@@ -1,0 +1,9 @@
+{
+    "status": true,
+    "user": {
+        "username": "admin",
+        "firstName": "Dog",
+        "lastName": "Tan",
+        "userType": "admin"
+    }
+}
