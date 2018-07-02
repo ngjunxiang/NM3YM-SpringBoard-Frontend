@@ -8,12 +8,8 @@ import { UserAuthGuard } from './core/guard/user-auth.guard';
 export const routes: Routes = [
     { 
         path: '', 
-        redirectTo: 'home', 
+        redirectTo: 'login', 
         pathMatch: 'full' 
-    },
-    { 
-        path: 'home', 
-        loadChildren: './modules/home/home.module#HomeModule' 
     },
     { 
         path: 'login', 
