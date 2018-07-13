@@ -1,87 +1,136 @@
-.sb-top-title-panel .ui-panel {
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 960px;
+/*
+ * Specific styles of signin component
+ */
+/*
+ * General styles
+ */
+ body, html {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
 }
 
-.sb-title-panel .ui-panel {
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 960px;
+.card-container.card {
+    max-width: 350px;
+    padding: 40px 40px;
 }
 
-.sb-title-panel .ui-panel .ui-panel-titlebar:lang(en) {
-    background-color: #FFFFFF;
-    line-height: 1.5em;
-    font-size:20px;
-    font-weight: 500;
-    color: #4A4A4A;
-    font-family: Oswald;
-    border-bottom: 0px solid;
-    margin-top: 10px;
-    box-shadow: none;
+.btn {
+    font-weight: 700;
+    height: 36px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
-.sb-no-title-panel .ui-panel {
-    margin-top: 20px !important;
-    margin-left: auto;
-    margin-right: auto;
-    width: 960px;
+/*
+ * Card component
+ */
+.card {
+    background-color: #F7F7F7;
+    /* just in case there no content*/
+    padding: 20px 25px 30px;
+    margin: 0 auto 25px;
+    margin-top: 50px;
+    /* shadows and rounded borders */
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
-.sb-no-title-panel .ui-panel .ui-panel-titlebar:lang(en) {
-    display: none;
+.profile-img-card {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
 }
 
-.sb-f-pri-btn {
-    height: 35px;	
-    width: 86px;	
-    border-radius: 2px;	
-    background-color: #F5A623;
-    color: #FFFFFF !important;
-    font-family: "Open Sans";
-    box-shadow: none;
+/*
+ * Form styles
+ */
+.profile-name-card {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0 0;
+    min-height: 1em;
 }
 
-.sb-f-sec-btn {
-    height: 35px;	
-    width: 86px;	
-    border-radius: 2px;	
-    background-color: #FFFFFF;
-    color: #F5A623;
-    font-family: "Open Sans";
-    box-shadow: none;
+.form-signin #inputUsername,
+.form-signin #inputPassword {
+    direction: ltr;
+    height: 44px;
+    font-size: 16px;
 }
 
-.sb-f-label {
-    line-height: 28px;
-    text-align: right;
-    color: #4A4A4A;	
-    font-family: "Open Sans";	
-    font-size: 14px;	
-    font-weight: 600;	
-    float: right;
-    width: 200px;
+.form-signin input[type=email],
+.form-signin input[type=password],
+.form-signin input[type=text],
+.form-signin button {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+    z-index: 1;
+    position: relative;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.sb-f-label-error {
-    line-height: 28px;
-    text-align: right;
-    color: red;	
-    font-family: "Open Sans";	
-    font-size: 14px;	
-    font-weight: 600;	
-    float: right;
-    width: max-content;
+.form-signin .form-control:focus {
+    border-color: rgb(104, 145, 162);
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
 }
 
-.sb-inline-msg:lang(en) {
+.btn.btn-signin {
+    /*background-color: #4d90fe; */
+    background-color: rgb(104, 145, 162);
+    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+    padding: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    height: 36px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: none;
+    -o-transition: all 0.218s;
+    -moz-transition: all 0.218s;
+    -webkit-transition: all 0.218s;
+    transition: all 0.218s;
+}
+
+.btn.btn-signin:hover,
+.btn.btn-signin:active,
+.btn.btn-signin:focus {
+    background-color: rgb(12, 97, 33);
+}
+
+.error-inline-msg {
     height: 14px;		
-    color: #AB081C;	
-    font-family: "Open Sans";	
+    color: #AB081C;		
     font-size: 10px;	
     line-height: 14px;
     width: 200px;
+    margin-bottom: 5px;
+    margin-top: -10px;
 } 
+
+.error-label {
+    line-height: 28px;
+    text-align: center;
+    color: #AB081C;	
+    font-size: 14px;	
+    float: left;
+    width: 100%;
+    margin-bottom:5px;
+}

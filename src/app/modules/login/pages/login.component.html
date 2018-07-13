@@ -1,53 +1,36 @@
-<div class="app flex-row align-items-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card-group">
-                    <div class="card p-4">
-                        <div class="card-body" [formGroup]="loginForm">
-                            <h1>Login</h1>
-                            <p class="text-muted">Sign in to your account</p>
-                            <div class="input-group-mb-3" style="padding-top: 5px; padding-bottom: 5px">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="icon-user"></i>
-                                    </span>
-                                    <input class="form-control" type="text" placeholder="Username" formControlName="username" pInputText>
-                                </div>
-                                <div>
-                                    <span *ngIf="loginForm.controls['username'].dirty && !loginForm.controls['username'].valid">
-                                        Please enter your username
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="input-group-mb-4" style="padding-top: 5px; padding-bottom: 5px">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="icon-lock"></i>
-                                    </span>
-                                    <input class="form-control" type="password" placeholder="Password" formControlName="password" pInputText>
-                                </div>
-                                <div>
-                                    <span *ngIf="loginForm.controls['password'].dirty && !loginForm.controls['password'].valid">
-                                        Please enter your password
-                                    </span>
-                                </div>
-                            </div>
-                            <div>
-                                <label *ngIf="!isValidUser">Invalid username / password</label>
-                            </div>
-                            <div class="row" style="padding-top: 5px; padding-bottom: 5px">
-                                <div class="col-6">
-                                    <button class="btn btn-primary px-4" type="button" [disabled]="loading" (click)="loginUser()">Login</button>
-                                </div>
-                                <div class="col-6 text-right">
-                                    <button class="btn btn-link px-0" type="button">Forgot password?</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="container">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <p id="profile-name" class="profile-name-card"></p>
+        <div class="form-signin" [formGroup]="loginForm">
+            <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
+            <div class="error-inline-msg">
+                <span *ngIf="loginForm.controls['username'].dirty && !loginForm.controls['username'].valid">
+                    Please enter your username
+                </span>
             </div>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
+                pInputText>
+            <div class="error-inline-msg">
+                <span *ngIf="loginForm.controls['password'].dirty && !loginForm.controls['password'].valid">
+                    Please enter your password
+                </span>
+            </div>
+            <div class="error-label" *ngIf="!isValidUser">
+                Invalid username/password
+            </div>
+            <div id="remember" class="checkbox">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="loginUser()">Sign In</button>
         </div>
+        <!-- /form -->
+        <a href="#" class="forgot-password">
+            Forgot the password?
+        </a>
     </div>
+    <!-- /card-container -->
 </div>
+<!-- /container -->
