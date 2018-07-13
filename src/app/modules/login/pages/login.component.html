@@ -16,8 +16,10 @@
                     Please enter your password
                 </span>
             </div>
-            <div class="error-label" *ngIf="!isValidUser">
-                Invalid username/password
+            <div class="error-label">
+                <span *ngIf="!isValidUser">
+                    Invalid username/password
+                </span>
             </div>
             <div id="remember" class="checkbox">
                 <label>
