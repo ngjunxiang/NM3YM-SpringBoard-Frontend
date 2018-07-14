@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { UserRoutingModule } from './user-routing.module';
-import { UserComponent } from './pages/user.component';
+import { CMRoutingModule } from './cm-routing.module';
+import { CMComponent } from './pages/cm.component';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { NavigationComponent } from '../../shared/header-navigation/navigation.component';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
@@ -15,13 +15,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
     imports: [
-        UserRoutingModule,
+        CMRoutingModule,
         CommonModule,
         NgbModule.forRoot(),
         PerfectScrollbarModule,
     ],
     declarations: [
-        UserComponent,
+        CMComponent,
         BreadcrumbComponent,
         NavigationComponent,
         SidebarComponent
@@ -34,4 +34,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ]
 })
 
-export class UserModule { }
+export class CMModule { }

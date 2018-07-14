@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AdminAuthGuard } from './core/guard/admin-auth.guard';
-import { UserAuthGuard } from './core/guard/user-auth.guard';
+import { RMAuthGuard } from './core/guard/rm-auth.guard';
+import { CMAuthGuard } from './core/guard/cm-auth.guard';
 
 export const routes: Routes = [
     { 
@@ -21,9 +22,14 @@ export const routes: Routes = [
         canActivate: [AdminAuthGuard] 
     },
     {
-        path: 'user',
-        loadChildren: './modules/user/user.module#UserModule',
-        canActivate: [UserAuthGuard]
+        path: 'rm',
+        loadChildren: './modules/rm/rm.module#RMModule',
+        canActivate: [RMAuthGuard]
+    },
+    {
+        path: 'cm',
+        loadChildren: './modules/cm/cm.module#CMModule',
+        canActivate: [CMAuthGuard]
     }
 ];
 

@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  selector: 'app-cm',
+  templateUrl: './cm.component.html',
+  styleUrls: ['./cm.component.scss']
 })
 
-export class UserComponent implements OnInit {
+export class CMComponent implements OnInit {
 
     color = 'defaultdark';
     showSettings = false;

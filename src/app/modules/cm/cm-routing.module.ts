@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { UserComponent } from './pages/user.component';
+import { CMComponent } from './pages/cm.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: UserComponent,
+        component: CMComponent,
         data: {
-            title: 'User',
+            title: 'Client Management',
             urls: [{ title: 'Main Page', url: '/dashboard' }, { title: 'Clients' }]
         }
     }
@@ -25,4 +25,4 @@ const routes: Routes = [
     declarations: []
 })
 
-export class UserRoutingModule { }
+export class CMRoutingModule { }

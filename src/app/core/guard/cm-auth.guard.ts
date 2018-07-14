@@ -7,7 +7,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
     providedIn: 'root'
 })
 
-export class UserAuthGuard implements CanActivate {
+export class CMAuthGuard implements CanActivate {
 
     constructor(
         private authService: AuthenticationService,
@@ -18,7 +18,7 @@ export class UserAuthGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         // this.authService.authenticate(localStorage.getItem('JSESSIONID')).subscribe( result => {
-            if (true && localStorage.getItem('USERTYPE') === 'user') return true;
+            if (true && localStorage.getItem('USERTYPE') === 'CM') return true;
         // });
         this.router.navigate(['/login'], { 
             queryParams: { 

@@ -7,7 +7,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
     providedIn: 'root'
 })
 
-export class AdminAuthGuard implements CanActivate {
+export class RMAuthGuard implements CanActivate {
 
     constructor(
         private authService: AuthenticationService,
@@ -18,7 +18,7 @@ export class AdminAuthGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         // this.authService.authenticate(localStorage.getItem('JSESSIONID')).subscribe( result => {
-            if (true && localStorage.getItem('USERTYPE') === 'ADMIN') return true;
+            if (true && localStorage.getItem('USERTYPE') === 'RM') return true;
         // });
         this.router.navigate(['/login'], { 
             queryParams: { 

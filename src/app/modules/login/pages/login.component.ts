@@ -38,12 +38,15 @@ export class LoginComponent implements OnInit {
         this.titleService.setTitle("SpringBoard - Login");
         this.createForm();
 
-        this.authService.invalidateUser();
-
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
         if (this.route.snapshot.queryParams['err']) {
             this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please log in to access it.' });
+        }
+
+        if (this.route.snapshot.queryParams['action'] === 'logout') {
+            this.authService.invalidateUser();
+            this.msgs.push({ severity: 'success', summary: 'Logged Out Successfully', detail: '' });
         }
     }
 
@@ -82,11 +85,14 @@ export class LoginComponent implements OnInit {
                 if (this.returnUrl !== '/') {
                     this.router.navigate([this.returnUrl]);
                 }
-                if (loginData.userType === 'admin') {
+                if (loginData.userType === 'ADMIN') {
                     this.router.navigate(['/admin']);
                 }
-                if (loginData.userType === 'user') {
-                    this.router.navigate(['/user']);
+                if (loginData.userType === 'RM') {
+                    this.router.navigate(['/rm']);
+                }
+                if (loginData.userType === 'CM') {
+                    this.router.navigate(['/cm']);
                 }
             }
         }, error => {
