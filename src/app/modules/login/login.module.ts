@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
     imports: [
@@ -16,6 +18,8 @@ import { ButtonModule } from 'primeng/button';
         FormsModule,
         InputTextModule,
         LoginRoutingModule,
+        MessageModule,
+        MessagesModule,
         PanelModule,
         ReactiveFormsModule
     ],

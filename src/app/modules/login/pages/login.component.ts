@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+
+import { Message } from 'primeng/components/common/api';
+
 import { AuthenticationService } from '../../../core/authentication/authentication.service';
 
 @Component({
@@ -9,11 +12,13 @@ import { AuthenticationService } from '../../../core/authentication/authenticati
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
     // UI Control
     isValidUser = true;
     loading = false;
     returnUrl: string;
+    msgs: Message[] = [];
 
     // UI Component
     username: string;
@@ -26,7 +31,7 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private titleService: Title
-    ) { 
+    ) {
     }
 
     ngOnInit() {
@@ -36,6 +41,10 @@ export class LoginComponent implements OnInit {
         this.authService.invalidateUser();
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+        if (this.route.snapshot.queryParams['err']) {
+            this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please log in to access it.' });
+        }
     }
 
     createForm() {
@@ -62,23 +71,27 @@ export class LoginComponent implements OnInit {
         this.username = this.loginForm.controls['username'].value;
         this.password = this.loginForm.controls['password'].value;
 
-        this.authService.validateUser(this.username, this.password).subscribe(data => {
-            this.isValidUser = data.status;
+        this.authService.validateUser(this.username, this.password).subscribe(loginData => {
+            if (loginData.error) {
+                this.isValidUser = false;
+            }
 
             if (this.isValidUser) {
-                console.log(this.returnUrl);
+                this.authService.setLocalStorage(loginData.jwtToken, loginData.userType);
+
                 if (this.returnUrl !== '/') {
                     this.router.navigate([this.returnUrl]);
                 }
-                if (data.user.userType === 'admin') {
+                if (loginData.userType === 'admin') {
                     this.router.navigate(['/admin']);
                 }
-                if (data.user.userType === 'user') {
+                if (loginData.userType === 'user') {
                     this.router.navigate(['/user']);
                 }
             }
+        }, error => {
+            this.isValidUser = false;
+            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please try again later.' });
         });
-
-        
     }
 }

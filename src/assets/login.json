@@ -1,9 +1,4 @@
 {
-    "status": true,
-    "user": {
-        "username": "admin",
-        "firstName": "Dog",
-        "lastName": "Tan",
-        "userType": "admin"
-    }
+    "jwtToken": "1234567890poiuytrewq",
+    "userType": "admin"
 }

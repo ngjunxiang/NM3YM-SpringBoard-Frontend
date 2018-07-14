@@ -1,39 +1,73 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { User } from '../domain/user';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { retry, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
 interface LoginData {
-    status: boolean,
-    user: User
+    jwtToken: string,
+    userType: string,
+    error: string
 }
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class AuthenticationService {
-    currentUser: User;
+
+    private loginURL = 'http://127.0.0.1:8000/app/loginList';
+    private authURL = 'http://127.0.0.1:8000/app/authenticate';
 
     constructor(private http: HttpClient) { }
 
-    validateUser(username, password) {
-        // change this to post
-        return this.http.get<LoginData>("/assets/login.json").pipe(map(data => {
-            if (data.status) {
-                localStorage.setItem('currentUser', 'validUser');
-                localStorage.setItem('userType', data.user.userType);
-                this.currentUser = data.user;
-            }
-            return data;
-        }));
+    authenticate(jwtToken) {
+        return true;
+        // return this.http.get(this.authURL, jwtToken);
+    }
+
+    validateUser(username, password): Observable<LoginData> {
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        
+        const postData = {
+            'username': username,
+            'password': password
+        };
+        return this.http.get<LoginData>("assets/login.json");
+        // return this.http.post<LoginData>(this.loginURL, postData, httpOptions)
+        //     .pipe(
+        //         retry(3),
+        //         catchError(this.handleError)
+        //     );
     }
 
     invalidateUser() {
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('userType');
+        localStorage.removeItem('JSESSIONID');
+        localStorage.removeItem('USERTYPE');
     }
 
-    getUserType() {
-        return this.currentUser.userType;
+    setLocalStorage(jwtToken, userType) {
+        localStorage.setItem('JSESSIONID', jwtToken);
+        localStorage.setItem('USERTYPE', userType);
     }
+
+    private handleError(error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('An error occurred:', error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
+        }
+        // return an observable with a user-facing error message
+        return throwError(
+            'Something bad happened; please try again later.');
+    };
 }
