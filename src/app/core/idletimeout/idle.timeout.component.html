@@ -1,0 +1,7 @@
+<p-dialog header="Session Expiring Soon" [(visible)]="isTimer" [modal]="true" [responsive]="true" [width]="400" [minWidth]="200"
+        [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+    <span>You will be logged out automatically in 5 minutes. Click OK to extend the session.</span>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="extendSession()" label="OK"></button>
+    </p-footer>
+</p-dialog>

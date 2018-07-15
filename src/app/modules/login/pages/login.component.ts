@@ -40,8 +40,13 @@ export class LoginComponent implements OnInit {
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-        if (this.route.snapshot.queryParams['err']) {
+        if (this.route.snapshot.queryParams['err'] === 'auth001') {
             this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please log in to access it.' });
+        }
+
+        if (this.route.snapshot.queryParams['err'] === 'idle001') {
+            this.authService.invalidateUser();
+            this.msgs.push({ severity: 'warn', summary: 'Session Expired', detail: 'You have been inactive for more than 30 minutes. Please log in again.' });
         }
 
         if (this.route.snapshot.queryParams['action'] === 'logout') {
