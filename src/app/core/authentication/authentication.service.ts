@@ -4,7 +4,7 @@ import { retry, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
 interface LoginData {
-    jwtToken: string,
+    token: string,
     userType: string,
     error: string
 }
@@ -15,14 +15,14 @@ interface LoginData {
 
 export class AuthenticationService {
 
-    private loginURL = 'http://127.0.0.1:8000/app/loginList';
+    private loginURL = 'http://localhost:8000/app/login';
     private authURL = 'http://127.0.0.1:8000/app/authenticate';
 
     constructor(private http: HttpClient) { }
 
-    authenticate(jwtToken) {
+    authenticate() {
         return true;
-        // return this.http.get(this.authURL, jwtToken);
+        // return this.http.get(this.authURL, localStorage.getItem('JSESSIONID'););
     }
 
     validateUser(username, password): Observable<LoginData> {
@@ -32,25 +32,28 @@ export class AuthenticationService {
                 'Content-Type': 'application/json'
             })
         };
-        
+
         const postData = {
             'username': username,
             'password': password
         };
-        return this.http.get<LoginData>("assets/login.json");
-        // return this.http.post<LoginData>(this.loginURL, postData, httpOptions)
-        //     .pipe(
-        //         retry(3),
-        //         catchError(this.handleError)
-        //     );
+
+        // return this.http.get<LoginData>("assets/login.json");
+        return this.http.post<LoginData>(this.loginURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
 
     invalidateUser() {
+        localStorage.removeItem('USERNAME');
         localStorage.removeItem('JSESSIONID');
         localStorage.removeItem('USERTYPE');
     }
 
-    setLocalStorage(jwtToken, userType) {
+    setLocalStorage(username, jwtToken, userType) {
+        localStorage.setItem('USERNAME', username);
         localStorage.setItem('JSESSIONID', jwtToken);
         localStorage.setItem('USERTYPE', userType);
     }

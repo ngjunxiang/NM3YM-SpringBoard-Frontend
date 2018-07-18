@@ -5,13 +5,12 @@ import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLL
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
-import { IdleTimeoutComponent } from '../../core/idletimeout/idle.timeout.component';
-import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
-import { NavigationComponent } from '../../shared/header-navigation/navigation.component';
-import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
+import { SharedModule } from '../../shared/shared.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -23,15 +22,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ButtonModule,
         CommonModule,
         DialogModule,
+        MessageModule,
+        MessagesModule,
         NgbModule.forRoot(),
         PerfectScrollbarModule,
+        SharedModule
     ],
     declarations: [
-        AdminComponent,
-        BreadcrumbComponent,
-        IdleTimeoutComponent,
-        NavigationComponent,
-        SidebarComponent
+        AdminComponent
     ],
     providers: [
         {

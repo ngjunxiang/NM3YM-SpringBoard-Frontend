@@ -8,12 +8,20 @@ import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLL
 import { UserIdleModule } from 'angular-user-idle';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
+import { PanelModule } from 'primeng/panel';
+import { MessagesModule } from 'primeng/messages';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminAuthGuard } from './core/guard/admin-auth.guard';
 import { RMAuthGuard } from './core/guard/rm-auth.guard';
 import { CMAuthGuard } from './core/guard/cm-auth.guard';
-import { SpinnerComponent } from './shared/spinner.component';
+import { SharedModule } from './shared/shared.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -21,19 +29,26 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
     declarations: [
-        AppComponent,
-        SpinnerComponent
+        AppComponent
     ],
     imports: [
         AppRoutingModule,
         BrowserAnimationsModule,
         BrowserModule,
+        ButtonModule,
+        CommonModule,
+        DialogModule,
         FormsModule,
         HttpClientModule,
+        MessageModule,
+        MessagesModule,
+        InputTextModule,
         NgbModule.forRoot(),
+        PanelModule,
         PerfectScrollbarModule,
         ReactiveFormsModule,
-        UserIdleModule.forRoot({idle: 1, timeout: 5, ping: 1})
+        UserIdleModule.forRoot({ idle: 1, timeout: 5, ping: 1 }),
+        SharedModule
     ],
     providers: [
         {

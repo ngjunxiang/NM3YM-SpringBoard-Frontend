@@ -40,9 +40,9 @@ export class LoginComponent implements OnInit {
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-        if (this.route.snapshot.queryParams['err'] === 'auth001') {
-            this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please log in to access it.' });
-        }
+        // if (this.route.snapshot.queryParams['err'] === 'auth001') {
+        //     this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please log in to access it.' });
+        // }
 
         if (this.route.snapshot.queryParams['err'] === 'idle001') {
             this.authService.invalidateUser();
@@ -80,12 +80,13 @@ export class LoginComponent implements OnInit {
         this.password = this.loginForm.controls['password'].value;
 
         this.authService.validateUser(this.username, this.password).subscribe(loginData => {
+            this.isValidUser = true;
             if (loginData.error) {
                 this.isValidUser = false;
             }
 
             if (this.isValidUser) {
-                this.authService.setLocalStorage(loginData.jwtToken, loginData.userType);
+                this.authService.setLocalStorage(this.username, loginData.token, loginData.userType);
 
                 if (this.returnUrl !== '/') {
                     this.router.navigate([this.returnUrl]);
@@ -100,9 +101,11 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/cm']);
                 }
             }
+            this.loading = false;
         }, error => {
             this.isValidUser = false;
             this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please try again later.' });
+            this.loading = false;
         });
     }
 }

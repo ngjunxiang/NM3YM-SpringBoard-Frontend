@@ -8,10 +8,7 @@ import { DialogModule } from 'primeng/dialog';
 
 import { RMRoutingModule } from './rm-routing.module';
 import { RMComponent } from './pages/rm.component';
-import { IdleTimeoutComponent } from '../../core/idletimeout/idle.timeout.component';
-import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
-import { NavigationComponent } from '../../shared/header-navigation/navigation.component';
-import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
+import { SharedModule } from '../../shared/shared.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -25,13 +22,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DialogModule,
         NgbModule.forRoot(),
         PerfectScrollbarModule,
+        SharedModule
     ],
     declarations: [
-        RMComponent,
-        IdleTimeoutComponent,
-        BreadcrumbComponent,
-        NavigationComponent,
-        SidebarComponent
+        RMComponent
     ],
     providers: [
         {

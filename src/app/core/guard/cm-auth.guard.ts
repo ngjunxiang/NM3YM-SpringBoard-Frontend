@@ -17,15 +17,16 @@ export class CMAuthGuard implements CanActivate {
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        // this.authService.authenticate(localStorage.getItem('JSESSIONID')).subscribe( result => {
+        // this.authService.authenticate().subscribe( result => {
             if (true && localStorage.getItem('USERTYPE') === 'CM') return true;
         // });
-        this.router.navigate(['/login'], { 
+        
+        this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase()], { 
             queryParams: { 
-                returnUrl: state.url,
                 err: 'auth001' 
             } 
         });
+        
         return false;
     }
 }
