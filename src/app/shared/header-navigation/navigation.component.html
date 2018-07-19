@@ -60,21 +60,21 @@
                                         <img src="assets/images/users/avatar.png" alt="user">
                                     </div>
                                     <div class="u-text">
-                                        <h4>Randy Lai</h4>
-                                        <p class="text-muted">randylai.2016@smu.edu.sg</p>
-                                        <a href="pages-profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
+                                        <h4>{{name}}</h4>
+                                        <p class="text-muted">{{email}}</p>
+                                        <!-- <a href="pages-profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a> -->
                                     </div>
                                 </div>
                             </li>
                             <li role="separator" class="divider"></li>
-                            <li>
+                            <!-- <li>
                                 <a href="#">
                                     <i class="ti-user"></i> My Profile</a>
                             </li>
                             <li>
                                 <a href="#">
                                     <i class="ti-wallet"></i> My Balance</a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a href="#">
                                     <i class="ti-email"></i> Inbox</a>
@@ -82,11 +82,11 @@
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="#">
-                                    <i class="ti-settings"></i> Account Setting</a>
+                                    <i class="ti-settings"></i> Account Settings</a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a routerLink="/login" [queryParams]="{ action: logout }">
+                                <a [routerLink]="['/login']" [queryParams]="{'action': 'logout'}">
                                     <i class="fa fa-power-off"></i> Logout</a>
                             </li>
                         </ul>

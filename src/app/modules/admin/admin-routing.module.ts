@@ -9,7 +9,15 @@ const routes: Routes = [
         component: AdminComponent,
         data: {
             title: 'Admin',
-            urls: [{ title: 'Main Page', url: '/dashboard' }, { title: 'Clients' }]
+            urls: [{ title: 'Dashboard', url: '/dashboard' }]
+        }
+    },
+    {
+        path: 'create',
+        component: AdminComponent,
+        data: {
+            title: 'Admin',
+            urls: [{ title: 'User Management'}, { title: 'Create Users' }]
         }
     }
 ];

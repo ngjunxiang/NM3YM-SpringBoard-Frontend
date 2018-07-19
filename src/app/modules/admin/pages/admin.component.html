@@ -12,14 +12,14 @@
     <!-- Topbar header - style you can find in pages.scss -->
     <!-- ============================================================== -->
 
-    <ui-navigation></ui-navigation>
+    <ui-navigation [name]="name" [email]="email"></ui-navigation>
     <!-- ============================================================== -->
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->
     <aside class="left-sidebar">
         <!-- Sidebar scroll-->
         <div class="scroll-sidebar" [perfectScrollbar]="config">
-            <ui-sidebar></ui-sidebar>
+            <ui-sidebar [sidebarRoutes]="sidebarRoutes"></ui-sidebar>
         </div>
         <!-- End Sidebar scroll-->
     </aside>

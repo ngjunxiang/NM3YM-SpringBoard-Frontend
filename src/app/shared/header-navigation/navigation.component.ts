@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
@@ -8,7 +8,9 @@ declare var $: any;
 })
 
 export class NavigationComponent implements AfterViewInit {
-    name: string;
+    
+    @Input('name') name: string;
+    @Input('email') email: string;
 
     constructor(private modalService: NgbModal) { }
 

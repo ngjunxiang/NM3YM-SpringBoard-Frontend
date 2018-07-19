@@ -11,6 +11,7 @@ import { MessagesModule } from 'primeng/messages';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
 import { SharedModule } from '../../shared/shared.module';
+import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -29,7 +30,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SharedModule
     ],
     declarations: [
-        AdminComponent
+        AdminComponent,
+        CreateAdminComponent
     ],
     providers: [
         {

@@ -5,6 +5,8 @@ import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLL
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 import { RMRoutingModule } from './rm-routing.module';
 import { RMComponent } from './pages/rm.component';
@@ -20,6 +22,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ButtonModule,
         CommonModule,
         DialogModule,
+        MessageModule,
+        MessagesModule,
         NgbModule.forRoot(),
         PerfectScrollbarModule,
         SharedModule

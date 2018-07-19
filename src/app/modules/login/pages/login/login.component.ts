@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 
 import { Message } from 'primeng/components/common/api';
 
-import { AuthenticationService } from '../../../core/authentication/authentication.service';
+import { AuthenticationService } from '../../../../core/authentication/authentication.service';
 
 @Component({
     selector: 'app-login',
@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../../core/authentication/authenticati
 })
 
 export class LoginComponent implements OnInit {
+    
     // UI Control
     isValidUser = true;
     loading = false;

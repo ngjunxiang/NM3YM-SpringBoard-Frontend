@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="card card-container">
-        <img id="profile-img" class="profile-img-card" src="assets/images/sb-logo.png"/>
+        <img id="profile-img" class="profile-img-card" src="assets/images/sb-logo.png" />
         <div class="form-signin" [formGroup]="loginForm">
             <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
             <div class="error-inline-msg">
@@ -30,7 +30,7 @@
             <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="loginUser()">Sign In</button>
         </div>
         <!-- /form -->
-        <a href="#" class="forgot-password">
+        <a routerLink="/login/forgotpw" class="forgot-password">
             Forgot the password?
         </a>
     </div>

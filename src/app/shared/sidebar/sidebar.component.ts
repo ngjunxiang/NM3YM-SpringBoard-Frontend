@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ROUTES } from './menu-items';
 import { Router, ActivatedRoute } from "@angular/router";
+import { RouteInfo } from './sidebar.metadata';
 
 declare var $: any;
 
@@ -11,11 +11,15 @@ declare var $: any;
 })
 
 export class SidebarComponent implements OnInit {
-
+    
+    @Input('sidebarRoutes') ROUTES: RouteInfo[];
+    
+    isLoading = true;
 
     showMenu: string = '';
     showSubMenu: string = '';
     public sidebarnavItems: any[];
+
     //this is for the open close
     addExpandClass(element: any) {
         if (element === this.showMenu) {
@@ -25,6 +29,7 @@ export class SidebarComponent implements OnInit {
             this.showMenu = element;
         }
     }
+
     addActiveClass(element: any) {
         if (element === this.showSubMenu) {
             this.showSubMenu = '0';
@@ -34,13 +39,15 @@ export class SidebarComponent implements OnInit {
         }
     }
 
-    constructor(private modalService: NgbModal, private router: Router,
-        private route: ActivatedRoute) {
+    constructor(
+        private modalService: NgbModal, 
+        private router: Router,
+        private route: ActivatedRoute
+    ) { }
 
-    }
     // End open close
     ngOnInit() {
-        this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
+        this.sidebarnavItems = this.ROUTES.filter(sidebarnavItem => sidebarnavItem);
         $(function () {
             $(".sidebartoggler").on('click', function () {
                 if ($("#main-wrapper").hasClass("mini-sidebar")) {
@@ -52,7 +59,7 @@ export class SidebarComponent implements OnInit {
                     $("#main-wrapper").addClass("mini-sidebar");
                 }
             });
-
+            this.isLoading = false;
         });
 
     }

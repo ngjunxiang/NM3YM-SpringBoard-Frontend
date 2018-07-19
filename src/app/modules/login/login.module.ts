@@ -9,8 +9,9 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 
 import { LoginRoutingModule } from './login-routing.module';
-import { LoginComponent } from './pages/login.component';
+import { LoginComponent } from './pages/login/login.component';
 import { AuthenticationService } from '../../core/authentication/authentication.service';
+import { LoginForgotPwComponent } from './pages/login-forgot-pw/login-forgot-pw.component';
 
 @NgModule({
     imports: [
@@ -24,7 +25,12 @@ import { AuthenticationService } from '../../core/authentication/authentication.
         PanelModule,
         ReactiveFormsModule
     ],
-    declarations: [LoginComponent],
-    providers: [AuthenticationService]
+    declarations: [
+        LoginComponent, 
+        LoginForgotPwComponent
+    ],
+    providers: [
+        AuthenticationService
+    ]
 })
 export class LoginModule { }

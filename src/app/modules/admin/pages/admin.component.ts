@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Message } from 'primeng/components/common/api';
 
+import { ROUTES } from './admin.sidebar-items';
+
 @Component({
     selector: 'app-admin',
     templateUrl: './admin.component.html',
@@ -19,7 +21,12 @@ export class AdminComponent implements OnInit {
     showDarktheme = false;
 
     // UI Control
+    sidebarRoutes = ROUTES;
     msgs: Message[] = [];
+
+    // Name & Email
+    name = 'Admin';
+    email = 'admin@bnpp.com';
 
     public config: PerfectScrollbarConfigInterface = {};
 

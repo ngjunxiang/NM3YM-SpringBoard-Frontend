@@ -1,18 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
 import { SpinnerComponent } from './spinner.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { NavigationComponent } from './header-navigation/navigation.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { RouterModule } from '../../../node_modules/@angular/router';
 import { IdleTimeoutComponent } from '../core/idletimeout/idle.timeout.component';
-import { DialogModule } from '../../../node_modules/primeng/dialog';
 
 @NgModule({
     imports: [
+        ButtonModule,
         CommonModule,
         DialogModule,
-        RouterModule
+        RouterModule,
+        NgbModule.forRoot(),
+        PerfectScrollbarModule
     ],
     exports: [
         BreadcrumbComponent,
