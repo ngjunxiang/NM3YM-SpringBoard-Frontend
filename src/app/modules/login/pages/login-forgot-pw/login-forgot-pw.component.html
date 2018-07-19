@@ -1,0 +1,24 @@
+<p-messages [(value)]="msgs" [closable]="false"></p-messages>
+
+<div class="container">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="assets/images/sb-logo.png" />
+        <div class="form-signin" [formGroup]="forgotPwForm">
+            <div style="text-align: center">
+                <p>Forgot your account's password?</p>
+                <p>Enter your email address and we'll send you a recovery link.</p>
+            </div>
+            <input type="text" id="inputEmail" class="form-control" placeholder="Email Address" formControlName="email" required pInputText>
+            <div class="error-inline-msg">
+                <span *ngIf="forgotPwForm.controls['email'].dirty && !forgotPwForm.controls['email'].valid">
+                    Please enter a valid email
+                </span>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="sendEmail()">Send Recovery Email</button>
+        </div>
+        <!-- /form -->
+    </div>
+    <!-- /card-container -->
+</div>
+<!-- /container -->
