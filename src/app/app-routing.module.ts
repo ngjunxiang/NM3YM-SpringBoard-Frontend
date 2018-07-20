@@ -30,13 +30,17 @@ export const routes: Routes = [
         path: 'cm',
         loadChildren: './modules/cm/cm.module#CMModule',
         canActivate: [CMAuthGuard]
+    },
+    {
+        path: '**',
+        loadChildren: './modules/login/login.module#LoginModule' 
     }
 ];
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forRoot(routes)
+        RouterModule.forRoot(routes, { useHash: true })
     ],
     exports: [
         RouterModule

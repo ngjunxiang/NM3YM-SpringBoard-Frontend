@@ -11,6 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 import { PanelModule } from 'primeng/panel';
 import { MessagesModule } from 'primeng/messages';
 import { InputTextModule } from 'primeng/inputtext';
@@ -38,6 +39,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ButtonModule,
         CommonModule,
         DialogModule,
+        DropdownModule,
         FormsModule,
         HttpClientModule,
         MessageModule,
@@ -47,7 +49,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PanelModule,
         PerfectScrollbarModule,
         ReactiveFormsModule,
-        UserIdleModule.forRoot({ idle: 300, timeout: 30, ping: 30 }),
+        UserIdleModule.forRoot({ idle: 300, timeout: 300, ping: 30 }),
         SharedModule
     ],
     providers: [

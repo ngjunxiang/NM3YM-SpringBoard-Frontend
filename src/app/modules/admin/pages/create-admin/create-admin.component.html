@@ -1,3 +1,54 @@
-<p>
-  create-admin works!
-</p>
+<p-growl [(value)]="msgs"></p-growl>
+{{createUserForm.controls.passwordForm.controls.password.invalid | json}}
+{{createUserForm.controls.passwordForm.controls.password.dirty | json}}
+<p-card [style]="{width: '60%'}">
+    <div class="form-create" [formGroup]="createUserForm">
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
+        <div class="error-inline-msg">
+            <span *ngIf="createUserForm.controls.username.dirty && createUserForm.controls.username.errors?.required">
+                Please fill in the username field
+            </span>
+            <span *ngIf="createUserForm.controls.username.dirty && createUserForm.controls.username.errors?.usernameExists">
+                Username exists, please choose another username
+            </span>
+        </div>
+
+        <input type="text" id="inputEmail" class="form-control" placeholder="Email Address" formControlName="email" required pInputText>
+        <div class="error-inline-msg">
+            <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.required">
+                Please fill in the email field
+            </span>
+            <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.pattern">
+                Please enter a valid email
+            </span>
+        </div>
+
+        <div [formGroup]="passwordForm">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
+                pInputText>
+            <div class="error-inline-msg">
+                <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.required">
+                    Please fill in the password field
+                </span>
+                <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.minlength">
+                    Password must be at least 6 characters
+                </span>
+            </div>
+
+            <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
+                required pInputText>
+            <div class="error-inline-msg">
+                <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.controls.confirmPassword.errors?.required">
+                    Please fill in the confirm password field
+                </span>
+                <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.errors?.mismatch">
+                    Please make sure your passwords match
+                </span>
+            </div>
+        </div>
+
+        <p-dropdown [options]="userTypes" optionLabel="name" formControlName="userType" placeholder="Select User Type"></p-dropdown>
+
+        <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="createUser()">Create</button>
+    </div>
+</p-card>
