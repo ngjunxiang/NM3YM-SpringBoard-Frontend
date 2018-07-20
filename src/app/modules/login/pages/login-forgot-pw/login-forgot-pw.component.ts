@@ -40,6 +40,14 @@ export class LoginForgotPwComponent implements OnInit {
     }
 
     sendEmail() {
+        if (this.forgotPwForm.controls['email']) {
+            this.forgotPwForm.controls['email'].markAsDirty();
+        }
+
+        if (this.forgotPwForm.controls['email'].invalid) {
+            return;
+        }
+
         this.loading = true;
 
         this.email = this.forgotPwForm.controls['email'].value;
