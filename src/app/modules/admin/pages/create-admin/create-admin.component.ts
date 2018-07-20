@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
 
@@ -49,6 +49,7 @@ export class CreateAdminComponent implements OnInit {
         }, {
                 validator: this.passwordMismatch
             });
+
         this.createUserForm = this.fb.group({
             username: new FormControl('', [Validators.required, this.usernameValidator]),
             email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]),
@@ -67,13 +68,13 @@ export class CreateAdminComponent implements OnInit {
 
     passwordMismatch(passwordForm: FormGroup) {
         let password = passwordForm.controls.password.value;
-        let repeatPassword = passwordForm.controls.confirmPassword.value;
+        let confirmPassword = passwordForm.controls.confirmPassword.value;
 
-        if (repeatPassword.length <= 0) {
+        if (confirmPassword.length <= 0) {
             return null;
         }
 
-        if (repeatPassword !== password) {
+        if (confirmPassword !== password) {
             return { 'mismatch': true };
         }
 
@@ -82,7 +83,7 @@ export class CreateAdminComponent implements OnInit {
 
     createUser() {
         this.loading = true;
-
+        
         for (const i in this.createUserForm.controls) {
             if (this.createUserForm.controls[i]) {
                 this.createUserForm.controls[i].markAsDirty();
@@ -96,14 +97,14 @@ export class CreateAdminComponent implements OnInit {
             this.createUserForm.controls.email.invalid ||
             this.createUserForm.controls.passwordForm.get('password').invalid ||
             this.createUserForm.controls.passwordForm.get('confirmPassword').invalid ||
+            this.createUserForm.controls.passwordForm.hasError ||
             this.createUserForm.controls.userType.invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
+            this.loading = false;
             return;
         }
-
-
 
         this.loading = false;
 

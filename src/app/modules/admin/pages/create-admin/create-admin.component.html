@@ -1,6 +1,5 @@
-<p-growl [(value)]="msgs"></p-growl>
-{{createUserForm.controls.passwordForm.controls.password.invalid | json}}
-{{createUserForm.controls.passwordForm.controls.password.dirty | json}}
+<p-growl [(value)]="msgs" [life]=5000></p-growl>
+
 <p-card [style]="{width: '60%'}">
     <div class="form-create" [formGroup]="createUserForm">
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
