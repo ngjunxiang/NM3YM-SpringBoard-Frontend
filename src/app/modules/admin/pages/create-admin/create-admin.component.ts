@@ -97,8 +97,9 @@ export class CreateAdminComponent implements OnInit {
             this.createUserForm.controls.email.invalid ||
             this.createUserForm.controls.passwordForm.get('password').invalid ||
             this.createUserForm.controls.passwordForm.get('confirmPassword').invalid ||
-            this.createUserForm.controls.passwordForm.hasError ||
+            this.createUserForm.controls.passwordForm.errors ||
             this.createUserForm.controls.userType.invalid) {
+                console.log("error wtfuck");
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
@@ -111,5 +112,6 @@ export class CreateAdminComponent implements OnInit {
         this.msgs.push({
             severity: 'success', summary: 'Success', detail: 'User has been created'
         });
+        return;
     }
 }
