@@ -20,6 +20,9 @@
             <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.pattern">
                 Please enter a valid email
             </span>
+            <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.emailExists">
+                Email exists, please use another email
+            </span>
         </div>
 
         <div [formGroup]="passwordForm">

@@ -52,7 +52,7 @@ export class CreateAdminComponent implements OnInit {
 
         this.createUserForm = this.fb.group({
             username: new FormControl('', [Validators.required, this.usernameValidator]),
-            email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]),
+            email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'), this.emailValidator]),
             userType: new FormControl('', Validators.required),
             passwordForm: this.passwordForm
         });
@@ -62,6 +62,14 @@ export class CreateAdminComponent implements OnInit {
         const existingUsers = ['admin', 'RandyLai', 'LimPeiXuan'];
         if (control.value && existingUsers && existingUsers.includes(control.value)) {
             return { 'usernameExists': true };
+        }
+        return null;
+    }
+
+    emailValidator(control: AbstractControl): { [key: string]: boolean } | null {
+        const existingEmail = ['admin@bnpp.com'];
+        if (control.value && existingEmail && existingEmail.includes(control.value)) {
+            return { 'emailExists': true };
         }
         return null;
     }
@@ -99,7 +107,6 @@ export class CreateAdminComponent implements OnInit {
             this.createUserForm.controls.passwordForm.get('confirmPassword').invalid ||
             this.createUserForm.controls.passwordForm.errors ||
             this.createUserForm.controls.userType.invalid) {
-                console.log("error wtfuck");
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
