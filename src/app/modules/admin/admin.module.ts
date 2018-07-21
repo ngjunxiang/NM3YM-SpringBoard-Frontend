@@ -17,6 +17,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
 import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
+import { UserMgmtService } from '../../core/admin/user-mgmt.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -48,7 +49,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        UserMgmtService
     ]
 })
 

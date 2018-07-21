@@ -4,9 +4,9 @@ import { retry, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
 interface LoginData {
-    token: string,
-    userType: string,
-    error: string
+    token: string;
+    userType: string;
+    error: string;
 }
 
 @Injectable({
@@ -26,7 +26,6 @@ export class AuthenticationService {
     }
 
     validateUser(username, password): Observable<LoginData> {
-
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -52,10 +51,18 @@ export class AuthenticationService {
         localStorage.removeItem('USERTYPE');
     }
 
-    setLocalStorage(username, jwtToken, userType) {
+    setLocalStorage(username, token, userType) {
         localStorage.setItem('USERNAME', username);
-        localStorage.setItem('JSESSIONID', jwtToken);
+        localStorage.setItem('JSESSIONID', token);
         localStorage.setItem('USERTYPE', userType);
+    }
+
+    get authItems() {
+        return {
+            username: localStorage.getItem('USERNAME'),
+            token: localStorage.getItem('JSESSIONID'),
+            userType: localStorage.getItem('USERTYPE')
+        };
     }
 
     private handleError(error: HttpErrorResponse) {

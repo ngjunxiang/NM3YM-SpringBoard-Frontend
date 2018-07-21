@@ -1,6 +1,6 @@
 <p-growl [(value)]="msgs" [life]=5000></p-growl>
 
-<p-card [style]="{width: '60%'}">
+<p-card *ngIf="!loading" [style]="{width: '60%'}">
     <div class="form-create" [formGroup]="createUserForm">
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
         <div class="error-inline-msg">
@@ -8,7 +8,7 @@
                 Please fill in the username field
             </span>
             <span *ngIf="createUserForm.controls.username.dirty && createUserForm.controls.username.errors?.usernameExists">
-                Username exists, please choose another username
+                Username exists, choose another username
             </span>
         </div>
 
@@ -17,11 +17,11 @@
             <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.required">
                 Please fill in the email field
             </span>
-            <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.pattern">
+            <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.email">
                 Please enter a valid email
             </span>
             <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.emailExists">
-                Email exists, please use another email
+                Email exists, use another email
             </span>
         </div>
 
@@ -50,6 +50,11 @@
         </div>
 
         <p-dropdown [options]="userTypes" optionLabel="name" formControlName="userType" placeholder="Select User Type"></p-dropdown>
+        <div class="error-inline-msg" style="padding-top: 10px; padding-bottom: 20px">
+            <span *ngIf="createUserForm.controls.userType.dirty && createUserForm.controls.userType.errors?.required">
+                Please fill in the user type field
+            </span>
+        </div>
 
         <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="createUser()">Create</button>
     </div>

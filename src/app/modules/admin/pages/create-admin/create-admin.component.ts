@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
+import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
+import { map } from '../../../../../../node_modules/rxjs/operators';
 
 interface UserType {
     name: string;
@@ -23,11 +25,11 @@ export class CreateAdminComponent implements OnInit {
     // UI Component
     createUserForm: FormGroup;
     passwordForm: FormGroup;
-
     userTypes: UserType[];
 
     constructor(
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private userMgmtService: UserMgmtService
     ) {
         this.userTypes = [
             { name: 'Admin', code: 'ADMIN' },
@@ -38,8 +40,8 @@ export class CreateAdminComponent implements OnInit {
 
     ngOnInit() {
         this.loading = true;
+
         this.createForm();
-        this.loading = false;
     }
 
     createForm() {
@@ -51,27 +53,32 @@ export class CreateAdminComponent implements OnInit {
             });
 
         this.createUserForm = this.fb.group({
-            username: new FormControl('', [Validators.required, this.usernameValidator]),
-            email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$'), this.emailValidator]),
+            username: new FormControl('', [Validators.required]),
+            email: new FormControl('', [Validators.required, Validators.email]),
             userType: new FormControl('', Validators.required),
             passwordForm: this.passwordForm
         });
+
+        this.createUserForm.controls.username.setAsyncValidators(this.usernameValidator(this.userMgmtService));
+        this.createUserForm.controls.email.setAsyncValidators(this.emailValidator(this.userMgmtService));
+        
+        this.loading = false;
     }
 
-    usernameValidator(control: AbstractControl): { [key: string]: boolean } | null {
-        const existingUsers = ['admin', 'RandyLai', 'LimPeiXuan'];
-        if (control.value && existingUsers && existingUsers.includes(control.value)) {
-            return { 'usernameExists': true };
-        }
-        return null;
+    usernameValidator(userMgmtService: UserMgmtService) {
+        return (control: AbstractControl) => {
+            return userMgmtService.checkUsernameExists(control.value).pipe(map(res => {
+                return res ? { 'usernameExists': true } : null;
+            }));
+        };
     }
 
-    emailValidator(control: AbstractControl): { [key: string]: boolean } | null {
-        const existingEmail = ['admin@bnpp.com'];
-        if (control.value && existingEmail && existingEmail.includes(control.value)) {
-            return { 'emailExists': true };
-        }
-        return null;
+    emailValidator(userMgmtService: UserMgmtService) {
+        return (control: AbstractControl) => {
+            return userMgmtService.checkEmailExists(control.value).pipe(map(res => {
+                return res ? { 'emailExists': true } : null;
+            }));
+        };
     }
 
     passwordMismatch(passwordForm: FormGroup) {
@@ -91,7 +98,7 @@ export class CreateAdminComponent implements OnInit {
 
     createUser() {
         this.loading = true;
-        
+
         for (const i in this.createUserForm.controls) {
             if (this.createUserForm.controls[i]) {
                 this.createUserForm.controls[i].markAsDirty();
