@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
@@ -18,6 +19,8 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
 import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
 import { UserMgmtService } from '../../core/admin/user-mgmt.service';
+import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
+import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -26,6 +29,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
     imports: [
         AdminRoutingModule,
+        AutoCompleteModule,
         ButtonModule,
         CardModule,
         CommonModule,
@@ -43,7 +47,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     declarations: [
         AdminComponent,
-        CreateAdminComponent
+        CreateAdminComponent,
+        UpdateAdminComponent,
+        DeleteAdminComponent
     ],
     providers: [
         {

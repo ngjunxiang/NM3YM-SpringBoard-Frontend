@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from
 import { Message } from 'primeng/components/common/api';
 import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
 import { map } from 'rxjs/operators';
+import { of, Observable } from '../../../../../../node_modules/rxjs';
 
 interface UserType {
     name: string;
@@ -26,6 +27,8 @@ export class CreateAdminComponent implements OnInit {
     createUserForm: FormGroup;
     passwordForm: FormGroup;
     userTypes: UserType[];
+    usernames = [];
+    emails = [];
 
     constructor(
         private fb: FormBuilder,
@@ -59,23 +62,57 @@ export class CreateAdminComponent implements OnInit {
             passwordForm: this.passwordForm
         });
 
-        this.createUserForm.controls.username.setAsyncValidators(this.usernameValidator(this.userMgmtService));
-        this.createUserForm.controls.email.setAsyncValidators(this.emailValidator(this.userMgmtService));
+        this.createUserForm.controls.username.setAsyncValidators(this.usernameValidator());
+        this.createUserForm.controls.email.setAsyncValidators(this.emailValidator());
 
         this.loading = false;
     }
 
-    usernameValidator(userMgmtService: UserMgmtService) {
+    checkUsernameExists(inputUsername: string): Observable<boolean> {
+        this.userMgmtService.retrieveUsersList().subscribe(data => {
+            data.forEach(user => {
+                this.usernames.push(user.username);
+            });
+        }, error => {
+            this.msgs.push({ 
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
+        
+        if (inputUsername && this.usernames.length !== 0) {
+            return of(this.usernames.includes(inputUsername));
+        }
+        return of(false);
+    }
+
+    checkEmailExists(inputEmail: string): Observable<boolean> {
+        this.userMgmtService.retrieveUsersList().subscribe(data => {
+            data.forEach(user => {
+                this.emails.push(user.email);
+            });
+        }, error => {
+            this.msgs.push({ 
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
+        
+        if (inputEmail && this.emails.length !== 0) {
+            return of(this.emails.includes(inputEmail));
+        }
+        return of(false);
+    }
+
+    usernameValidator() {
         return (control: AbstractControl) => {
-            return userMgmtService.checkUsernameExists(control.value).pipe(map(res => {
+            return this.checkUsernameExists(control.value).pipe(map(res => {
                 return res ? { 'usernameExists': true } : null;
             }));
         };
     }
 
-    emailValidator(userMgmtService: UserMgmtService) {
+    emailValidator() {
         return (control: AbstractControl) => {
-            return userMgmtService.checkEmailExists(control.value).pipe(map(res => {
+            return this.checkEmailExists(control.value).pipe(map(res => {
                 return res ? { 'emailExists': true } : null;
             }));
         };
@@ -125,7 +162,7 @@ export class CreateAdminComponent implements OnInit {
         let newPassword = this.createUserForm.controls.passwordForm.get('password').value;
         let newEmail = this.createUserForm.controls.email.value;
         let newUserType = this.createUserForm.controls.userType.value.code;
-console.log(newUserType);
+
         this.userMgmtService.createUser(newUsername, newEmail, newUserType, newPassword).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -133,7 +170,7 @@ console.log(newUserType);
                 });
                 return;
             }
-            
+
             if (res.results) {
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: 'User has been created'
@@ -145,7 +182,9 @@ console.log(newUserType);
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: error + ' Please try again later.' });
+            this.msgs.push({ 
+                severity: 'error', summary: 'Server Error', detail: error
+            });
             this.loading = false;
         });
     }

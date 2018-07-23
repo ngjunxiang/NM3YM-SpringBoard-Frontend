@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 
 import { AdminComponent } from './pages/admin.component';
 import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
+import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
+import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
 
 const routes: Routes = [
     {
@@ -19,7 +21,23 @@ const routes: Routes = [
                 component: CreateAdminComponent,
                 data: {
                     title: 'Admin',
-                    urls: [{ title: 'User Management'}, { title: 'Create Users' }]
+                    urls: [{ title: 'User Management'}, { title: 'Create User Account' }]
+                }
+            },
+            {
+                path: 'usrmgmt/update',
+                component: UpdateAdminComponent,
+                data: {
+                    title: 'Admin',
+                    urls: [{ title: 'User Management'}, { title: 'Update User Account' }]
+                }
+            },
+            {
+                path: 'usrmgmt/delete',
+                component: DeleteAdminComponent,
+                data: {
+                    title: 'Admin',
+                    urls: [{ title: 'User Management'}, { title: 'Delete User Account' }]
                 }
             }
         ]

@@ -78,32 +78,6 @@ export class UserMgmtService {
             );
     }
 
-    checkUsernameExists(inputUsername: string): Observable<boolean> {
-        this.retrieveUsersList().subscribe(data => {
-            data.forEach(user => {
-                this.usernames.push(user.username);
-            });
-        });
-        
-        if (inputUsername && this.usernames.length !== 0) {
-            return of(this.usernames.includes(inputUsername));
-        }
-        return of(false);
-    }
-
-    checkEmailExists(inputEmail: string): Observable<boolean> {
-        this.retrieveUsersList().subscribe(data => {
-            data.forEach(user => {
-                this.emails.push(user.email);
-            });
-        });
-        
-        if (inputEmail && this.emails.length !== 0) {
-            return of(this.emails.includes(inputEmail));
-        }
-        return of(false);
-    }
-
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
