@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from
 import { Message } from 'primeng/components/common/api';
 import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
 import { map } from '../../../../../../node_modules/rxjs/operators';
+import { PassThrough } from 'stream';
 
 interface UserType {
     name: string;
@@ -61,7 +62,7 @@ export class CreateAdminComponent implements OnInit {
 
         this.createUserForm.controls.username.setAsyncValidators(this.usernameValidator(this.userMgmtService));
         this.createUserForm.controls.email.setAsyncValidators(this.emailValidator(this.userMgmtService));
-        
+
         this.loading = false;
     }
 
@@ -121,11 +122,32 @@ export class CreateAdminComponent implements OnInit {
             return;
         }
 
-        this.loading = false;
+        let newUsername = this.createUserForm.controls.username.value;
+        let newPassword = this.createUserForm.controls.passwordForm.get('password').value;
+        let newEmail = this.createUserForm.controls.email.value;
+        let newUserType = this.createUserForm.controls.userType.value;
 
-        this.msgs.push({
-            severity: 'success', summary: 'Success', detail: 'User has been created'
+        this.userMgmtService.createUser(newUsername, newEmail, newUserType, newPassword).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+            
+            if (res.results) {
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'User has been created'
+                });
+            } else {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: 'Something went wrong'
+                });
+            }
+            this.loading = false;
+        }, error => {
+            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please try again later.' });
+            this.loading = false;
         });
-        return;
     }
 }

@@ -15,6 +15,11 @@ interface Data {
     users: User[];
 }
 
+interface Response {
+    results: string;
+    error: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -31,6 +36,29 @@ export class UserMgmtService {
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    createUser(newUsername, newEmail, newUserType, newPassword) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const userData = { 
+            'newUsername': newUsername,
+            'newEmail': newEmail,
+            'newUserType': newUserType,
+            'newPassword': newPassword
+        };
+        
+        const postData = Object.assign(this.authService.authItems, userData);
+
+        return this.http.post<Response>(this.createUsersURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveUsersList() {
         let users = [];
