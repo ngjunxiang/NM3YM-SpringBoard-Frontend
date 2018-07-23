@@ -27,7 +27,7 @@ interface Response {
 export class UserMgmtService {
 
     private retrieveUsersURL = 'http://localhost:8000/app/retrieve-users';
-    private createUsersURL = 'http://localhost:8000/app/create-users';
+    private CUDUsersURL = 'http://localhost:8000/app/manage-users';
 
     usernames = [];
     emails = [];
@@ -50,10 +50,10 @@ export class UserMgmtService {
             'newUserType': newUserType,
             'newPassword': newPassword
         };
-        
+
         const postData = Object.assign(this.authService.authItems, userData);
 
-        return this.http.post<Response>(this.createUsersURL, postData, httpOptions)
+        return this.http.post<Response>(this.CUDUsersURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
