@@ -3,8 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from
 
 import { Message } from 'primeng/components/common/api';
 import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
-import { map } from '../../../../../../node_modules/rxjs/operators';
-import { PassThrough } from 'stream';
+import { map } from 'rxjs/operators';
 
 interface UserType {
     name: string;
@@ -125,8 +124,8 @@ export class CreateAdminComponent implements OnInit {
         let newUsername = this.createUserForm.controls.username.value;
         let newPassword = this.createUserForm.controls.passwordForm.get('password').value;
         let newEmail = this.createUserForm.controls.email.value;
-        let newUserType = this.createUserForm.controls.userType.value;
-
+        let newUserType = this.createUserForm.controls.userType.value.code;
+console.log(newUserType);
         this.userMgmtService.createUser(newUsername, newEmail, newUserType, newPassword).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -146,7 +145,7 @@ export class CreateAdminComponent implements OnInit {
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please try again later.' });
+            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: error + ' Please try again later.' });
             this.loading = false;
         });
     }
