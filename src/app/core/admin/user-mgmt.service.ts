@@ -60,6 +60,27 @@ export class UserMgmtService {
             );
     }
 
+    updateUser(updateUsername, updatePassword) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const userData = { 
+            'updateUsername': updateUsername,
+            'updatePassword': updatePassword
+        };
+
+        const postData = Object.assign(this.authService.authItems, userData);
+
+        return this.http.put<Response>(this.CUDUsersURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     retrieveUsersList() {
         let users = [];
         const httpOptions = {

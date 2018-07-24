@@ -22,7 +22,7 @@ export class AdminComponent implements OnInit {
 
     // UI Control
     sidebarRoutes = ROUTES;
-    msgs: Message[] = [];
+    appMsgs: Message[] = [];
 
     // Name & Email
     name = 'Admin';
@@ -41,7 +41,9 @@ export class AdminComponent implements OnInit {
         }
 
         if (this.route.snapshot.queryParams['err'] === 'auth001') {
-            this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.' });
+            this.appMsgs.push({
+                severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
+            });
         }
     }
 }

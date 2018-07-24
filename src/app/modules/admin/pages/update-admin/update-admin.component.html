@@ -1,3 +1,41 @@
-<p>
-  update-admin works!
-</p>
+<p-growl [(value)]="msgs" [life]=5000></p-growl>
+
+<p-card *ngIf="!loading" [style]="{width: '60%'}">
+    <div class="form-create" [formGroup]="updateUserForm">
+        <p-autoComplete formControlName="username" [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" [size]="30"
+            placeholder="Username" [minLength]="1"></p-autoComplete>
+
+        <div class="error-inline-msg">
+            <span *ngIf="updateUserForm.controls.username.dirty && updateUserForm.controls.username.errors?.required">
+                Please fill in the username field
+            </span>
+        </div>
+
+        <input type="password" id="inputPassword" class="form-control" placeholder="New Password" formControlName="password" required
+            pInputText>
+        <div class="error-inline-msg">
+            <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.required">
+                Please fill in the new password field
+            </span>
+            <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.minlength">
+                Password must be at least 6 characters
+            </span>
+            <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.samePassword">
+                Password must be different from the previous passwords
+            </span>
+        </div>
+
+        <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm New Password" formControlName="confirmPassword"
+            required pInputText>
+        <div class="error-inline-msg">
+            <span *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.controls.confirmPassword.errors?.required">
+                Please fill in the confirm password field
+            </span>
+            <span *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.errors?.mismatch">
+                Please make sure your passwords match
+            </span>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="updateUser()">Change Password</button>
+    </div>
+</p-card>
