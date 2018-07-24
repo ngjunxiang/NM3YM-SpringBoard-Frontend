@@ -36,14 +36,17 @@ export class AdminComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        console.log('init');
         if (this.router.url === '/') {
-            this.router.navigate(['/dashboard/dashboard1']);
+            this.router.navigate(['/dashboard']);
         }
 
-        if (this.route.snapshot.queryParams['err'] === 'auth001') {
-            this.appMsgs.push({
-                severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
-            });
-        }
+        this.route.queryParams.subscribe(params => {
+            if (params['err'] === 'auth001') {
+                this.appMsgs.push({
+                    severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
+                });
+            }
+        });
     }
 }

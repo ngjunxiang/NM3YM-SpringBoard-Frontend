@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Message } from 'primeng/components/common/api';
 
+import { ROUTES } from './cm.sidebar-items';
+
 @Component({
   selector: 'app-cm',
   templateUrl: './cm.component.html',
@@ -18,10 +20,16 @@ export class CMComponent implements OnInit {
     showMinisidebar = false; 
     showDarktheme = false;
 
+    
     // UI Control
-    msgs: Message[] = [];
+    sidebarRoutes = ROUTES;
+    appMsgs: Message[] = [];
 
-	public config: PerfectScrollbarConfigInterface = {};
+    // Name & Email
+    name = 'CM';
+    email = 'cm@bnpp.com';
+
+    public config: PerfectScrollbarConfigInterface = {};
 
     constructor(
         private route: ActivatedRoute,
@@ -30,11 +38,15 @@ export class CMComponent implements OnInit {
 
     ngOnInit() {
         if (this.router.url === '/') {
-            this.router.navigate(['/dashboard/dashboard1']);
+            this.router.navigate(['/dashboard']);
         }
 
-        if (this.route.snapshot.queryParams['err'] === 'auth001') {
-            this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.' });
-        }
+        this.route.queryParams.subscribe(params => {
+            if (params['err'] === 'auth001') {
+                this.appMsgs.push({
+                    severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
+                });
+            }
+        });
     }
 }

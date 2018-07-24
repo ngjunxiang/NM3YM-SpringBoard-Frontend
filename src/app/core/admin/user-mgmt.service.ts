@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map } from 'rxjs/operators';
-import { throwError } from '../../../../node_modules/rxjs';
+import { throwError } from 'rxjs';
+
 import { AuthenticationService } from '../authentication/authentication.service';
 
 interface User {
