@@ -1,0 +1,16 @@
+<p-growl [(value)]="msgs" [life]=5000></p-growl>
+
+<p-card *ngIf="!loading" [style]="{width: '60%'}">
+    <div class="form-create" [formGroup]="deleteUserForm">
+        <p-autoComplete formControlName="username" [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" [size]="30"
+            placeholder="Username" [minLength]="1"></p-autoComplete>
+
+        <div class="error-inline-msg">
+            <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.required">
+                Please fill in the username field
+            </span>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="deleteUser()">Delete</button>
+    </div>
+</p-card>

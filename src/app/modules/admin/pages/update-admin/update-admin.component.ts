@@ -5,7 +5,7 @@ import { Message } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
 
 import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
-import { Observable, of } from '../../../../../../node_modules/rxjs';
+import { Observable } from '../../../../../../node_modules/rxjs';
 
 @Component({
     selector: 'admin-update',
@@ -22,7 +22,6 @@ export class UpdateAdminComponent implements OnInit {
     updateUserForm: FormGroup;
     usernameList = [];
     filteredUsernameList = [];
-    passwordExists = false;
 
     constructor(
         private fb: FormBuilder,
@@ -39,9 +38,9 @@ export class UpdateAdminComponent implements OnInit {
 
     createForm() {
         this.updateUserForm = this.fb.group({
-            username: new FormControl('', [Validators.required]),
+            username: new FormControl('', Validators.required),
             password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-            confirmPassword: new FormControl('', [Validators.required])
+            confirmPassword: new FormControl('', Validators.required)
         }, {
                 validator: this.passwordMismatch,
             });
@@ -114,49 +113,49 @@ export class UpdateAdminComponent implements OnInit {
             });
             return false;
         }));
-}
-
-updateUser() {
-    this.loading = true;
-
-    this.updateUserForm.controls.username.markAsDirty();
-    this.updateUserForm.controls.password.markAsDirty();
-    this.updateUserForm.controls.confirmPassword.markAsDirty();
-
-    if (this.updateUserForm.controls.username.invalid ||
-        this.updateUserForm.controls.password.invalid ||
-        this.updateUserForm.controls.confirmPassword.invalid) {
-        this.msgs.push({
-            severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
-        });
-        this.loading = false;
-        return;
     }
 
-    let updateUsername = this.updateUserForm.controls.username.value;
-    let updatePassword = this.updateUserForm.controls.password.value;
+    updateUser() {
+        this.loading = true;
 
-    this.userMgmtService.updateUser(updateUsername, updatePassword).subscribe(res => {
-        if (res.error) {
+        this.updateUserForm.controls.username.markAsDirty();
+        this.updateUserForm.controls.password.markAsDirty();
+        this.updateUserForm.controls.confirmPassword.markAsDirty();
+
+        if (this.updateUserForm.controls.username.invalid ||
+            this.updateUserForm.controls.password.invalid ||
+            this.updateUserForm.controls.confirmPassword.invalid) {
             this.msgs.push({
-                severity: 'error', summary: 'Error', detail: res.error
+                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
+            this.loading = false;
             return;
         }
 
-        if (res.results) {
-            this.msgs.push({
-                severity: 'success', summary: 'Success', detail: 'User has been created'
-            });
-        } else {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Username not found'
-            });
-        }
-        this.loading = false;
-    }, error => {
-        this.msgs.push({ severity: 'error', summary: 'Server Error', detail: error + ' Please try again later.' });
-        this.loading = false;
-    });
-}
+        let updateUsername = this.updateUserForm.controls.username.value;
+        let updatePassword = this.updateUserForm.controls.password.value;
+
+        this.userMgmtService.updateUser(updateUsername, updatePassword).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'User has been created'
+                });
+            } else {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: 'Username not found'
+                });
+            }
+            this.loading = false;
+        }, error => {
+            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: error + ' Please try again later.' });
+            this.loading = false;
+        });
+    }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map } from 'rxjs/operators';
-import { throwError, Observable, observable, of } from '../../../../node_modules/rxjs';
+import { throwError } from '../../../../node_modules/rxjs';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 interface User {
@@ -18,6 +18,7 @@ interface Data {
 interface Response {
     results: string;
     error: string;
+    items_deleted: number;
 }
 
 @Injectable({
@@ -31,7 +32,7 @@ export class UserMgmtService {
 
     usernames = [];
     emails = [];
-    
+
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
@@ -44,7 +45,7 @@ export class UserMgmtService {
             })
         };
 
-        const userData = { 
+        const userData = {
             'newUsername': newUsername,
             'newEmail': newEmail,
             'newUserType': newUserType,
@@ -67,7 +68,7 @@ export class UserMgmtService {
             })
         };
 
-        const userData = { 
+        const userData = {
             'updateUsername': updateUsername,
             'updatePassword': updatePassword
         };
@@ -75,6 +76,28 @@ export class UserMgmtService {
         const postData = Object.assign(this.authService.authItems, userData);
 
         return this.http.put<Response>(this.CUDUsersURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    deleteUser(deleteUsername) {
+        const userData = {
+            'deleteUsername': deleteUsername
+        };
+
+        const postData = Object.assign(this.authService.authItems, userData);
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            }),
+            body: postData
+        };
+
+
+        return this.http.delete<Response>(this.CUDUsersURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
