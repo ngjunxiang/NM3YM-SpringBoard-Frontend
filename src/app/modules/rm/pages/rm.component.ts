@@ -19,7 +19,7 @@ export class RMComponent implements OnInit {
     showDarktheme = false;
 
     // UI Control
-    msgs: Message[] = [];
+    appMsgs: Message[] = [];
 
 	public config: PerfectScrollbarConfigInterface = {};
 
@@ -33,8 +33,12 @@ export class RMComponent implements OnInit {
             this.router.navigate(['/dashboard/dashboard1']);
         }
 
-        if (this.route.snapshot.queryParams['err'] === 'auth001') {
-            this.msgs.push({ severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.' });
-        }
+        this.route.queryParams.subscribe(params => {
+            if (params['err'] === 'auth001') {
+                this.appMsgs.push({
+                    severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
+                });
+            }
+        });
     }
 }

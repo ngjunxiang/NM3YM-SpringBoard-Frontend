@@ -5,13 +5,14 @@ import { Message } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
 
 import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
-import { Observable } from '../../../../../../node_modules/rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'admin-update',
     templateUrl: './update-admin.component.html',
     styleUrls: ['./update-admin.component.scss']
 })
+
 export class UpdateAdminComponent implements OnInit {
 
     // UI Control
