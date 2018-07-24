@@ -28,7 +28,8 @@ interface Response {
 export class UserMgmtService {
 
     private retrieveUsersURL = 'http://localhost:8000/app/retrieve-users';
-    private CUDUsersURL = 'http://localhost:8000/app/manage-users';
+    private CDUsersURL = 'http://localhost:8000/app/manage-users';
+    private UUsersURL = 'http://localhost:8000/app/update-users';
 
     usernames = [];
     emails = [];
@@ -54,7 +55,7 @@ export class UserMgmtService {
 
         const postData = Object.assign(this.authService.authItems, userData);
 
-        return this.http.post<Response>(this.CUDUsersURL, postData, httpOptions)
+        return this.http.post<Response>(this.CDUsersURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -75,7 +76,7 @@ export class UserMgmtService {
 
         const postData = Object.assign(this.authService.authItems, userData);
 
-        return this.http.put<Response>(this.CUDUsersURL, postData, httpOptions)
+        return this.http.post<Response>(this.UUsersURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -97,7 +98,7 @@ export class UserMgmtService {
         };
 
 
-        return this.http.delete<Response>(this.CUDUsersURL, httpOptions)
+        return this.http.delete<Response>(this.CDUsersURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
