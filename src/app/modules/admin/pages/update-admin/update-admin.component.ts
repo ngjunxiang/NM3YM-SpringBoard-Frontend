@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
-import { Observable } from 'rxjs';
 
 @Component({
     selector: 'admin-update',

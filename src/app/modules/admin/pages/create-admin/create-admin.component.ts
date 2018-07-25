@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
-import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
 import { map } from 'rxjs/operators';
-import { of, Observable } from '../../../../../../node_modules/rxjs';
+import { of, Observable } from 'rxjs';
+
+import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
 
 interface UserType {
     name: string;

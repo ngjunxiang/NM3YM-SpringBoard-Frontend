@@ -21,7 +21,7 @@ export class CMAuthGuard implements CanActivate {
             if (true && localStorage.getItem('USERTYPE') === 'CM') return true;
         // });
         
-        this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase()], { 
+        this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase() + '/dashboard'], { 
             queryParams: { 
                 err: 'auth001' 
             } 

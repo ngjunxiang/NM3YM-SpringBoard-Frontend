@@ -6,16 +6,21 @@ import { AdminComponent } from './pages/admin.component';
 import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
     {
         path: '',
         component: AdminComponent,
-        data: {
-            title: 'Admin',
-            urls: [{ title: 'Dashboard', url: '/dashboard' }]
-        },
         children: [
+            {
+                path: 'dashboard',
+                component: AdminDashboardComponent,
+                data: {
+                    title: 'Admin',
+                    urls: [{ title: 'Dashboard' }]
+                }
+            },
             {
                 path: 'usrmgmt/create',
                 component: CreateAdminComponent,
@@ -41,13 +46,11 @@ const routes: Routes = [
                 }
             }
         ]
-    }, {
+    }, 
+    {
         path: '**',
-        component: AdminComponent,
-        data: {
-            title: 'Admin',
-            urls: [{ title: 'Dashboard', url: '/dashboard' }]
-        }
+        redirectTo: 'dashboard', 
+        pathMatch: 'full' 
     }
 ];
 

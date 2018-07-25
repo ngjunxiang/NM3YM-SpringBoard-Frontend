@@ -1,6 +1,6 @@
 <p-growl [(value)]="msgs" [life]=5000></p-growl>
 
-<p-card *ngIf="!loading" [style]="{width: '60%'}">
+<p-card *ngIf="!loading" [style]="{width: '60%'}" styleClass="ui-card-shadow">
     <div class="form-create" [formGroup]="updateUserForm">
         <p-autoComplete formControlName="username" [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" [size]="30"
             placeholder="Username" [minLength]="1"></p-autoComplete>
