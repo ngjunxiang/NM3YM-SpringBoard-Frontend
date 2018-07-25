@@ -1,0 +1,24 @@
+<p-blockUI [blocked]="blocked"></p-blockUI>
+
+<span>
+    Current Checklists
+    <a routerLink="../create">
+        <button pButton style="float: right;" label="Add New Checklist" type="button" icon="fa fa-plus"></button>
+    </a>
+</span>
+
+<div *ngIf="!loading" style="padding-top: 10px">
+    <div *ngFor="let checklistName of checklistsNames; let i=index" style="padding-bottom: 10px">
+        <p-card styleClass="ui-card-shadow">
+            <div>
+                {{ checklistName }}
+                <div style="float: right">
+                    <button pButton label="Edit" type="button" icon="fa fa-pencil" (click)="edit()"></button>
+                </div>
+            </div>
+            <div>
+                Last Updated:
+            </div>
+        </p-card>
+    </div>
+</div>

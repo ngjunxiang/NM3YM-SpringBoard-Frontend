@@ -1,0 +1,35 @@
+<div *ngIf="!loading">
+    <div class="form-create" [formGroup]="newChecklistForm">
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                Checklist Name
+                <input type="text" id="input" class="form-control" placeholder="Enter Checklist Name" formControlName="checklistName" required
+                    pInputText>
+            </p-card>
+        </div>
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                Checklist Conditions
+
+                <div formArrayName="conditions">
+                    <div *ngFor="let condition of newChecklistForm.get('conditions').controls; let i=index">
+                        Condition {{i+1}}
+                        <div [formGroupName]="i" class="ui-g">
+                            <div class="ui-g-12 ui-md-10">
+                                <input type="text" id="input" class="form-control" style="width: 48%" placeholder="Condition (e.g. Booking Center)" formControlName="conditionName"
+                                    required pInputText>
+                            </div>
+                            <div class="ui-g-12 ui-md-10">
+                                <input type="text" id="input" class="form-control" style="width: 48%; float: right" placeholder="Condition Options* (e.g. Singapore, Hong Kong)"
+                                    formControlName="conditionOptions" required pInputText>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <button pButton label="Add New Condition" type="button" icon="fa fa-plus" (click)="addNewCondition()"></button>
+            </p-card>
+        </div>
+    </div>
+</div>

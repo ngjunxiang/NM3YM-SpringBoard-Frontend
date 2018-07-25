@@ -1,6 +1,6 @@
 <p-growl [(value)]="msgs" [life]=5000></p-growl>
 
-<p-card *ngIf="!loading" [style]="{width: '60%'}">
+<p-card *ngIf="!loading" [style]="{width: '60%'}" styleClass="ui-card-shadow">
     <div class="form-create" [formGroup]="createUserForm">
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
         <div class="error-inline-msg">

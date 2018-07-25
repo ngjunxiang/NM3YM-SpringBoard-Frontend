@@ -93,13 +93,13 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 }
                 if (loginData.userType === 'ADMIN') {
-                    this.router.navigate(['/admin']);
+                    this.router.navigate(['/admin/dashboard']);
                 }
                 if (loginData.userType === 'RM') {
-                    this.router.navigate(['/rm']);
+                    this.router.navigate(['/rm/dashboard']);
                 }
                 if (loginData.userType === 'CM') {
-                    this.router.navigate(['/cm']);
+                    this.router.navigate(['/cm/dashboard']);
                 }
             }
             this.loading = false;

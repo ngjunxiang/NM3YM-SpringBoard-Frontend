@@ -21,6 +21,7 @@ import { CreateAdminComponent } from './pages/create-admin/create-admin.componen
 import { UserMgmtService } from '../../core/admin/user-mgmt.service';
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -49,7 +50,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AdminComponent,
         CreateAdminComponent,
         UpdateAdminComponent,
-        DeleteAdminComponent
+        DeleteAdminComponent,
+        AdminDashboardComponent
     ],
     providers: [
         {

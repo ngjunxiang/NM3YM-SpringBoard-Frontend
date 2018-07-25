@@ -21,7 +21,7 @@ export class AdminAuthGuard implements CanActivate {
             if (true && localStorage.getItem('USERTYPE') === 'ADMIN') return true;
         // });
         
-        this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase()], { 
+        this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase() + '/dashboard'], { 
             queryParams: { 
                 err: 'auth001' 
             } 

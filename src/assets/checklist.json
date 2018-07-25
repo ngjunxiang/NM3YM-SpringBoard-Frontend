@@ -1,0 +1,112 @@
+{
+    "checklists": [
+        {
+            "name": "Individual Account Opening",
+            "required_fields": [
+                "RM Name",
+                "Client Name",
+                "Date of submission",
+                "Client A/C Number"
+            ],
+            "conditions": {
+                "Booking Center": [
+                    "Hong Kong",
+                    "Singapore"
+                ],
+                "Business Center": [
+                    "Front Office Hong Kong",
+                    "Front Office Singapore"
+                ]
+            },
+            "documents": {
+                "defaults": {
+                    "signature": "Y"
+                },
+                "mandatory": {
+                    "Account Opening Book V6": {
+                        "agmt_code": "677"
+                    },
+                    "Letter of Authority - All": {
+                        "agmt_code": "333"
+                    }
+                },
+                "conditional": {
+                    "Personal Data Privacy Ordinance (Wef Mar 2013) / Direct Marketing Opt Out": {
+                        "condition": {
+                            "Booking Center": "Hong Kong"
+                        },
+                        "agmt_code": "554 / 679",
+                        "remarks": "ref -2nd Box -3rd Box -2nd & 3rd Box"
+                    },
+                    "Notice to Customers Acknowledgement - Deposit Covered by the Deposit Protection Scheme Form": {
+                        "condition": {
+                            "Booking Center": "Hong Kong"
+                        },
+                        "agmt_code": "760",
+                        "signature": "N"
+                    }
+                },
+                "optional": {
+                    "Discretionary Portfolio Management Agreement": {
+                        "agmt code": "002",
+                        "remarks": "For DPM Service Only"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Individual Account Closing",
+            "required_fields": [
+                "RM Name",
+                "Client Name",
+                "Date of submission",
+                "Client A/C Number"
+            ],
+            "conditions": {
+                "Booking Center": [
+                    "Hong Kong",
+                    "Singapore"
+                ],
+                "Business Center": [
+                    "Front Office Hong Kong",
+                    "Front Office Singapore"
+                ]
+            },
+            "documents": {
+                "defaults": {
+                    "signature": "Y"
+                },
+                "mandatory": {
+                    "Account Opening Book V6": {
+                        "agmt_code": "677"
+                    },
+                    "Letter of Authority - All": {
+                        "agmt_code": "333"
+                    }
+                },
+                "conditional": {
+                    "Personal Data Privacy Ordinance (Wef Mar 2013) / Direct Marketing Opt Out": {
+                        "condition": {
+                            "Booking Center": "Hong Kong"
+                        },
+                        "agmt_code": "554 / 679",
+                        "remarks": "ref -2nd Box -3rd Box -2nd & 3rd Box"
+                    },
+                    "Notice to Customers Acknowledgement - Deposit Covered by the Deposit Protection Scheme Form": {
+                        "condition": {
+                            "Booking Center": "Hong Kong"
+                        },
+                        "agmt_code": "760",
+                        "signature": "N"
+                    }
+                },
+                "optional": {
+                    "Discretionary Portfolio Management Agreement": {
+                        "agmt code": "002",
+                        "remarks": "For DPM Service Only"
+                    }
+                }
+            }
+        }
+    ]
+}

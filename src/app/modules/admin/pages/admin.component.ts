@@ -36,7 +36,6 @@ export class AdminComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log('init');
         if (this.router.url === '/') {
             this.router.navigate(['/dashboard']);
         }
