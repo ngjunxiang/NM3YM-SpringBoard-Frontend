@@ -2,7 +2,10 @@
 
 <p-card *ngIf="!loading" [style]="{width: '60%'}" styleClass="ui-card-shadow">
     <div class="form-create" [formGroup]="updateUserForm">
-        <p-autoComplete formControlName="username" [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" [size]="30"
+        <h3>Update User Account</h3>
+        <br>
+        <h4>Username</h4>
+        <p-autoComplete  [style]="{'width':'90%'}" [inputStyle]="{'width':'100%'}" inputStyleClass= "form-control" formControlName="username" [suggestions]="filteredUsernameList" (completeMethod)="searchUser()"
             placeholder="Username" [minLength]="1"></p-autoComplete>
 
         <div class="error-inline-msg">
@@ -11,9 +14,14 @@
             </span>
         </div>
 
-        <input type="password" id="inputPassword" class="form-control" placeholder="New Password" formControlName="password" required
+        <h4>Password</h4>
+        <input type="password" id="inputPassword" style="display: inline-block; width: 44%" class="form-control" placeholder="New Password" formControlName="password" required
             pInputText>
-        <div class="error-inline-msg">
+
+        <input type="password" id="inputConfirmPassword" style="display: inline-block; width: 44%; margin-left: 2%" class="form-control" placeholder="Confirm New Password" formControlName="confirmPassword"
+            required pInputText>
+
+        <div class="error-inline-msg" style="display: inline-block; width: 44%">
             <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.required">
                 Please fill in the new password field
             </span>
@@ -25,9 +33,7 @@
             </span>
         </div>
 
-        <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm New Password" formControlName="confirmPassword"
-            required pInputText>
-        <div class="error-inline-msg">
+        <div class="error-inline-msg" style="display: inline-block; width: 44%; margin-left: 2%">
             <span *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.controls.confirmPassword.errors?.required">
                 Please fill in the confirm password field
             </span>
@@ -36,6 +42,6 @@
             </span>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="updateUser()">Change Password</button>
+        <button pButton label="Change Password" class="ui-button-warning" type="button" [disabled]="loading" (click)="updateUser()"></button>
     </div>
 </p-card>

@@ -2,8 +2,11 @@
 
 <p-card *ngIf="!loading" [style]="{width: '60%'}" styleClass="ui-card-shadow">
     <div class="form-create" [formGroup]="createUserForm">
+        <h3>Create New User</h3>
+        <br>
+        <h4>Username</h4>
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
-        <div class="error-inline-msg">
+        <div class="error-inline-msg" >
             <span *ngIf="createUserForm.controls.username.dirty && createUserForm.controls.username.errors?.required">
                 Please fill in the username field
             </span>
@@ -11,7 +14,7 @@
                 Username exists, choose another username
             </span>
         </div>
-
+        <h4>Email</h4>
         <input type="text" id="inputEmail" class="form-control" placeholder="Email Address" formControlName="email" required pInputText>
         <div class="error-inline-msg">
             <span *ngIf="createUserForm.controls.email.dirty && createUserForm.controls.email.errors?.required">
@@ -25,21 +28,32 @@
             </span>
         </div>
 
+        <h4>User Type</h4>
+        <p-dropdown [options]="userTypes" optionLabel="name" formControlName="userType" placeholder="Select User Type"></p-dropdown>
+        <div class="error-inline-msg" style="padding-top: 10px; padding-bottom: 20px">
+            <span *ngIf="createUserForm.controls.userType.dirty && createUserForm.controls.userType.errors?.required">
+                Please fill in the user type field
+            </span>
+        </div>
+
+        <h4>Password</h4>
         <div [formGroup]="passwordForm">
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
+            <input type="password" id="inputPassword" style="display: inline-block; width: 44%" class="form-control" placeholder="Password" formControlName="password" required
                 pInputText>
-            <div class="error-inline-msg">
-                <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.required">
-                    Please fill in the password field
-                </span>
-                <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.minlength">
-                    Password must be at least 6 characters
-                </span>
+
+            <input type="password" id="inputConfirmPassword" style="display: inline-block; width: 44%; margin-left: 2%" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
+                required pInputText>
+
+            <div class="error-inline-msg" style="display: inline-block; width: 44%">
+                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.required">
+                        Please fill in the password field
+                    </span>
+                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.minlength">
+                        Password must be at least 6 characters
+                    </span>
             </div>
 
-            <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
-                required pInputText>
-            <div class="error-inline-msg">
+            <div class="error-inline-msg" style="display: inline-block; width: 44%; margin-left: 2%">
                 <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.controls.confirmPassword.errors?.required">
                     Please fill in the confirm password field
                 </span>
@@ -48,14 +62,9 @@
                 </span>
             </div>
         </div>
+        
+        
 
-        <p-dropdown [options]="userTypes" optionLabel="name" formControlName="userType" placeholder="Select User Type"></p-dropdown>
-        <div class="error-inline-msg" style="padding-top: 10px; padding-bottom: 20px">
-            <span *ngIf="createUserForm.controls.userType.dirty && createUserForm.controls.userType.errors?.required">
-                Please fill in the user type field
-            </span>
-        </div>
-
-        <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="createUser()">Create</button>
+        <button pButton label="Create" class="ui-button-success" type="button" [disabled]="loading" (click)="createUser()"></button>
     </div>
 </p-card>
