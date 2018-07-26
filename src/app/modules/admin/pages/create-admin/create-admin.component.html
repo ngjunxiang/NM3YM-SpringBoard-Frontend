@@ -6,7 +6,7 @@
         <br>
         <h4>Username</h4>
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
-        <div class="error-inline-msg" >
+        <div class="error-inline-msg">
             <span *ngIf="createUserForm.controls.username.dirty && createUserForm.controls.username.errors?.required">
                 Please fill in the username field
             </span>
@@ -37,33 +37,36 @@
         </div>
 
         <h4>Password</h4>
-        <div [formGroup]="passwordForm">
-            <input type="password" id="inputPassword" style="display: inline-block; width: 44%" class="form-control" placeholder="Password" formControlName="password" required
-                pInputText>
+        <div [formGroup]="passwordForm" style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column; width: 44%">
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
+                    pInputText>
 
-            <input type="password" id="inputConfirmPassword" style="display: inline-block; width: 44%; margin-left: 2%" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
-                required pInputText>
-
-            <div class="error-inline-msg" style="display: inline-block; width: 44%">
+                <div class="error-inline-msg">
                     <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.required">
                         Please fill in the password field
                     </span>
                     <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.minlength">
                         Password must be at least 6 characters
                     </span>
+                </div>
             </div>
 
-            <div class="error-inline-msg" style="display: inline-block; width: 44%; margin-left: 2%">
-                <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.controls.confirmPassword.errors?.required">
-                    Please fill in the confirm password field
-                </span>
-                <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.errors?.mismatch">
-                    Please make sure your passwords match
-                </span>
+            <div style="display: flex; flex-direction: column; width: 44%; margin-left: 2%">
+                <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
+                    required pInputText>
+
+                <div class="error-inline-msg">
+                    <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.controls.confirmPassword.errors?.required">
+                        Please fill in the confirm password field
+                    </span>
+                    <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.errors?.mismatch">
+                        Please make sure your passwords match
+                    </span>
+                </div>
             </div>
+
         </div>
-        
-        
 
         <button pButton label="Create" class="ui-button-success" type="button" [disabled]="loading" (click)="createUser()"></button>
     </div>
