@@ -1,84 +1,106 @@
+<p-growl [(value)]="msgs" [life]=5000></p-growl>
+
 <div *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h3>Checklist Name</h3>
-                <input type="text" id="input" style="width: 83%" class="form-control" placeholder="Enter Checklist Name" formControlName="checklistName" required
-                    pInputText>
+                <input type="text" id="input" style="width: 83%" class="form-control" placeholder="Enter Checklist Name" formControlName="checklistName"
+                    required pInputText>
             </p-card>
         </div>
-        <div style="padding-bottom: 10px">
-                <p-card styleClass="ui-card-shadow">
-                    <h3>Required Fields</h3>
-    
-                    <div formArrayName="required_fields">
-                        <div *ngFor="let field of newChecklistForm.get('required_fields').controls; let i=index">
-                            <h4>Field {{i+1}}</h4>
-                            <div [formGroupName]="i" class="ui-g">
-                                <div class="ui-g-12 ui-md-10">
-                                    <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Field (e.g. Client A/C Number)" formControlName="fieldName"
-                                        required pInputText>
-                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times" (click)="deleteField(i)"></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <button pButton label="Add New Field" class="ui-button-success" style="width: 20%" type="button" icon="fa fa-plus" (click)="addNewField()"></button>
-                </p-card>
-            </div>
+
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
-                <h3>Checklist Conditions</h3>
+                <h3>Required Fields</h3>
 
-                <div formArrayName="conditions">
-                    <div *ngFor="let condition of newChecklistForm.get('conditions').controls; let i=index">
-                        <h4>Condition {{i+1}}</h4>
+                <div formArrayName="required_fields">
+                    <div *ngFor="let field of newChecklistForm.get('required_fields').controls; let i=index">
+                        <h4>Field {{i+1}}</h4>
                         <div [formGroupName]="i" class="ui-g">
                             <div class="ui-g-12 ui-md-10">
-                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 28%" placeholder="Condition (e.g. Booking Center)" formControlName="conditionName"
-                                    required pInputText>
-                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 62%; margin-left: 2%" placeholder="Condition Options* (e.g. Singapore, Hong Kong)"
-                                    formControlName="conditionOptions" required pInputText>
-                                <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times" (click)="deleteCondition(i)"></button>
+                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Field (e.g. Client A/C Number)"
+                                    formControlName="fieldName" required pInputText>
+                                <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
+                                    (click)="deleteField(i)"></button>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <button pButton label="Add New Field" class="ui-button-success" style="width: 20%" type="button" icon="fa fa-plus" (click)="addNewField()"></button>
+            </p-card>
+        </div>
+
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h3>Checklist Conditions</h3>
+                <div formArrayName="conditions">
+                    <div *ngFor="let condition of newChecklistForm.get('conditions').controls; let i=index">
+                        <h4>Condition {{i+1}}</h4>
+                        <div [formGroupName]="i" class="ui-g">
+                            <div class="ui-g-12 ui-md-10">
+                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 28%" placeholder="Condition (e.g. Booking Center)"
+                                    formControlName="conditionName" required pInputText>
+                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 62%; margin-left: 2%" placeholder="Condition Options* (e.g. Singapore, Hong Kong)"
+                                    formControlName="conditionOptions" required pInputText>
+                                <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
+                                    (click)="deleteCondition(i)"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <button pButton label="Add New Condition" class="ui-button-success" style="width: 20%" type="button" icon="fa fa-plus" (click)="addNewCondition()"></button>
             </p-card>
         </div>
-        
+
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h3>Documents</h3>
+
                 <h4>Mandatory</h4>
-                <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus" (click)="showMDialog()"></button>
-                <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [width]="800">
-                    <!-- <div formArrayName="mandatory">
-                        <div *ngFor="let doc of newChecklistForm.get('mandatory').controls; let i=index">
-                            <div [formGroupName]="i" class="ui-g"> -->
-                                <h4>Document Name</h4>
-                                <input type="text" id="input" class="form-control" placeholder="Document name" formControlName="documentName"
-                                    required pInputText>
-                                <h4>Agent Code</h4>
-                                <input type="text" id="input" class="form-control" placeholder="Agent Code"
-                                    formControlName="agentCode" required pInputText>
-                                <!-- <h4>Signature Required</h4>
-                                <p-checkbox [(ngModel)]="checked" binary="true"></p-checkbox> -->
-                                <h4>Remarks</h4>
-                                <input type="text" id="input" class="form-control" placeholder="Additional remarks"
-                                    formControlName="remarks" required pInputText>
-                                <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus" (click)="addNewMandatory()"></button>
-                            <!-- </div>
+                <div *ngIf="newChecklistForm.controls.documents.get('mandatory').length == 0">
+                    Document Name Agent Code Signature Required Remarks
+                    <br>
+                     No documents yet
+                </div>
+                <!-- {{newChecklistForm.get('documents').controls.get('mandatory') | json}} -->
+                <div *ngFor="let doc of newChecklistForm.controls.documents.get('mandatory').controls; let i=index">
+                    <div>
+                        <h4>Mandatory Doc {{i+1}}</h4>
+                        {{ doc.controls.documentName.value }} {{ doc.controls.agentCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.remarks.value
+                        }}
+                    </div>
+                </div>
+                <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                    (click)="showMDialog()"></button>
+                <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [width]="800" formGroupName="documents">
+                    <div formArrayName="mandatory">
+                        <div *ngFor="let doc of newChecklistForm.controls.documents.get('mandatory').controls; let i=index">
+                            <div *ngIf="i == newChecklistForm.controls.documents.get('mandatory').length - 1">
+                                <div [formGroupName]="newChecklistForm.controls.documents.get('mandatory').length - 1" class="ui-g">
+                                    <h4>Document Name</h4>
+                                    <input type="text" id="input" class="form-control" placeholder="Document name" formControlName="documentName" required pInputText>
+                                    <h4>Agent Code</h4>
+                                    <input type="text" id="input" class="form-control" placeholder="Agent Code" formControlName="agentCode" required pInputText>
+                                    <h4>Signature Required</h4>
+                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                    <h4>Remarks</h4>
+                                    <input type="text" id="input" class="form-control" placeholder="Additional remarks" formControlName="remarks" pInputText>
+                                    <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                                        (click)="addNewMandatory()"></button>
+                                </div>
+                            </div>
                         </div>
-                    </div> -->
+                    </div>
                 </p-dialog>
+
                 <h4>Conditional</h4>
-                <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus" (click)="addNewCondition()"></button>
+                <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                    (click)="addNewCondition()"></button>
                 <h4>Optional</h4>
-                <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus" (click)="addNewCondition()"></button>
+                <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                    (click)="addNewCondition()"></button>
 
             </p-card>
         </div>

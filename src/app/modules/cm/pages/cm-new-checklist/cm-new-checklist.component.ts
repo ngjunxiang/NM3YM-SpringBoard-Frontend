@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from '../../../../../../node_modules/primeng/components/common/api';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '../../../../../../node_modules/@angular/forms';
-import {DialogModule} from 'primeng/dialog';
-import {CheckboxModule} from 'primeng/checkbox';
+import { Message } from 'primeng/components/common/api';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 @Component({
     selector: 'cm-new-checklist',
@@ -15,10 +13,16 @@ export class CMNewChecklistComponent implements OnInit {
     // UI Control
     loading = false;
     msgs: Message[] = [];
+    mDisplay: boolean = false;
 
     // UI Component
     newChecklistForm: FormGroup;
-    checked: boolean = true;
+    tempMandatoryForm: FormGroup;
+    documentName = "";
+    agentCode = "";
+    signature = true;
+    remarks = "";
+    checklist: any;
 
     constructor(
         private fb: FormBuilder
@@ -45,14 +49,7 @@ export class CMNewChecklistComponent implements OnInit {
                 })
             ]),
             documents: this.fb.group({
-                mandatory: this.fb.array([
-                    this.fb.group({
-                        documentName: new FormControl('', Validators.required),
-                        agentCode: new FormControl('', Validators.required),
-                        // signature: this.checked,
-                        remarks: new FormControl('', Validators.required)
-                    })
-                ])
+                mandatory: this.fb.array([])
             })
         });
 
@@ -66,7 +63,8 @@ export class CMNewChecklistComponent implements OnInit {
                 conditionName: new FormControl('', Validators.required),
                 conditionOptions: new FormControl('', Validators.required)
             })
-        )
+        );
+        console.log(this.newChecklistForm);
     }
 
     deleteCondition(index) {
@@ -80,7 +78,7 @@ export class CMNewChecklistComponent implements OnInit {
             this.fb.group({
                 fieldName: new FormControl('', Validators.required)
             })
-        )
+        );
     }
 
     deleteField(index) {
@@ -88,22 +86,42 @@ export class CMNewChecklistComponent implements OnInit {
         control.removeAt(index);
     }
 
-    mDisplay: boolean = false;
-    
     showMDialog() {
-            this.mDisplay = true;
-    }
-    
-    addNewMandatory() {
-        let control = <FormArray>this.newChecklistForm.controls.mandatory;
+        let control = <FormArray>this.newChecklistForm.controls.documents.get('mandatory');
         control.push(
             this.fb.group({
                 documentName: new FormControl('', Validators.required),
                 agentCode: new FormControl('', Validators.required),
-                signature: this.checked,
-                remarks: new FormControl('', Validators.required)
+                signature: new FormControl(true, Validators.required),
+                remarks: new FormControl('')
             })
-        )
+        );
+        this.mDisplay = true;
     }
-    
+
+    addNewMandatory() {
+        let i = (+this.newChecklistForm.controls.documents.get('mandatory').get('length') - 1) + '';
+
+        this.newChecklistForm.controls.documents.get('mandatory').get(i).get('documentName').markAsDirty();
+        this.newChecklistForm.controls.documents.get('mandatory').get(i).get('agentCode').markAsDirty();
+        this.newChecklistForm.controls.documents.get('mandatory').get(i).get('signature').markAsDirty();
+        this.newChecklistForm.controls.documents.get('mandatory').get(i).get('remarks').markAsDirty();
+
+        if (this.newChecklistForm.controls.documents.get('mandatory').get(i).get('documentName').invalid ||
+            this.newChecklistForm.controls.documents.get('mandatory').get(i).get('agentCode').invalid ||
+            this.newChecklistForm.controls.documents.get('mandatory').get(i).get('signature').invalid ||
+            this.newChecklistForm.controls.documents.get('mandatory').get(i).get('remarks').invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            });
+            return;
+        }
+
+        this.mDisplay = false;
+    }
+
+    saveConditions() {
+        this.checklist['name'] = this.newChecklistForm.controls.checklistName.value;
+        // this.checklist['conditions'] = 
+    }
 }
