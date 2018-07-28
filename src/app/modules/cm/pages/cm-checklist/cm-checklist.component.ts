@@ -41,8 +41,4 @@ export class CMChecklistComponent implements OnInit {
         });
         this.loading = false;
     }
-
-    edit() {
-        this.blocked = true;
-    }
 }
