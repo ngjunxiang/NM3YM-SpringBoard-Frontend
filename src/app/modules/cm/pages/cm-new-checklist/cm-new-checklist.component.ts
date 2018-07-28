@@ -103,7 +103,7 @@ export class CMNewChecklistComponent implements OnInit {
             return;
         }
 
-        let control = <FormArray>this.newChecklistForm.controls.required_fields;
+        let control = <FormArray>this.newChecklistForm.controls.requiredFields;
         control.push(
             this.fb.group({
                 fieldName: new FormControl('', Validators.required)
@@ -112,7 +112,7 @@ export class CMNewChecklistComponent implements OnInit {
     }
 
     deleteField(index) {
-        let control = <FormArray>this.newChecklistForm.controls.required_fields;
+        let control = <FormArray>this.newChecklistForm.controls.requiredFields;
         control.removeAt(index);
     }
 
@@ -244,6 +244,51 @@ export class CMNewChecklistComponent implements OnInit {
         control.removeAt(i);
 
         this.cDisplay = false;
+    }
+
+    showODialog() {
+        let control = <FormArray>this.documentsForm.get('optional');
+        control.push(
+            this.fb.group({
+                documentName: new FormControl('', Validators.required),
+                agentCode: new FormControl('', Validators.required),
+                signature: new FormControl(true),
+                canWaiver: new FormControl(false),
+                remarks: new FormControl('')
+            })
+        );
+        this.oDisplay = true;
+    }
+
+    addNewOptional() {
+        let i = (+this.documentsForm.get('optional').get('length') - 1) + '';
+
+        this.documentsForm.get('optional').get(i).get('documentName').markAsDirty();
+        this.documentsForm.get('optional').get(i).get('agentCode').markAsDirty();
+        this.documentsForm.get('optional').get(i).get('signature').markAsDirty();
+        this.documentsForm.get('optional').get(i).get('canWaiver').markAsDirty();
+        this.documentsForm.get('optional').get(i).get('remarks').markAsDirty();
+
+        if (this.documentsForm.get('optional').get(i).get('documentName').invalid ||
+            this.documentsForm.get('optional').get(i).get('agentCode').invalid ||
+            this.documentsForm.get('optional').get(i).get('signature').invalid ||
+            this.documentsForm.get('optional').get(i).get('canWaiver').invalid ||
+            this.documentsForm.get('optional').get(i).get('remarks').invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            });
+            return;
+        }
+
+        this.oDisplay = false;
+    }
+
+    cancelAddNewOptional() {
+        let i = +this.documentsForm.get('optional').get('length') - 1;
+        let control = <FormArray>this.documentsForm.get('optional');
+        control.removeAt(i);
+
+        this.oDisplay = false;
     }
 
     saveConditions() {

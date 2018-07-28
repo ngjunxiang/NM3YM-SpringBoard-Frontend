@@ -159,9 +159,47 @@
 
 
             <h4>Optional</h4>
+            <div *ngIf="documentsForm.get('optional').length == 0">
+                Document Name Agent Code Signature Required Can be waivered? Remarks
+                <br> No documents yet
+            </div>
+            <div *ngFor="let doc of documentsForm.get('optional').controls; let i=index">
+                <div>
+                    <h4>Optional Doc {{i+1}}</h4>
+                    {{ doc.controls.documentName.value }} {{ doc.controls.agentCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
+                    }} {{ doc.controls.remarks.value }}
+                </div>
+            </div>
             <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
                 (click)="showODialog()"></button>
-
+            <p-dialog header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
+                <div formArrayName="optional">
+                    <div *ngFor="let doc of documentsForm.get('optional').controls; let i=index">
+                        <div *ngIf="i == documentsForm.get('optional').length - 1">
+                            <div [formGroupName]="documentsForm.get('optional').length - 1" class="ui-g">
+                                <h4>Document Name</h4>
+                                <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                <h4>Agent Code</h4>
+                                <input type="text" id="input" class="form-control" placeholder="Agent Code" formControlName="agentCode" required pInputText>
+                                <div class="ui-g">
+                                    <h4>Signature Required</h4>
+                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                </div>
+                                <div class="ui-g">
+                                    <h4>Can be waivered?</h4>
+                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                </div>
+                                <h4>Remarks</h4>
+                                <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                                    (click)="addNewOptional()"></button>
+                                <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
+                                    (click)="cancelAddNewOptional()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-dialog>
         </p-card>
     </div>
 </div>

@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { BlockUIModule } from 'primeng/blockui';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -15,7 +14,9 @@ import { GrowlModule } from 'primeng/growl';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
+import { PanelModule } from '../../../../node_modules/primeng/panel';
 import { SharedModule } from '../../shared/shared.module';
+import { TableModule } from 'primeng/table';
 
 import { CMRoutingModule } from './cm-routing.module';
 import { CMComponent } from './pages/cm.component';
@@ -23,7 +24,6 @@ import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.componen
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { ChecklistService } from '../../core/cm/checklist.service';
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
-import { PanelModule } from '../../../../node_modules/primeng/panel';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -32,7 +32,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
     imports: [
         AutoCompleteModule,
-        BlockUIModule,
         ButtonModule,
         CardModule,
         CheckboxModule,
@@ -49,7 +48,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PanelModule,
         PerfectScrollbarModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        TableModule
     ],
     declarations: [
         CMComponent,

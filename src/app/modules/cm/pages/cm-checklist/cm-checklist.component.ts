@@ -14,7 +14,6 @@ export class CMChecklistComponent implements OnInit {
 
     // UI Control
     loading = false;
-    blocked = false;
     msgs: Message[] = [];
 
     // UI Component
