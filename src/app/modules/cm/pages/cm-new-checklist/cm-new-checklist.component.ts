@@ -21,7 +21,7 @@ export class CMNewChecklistComponent implements OnInit {
     newChecklistForm: FormGroup;
     documentsForm: FormGroup;
     documentName = "";
-    agentCode = "";
+    agmtCode = "";
     signature = true;
     remarks = "";
     checklist: any;
@@ -121,7 +121,7 @@ export class CMNewChecklistComponent implements OnInit {
         control.push(
             this.fb.group({
                 documentName: new FormControl('', Validators.required),
-                agentCode: new FormControl('', Validators.required),
+                agmtCode: new FormControl('', Validators.required),
                 signature: new FormControl(true),
                 canWaiver: new FormControl(false),
                 remarks: new FormControl('')
@@ -134,13 +134,13 @@ export class CMNewChecklistComponent implements OnInit {
         let i = (+this.documentsForm.get('mandatory').get('length') - 1) + '';
 
         this.documentsForm.get('mandatory').get(i).get('documentName').markAsDirty();
-        this.documentsForm.get('mandatory').get(i).get('agentCode').markAsDirty();
+        this.documentsForm.get('mandatory').get(i).get('agmtCode').markAsDirty();
         this.documentsForm.get('mandatory').get(i).get('signature').markAsDirty();
         this.documentsForm.get('mandatory').get(i).get('canWaiver').markAsDirty();
         this.documentsForm.get('mandatory').get(i).get('remarks').markAsDirty();
 
         if (this.documentsForm.get('mandatory').get(i).get('documentName').invalid ||
-            this.documentsForm.get('mandatory').get(i).get('agentCode').invalid ||
+            this.documentsForm.get('mandatory').get(i).get('agmtCode').invalid ||
             this.documentsForm.get('mandatory').get(i).get('signature').invalid ||
             this.documentsForm.get('mandatory').get(i).get('canWaiver').invalid ||
             this.documentsForm.get('mandatory').get(i).get('remarks').invalid) {
@@ -167,7 +167,7 @@ export class CMNewChecklistComponent implements OnInit {
             this.fb.group({
                 conditions: new FormArray([]),
                 documentName: new FormControl('', Validators.required),
-                agentCode: new FormControl('', Validators.required),
+                agmtCode: new FormControl('', Validators.required),
                 signature: new FormControl(true),
                 canWaiver: new FormControl(false),
                 remarks: new FormControl('')
@@ -219,13 +219,13 @@ export class CMNewChecklistComponent implements OnInit {
         let i = (+this.documentsForm.get('conditional').get('length') - 1) + '';
         console.log(this.documentsForm);
         this.documentsForm.get('conditional').get(i).get('documentName').markAsDirty();
-        this.documentsForm.get('conditional').get(i).get('agentCode').markAsDirty();
+        this.documentsForm.get('conditional').get(i).get('agmtCode').markAsDirty();
         this.documentsForm.get('conditional').get(i).get('signature').markAsDirty();
         this.documentsForm.get('conditional').get(i).get('canWaiver').markAsDirty();
         this.documentsForm.get('conditional').get(i).get('remarks').markAsDirty();
 
         if (this.documentsForm.get('conditional').get(i).get('documentName').invalid ||
-            this.documentsForm.get('conditional').get(i).get('agentCode').invalid ||
+            this.documentsForm.get('conditional').get(i).get('agmtCode').invalid ||
             this.documentsForm.get('conditional').get(i).get('signature').invalid ||
             this.documentsForm.get('conditional').get(i).get('canWaiver').invalid ||
             this.documentsForm.get('conditional').get(i).get('remarks').invalid) {
@@ -251,7 +251,7 @@ export class CMNewChecklistComponent implements OnInit {
         control.push(
             this.fb.group({
                 documentName: new FormControl('', Validators.required),
-                agentCode: new FormControl('', Validators.required),
+                agmtCode: new FormControl('', Validators.required),
                 signature: new FormControl(true),
                 canWaiver: new FormControl(false),
                 remarks: new FormControl('')
@@ -264,13 +264,13 @@ export class CMNewChecklistComponent implements OnInit {
         let i = (+this.documentsForm.get('optional').get('length') - 1) + '';
 
         this.documentsForm.get('optional').get(i).get('documentName').markAsDirty();
-        this.documentsForm.get('optional').get(i).get('agentCode').markAsDirty();
+        this.documentsForm.get('optional').get(i).get('agmtCode').markAsDirty();
         this.documentsForm.get('optional').get(i).get('signature').markAsDirty();
         this.documentsForm.get('optional').get(i).get('canWaiver').markAsDirty();
         this.documentsForm.get('optional').get(i).get('remarks').markAsDirty();
 
         if (this.documentsForm.get('optional').get(i).get('documentName').invalid ||
-            this.documentsForm.get('optional').get(i).get('agentCode').invalid ||
+            this.documentsForm.get('optional').get(i).get('agmtCode').invalid ||
             this.documentsForm.get('optional').get(i).get('signature').invalid ||
             this.documentsForm.get('optional').get(i).get('canWaiver').invalid ||
             this.documentsForm.get('optional').get(i).get('remarks').invalid) {

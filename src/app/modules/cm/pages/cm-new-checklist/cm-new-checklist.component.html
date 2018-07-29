@@ -20,7 +20,7 @@
                             <div class="ui-g-12 ui-md-10" style="margin-left: -8px">
                                 <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Field (e.g. Client A/C Number)"
                                     formControlName="fieldName" required pInputText>
-                                <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
+                                <button pButton [disabled]="newChecklistForm.get('requiredFields').length < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
                                     (click)="deleteField(i)"></button>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                                     formControlName="conditionName" required pInputText>
                                 <input type="text" id="input" class="form-control" style="display: inline-block; width: 55%; margin-left: 2%" placeholder="Condition Options* (e.g. Singapore, Hong Kong)"
                                     formControlName="conditionOptions" required pInputText>
-                                <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
+                                <button pButton [disabled]="newChecklistForm.get('conditions').length < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
                                     (click)="deleteCondition(i)"></button>
                             </div>
                         </div>
@@ -59,13 +59,14 @@
 
             <h4>Mandatory</h4>
             <div *ngIf="documentsForm.get('mandatory').length == 0">
-                Document Name Agent Code Signature Required Can be waivered? Remarks
-                <br> No documents yet
+                No documents yet
+            </div>
+            <div *ngIf="documentsForm.get('mandatory').length != 0">
+                Document Name Agmt Code Signature Required Can be waivered? Remarks
             </div>
             <div *ngFor="let doc of documentsForm.get('mandatory').controls; let i=index">
                 <div>
-                    <h4>Mandatory Doc {{i+1}}</h4>
-                    {{ doc.controls.documentName.value }} {{ doc.controls.agentCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
+                    {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
                     }} {{ doc.controls.remarks.value }}
                 </div>
             </div>
@@ -78,22 +79,22 @@
                             <div [formGroupName]="documentsForm.get('mandatory').length - 1" class="ui-g">
                                 <h4>Document Name</h4>
                                 <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                <h4>Agent Code</h4>
-                                <input type="text" id="input" class="form-control" placeholder="Agent Code" formControlName="agentCode" required pInputText>
-                                <div class="ui-g">
-                                    <h4>Signature Required</h4>
-                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                </div>
-                                <div class="ui-g">
-                                    <h4>Can be waivered?</h4>
-                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                </div>
+                                <h4>Agmt Code</h4>
+                                <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                                 <h4>Remarks</h4>
                                 <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                                    (click)="addNewMandatory()"></button>
-                                <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
-                                    (click)="cancelAddNewMandatory()"></button>
+                                <div class="ui-g" style="padding-right: 4%">
+                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                    <h4>Signature required</h4>
+                                </div>
+                                <div class="ui-g">
+                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                    <h4>Can be waived</h4>
+                                </div>
+                                <div class="ui-g-12">
+                                    <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button" icon="fa fa-plus" (click)="addNewMandatory()"></button>
+                                    <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus" (click)="cancelAddNewMandatory()"></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,14 +103,15 @@
 
             <h4>Conditional</h4>
             <div *ngIf="documentsForm.get('conditional').length == 0">
-                Condition Condition Options Document Name Agent Code Signature Required Can be waivered? Remarks
-                <br> No documents yet
+                No documents yet
+            </div>
+            <div *ngIf="documentsForm.get('conditional').length != 0">
+                Condition Condition Options Document Name Agmt Code Signature Required Can be waivered? Remarks
             </div>
             <!-- {{newChecklistForm.get('documents').controls.get('mandatory') | json}} -->
             <div *ngFor="let doc of documentsForm.get('conditional').controls; let i=index">
                 <div>
-                    <h4>Conditional Doc {{i+1}}</h4>
-                    {{ doc.controls.documentName.value }} {{ doc.controls.agentCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
+                    {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
                     }} {{ doc.controls.remarks.value }}
                 </div>
             </div>
@@ -119,38 +121,43 @@
                 <div formArrayName="conditional">
                     <div *ngFor="let doc of documentsForm.get('conditional').controls; let i=index">
                         <div *ngIf="i == documentsForm.get('conditional').length - 1">
-                            <div [formGroupName]="documentsForm.get('conditional').length - 1" class="ui-g">
+                            <div [formGroupName]="documentsForm.get('conditional').length - 1" >
                                 <h4>Conditions</h4>
                                 <div formArrayName="conditions">
                                     <div *ngFor="let condition of documentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
-                                        <div *ngIf="documentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0" [formGroupName]="j">
+                                        <div style="padding-top:1%" *ngIf="documentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0" [formGroupName]="j">
                                             <h5>Condition {{j+1}}</h5>
                                             <p-dropdown [options]="conditions" placeholder="Select a condition" formControlName="conditionName"></p-dropdown>
                                             <p-dropdown [options]="conditionOptions" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
-                                            {{condition.controls.conditionName.value}} {{condition.controls.conditionOption.value}}
+                                            <button pButton [disabled]="documentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
+                                            (click)="deleteConditionalCondition(j)"></button>
                                         </div>
                                     </div>
-                                    <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                                    <div style="padding-top:1%">
+                                    <button pButton label="Add Condition" class="ui-button-success" style="display: inline-block; width: 35%" type="button" icon="fa fa-plus"
                                         (click)="addNewConditionalCondition()"></button>
+                                    </div>
                                 </div>
                                 <h4>Document Name</h4>
                                 <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                <h4>Agent Code</h4>
-                                <input type="text" id="input" class="form-control" placeholder="Agent Code" formControlName="agentCode" required pInputText>
-                                <div class="ui-g">
-                                    <h4>Signature Required</h4>
-                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                </div>
-                                <div class="ui-g">
-                                    <h4>Can be waivered?</h4>
-                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                </div>
+                                <h4>Agmt Code</h4>
+                                <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                                 <h4>Remarks</h4>
                                 <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                                    (click)="addNewConditional()"></button>
-                                <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
-                                    (click)="cancelAddNewConditional()"></button>
+                                <div class="ui-g" style="padding-right:4%">
+                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                    <h4>Signature required</h4>
+                                </div>
+                                <div class="ui-g">
+                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                    <h4>Can be waived</h4>
+                                </div>
+                                <div class="ui-g-12">
+                                    <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button" icon="fa fa-plus"
+                                        (click)="addNewConditional()"></button>
+                                    <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
+                                        (click)="cancelAddNewConditional()"></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,13 +167,14 @@
 
             <h4>Optional</h4>
             <div *ngIf="documentsForm.get('optional').length == 0">
-                Document Name Agent Code Signature Required Can be waivered? Remarks
-                <br> No documents yet
+                No documents yet
+            </div>
+            <div *ngIf="documentsForm.get('optional').length != 0">
+                Document Name Agmt Code Signature Required Can be waivered? Remarks
             </div>
             <div *ngFor="let doc of documentsForm.get('optional').controls; let i=index">
                 <div>
-                    <h4>Optional Doc {{i+1}}</h4>
-                    {{ doc.controls.documentName.value }} {{ doc.controls.agentCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
+                    {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
                     }} {{ doc.controls.remarks.value }}
                 </div>
             </div>
@@ -179,22 +187,24 @@
                             <div [formGroupName]="documentsForm.get('optional').length - 1" class="ui-g">
                                 <h4>Document Name</h4>
                                 <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                <h4>Agent Code</h4>
-                                <input type="text" id="input" class="form-control" placeholder="Agent Code" formControlName="agentCode" required pInputText>
-                                <div class="ui-g">
-                                    <h4>Signature Required</h4>
-                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                </div>
-                                <div class="ui-g">
-                                    <h4>Can be waivered?</h4>
-                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                </div>
+                                <h4>Agmt Code</h4>
+                                <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                                 <h4>Remarks</h4>
                                 <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                                <div class="ui-g" style="padding-right:4%">
+                                    <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                    <h4>Signature required</h4>
+                                </div>
+                                <div class="ui-g">
+                                    <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                    <h4>Can be waived</h4>
+                                </div>
+                                <div class="ui-g-12">
+                                <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button" icon="fa fa-plus"
                                     (click)="addNewOptional()"></button>
                                 <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
                                     (click)="cancelAddNewOptional()"></button>
+                                </div>
                             </div>
                         </div>
                     </div>
