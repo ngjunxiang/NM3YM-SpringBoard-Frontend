@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
             this.loading = false;
         }, error => {
             this.isValidUser = false;
-            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please try again later.' });
+            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin.' });
             this.loading = false;
         });
     }

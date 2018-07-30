@@ -39,7 +39,7 @@ export class UpdateAdminComponent implements OnInit {
 
     createForm() {
         this.updateUserForm = this.fb.group({
-            username: new FormControl('', Validators.required),
+            username: new FormControl('', [Validators.required, this.usernameExists]),
             password: new FormControl('', [Validators.required, Validators.minLength(6)]),
             confirmPassword: new FormControl('', Validators.required)
         }, {
@@ -74,6 +74,13 @@ export class UpdateAdminComponent implements OnInit {
             }
         }
         this.filteredUsernameList = filtered;
+    }
+
+    usernameExists(control: AbstractControl): { [key: string]: boolean } | null {
+        if (this.usernameList.includes(control.value))
+            return null;
+
+        return { 'doesNotExist': true };
     }
 
     passwordMismatch(passwordForm: FormGroup) {

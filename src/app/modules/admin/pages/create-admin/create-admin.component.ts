@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
@@ -50,7 +50,13 @@ export class CreateAdminComponent implements OnInit {
 
     createForm() {
         this.passwordForm = this.fb.group({
-            password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+            password: new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+                this.hasLowerUppercase,
+                this.hasNumber,
+                this.hasSpecialChar
+            ]),
             confirmPassword: new FormControl('', [Validators.required])
         }, {
                 validator: this.passwordMismatch
@@ -75,11 +81,11 @@ export class CreateAdminComponent implements OnInit {
                 this.usernames.push(user.username);
             });
         }, error => {
-            this.msgs.push({ 
+            this.msgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
         });
-        
+
         if (inputUsername && this.usernames.length !== 0) {
             return of(this.usernames.includes(inputUsername));
         }
@@ -92,11 +98,11 @@ export class CreateAdminComponent implements OnInit {
                 this.emails.push(user.email);
             });
         }, error => {
-            this.msgs.push({ 
+            this.msgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
         });
-        
+
         if (inputEmail && this.emails.length !== 0) {
             return of(this.emails.includes(inputEmail));
         }
@@ -117,6 +123,24 @@ export class CreateAdminComponent implements OnInit {
                 return res ? { 'emailExists': true } : null;
             }));
         };
+    }
+
+    hasLowerUppercase(control: AbstractControl): { [key: string]: boolean } | null {
+        if (!(/[a-z]/.test(control.value) && /[A-Z]/.test(control.value)))
+            return { 'caseError': true };
+        return null;
+    }
+
+    hasNumber(control: AbstractControl): { [key: string]: boolean } | null {
+        if (!/\d/.test(control.value))
+            return { 'numberError': true };
+        return null;
+    }
+
+    hasSpecialChar(control: AbstractControl): { [key: string]: boolean } | null {
+        if (!(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(control.value)))
+            return { 'specialCharError': true };
+        return null;
     }
 
     passwordMismatch(passwordForm: FormGroup) {
@@ -183,7 +207,7 @@ export class CreateAdminComponent implements OnInit {
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({ 
+            this.msgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;

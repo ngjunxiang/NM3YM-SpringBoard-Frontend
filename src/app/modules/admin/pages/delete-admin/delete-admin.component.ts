@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
 
@@ -36,7 +36,7 @@ export class DeleteAdminComponent implements OnInit {
 
     createForm() {
         this.deleteUserForm = this.fb.group({
-            username: new FormControl('', Validators.required)
+            username: new FormControl('', [Validators.required, this.usernameExists])
         });
 
         this.loading = false;
@@ -44,6 +44,12 @@ export class DeleteAdminComponent implements OnInit {
 
     retrieveAllUsers() {
         this.userMgmtService.retrieveUsersList().subscribe(data => {
+            if (!data) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin'
+                });
+                return;
+            }
             let usernames = [];
             data.forEach(user => {
                 usernames.push(user.username);
@@ -54,6 +60,13 @@ export class DeleteAdminComponent implements OnInit {
                 severity: 'error', summary: 'Server Error', detail: error
             });
         });
+    }
+
+    usernameExists(control: AbstractControl): { [key: string]: boolean } | null {
+        if (this.usernameList.includes(control.value))
+            return null;
+
+        return { 'doesNotExist': true };
     }
 
     searchUser() {

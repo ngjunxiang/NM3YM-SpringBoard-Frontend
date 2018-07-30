@@ -12,6 +12,9 @@
             <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.required">
                 Please fill in the username field
             </span>
+            <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.doesNotExist">
+                This username does not exist
+            </span>
         </div>
         <br>
         <button pButton label="Delete" class="ui-button-danger" type="button" [disabled]="loading" (click)="deleteUser()"></button>
