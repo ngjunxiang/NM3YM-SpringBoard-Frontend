@@ -12,7 +12,7 @@
             <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.required">
                 Please fill in the username field
             </span>
-            <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.doesNotExist">
+            <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.usernameNoExist">
                 This username does not exist
             </span>
         </div>

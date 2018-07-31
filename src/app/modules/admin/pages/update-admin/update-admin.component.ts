@@ -39,14 +39,15 @@ export class UpdateAdminComponent implements OnInit {
 
     createForm() {
         this.updateUserForm = this.fb.group({
-            username: new FormControl('', [Validators.required, this.usernameExists]),
+            username: new FormControl('', Validators.required),
             password: new FormControl('', [Validators.required, Validators.minLength(6)]),
             confirmPassword: new FormControl('', Validators.required)
         }, {
-                validator: this.passwordMismatch,
+                validator: this.passwordMismatch
             });
 
         this.updateUserForm.controls.password.setAsyncValidators(this.differentPasswordValidator());
+        this.updateUserForm.controls.username.setAsyncValidators(this.usernameExists());
 
         this.loading = false;
     }
@@ -76,11 +77,29 @@ export class UpdateAdminComponent implements OnInit {
         this.filteredUsernameList = filtered;
     }
 
-    usernameExists(control: AbstractControl): { [key: string]: boolean } | null {
-        if (this.usernameList.includes(control.value))
-            return null;
+    usernameExists() {
+        return (control: AbstractControl) => {
+            return this.checkUsernameExists(control.value).pipe(map(res => {
+                return res ? null : { 'usernameNoExist': true };
+            }));
+        };
+    }
 
-        return { 'doesNotExist': true };
+    checkUsernameExists(inputUsername: string): Observable<boolean> {
+        return this.userMgmtService.retrieveUsersList().pipe(map(data => {
+            let exists = false;
+            data.forEach(user => {
+                if (user.username === inputUsername) {
+                    exists = true;
+                }
+            });
+            return exists;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            return false;
+        }));
     }
 
     passwordMismatch(passwordForm: FormGroup) {
