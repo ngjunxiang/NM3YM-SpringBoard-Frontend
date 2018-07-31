@@ -40,7 +40,13 @@ export class UpdateAdminComponent implements OnInit {
     createForm() {
         this.updateUserForm = this.fb.group({
             username: new FormControl('', Validators.required),
-            password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+            password: new FormControl('', [
+                Validators.required, 
+                Validators.minLength(6),
+                this.hasLowerUppercase,
+                this.hasNumber,
+                this.hasSpecialChar
+            ]),
             confirmPassword: new FormControl('', Validators.required)
         }, {
                 validator: this.passwordMismatch
@@ -102,6 +108,24 @@ export class UpdateAdminComponent implements OnInit {
         }));
     }
 
+    hasLowerUppercase(control: AbstractControl): { [key: string]: boolean } | null {
+        if (!(/[a-z]/.test(control.value) && /[A-Z]/.test(control.value)))
+            return { 'caseError': true };
+        return null;
+    }
+
+    hasNumber(control: AbstractControl): { [key: string]: boolean } | null {
+        if (!/\d/.test(control.value))
+            return { 'numberError': true };
+        return null;
+    }
+
+    hasSpecialChar(control: AbstractControl): { [key: string]: boolean } | null {
+        if (!(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(control.value)))
+            return { 'specialCharError': true };
+        return null;
+    }
+    
     passwordMismatch(passwordForm: FormGroup) {
         let password = passwordForm.controls.password.value;
         let confirmPassword = passwordForm.controls.confirmPassword.value;
