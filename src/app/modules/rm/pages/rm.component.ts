@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Message } from 'primeng/components/common/api';
 
+import { ROUTES } from './rm.sidebar-items';
+
 @Component({
   selector: 'app-rm',
   templateUrl: './rm.component.html',
@@ -18,10 +20,16 @@ export class RMComponent implements OnInit {
     showMinisidebar = false; 
     showDarktheme = false;
 
+    
     // UI Control
+    sidebarRoutes = ROUTES;
     appMsgs: Message[] = [];
 
-	public config: PerfectScrollbarConfigInterface = {};
+    // Name & Email
+    name = 'RM';
+    email = 'rm@bnpp.com';
+
+    public config: PerfectScrollbarConfigInterface = {};
 
     constructor(
         private route: ActivatedRoute,
@@ -30,7 +38,7 @@ export class RMComponent implements OnInit {
 
     ngOnInit() {
         if (this.router.url === '/') {
-            this.router.navigate(['/dashboard/dashboard1']);
+            this.router.navigate(['/dashboard']);
         }
 
         this.route.queryParams.subscribe(params => {

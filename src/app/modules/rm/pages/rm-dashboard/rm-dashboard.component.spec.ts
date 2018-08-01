@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RMComponent } from './rm.component';
+import { RMDashboardComponent } from './rm-dashboard.component';
 
-describe('RMComponent', () => {
-    let component: RMComponent;
-    let fixture: ComponentFixture<RMComponent>;
+describe('RMDashboardComponent', () => {
+    let component: RMDashboardComponent;
+    let fixture: ComponentFixture<RMDashboardComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RMComponent]
+            declarations: [RMDashboardComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RMComponent);
+        fixture = TestBed.createComponent(RMDashboardComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

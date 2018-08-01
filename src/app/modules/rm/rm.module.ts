@@ -5,12 +5,14 @@ import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLL
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { GrowlModule } from 'primeng/growl';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { SharedModule } from '../../shared/shared.module';
 
 import { RMRoutingModule } from './rm-routing.module';
 import { RMComponent } from './pages/rm.component';
-import { SharedModule } from '../../shared/shared.module';
+import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -22,6 +24,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ButtonModule,
         CommonModule,
         DialogModule,
+        GrowlModule,
         MessageModule,
         MessagesModule,
         NgbModule.forRoot(),
@@ -29,7 +32,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SharedModule
     ],
     declarations: [
-        RMComponent
+        RMComponent,
+        RMDashboardComponent
     ],
     providers: [
         {

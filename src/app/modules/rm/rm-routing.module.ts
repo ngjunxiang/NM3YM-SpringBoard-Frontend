@@ -2,15 +2,44 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { RMComponent } from './pages/rm.component';
+import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
 
 const routes: Routes = [
     {
         path: '',
         component: RMComponent,
-        data: {
-            title: 'Relationship Manager',
-            urls: [{ title: 'Main Page', url: '/dashboard' }, { title: 'Clients' }]
-        }
+        children: [
+            {
+                path: 'dashboard',
+                component: RMDashboardComponent,
+                data: {
+                    title: 'Relationship Manager',
+                    urls: [{ title: 'Dashboard' }]
+                }
+            },
+            // {
+            //     path: 'checklist/manage',
+            //     component: CMChecklistComponent,
+            //     data: {
+            //         title: 'Client Management',
+            //         urls: [{ title: 'Checklists' }, { title: 'Manage' }]
+            //     }
+            // },
+            // {
+            //     path: 'checklist/create',
+            //     component: CMNewChecklistComponent,
+            //     data: {
+            //         title: 'Client Management',
+            //         urls: [{ title: 'Checklist' }, { title: 'New' }]
+            //     }
+            // }
+
+        ]
+    },
+    {
+        path: '**',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
     }
 ];
 
