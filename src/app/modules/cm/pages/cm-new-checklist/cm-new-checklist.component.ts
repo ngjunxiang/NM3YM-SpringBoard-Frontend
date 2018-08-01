@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
+import { ChecklistService } from '../../../../core/cm/checklist.service';
+
 @Component({
     selector: 'cm-new-checklist',
     templateUrl: './cm-new-checklist.component.html',
@@ -15,8 +17,11 @@ export class CMNewChecklistComponent implements OnInit {
     msgs: Message[] = [];
     tabs: MenuItem[] = [];
     activeTab = 'Compliance';
-    conditions: SelectItem[];
-    conditionOptions: SelectItem[];
+    dropdownData = {
+        conditions: [],
+        conditionOptions: []
+    };
+    mandatoryCols: any[];
     mDisplay: boolean = false;
     cDisplay: boolean = false;
     oDisplay: boolean = false;
@@ -28,6 +33,7 @@ export class CMNewChecklistComponent implements OnInit {
     checklist: any;
 
     constructor(
+        private checklistService: ChecklistService,
         private fb: FormBuilder
     ) { }
 
@@ -41,6 +47,14 @@ export class CMNewChecklistComponent implements OnInit {
             {label: 'Legal', icon: 'fa fa-fw fa-calendar', command: (event) => {
                 this.activeTab = event['item']['label'];
             }}
+        ];
+
+        this.mandatoryCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' },
+            { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
         this.createForm();
@@ -186,6 +200,28 @@ export class CMNewChecklistComponent implements OnInit {
         this.mDisplay = false;
     }
 
+    editMandatoryDoc(index: number) {
+        let form = this.complianceDocumentsForm;
+        
+        if (this.activeTab === 'Legal') {
+            form = this.legalDocumentsForm;
+        }
+        this.mDisplay = true;
+        // let control = <FormArray>form.get('mandatory').get(index);
+        // control.removeAt(index);
+    }
+
+    deleteMandatoryDoc(index: number) {
+        let form = this.complianceDocumentsForm;
+        
+        if (this.activeTab === 'Legal') {
+            form = this.legalDocumentsForm;
+        }
+
+        let control = <FormArray>form.get('mandatory');
+        control.removeAt(index);
+    }
+
     showCDialog() {
         if (this.newChecklistForm.get('conditions')['length'] === 1
             && (this.newChecklistForm.get('conditions').get('0').get('conditionName').value == ''
@@ -228,32 +264,32 @@ export class CMNewChecklistComponent implements OnInit {
     }
 
     retrieveConditionalConditions() {
-        let i: number;
-        this.conditions = [];
-        for (i = 0; i < this.newChecklistForm.get('conditions')['length']; i++) {
+        let conditions: SelectItem[] = [];
+        for (let i = 0; i < this.newChecklistForm.get('conditions')['length']; i++) {
             if (this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value !== '') {
-                this.conditions.push({
+                conditions.push({
                     'label': this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value,
                     'value': this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value
                 });
             }
         }
+        this.dropdownData['conditions'] = conditions;
     }
 
-    onConditionNameSelect(conditionName: string) {
-        let i: number;
-        this.conditionOptions = [];
-        for (i = 0; i < this.newChecklistForm.get('conditions')['length']; i++) {
+    onConditionNameSelect(conditionName: string, index: number) {
+        let conditionOptions: SelectItem[] = [];
+        for (let i = 0; i < this.newChecklistForm.get('conditions')['length']; i++) {
             if (conditionName === this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value) {
                 let options = this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').value.split(',');
                 options.forEach(option => {
-                    this.conditionOptions.push({
+                    conditionOptions.push({
                         'label': option.trim(),
                         'value': option.trim()
                     });
                 });
             }
         }
+        this.dropdownData['conditionOptions'][index] = conditionOptions;
     }
 
     addNewConditionalCondition() {
@@ -323,6 +359,7 @@ export class CMNewChecklistComponent implements OnInit {
             return;
         }
 
+        this.dropdownData.conditionOptions = [];
         this.cDisplay = false;
     }
 
@@ -337,6 +374,7 @@ export class CMNewChecklistComponent implements OnInit {
         let control = <FormArray>form.get('conditional');
         control.removeAt(i);
 
+        this.dropdownData.conditionOptions = [];
         this.cDisplay = false;
     }
 
@@ -418,7 +456,7 @@ export class CMNewChecklistComponent implements OnInit {
             }
         }
 
-        this.checklist['conditions'] = [];
+        this.checklist['conditions'] = {};
 
         for (let i = 0; i < this.newChecklistForm.get('conditions')['length']; i++) {
             if (!(this.newChecklistForm.get('conditions')['length'] - 1 === i
@@ -432,5 +470,62 @@ export class CMNewChecklistComponent implements OnInit {
                 });
             }
         }
+
+        this.checklist['documents'] = {};
+        this.checklist['documents']['mandatory'] = [];
+
+        for (let i = 0; i < this.complianceDocumentsForm.get('mandatory')['length']; i++) {
+            let mandatoryDoc = this.complianceDocumentsForm.get('mandatory').get(i + '');
+            this.checklist['documents']['mandatory'].push({
+                documentName: mandatoryDoc.get('documentName').value,
+                agmtCode: mandatoryDoc.get('agmtCode').value,
+                signature: mandatoryDoc.get('signature').value,
+                canWaiver: mandatoryDoc.get('canWaiver').value,
+                remarks: mandatoryDoc.get('remarks').value
+            });
+        }
+
+        this.checklist['documents']['conditional'] = [];
+
+        for (let i = 0; i < this.complianceDocumentsForm.get('conditional')['length']; i++) {
+            let conditionalDoc = this.complianceDocumentsForm.get('conditional').get(i + '');
+            let conditions = [];
+            for (let j = 0; j < this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
+                let condition = this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
+                conditions.push({
+                    conditionName: condition.get('conditionName').value,
+                    conditionOption: condition.get('conditionOption').value
+                })
+            }
+            this.checklist['documents']['conditional'].push({
+                conditions: conditions,
+                documentName: conditionalDoc.get('documentName').value,
+                agmtCode: conditionalDoc.get('agmtCode').value,
+                signature: conditionalDoc.get('signature').value,
+                canWaiver: conditionalDoc.get('canWaiver').value,
+                remarks: conditionalDoc.get('remarks').value
+            });
+        }
+
+        this.checklist['documents']['optional'] = [];
+
+        for (let i = 0; i < this.complianceDocumentsForm.get('optional')['length']; i++) {
+            let optionalDoc = this.complianceDocumentsForm.get('optional').get(i + '');
+            this.checklist['documents']['optional'].push({
+                documentName: optionalDoc.get('documentName').value,
+                agmtCode: optionalDoc.get('agmtCode').value,
+                signature: optionalDoc.get('signature').value,
+                canWaiver: optionalDoc.get('canWaiver').value,
+                remarks: optionalDoc.get('remarks').value
+            });
+        }
+
+        this.checklistService.createChecklist(this.checklist).subscribe(res => {
+            if (res.error) {
+                
+            }
+        }, error => {
+            
+        });
     }
 }

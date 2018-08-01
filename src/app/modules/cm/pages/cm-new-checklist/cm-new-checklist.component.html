@@ -2,6 +2,7 @@
 
 <div *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
+        <!-- Checklist Name -->
         <div style="padding-bottom: 10px" id="checklistName">
             <p-card styleClass="ui-card-shadow">
                 <h3>Checklist Name</h3>
@@ -10,6 +11,7 @@
             </p-card>
         </div>
 
+        <!-- Required Fields -->
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h3>Required Fields</h3>
@@ -30,6 +32,7 @@
             </p-card>
         </div>
 
+        <!-- Checklist Conditions -->
         <div style="padding-bottom: 10px" id="conditions">
             <p-card styleClass="ui-card-shadow">
                 <h3>Checklist Conditions</h3>
@@ -53,6 +56,7 @@
         </div>
     </div>
 
+    <!-- Documents -->
     <div class="form-create" style="padding-bottom: 10px">
         <p-card styleClass="ui-card-shadow">
             <h3>Documents</h3>
@@ -65,14 +69,41 @@
                     No documents yet
                 </div>
                 <div *ngIf="complianceDocumentsForm.get('mandatory').length != 0">
-                    Document Name Agmt Code Signature Required Can be waivered? Remarks
+                    <p-table [value]="complianceDocumentsForm.get('mandatory').controls">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of mandatoryCols">
+                                    {{ col.header }}
+                                </th>
+                                <th style="width: 10%"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr *ngFor="let doc of complianceDocumentsForm.get('mandatory').controls; let i=index">
+                                <td>{{doc.get('documentName').value}}</td>
+                                <td>{{doc.get('agmtCode').value}}</td>
+                                <td>{{doc.get('remarks').value}}</td>
+                                <td *ngIf="doc.get('signature').value">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.get('signature').value">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.get('canWaiver').value">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.get('canWaiver').value">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td>
+                                    <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
+                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
                 </div>
-                <div *ngFor="let doc of complianceDocumentsForm.get('mandatory').controls; let i=index">
-                    <div>
-                        {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
-                        }} {{ doc.controls.remarks.value }}
-                    </div>
-                </div>
+
                 <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
                     (click)="showMDialog()"></button>
                 <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
@@ -133,8 +164,9 @@
                                             <div style="padding-top:1%" *ngIf="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0"
                                                 [formGroupName]="j">
                                                 <h5>Condition {{j+1}}</h5>
-                                                <p-dropdown [options]="conditions" (onChange)="onConditionNameSelect($event.value)" placeholder="Select a condition" formControlName="conditionName"></p-dropdown>
-                                                <p-dropdown [options]="conditionOptions" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
+                                                <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, j)" placeholder="Select a condition"
+                                                    formControlName="conditionName"></p-dropdown>
+                                                <p-dropdown [options]="dropdownData.conditionOptions[j]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                                 <button pButton [disabled]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger"
                                                     style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
                                                     (click)="deleteConditionalCondition(j)"></button>
@@ -290,11 +322,11 @@
                                     <h4>Conditions</h4>
                                     <div formArrayName="conditions">
                                         <div *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
-                                            <div style="padding-top:1%" *ngIf="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0"
-                                                [formGroupName]="j">
+                                            <div style="padding-top:1%" *ngIf="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0" [formGroupName]="j">
                                                 <h5>Condition {{j+1}}</h5>
-                                                <p-dropdown [options]="conditions" (onChange)="onConditionNameSelect($event.value)" placeholder="Select a condition" formControlName="conditionName"></p-dropdown>
-                                                <p-dropdown [options]="conditionOptions" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
+                                                <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, j)" placeholder="Select a condition"
+                                                    formControlName="conditionName"></p-dropdown>
+                                                <p-dropdown [options]="dropdownData.conditionOptions[j]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                                 <button pButton [disabled]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger"
                                                     style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
                                                     (click)="deleteConditionalCondition(j)"></button>

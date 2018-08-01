@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpClient } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError, Observable } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../authentication/authentication.service';
 
@@ -15,6 +16,11 @@ interface Checklists {
     checklists: Checklist[];
 }
 
+interface Response {
+    results: string;
+    error: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -22,6 +28,7 @@ interface Checklists {
 export class ChecklistService {
 
     private retrieveChecklistURL = 'http://localhost:8000/app/retrieve-users';
+    private createChecklistURL = '';
 
     constructor(
         private authService: AuthenticationService,
@@ -30,6 +37,26 @@ export class ChecklistService {
 
     retrieveChecklist(): Observable<Checklists> {
         return this.http.get<Checklists>('assets/checklist.json');
+    }
+
+    createChecklist(checklist) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistData = {
+            'checklist': checklist
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistData);
+
+        return this.http.post<Response>(this.createChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
     
     private handleError(error: HttpErrorResponse) {
