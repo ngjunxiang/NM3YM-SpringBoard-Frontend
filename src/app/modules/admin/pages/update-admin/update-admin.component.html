@@ -32,13 +32,13 @@
                     <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.samePassword">
                         Password must be different from the previous passwords
                     </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.caseError">
+                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.caseError">
                         Password must contain upper and lowercase letters
                     </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.numberError">
+                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.numberError">
                         Password must contain at least 1 number
                     </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.specialCharError">
+                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.specialCharError">
                         Password must contain at least 1 special character
                     </span>
                 </div>
