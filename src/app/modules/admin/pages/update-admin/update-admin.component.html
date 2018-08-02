@@ -5,7 +5,7 @@
         <h3>Update User Account</h3>
         <br>
         <h4>Username</h4>
-        <p-autoComplete [style]="{'width':'90%'}" [inputStyle]="{'width':'100%'}" inputStyleClass="form-control" formControlName="username"
+        <p-autoComplete [style]="{'width':'90%', 'margin-bottom': '2%'}" [inputStyle]="{'width':'100%'}" inputStyleClass="form-control" formControlName="username"
             [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" placeholder="Username" [minLength]="1"></p-autoComplete>
         <div class="error-inline-msg">
             <span *ngIf="updateUserForm.controls.username.dirty && updateUserForm.controls.username.errors?.required">
