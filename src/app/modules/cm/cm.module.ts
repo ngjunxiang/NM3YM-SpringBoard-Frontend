@@ -17,7 +17,7 @@ import { MessagesModule } from 'primeng/messages';
 import { PanelModule } from 'primeng/panel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
-import { TabMenuModule } from 'primeng/tabmenu';
+import { TabViewModule } from 'primeng/tabview';
 
 import { CMRoutingModule } from './cm-routing.module';
 import { CMComponent } from './pages/cm.component';
@@ -51,7 +51,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReactiveFormsModule,
         SharedModule,
         TableModule,
-        TabMenuModule
+        TabViewModule
     ],
     declarations: [
         CMComponent,
