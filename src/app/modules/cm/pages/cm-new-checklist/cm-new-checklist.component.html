@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs" [life]=5000 [style]="{zIndex:99999999}"></p-growl>
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 
 <div *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
@@ -61,354 +61,500 @@
         <p-card styleClass="ui-card-shadow">
             <h3>Documents</h3>
 
-            <p-tabMenu [model]="tabs" [activeItem]="activeTab"></p-tabMenu>
+            <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
+                <p-tabPanel header="Compliance" [formGroup]="complianceDocumentsForm">
+                    <h4>Mandatory</h4>
+                    <div *ngIf="complianceDocumentsForm.get('mandatory').length === 0">
+                        No documents yet
+                    </div>
+                    <div *ngIf="complianceDocumentsForm.get('mandatory').length !== 0">
+                        <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of mandatoryCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc>
+                                <tr>
+                                    <td>{{ doc.get('documentName').value }}</td>
+                                    <td>{{ doc.get('agmtCode').value }}</td>
+                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td *ngIf="doc.get('signature').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('signature').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td *ngIf="doc.get('canWaiver').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('canWaiver').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
 
-            <div *ngIf="activeTab ==='Compliance'" [formGroup]="complianceDocumentsForm">
-                <h4>Mandatory</h4>
-                <div *ngIf="complianceDocumentsForm.get('mandatory').length == 0">
-                    No documents yet
-                </div>
-                <div *ngIf="complianceDocumentsForm.get('mandatory').length != 0">
-                    <p-table [value]="complianceDocumentsForm.get('mandatory').controls">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th *ngFor="let col of mandatoryCols">
-                                    {{ col.header }}
-                                </th>
-                                <th style="width: 10%"></th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body">
-                            <tr *ngFor="let doc of complianceDocumentsForm.get('mandatory').controls; let i=index">
-                                <td>{{doc.get('documentName').value}}</td>
-                                <td>{{doc.get('agmtCode').value}}</td>
-                                <td>{{doc.get('remarks').value}}</td>
-                                <td *ngIf="doc.get('signature').value">
-                                    <i class="fa fa-check"></i>
-                                </td>
-                                <td *ngIf="!doc.get('signature').value">
-                                    <i class="fa fa-times"></i>
-                                </td>
-                                <td *ngIf="doc.get('canWaiver').value">
-                                    <i class="fa fa-check"></i>
-                                </td>
-                                <td *ngIf="!doc.get('canWaiver').value">
-                                    <i class="fa fa-times"></i>
-                                </td>
-                                <td>
-                                    <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
-                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </div>
-
-                <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showMDialog()"></button>
-                <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
-                    <div formArrayName="mandatory">
-                        <div *ngFor="let doc of complianceDocumentsForm.get('mandatory').controls; let i=index">
-                            <div *ngIf="i == complianceDocumentsForm.get('mandatory').length - 1">
-                                <div [formGroupName]="complianceDocumentsForm.get('mandatory').length - 1" class="ui-g">
-                                    <h4>Document Name</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                    <h4>Agmt Code</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                                    <h4>Remarks</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                    <div class="ui-g" style="padding-right: 4%">
-                                        <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                        <h4>Signature required</h4>
-                                    </div>
-                                    <div class="ui-g">
-                                        <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                        <h4>Can be waived</h4>
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
-                                            icon="fa fa-plus" (click)="addNewMandatory()"></button>
-                                        <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
-                                            (click)="cancelAddNewMandatory()"></button>
+                    <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                        (click)="showMDialog()"></button>
+                    <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
+                        <div formArrayName="mandatory">
+                            <div *ngFor="let doc of complianceDocumentsForm.get('mandatory').controls; let i=index">
+                                <div *ngIf="i === complianceDocumentsForm.get('mandatory').length - 1">
+                                    <div [formGroupName]="complianceDocumentsForm.get('mandatory').length - 1" class="ui-g">
+                                        <h4>Document Name</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                        <h4>Agmt Code</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                                        <h4>Remarks</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                        <div class="ui-g" style="padding-right: 4%">
+                                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                            <h4>Signature required</h4>
+                                        </div>
+                                        <div class="ui-g">
+                                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                            <h4>Can be waived</h4>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
+                                                icon="fa fa-plus" (click)="addNewMandatory()"></button>
+                                            <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
+                                                (click)="cancelAddNewMandatory()"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </p-dialog>
+                    </p-dialog>
 
-                <h4>Conditional</h4>
-                <div *ngIf="complianceDocumentsForm.get('conditional').length == 0">
-                    No documents yet
-                </div>
-                <div *ngIf="complianceDocumentsForm.get('conditional').length != 0">
-                    Condition Condition Options Document Name Agmt Code Signature Required Can be waivered? Remarks
-                </div>
-
-                <div *ngFor="let doc of complianceDocumentsForm.get('conditional').controls; let i=index">
-                    <div>
-                        {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
-                        }} {{ doc.controls.remarks.value }}
+                    <h4>Conditional</h4>
+                    <div *ngIf="complianceDocumentsForm.get('conditional').length === 0">
+                        No documents yet
                     </div>
-                </div>
-                <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showCDialog()"></button>
-                <p-dialog header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
-                    <div formArrayName="conditional">
-                        <div *ngFor="let doc of complianceDocumentsForm.get('conditional').controls; let i=index">
-                            <div *ngIf="i == complianceDocumentsForm.get('conditional').length - 1">
-                                <div [formGroupName]="complianceDocumentsForm.get('conditional').length - 1">
-                                    <h4>Conditions</h4>
-                                    <div formArrayName="conditions">
-                                        <div *ngFor="let condition of complianceDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
-                                            <div style="padding-top:1%" *ngIf="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0"
-                                                [formGroupName]="j">
-                                                <h5>Condition {{j+1}}</h5>
-                                                <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, j)" placeholder="Select a condition"
-                                                    formControlName="conditionName"></p-dropdown>
-                                                <p-dropdown [options]="dropdownData.conditionOptions[j]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
-                                                <button pButton [disabled]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger"
-                                                    style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
-                                                    (click)="deleteConditionalCondition(j)"></button>
+
+                    <div *ngIf="complianceDocumentsForm.get('conditional').length !== 0">
+                        <p-table [value]="complianceDocumentsForm.get('conditional').controls" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of conditionalCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngFor="let condition of complianceDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
+                                    <tr>
+                                        <ng-container *ngIf="j === 0">
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
+                                        </ng-container>
+                                        <td>{{ condition.get('conditionName').value }}</td>
+                                        <td>{{ condition.get('conditionOption').value }}</td>
+                                        <ng-container *ngIf="j === 0">
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('agmtCode').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('remarks').value }}</td>
+                                            <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
+                                            </td>
+                                        </ng-container>
+
+                                    </tr>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
+
+                    <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                        (click)="showCDialog()"></button>
+                    <p-dialog header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
+                        <div formArrayName="conditional">
+                            <div *ngFor="let doc of complianceDocumentsForm.get('conditional').controls; let i=index">
+                                <div *ngIf="i == complianceDocumentsForm.get('conditional').length - 1">
+                                    <div [formGroupName]="complianceDocumentsForm.get('conditional').length - 1">
+                                        <h4>Conditions</h4>
+                                        <div formArrayName="conditions">
+                                            <div *ngFor="let condition of complianceDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
+                                                <div style="padding-top:1%" *ngIf="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0"
+                                                    [formGroupName]="j">
+                                                    <h5>Condition {{j+1}}</h5>
+                                                    <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, j)" placeholder="Select a condition"
+                                                        formControlName="conditionName"></p-dropdown>
+                                                    <p-dropdown [options]="dropdownData.conditionOptions[j]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
+                                                    <button pButton [disabled]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger"
+                                                        style="display: inline-block; width: 6%; margin-left: 2%" type="button"
+                                                        icon="fa fa-times" (click)="deleteConditionalCondition(j)"></button>
+                                                </div>
+                                            </div>
+                                            <div style="padding-top:1%">
+                                                <button pButton label="Add Condition" class="ui-button-success" style="display: inline-block; width: 35%" type="button" icon="fa fa-plus"
+                                                    (click)="addNewConditionalCondition()"></button>
                                             </div>
                                         </div>
-                                        <div style="padding-top:1%">
-                                            <button pButton label="Add Condition" class="ui-button-success" style="display: inline-block; width: 35%" type="button" icon="fa fa-plus"
-                                                (click)="addNewConditionalCondition()"></button>
+                                        <h4>Document Name</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                        <h4>Agmt Code</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                                        <h4>Remarks</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                        <div class="ui-g" style="padding-right:4%">
+                                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                            <h4>Signature required</h4>
+                                        </div>
+                                        <div class="ui-g">
+                                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                            <h4>Can be waived</h4>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
+                                                icon="fa fa-plus" (click)="addNewConditional()"></button>
+                                            <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
+                                                (click)="cancelAddNewConditional()"></button>
                                         </div>
                                     </div>
-                                    <h4>Document Name</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                    <h4>Agmt Code</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                                    <h4>Remarks</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                    <div class="ui-g" style="padding-right:4%">
-                                        <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                        <h4>Signature required</h4>
-                                    </div>
-                                    <div class="ui-g">
-                                        <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                        <h4>Can be waived</h4>
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
-                                            icon="fa fa-plus" (click)="addNewConditional()"></button>
-                                        <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
-                                            (click)="cancelAddNewConditional()"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </p-dialog>
+
+                    <h4>Optional</h4>
+                    <div *ngIf="complianceDocumentsForm.get('optional').length == 0">
+                        No documents yet
+                    </div>
+                    <div *ngIf="complianceDocumentsForm.get('optional').length !== 0">
+                        <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of mandatoryCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc>
+                                <tr>
+                                    <td>{{ doc.get('documentName').value }}</td>
+                                    <td>{{ doc.get('agmtCode').value }}</td>
+                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td *ngIf="doc.get('signature').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('signature').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td *ngIf="doc.get('canWaiver').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('canWaiver').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                        (click)="showODialog()"></button>
+                    <p-dialog header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
+                        <div formArrayName="optional">
+                            <div *ngFor="let doc of complianceDocumentsForm.get('optional').controls; let i=index">
+                                <div *ngIf="i == complianceDocumentsForm.get('optional').length - 1">
+                                    <div [formGroupName]="complianceDocumentsForm.get('optional').length - 1" class="ui-g">
+                                        <h4>Document Name</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                        <h4>Agmt Code</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                                        <h4>Remarks</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                        <div class="ui-g" style="padding-right:4%">
+                                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                            <h4>Signature required</h4>
+                                        </div>
+                                        <div class="ui-g">
+                                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                            <h4>Can be waived</h4>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
+                                                icon="fa fa-plus" (click)="addNewOptional()"></button>
+                                            <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
+                                                (click)="cancelAddNewOptional()"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </p-dialog>
+                </p-tabPanel>
+                <p-tabPanel header="Legal" [formGroup]="legalDocumentsForm">
+                    <h4>Mandatory</h4>
+                    <div *ngIf="legalDocumentsForm.get('mandatory').length == 0">
+                        No documents yet
                     </div>
-                </p-dialog>
-
-                <h4>Optional</h4>
-                <div *ngIf="complianceDocumentsForm.get('optional').length == 0">
-                    No documents yet
-                </div>
-                <div *ngIf="complianceDocumentsForm.get('optional').length != 0">
-                    Document Name Agmt Code Signature Required Can be waivered? Remarks
-                </div>
-                <div *ngFor="let doc of complianceDocumentsForm.get('optional').controls; let i=index">
-                    <div>
-                        {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
-                        }} {{ doc.controls.remarks.value }}
+                    <div *ngIf="legalDocumentsForm.get('mandatory').length !== 0">
+                        <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of mandatoryCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc>
+                                <tr>
+                                    <td>{{ doc.get('documentName').value }}</td>
+                                    <td>{{ doc.get('agmtCode').value }}</td>
+                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td *ngIf="doc.get('signature').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('signature').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td *ngIf="doc.get('canWaiver').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('canWaiver').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
                     </div>
-                </div>
-                <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showODialog()"></button>
-                <p-dialog header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
-                    <div formArrayName="optional">
-                        <div *ngFor="let doc of complianceDocumentsForm.get('optional').controls; let i=index">
-                            <div *ngIf="i == complianceDocumentsForm.get('optional').length - 1">
-                                <div [formGroupName]="complianceDocumentsForm.get('optional').length - 1" class="ui-g">
-                                    <h4>Document Name</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                    <h4>Agmt Code</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                                    <h4>Remarks</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                    <div class="ui-g" style="padding-right:4%">
-                                        <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                        <h4>Signature required</h4>
-                                    </div>
-                                    <div class="ui-g">
-                                        <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                        <h4>Can be waived</h4>
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
-                                            icon="fa fa-plus" (click)="addNewOptional()"></button>
-                                        <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
-                                            (click)="cancelAddNewOptional()"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </p-dialog>
-            </div>
-
-
-            <div *ngIf="activeTab ==='Legal'" [formGroup]="legalDocumentsForm">
-                <h4>Mandatory</h4>
-                <div *ngIf="legalDocumentsForm.get('mandatory').length == 0">
-                    No documents yet
-                </div>
-                <div *ngIf="legalDocumentsForm.get('mandatory').length != 0">
-                    Document Name Agmt Code Signature Required Can be waivered? Remarks
-                </div>
-                <div *ngFor="let doc of legalDocumentsForm.get('mandatory').controls; let i=index">
-                    <div>
-                        {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
-                        }} {{ doc.controls.remarks.value }}
-                    </div>
-                </div>
-                <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showMDialog()"></button>
-                <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
-                    <div formArrayName="mandatory">
-                        <div *ngFor="let doc of legalDocumentsForm.get('mandatory').controls; let i=index">
-                            <div *ngIf="i == legalDocumentsForm.get('mandatory').length - 1">
-                                <div [formGroupName]="legalDocumentsForm.get('mandatory').length - 1" class="ui-g">
-                                    <h4>Document Name</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                    <h4>Agmt Code</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                                    <h4>Remarks</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                    <div class="ui-g" style="padding-right: 4%">
-                                        <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                        <h4>Signature required</h4>
-                                    </div>
-                                    <div class="ui-g">
-                                        <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                        <h4>Can be waived</h4>
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
-                                            icon="fa fa-plus" (click)="addNewMandatory()"></button>
-                                        <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
-                                            (click)="cancelAddNewMandatory()"></button>
+                    <button pButton label="Mandatory" class="ui-button-primary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                        (click)="showMDialog()"></button>
+                    <p-dialog header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
+                        <div formArrayName="mandatory">
+                            <div *ngFor="let doc of legalDocumentsForm.get('mandatory').controls; let i=index">
+                                <div *ngIf="i == legalDocumentsForm.get('mandatory').length - 1">
+                                    <div [formGroupName]="legalDocumentsForm.get('mandatory').length - 1" class="ui-g">
+                                        <h4>Document Name</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                        <h4>Agmt Code</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                                        <h4>Remarks</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                        <div class="ui-g" style="padding-right: 4%">
+                                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                            <h4>Signature required</h4>
+                                        </div>
+                                        <div class="ui-g">
+                                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                            <h4>Can be waived</h4>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
+                                                icon="fa fa-plus" (click)="addNewMandatory()"></button>
+                                            <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
+                                                (click)="cancelAddNewMandatory()"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </p-dialog>
+                    </p-dialog>
 
-                <h4>Conditional</h4>
-                <div *ngIf="legalDocumentsForm.get('conditional').length == 0">
-                    No documents yet
-                </div>
-                <div *ngIf="legalDocumentsForm.get('conditional').length != 0">
-                    Condition Condition Options Document Name Agmt Code Signature Required Can be waivered? Remarks
-                </div>
-
-                <div *ngFor="let doc of legalDocumentsForm.get('conditional').controls; let i=index">
-                    <div>
-                        {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
-                        }} {{ doc.controls.remarks.value }}
+                    <h4>Conditional</h4>
+                    <div *ngIf="legalDocumentsForm.get('conditional').length == 0">
+                        No documents yet
                     </div>
-                </div>
-                <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showCDialog()"></button>
-                <p-dialog header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
-                    <div formArrayName="conditional">
-                        <div *ngFor="let doc of legalDocumentsForm.get('conditional').controls; let i=index">
-                            <div *ngIf="i == legalDocumentsForm.get('conditional').length - 1">
-                                <div [formGroupName]="legalDocumentsForm.get('conditional').length - 1">
-                                    <h4>Conditions</h4>
-                                    <div formArrayName="conditions">
-                                        <div *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
-                                            <div style="padding-top:1%" *ngIf="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0" [formGroupName]="j">
-                                                <h5>Condition {{j+1}}</h5>
-                                                <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, j)" placeholder="Select a condition"
-                                                    formControlName="conditionName"></p-dropdown>
-                                                <p-dropdown [options]="dropdownData.conditionOptions[j]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
-                                                <button pButton [disabled]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger"
-                                                    style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
-                                                    (click)="deleteConditionalCondition(j)"></button>
+                    <div *ngIf="legalDocumentsForm.get('conditional').length !== 0">
+                        <p-table [value]="legalDocumentsForm.get('conditional').controls" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of conditionalCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
+                                    <tr>
+                                        <ng-container *ngIf="j === 0">
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
+                                        </ng-container>
+                                        <td>{{ condition.get('conditionName').value }}</td>
+                                        <td>{{ condition.get('conditionOption').value }}</td>
+                                        <ng-container *ngIf="j === 0">
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('agmtCode').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('remarks').value }}</td>
+                                            <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
+                                            </td>
+                                        </ng-container>
+
+                                    </tr>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                        (click)="showCDialog()"></button>
+                    <p-dialog header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
+                        <div formArrayName="conditional">
+                            <div *ngFor="let doc of legalDocumentsForm.get('conditional').controls; let i=index">
+                                <div *ngIf="i == legalDocumentsForm.get('conditional').length - 1">
+                                    <div [formGroupName]="legalDocumentsForm.get('conditional').length - 1">
+                                        <h4>Conditions</h4>
+                                        <div formArrayName="conditions">
+                                            <div *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
+                                                <div style="padding-top:1%" *ngIf="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] >= 0" [formGroupName]="j">
+                                                    <h5>Condition {{j+1}}</h5>
+                                                    <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, j)" placeholder="Select a condition"
+                                                        formControlName="conditionName"></p-dropdown>
+                                                    <p-dropdown [options]="dropdownData.conditionOptions[j]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
+                                                    <button pButton [disabled]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length'] < 2" class="ui-button-danger"
+                                                        style="display: inline-block; width: 6%; margin-left: 2%" type="button"
+                                                        icon="fa fa-times" (click)="deleteConditionalCondition(j)"></button>
+                                                </div>
+                                            </div>
+                                            <div style="padding-top:1%">
+                                                <button pButton label="Add Condition" class="ui-button-success" style="display: inline-block; width: 35%" type="button" icon="fa fa-plus"
+                                                    (click)="addNewConditionalCondition()"></button>
                                             </div>
                                         </div>
-                                        <div style="padding-top:1%">
-                                            <button pButton label="Add Condition" class="ui-button-success" style="display: inline-block; width: 35%" type="button" icon="fa fa-plus"
-                                                (click)="addNewConditionalCondition()"></button>
+                                        <h4>Document Name</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                        <h4>Agmt Code</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                                        <h4>Remarks</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                        <div class="ui-g" style="padding-right:4%">
+                                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                            <h4>Signature required</h4>
+                                        </div>
+                                        <div class="ui-g">
+                                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                            <h4>Can be waived</h4>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
+                                                icon="fa fa-plus" (click)="addNewConditional()"></button>
+                                            <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
+                                                (click)="cancelAddNewConditional()"></button>
                                         </div>
                                     </div>
-                                    <h4>Document Name</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                    <h4>Agmt Code</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                                    <h4>Remarks</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                    <div class="ui-g" style="padding-right:4%">
-                                        <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                        <h4>Signature required</h4>
-                                    </div>
-                                    <div class="ui-g">
-                                        <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                        <h4>Can be waived</h4>
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
-                                            icon="fa fa-plus" (click)="addNewConditional()"></button>
-                                        <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
-                                            (click)="cancelAddNewConditional()"></button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </p-dialog>
+                    </p-dialog>
 
-                <h4>Optional</h4>
-                <div *ngIf="legalDocumentsForm.get('optional').length == 0">
-                    No documents yet
-                </div>
-                <div *ngIf="legalDocumentsForm.get('optional').length != 0">
-                    Document Name Agmt Code Signature Required Can be waivered? Remarks
-                </div>
-                <div *ngFor="let doc of legalDocumentsForm.get('optional').controls; let i=index">
-                    <div>
-                        {{ doc.controls.documentName.value }} {{ doc.controls.agmtCode.value }} {{ doc.controls.signature.value }} {{ doc.controls.canWaiver.value
-                        }} {{ doc.controls.remarks.value }}
+                    <h4>Optional</h4>
+                    <div *ngIf="legalDocumentsForm.get('optional').length == 0">
+                        No documents yet
                     </div>
-                </div>
-                <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showODialog()"></button>
-                <p-dialog header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
-                    <div formArrayName="optional">
-                        <div *ngFor="let doc of legalDocumentsForm.get('optional').controls; let i=index">
-                            <div *ngIf="i == legalDocumentsForm.get('optional').length - 1">
-                                <div [formGroupName]="legalDocumentsForm.get('optional').length - 1" class="ui-g">
-                                    <h4>Document Name</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                                    <h4>Agmt Code</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                                    <h4>Remarks</h4>
-                                    <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
-                                    <div class="ui-g" style="padding-right:4%">
-                                        <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                                        <h4>Signature required</h4>
-                                    </div>
-                                    <div class="ui-g">
-                                        <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                                        <h4>Can be waived</h4>
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
-                                            icon="fa fa-plus" (click)="addNewOptional()"></button>
-                                        <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
-                                            (click)="cancelAddNewOptional()"></button>
+                    <div *ngIf="legalDocumentsForm.get('optional').length !== 0">
+                        <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of mandatoryCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc>
+                                <tr>
+                                    <td>{{ doc.get('documentName').value }}</td>
+                                    <td>{{ doc.get('agmtCode').value }}</td>
+                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td *ngIf="doc.get('signature').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('signature').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td *ngIf="doc.get('canWaiver').value">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.get('canWaiver').value">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <button pButton label="Optional" class="ui-button-secondary" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                        (click)="showODialog()"></button>
+                    <p-dialog header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
+                        <div formArrayName="optional">
+                            <div *ngFor="let doc of legalDocumentsForm.get('optional').controls; let i=index">
+                                <div *ngIf="i == legalDocumentsForm.get('optional').length - 1">
+                                    <div [formGroupName]="legalDocumentsForm.get('optional').length - 1" class="ui-g">
+                                        <h4>Document Name</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
+                                        <h4>Agmt Code</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                                        <h4>Remarks</h4>
+                                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                                        <div class="ui-g" style="padding-right:4%">
+                                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
+                                            <h4>Signature required</h4>
+                                        </div>
+                                        <div class="ui-g">
+                                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
+                                            <h4>Can be waived</h4>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
+                                                icon="fa fa-plus" (click)="addNewOptional()"></button>
+                                            <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
+                                                (click)="cancelAddNewOptional()"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </p-dialog>
-            </div>
+                    </p-dialog>
+                </p-tabPanel>
+            </p-tabView>
         </p-card>
     </div>
     <button pButton label="Create Checklist" class="ui-button-success" style="width: 100%" type="button" icon="fa fa-plus" (click)="createChecklist()"></button>

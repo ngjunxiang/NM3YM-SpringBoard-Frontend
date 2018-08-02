@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+
+import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/cm/checklist.service';
 
@@ -15,13 +16,14 @@ export class CMNewChecklistComponent implements OnInit {
     // UI Control
     loading = false;
     msgs: Message[] = [];
-    tabs: MenuItem[] = [];
-    activeTab = 'Compliance';
+    tabs: MenuItem[];
+    activeTab: number;
     dropdownData = {
         conditions: [],
         conditionOptions: []
     };
     mandatoryCols: any[];
+    conditionalCols: any[];
     mDisplay: boolean = false;
     cDisplay: boolean = false;
     oDisplay: boolean = false;
@@ -40,17 +42,20 @@ export class CMNewChecklistComponent implements OnInit {
     ngOnInit() {
         this.loading = true;
 
-        this.tabs = [
-            {label: 'Compliance', icon: 'fa fa-fw fa-bar-chart', command: (event) => {
-                this.activeTab = event['item']['label'];
-            }},
-            {label: 'Legal', icon: 'fa fa-fw fa-calendar', command: (event) => {
-                this.activeTab = event['item']['label'];
-            }}
-        ];
+        this.activeTab = 0;
 
         this.mandatoryCols = [
             { field: 'documentName', header: 'Document Name' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' },
+            { field: 'canWaiver', header: 'Can be Waivered' }
+        ];
+
+        this.conditionalCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'conditionName', header: 'Condition Name' },
+            { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
             { field: 'remarks', header: 'Remarks' },
             { field: 'signature', header: 'Signature Required' },
@@ -147,7 +152,7 @@ export class CMNewChecklistComponent implements OnInit {
     showMDialog() {
         let control = <FormArray>this.complianceDocumentsForm.get('mandatory');
 
-        if (this.activeTab === 'Legal') {
+        if (this.activeTab === 1) {
             control = <FormArray>this.legalDocumentsForm.get('mandatory');
         }
 
@@ -165,8 +170,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     addNewMandatory() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -188,8 +193,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     cancelAddNewMandatory() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -202,8 +207,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     editMandatoryDoc(index: number) {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
         this.mDisplay = true;
@@ -213,8 +218,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     deleteMandatoryDoc(index: number) {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -236,8 +241,8 @@ export class CMNewChecklistComponent implements OnInit {
         }
 
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -294,8 +299,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     addNewConditionalCondition() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -324,8 +329,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     deleteConditionalCondition(index) {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -336,8 +341,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     addNewConditional() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -365,8 +370,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     cancelAddNewConditional() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -378,10 +383,21 @@ export class CMNewChecklistComponent implements OnInit {
         this.cDisplay = false;
     }
 
+    editConditionalDoc(index: number) {
+        let form = this.complianceDocumentsForm;
+
+        if (this.activeTab === 1) {
+            form = this.legalDocumentsForm;
+        }
+        this.cDisplay = true;
+        // let control = <FormArray>form.get('mandatory').get(index);
+        // control.removeAt(index);
+    }
+
     showODialog() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -400,8 +416,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     addNewOptional() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -424,8 +440,8 @@ export class CMNewChecklistComponent implements OnInit {
 
     cancelAddNewOptional() {
         let form = this.complianceDocumentsForm;
-        
-        if (this.activeTab === 'Legal') {
+
+        if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
@@ -434,6 +450,21 @@ export class CMNewChecklistComponent implements OnInit {
         control.removeAt(i);
 
         this.oDisplay = false;
+    }
+
+    editOptionalDoc(index: number) {
+        let form = this.complianceDocumentsForm;
+
+        if (this.activeTab === 1) {
+            form = this.legalDocumentsForm;
+        }
+        this.oDisplay = true;
+        // let control = <FormArray>form.get('mandatory').get(index);
+        // control.removeAt(index);
+    }
+
+    changeTab(event) {
+        this.activeTab = event.index;
     }
 
     createChecklist() {
@@ -520,12 +551,13 @@ export class CMNewChecklistComponent implements OnInit {
             });
         }
 
-        this.checklistService.createChecklist(this.checklist).subscribe(res => {
-            if (res.error) {
-                
-            }
-        }, error => {
-            
-        });
+        console.log(this.checklist);
+        // this.checklistService.createChecklist(this.checklist).subscribe(res => {
+        //     if (res.error) {
+
+        //     }
+        // }, error => {
+
+        // });
     }
 }
