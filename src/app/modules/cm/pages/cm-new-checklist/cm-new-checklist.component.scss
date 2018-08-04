@@ -59,8 +59,18 @@
 .form-create input[type=email],
 .form-create input[type=password],
 .form-create input[type=text],
+.form-create input[type=textarea],
 .form-create button {
     width: 90%;
+    display: block;
+    margin-bottom: 10px;
+    position: relative;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.form-create textarea {
     display: block;
     margin-bottom: 10px;
     position: relative;

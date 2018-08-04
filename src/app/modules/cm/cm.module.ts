@@ -11,10 +11,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { GrowlModule } from 'primeng/growl';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { PanelModule } from 'primeng/panel';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
@@ -42,6 +44,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DropdownModule,
         FormsModule,
         GrowlModule,
+        InputTextareaModule,
         InputTextModule,
         MessageModule,
         MessagesModule,
@@ -49,6 +52,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PanelModule,
         PerfectScrollbarModule,
         ReactiveFormsModule,
+        ScrollPanelModule,
         SharedModule,
         TableModule,
         TabViewModule
