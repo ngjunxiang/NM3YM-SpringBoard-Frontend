@@ -5,6 +5,7 @@ import { CMComponent } from './pages/cm.component';
 import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.component';
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
+import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,14 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Dashboard' }]
+                }
+            },
+            {
+                path: 'checklist/manage/edit/:name',
+                component: CMEditChecklistComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'Checklists' }, { title: 'Edit' }]
                 }
             },
             {

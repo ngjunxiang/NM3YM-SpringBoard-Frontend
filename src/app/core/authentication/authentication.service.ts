@@ -15,8 +15,9 @@ interface LoginData {
 
 export class AuthenticationService {
 
-    private loginURL = 'http://localhost:8000/app/login';
-    private authURL = 'http://localhost:8000/app/api-auth';
+    private host = "http://localhost:8000";
+    private loginURL = this.host + '/app/login';
+    private authURL = this.host + '/app/api-auth';
 
     constructor(private http: HttpClient) { }
 

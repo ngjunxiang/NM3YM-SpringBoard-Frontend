@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
+import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/cm/checklist.service';
@@ -17,10 +19,12 @@ export class CMChecklistComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Component
-    checklistsNames: string[];
+    checklistNames: string[];
 
     constructor(
-        private checklistService: ChecklistService
+        private checklistService: ChecklistService,
+        private confirmationService: ConfirmationService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -28,11 +32,11 @@ export class CMChecklistComponent implements OnInit {
         this.loadPage();
     }
 
-    async loadPage() {
-        this.checklistsNames = [];
-        await this.checklistService.retrieveChecklist().subscribe(data => {
-            data.checklists.forEach(checklist => {
-                this.checklistsNames.push(checklist.name);
+    loadPage() {
+        this.checklistNames = [];
+        this.checklistService.retrieveChecklistNames().subscribe(data => {
+            data.clNames.forEach(clName => {
+                this.checklistNames.push(clName.name);
             });
         }, error => {
             this.msgs.push({
@@ -40,5 +44,42 @@ export class CMChecklistComponent implements OnInit {
             });
         });
         this.loading = false;
+    }
+
+    editChecklist(index: number) {
+        let selectedChecklist = this.checklistNames[index];
+        this.router.navigate(['/cm/checklist/manage/edit', selectedChecklist]);
+    }
+
+    deleteChecklist(index: number) {
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this checklist?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
+            accept: () => {
+                let selectedChecklist = this.checklistNames[index];
+                this.checklistService.deleteChecklist(selectedChecklist).subscribe(res => {
+                    if (res.error) {
+                        this.msgs.push({
+                            severity: 'error', summary: 'Error', detail: res.error
+                        });
+                    }
+                    
+                    if (res.results) {
+                        this.loadPage();
+                        this.msgs.push({
+                            severity: 'success', summary: 'Success', detail: 'Checklist deleted'
+                        });
+                    }
+                }, error => {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: error
+                    });
+                });
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 }

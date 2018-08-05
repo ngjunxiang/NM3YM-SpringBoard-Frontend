@@ -7,13 +7,19 @@ import { AuthenticationService } from '../authentication/authentication.service'
 
 interface Checklist {
     name: string;
-    required_fields: string[];
-    conditions: any[];
-    documents: any[];
+    requiredFields: string[];
+    conditions: any;
+    complianceDocuments: any;
+    legalDocuments: any;
 }
 
-interface Checklists {
-    checklists: Checklist[];
+interface ChecklistNames {
+    clNames: ChecklistName[];
+}
+
+interface ChecklistName {
+    name: string,
+    lastUpdated: Date
 }
 
 interface Response {
@@ -27,16 +33,50 @@ interface Response {
 
 export class ChecklistService {
 
-    private retrieveChecklistURL = 'http://localhost:8000/app/retrieve-users';
-    private createChecklistURL = '';
+    private host = "http://localhost:8000";
+    private retrieveChecklistNamesURL = this.host + '/app/cm-retrieve-checklistNames';
+    private retrieveUpdateChecklistURL = this.host + '/app/cm-manage-checklist';
+    private createChecklistURL = this.host + '/app/create-checklist';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
 
-    retrieveChecklist(): Observable<Checklists> {
-        return this.http.get<Checklists>('assets/checklist.json');
+    retrieveChecklistNames() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<ChecklistNames>(this.retrieveChecklistNamesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveChecklistDetails(checklistName) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistNameData = {
+            'clName': checklistName
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistNameData);
+
+        return this.http.post<Checklist>(this.retrieveUpdateChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
 
     createChecklist(checklist) {
@@ -47,7 +87,7 @@ export class ChecklistService {
         };
 
         const checklistData = {
-            'checklist': checklist
+            'checklist': JSON.stringify(checklist)
         };
 
         const postData = Object.assign(this.authService.authItems, checklistData);
@@ -58,7 +98,28 @@ export class ChecklistService {
                 catchError(this.handleError)
             );
     }
-    
+
+    deleteChecklist(checklistName) {
+        const checklistData = {
+            'clName': checklistName
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistData);
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            }),
+            body: postData
+        };
+
+        return this.http.delete<Response>(this.retrieveUpdateChecklistURL, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.

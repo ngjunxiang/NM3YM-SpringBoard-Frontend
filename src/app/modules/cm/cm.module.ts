@@ -8,6 +8,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { GrowlModule } from 'primeng/growl';
@@ -27,6 +29,7 @@ import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.componen
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { ChecklistService } from '../../core/cm/checklist.service';
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
+import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -40,6 +43,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CheckboxModule,
         CMRoutingModule,
         CommonModule,
+        ConfirmDialogModule,
         DialogModule,
         DropdownModule,
         FormsModule,
@@ -61,14 +65,17 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMComponent,
         CMDashboardComponent,
         CMChecklistComponent,
-        CMNewChecklistComponent
+        CMEditChecklistComponent,
+        CMNewChecklistComponent,
+        CMEditChecklistComponent
     ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
-        ChecklistService
+        ChecklistService,
+        ConfirmationService
     ]
 })
 

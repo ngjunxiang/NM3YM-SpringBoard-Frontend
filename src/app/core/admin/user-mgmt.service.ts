@@ -28,9 +28,10 @@ interface Response {
 
 export class UserMgmtService {
 
-    private retrieveUsersURL = 'http://localhost:8000/app/retrieve-users';
-    private CDUsersURL = 'http://localhost:8000/app/manage-users';
-    private UUsersURL = 'http://localhost:8000/app/update-users';
+    private host = "http://localhost:8000";
+    private retrieveUsersURL = this.host + '/app/retrieve-users';
+    private CDUsersURL = this.host + '/app/manage-users';
+    private UUsersURL = this.host + '/app/update-users';
 
     usernames = [];
     emails = [];
