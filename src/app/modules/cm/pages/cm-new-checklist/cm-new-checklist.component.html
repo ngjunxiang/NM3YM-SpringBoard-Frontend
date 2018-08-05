@@ -63,7 +63,7 @@
 
             <!-- Compliance Documents -->
             <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
-                <p-tabPanel header="Compliance">
+                <p-tabPanel header="Compliance" leftIcon="fas fa-file-contract">
                     <h4>Mandatory</h4>
                     <div *ngIf="complianceDocumentsForm.get('mandatory').length === 0">
                         No documents yet
@@ -72,7 +72,7 @@
                         <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of mandatoryCols">
+                                    <th *ngFor="let col of complianceMOCols">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -87,12 +87,6 @@
                                         <i class="fa fa-check"></i>
                                     </td>
                                     <td *ngIf="!doc.get('signature').value">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td *ngIf="doc.get('canWaiver').value">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td *ngIf="!doc.get('canWaiver').value">
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
@@ -119,10 +113,6 @@
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
                         </div>
-                        <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
-                        </div>
                         <div class="ui-g-12">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewMandatory()"></button>
@@ -143,10 +133,6 @@
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
                         </div>
-                        <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
-                        </div>
                         <div class="ui-g-12">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Save" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewMandatory()"></button>
@@ -166,7 +152,7 @@
                         <p-table [value]="complianceDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of conditionalCols">
+                                    <th *ngFor="let col of complianceCCols">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -187,12 +173,6 @@
                                                 <i class="fa fa-check"></i>
                                             </td>
                                             <td *ngIf="!doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-times"></i>
                                             </td>
                                             <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
@@ -230,15 +210,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                        <h4>Remarks</h4>
-                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                        <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
+                            pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
-                        </div>
-                        <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
                         </div>
                         <div class="ui-g-12">
                             <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
@@ -276,10 +252,6 @@
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
                         </div>
-                        <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
-                        </div>
                         <div class="ui-g-12">
                             <button pButton label="Save" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
                                 icon="fa fa-plus" (click)="addNewConditional()"></button>
@@ -297,7 +269,7 @@
                         <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of optionalCols">
+                                    <th *ngFor="let col of complianceMOCols">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -312,12 +284,6 @@
                                         <i class="fa fa-check"></i>
                                     </td>
                                     <td *ngIf="!doc.get('signature').value">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td *ngIf="doc.get('canWaiver').value">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td *ngIf="!doc.get('canWaiver').value">
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
@@ -344,10 +310,6 @@
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
                         </div>
-                        <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
-                        </div>
                         <div class="ui-g-12">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewOptional()"></button>
@@ -368,10 +330,6 @@
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
                         </div>
-                        <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
-                        </div>
                         <div class="ui-g-12">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Save" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewOptional()"></button>
@@ -384,7 +342,7 @@
 
                 <!-- Legal Documents -->
 
-                <p-tabPanel header="Legal">
+                <p-tabPanel header="Legal" leftIcon="fa fa-balance-scale">
                     <h4>Mandatory</h4>
                     <div *ngIf="legalDocumentsForm.get('mandatory').length === 0">
                         No documents yet
@@ -393,7 +351,7 @@
                         <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of mandatoryCols">
+                                    <th *ngFor="let col of legalMOCols">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -487,7 +445,7 @@
                         <p-table [value]="legalDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of conditionalCols">
+                                    <th *ngFor="let col of legalCCols">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -551,8 +509,8 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
-                        <h4>Remarks</h4>
-                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                        <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
+                            pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
@@ -618,7 +576,7 @@
                         <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of optionalCols">
+                                    <th *ngFor="let col of legalMOCols">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>

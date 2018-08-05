@@ -22,9 +22,10 @@ export class CMNewChecklistComponent implements OnInit {
         conditions: [],
         conditionOptions: []
     };
-    mandatoryCols: any[];
-    conditionalCols: any[];
-    optionalCols: any[];
+    complianceMOCols: any[];
+    complianceCCols: any[];
+    legalMOCols: any[];
+    legalCCols: any[];
     docIndex: number;
     editMode = false;
     mDisplay = false;
@@ -52,7 +53,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.activeTab = 0;
 
-        this.mandatoryCols = [
+        this.legalMOCols = [
             { field: 'documentName', header: 'Document Name' },
             { field: 'agmtCode', header: 'Agmt Code' },
             { field: 'remarks', header: 'Remarks' },
@@ -60,7 +61,7 @@ export class CMNewChecklistComponent implements OnInit {
             { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
-        this.conditionalCols = [
+        this.legalCCols = [
             { field: 'documentName', header: 'Document Name' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
@@ -70,12 +71,20 @@ export class CMNewChecklistComponent implements OnInit {
             { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
-        this.optionalCols = [
+        this.complianceMOCols = [
             { field: 'documentName', header: 'Document Name' },
             { field: 'agmtCode', header: 'Agmt Code' },
             { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' },
-            { field: 'canWaiver', header: 'Can be Waivered' }
+            { field: 'signature', header: 'Signature Required' }
+        ];
+
+        this.complianceCCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'conditionName', header: 'Condition Name' },
+            { field: 'conditionOptions', header: 'Condition Options' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' }
         ];
 
         this.createForm();
@@ -560,7 +569,7 @@ export class CMNewChecklistComponent implements OnInit {
     }
 
     createChecklist() {
-        this.checklist = [];
+        this.checklist = {};
         if (this.newChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
             this.msgs.push({
@@ -609,7 +618,6 @@ export class CMNewChecklistComponent implements OnInit {
                 documentName: mandatoryDoc.get('documentName').value,
                 agmtCode: mandatoryDoc.get('agmtCode').value,
                 signature: mandatoryDoc.get('signature').value,
-                canWaiver: mandatoryDoc.get('canWaiver').value,
                 remarks: mandatoryDoc.get('remarks').value
             });
         }
@@ -631,7 +639,6 @@ export class CMNewChecklistComponent implements OnInit {
                 documentName: conditionalDoc.get('documentName').value,
                 agmtCode: conditionalDoc.get('agmtCode').value,
                 signature: conditionalDoc.get('signature').value,
-                canWaiver: conditionalDoc.get('canWaiver').value,
                 remarks: conditionalDoc.get('remarks').value
             });
         }
@@ -644,7 +651,6 @@ export class CMNewChecklistComponent implements OnInit {
                 documentName: optionalDoc.get('documentName').value,
                 agmtCode: optionalDoc.get('agmtCode').value,
                 signature: optionalDoc.get('signature').value,
-                canWaiver: optionalDoc.get('canWaiver').value,
                 remarks: optionalDoc.get('remarks').value
             });
         }
@@ -699,20 +705,22 @@ export class CMNewChecklistComponent implements OnInit {
             });
         }
 
-        console.log(this.checklist);
-        // this.checklistService.createChecklist(this.checklist).subscribe(res => {
-        //     if (res.error) {
-        //         this.msgs.push({
-        //             severity: 'error', summary: 'Error', detail: res.error
-        //         });
-        //     }
-        //     this.msgs.push({
-        //         severity: 'success', summary: 'Success', detail: 'Checklist created'
-        //     });
-        // }, error => {
-        //     this.msgs.push({
-        //         severity: 'error', summary: 'Error', detail: error
-        //     });
-        // });
+        this.checklistService.createChecklist(this.checklist).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+            }
+
+            if (res.results) {
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'Checklist created'
+                });
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
     }
 }
