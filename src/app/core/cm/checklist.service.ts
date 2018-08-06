@@ -35,7 +35,8 @@ export class ChecklistService {
 
     private host = "http://localhost:8000";
     private retrieveChecklistNamesURL = this.host + '/app/cm-retrieve-checklistNames';
-    private retrieveUpdateChecklistURL = this.host + '/app/cm-manage-checklist';
+    private retrieveDeleteChecklistURL = this.host + '/app/cm-manage-checklist';
+    private updateChecklistURL = this.host + '/app/update-checklist';
     private createChecklistURL = this.host + '/app/create-checklist';
 
     constructor(
@@ -72,7 +73,7 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistNameData);
 
-        return this.http.post<Checklist>(this.retrieveUpdateChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveDeleteChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -99,6 +100,27 @@ export class ChecklistService {
             );
     }
 
+    updateChecklist(checklistName, checklist) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistData = {
+            'checklist': JSON.stringify(checklist),
+            'clName': checklistName
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistData);
+
+        return this.http.post<Response>(this.updateChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     deleteChecklist(checklistName) {
         const checklistData = {
             'clName': checklistName
@@ -113,7 +135,7 @@ export class ChecklistService {
             body: postData
         };
 
-        return this.http.delete<Response>(this.retrieveUpdateChecklistURL, httpOptions)
+        return this.http.delete<Response>(this.retrieveDeleteChecklistURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

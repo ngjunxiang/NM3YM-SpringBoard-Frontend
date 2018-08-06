@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
@@ -45,7 +46,9 @@ export class CMNewChecklistComponent implements OnInit {
 
     constructor(
         private checklistService: ChecklistService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -712,11 +715,13 @@ export class CMNewChecklistComponent implements OnInit {
                 });
             }
 
-            if (res.results) {
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Checklist created'
-                });
-            }
+            this.msgs.push({
+                severity: 'success', summary: 'Success', detail: 'Checklist created <br> You will be redirected shortly'
+            });
+
+            setTimeout(() => {
+                this.router.navigate(['/cm/checklist/manage']);
+            }, 5000);
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error

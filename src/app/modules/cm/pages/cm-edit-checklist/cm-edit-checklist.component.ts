@@ -37,6 +37,7 @@ export class CMEditChecklistComponent implements OnInit {
     oEditDisplay = false;
 
     // UI Component
+    pageInfo;
     currentChecklistForm: FormGroup;
     complianceDocumentsForm: FormGroup;
     legalDocumentsForm: FormGroup;
@@ -48,10 +49,16 @@ export class CMEditChecklistComponent implements OnInit {
         private checklistService: ChecklistService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        private router: Router,
+        private router: Router
     ) { }
 
     ngOnInit() {
+        this.route.snapshot.data['urls'] = [
+            { title: 'Checklists' },
+            { title: 'Edit', url: '/cm/checklist/manage' },
+            { title: this.route.snapshot.paramMap.get('name') }
+        ];
+
         this.loading = true;
 
         this.activeTab = 0;
@@ -153,7 +160,7 @@ export class CMEditChecklistComponent implements OnInit {
                     })
                 );
             });
-            
+
             // Update Conditions
             Object.keys(res.conditions).forEach(conditionName => {
                 let conditionOptionsArr = res.conditions[conditionName];
@@ -167,12 +174,102 @@ export class CMEditChecklistComponent implements OnInit {
             });
 
             // Update Compliance Documents
+            Object.keys(res.complianceDocuments['mandatory']).forEach(mandatoryDoc => {
+                let complianceMandatoryArr = <FormArray>this.complianceDocumentsForm.controls.mandatory;
+                complianceMandatoryArr.push(
+                    this.fb.group({
+                        documentName: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['documentName'], Validators.required),
+                        agmtCode: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
+                        signature: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['signature']),
+                        remarks: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['remarks'])
+                    })
+                );
+            });
 
+            Object.keys(res.complianceDocuments['conditional']).forEach(conditionalDoc => {
+                let conditionsArr = [];
+                res.complianceDocuments['conditional'][conditionalDoc]['conditions'].forEach(condition => {
+                    conditionsArr.push(
+                        this.fb.group({
+                            conditionName: new FormControl(condition.conditionName, Validators.required),
+                            conditionOption: new FormControl(condition.conditionOption, Validators.required)
+                        })
+                    );
+                });
+                let complianceConditionalArr = <FormArray>this.complianceDocumentsForm.controls.conditional;
+                complianceConditionalArr.push(
+                    this.fb.group({
+                        conditions: new FormArray(conditionsArr),
+                        documentName: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['documentName'], Validators.required),
+                        agmtCode: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
+                        signature: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['signature']),
+                        remarks: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['remarks'])
+                    })
+                );
+            });
 
+            Object.keys(res.complianceDocuments['optional']).forEach(optionalDoc => {
+                let complianceOptionalArr = <FormArray>this.complianceDocumentsForm.controls.optional;
+                complianceOptionalArr.push(
+                    this.fb.group({
+                        documentName: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentName'], Validators.required),
+                        agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
+                        signature: new FormControl(res.complianceDocuments['optional'][optionalDoc]['signature']),
+                        remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks'])
+                    })
+                );
+            });
 
 
             // Update Legal Documents
-            
+            Object.keys(res.legalDocuments['mandatory']).forEach(mandatoryDoc => {
+                let legalMandatoryArr = <FormArray>this.legalDocumentsForm.controls.mandatory;
+                legalMandatoryArr.push(
+                    this.fb.group({
+                        documentName: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['documentName'], Validators.required),
+                        agmtCode: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
+                        signature: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['signature']),
+                        canWaiver: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['canWaiver']),
+                        remarks: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['remarks'])
+                    })
+                );
+            });
+
+            Object.keys(res.legalDocuments['conditional']).forEach(conditionalDoc => {
+                let conditionsArr = [];
+                res.legalDocuments['conditional'][conditionalDoc]['conditions'].forEach(condition => {
+                    conditionsArr.push(
+                        this.fb.group({
+                            conditionName: new FormControl(condition.conditionName, Validators.required),
+                            conditionOption: new FormControl(condition.conditionOption, Validators.required)
+                        })
+                    );
+                });
+                let legalConditionalArr = <FormArray>this.legalDocumentsForm.controls.conditional;
+                legalConditionalArr.push(
+                    this.fb.group({
+                        conditions: new FormArray(conditionsArr),
+                        documentName: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['documentName'], Validators.required),
+                        agmtCode: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
+                        signature: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['signature']),
+                        canWaiver: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['canWaiver']),
+                        remarks: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['remarks'])
+                    })
+                );
+            });
+
+            Object.keys(res.legalDocuments['optional']).forEach(optionalDoc => {
+                let legalOptionalArr = <FormArray>this.legalDocumentsForm.controls.optional;
+                legalOptionalArr.push(
+                    this.fb.group({
+                        documentName: new FormControl(res.legalDocuments['optional'][optionalDoc]['documentName'], Validators.required),
+                        agmtCode: new FormControl(res.legalDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
+                        signature: new FormControl(res.legalDocuments['optional'][optionalDoc]['signature']),
+                        canWaiver: new FormControl(res.legalDocuments['optional'][optionalDoc]['canWaiver']),
+                        remarks: new FormControl(res.legalDocuments['optional'][optionalDoc]['remarks'])
+                    })
+                );
+            });
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
@@ -605,7 +702,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.activeTab = event.index;
     }
 
-    createChecklist() {
+    updateChecklist() {
         this.checklist = {};
         if (this.currentChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
@@ -742,15 +839,20 @@ export class CMEditChecklistComponent implements OnInit {
             });
         }
 
-        this.checklistService.createChecklist(this.checklist).subscribe(res => {
+        this.checklistService.updateChecklist(this.checklist.name, this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
             }
+
             this.msgs.push({
-                severity: 'success', summary: 'Success', detail: 'Checklist created'
+                severity: 'success', summary: 'Success', detail: 'Checklist updated <br> You will be redirected shortly'
             });
+
+            setTimeout(() => {
+                this.router.navigate(['/cm/checklist/manage']);
+            }, 5000);
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
