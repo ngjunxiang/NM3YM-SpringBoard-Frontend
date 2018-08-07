@@ -8,15 +8,16 @@
         <p-autoComplete [style]="{'width':'90%', 'margin-bottom': '2%'}" [inputStyle]="{'width':'100%'}" inputStyleClass= "form-control" formControlName="username" [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" [size]="30"
             placeholder="Username" [minLength]="1"></p-autoComplete>
 
-        <div class="error-inline-msg">
-            <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.required">
-                Please fill in the username field
-            </span>
-            <span *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.usernameNoExist">
-                This username does not exist
-            </span>
+        <div style="width: 100%; padding-bottom: 2%">
+            <div style="display:inline-block" *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.required; else checkExist">
+                <p-message severity="error" text="Field is required"></p-message>
+            </div>
+            <ng-template #checkExist>    
+                <div style="display:inline-block" *ngIf="deleteUserForm.controls.username.dirty && deleteUserForm.controls.username.errors?.usernameNoExist">
+                    <p-message severity="error" text="Username does not exist"></p-message>
+                </div>
+            </ng-template>
         </div>
-        <br>
         <button pButton label="Delete" class="ui-button-danger" type="button" [disabled]="loading" (click)="deleteUser()"></button>
     </div>
 </p-card>

@@ -36,43 +36,59 @@
             </span>
         </div>
 
-        <h4>Password</h4>
-        <div [formGroup]="passwordForm" style="display: flex; flex-direction: row;">
-            <div style="display: flex; flex-direction: column; width: 44%">
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
+        <div [formGroup]="passwordForm">
+            <h4>Password</h4>
+            Passwords must:<br>
+            - be at least 6 characters long<br>
+            - contain upper and lowercase letters<br>
+            - contain at least one number<br><br>
+            <div style="width: 100%; padding-bottom: 2%">
+                <input type="password" style="width:30%" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
                     pInputText>
 
-                <div class="error-inline-msg">
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.required">
-                        Please fill in the password field
-                    </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.minlength">
-                        Password must be at least 6 characters
-                    </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.caseError">
-                        Password must contain upper and lowercase letters
-                    </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.numberError">
-                        Password must contain at least 1 number
-                    </span>
-                    <span *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.specialCharError">
-                        Password must contain at least 1 special character
-                    </span>
+                <div style="display:inline-block" *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.required; else checkLength">
+                    <p-message severity="error" text="Field is required"></p-message>
                 </div>
+                
+                <ng-template #checkLength>
+                    <div style="display:inline-block" *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.minlength; else checkCase">
+                        <p-message severity="error" text="At least 6 characters"></p-message>
+                    </div>
+                </ng-template> 
+
+                <ng-template #checkCase>
+                    <div style="display:inline-block" *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.caseError; else checkNum">
+                        <p-message severity="error" text="Contains upper and lowercase letters"></p-message>
+                    </div>
+                </ng-template>
+
+                <ng-template #checkNum>
+                    <div style="display:inline-block" *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.numberError; else checkChar">
+                        <p-message severity="error" text="Contains one number"></p-message>
+                    </div>
+                </ng-template>
+
+                <ng-template #checkChar>
+                    <div style="display:inline-block" *ngIf="passwordForm.controls.password.dirty && passwordForm.controls.password.errors?.specialCharError">
+                        <p-message severity="error" text="Contains one special character"></p-message>
+                    </div>
+                </ng-template>
             </div>
 
-            <div style="display: flex; flex-direction: column; width: 44%; margin-left: 2%">
-                <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
+            <h4>Confirm Password</h4>
+            <div style="width: 100%; padding-bottom: 2%">
+                <input type="password" style="width:30%" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword"
                     required pInputText>
 
-                <div class="error-inline-msg">
-                    <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.controls.confirmPassword.errors?.required">
-                        Please fill in the confirm password field
-                    </span>
-                    <span *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.errors?.mismatch">
-                        Please make sure your passwords match
-                    </span>
+                <div style="display:inline-block" *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.controls.confirmPassword.errors?.required; else checkPass">
+                    <p-message severity="error" text="Field is required"></p-message>
                 </div>
+
+                <ng-template #checkPass>
+                    <div style="display:inline-block" *ngIf="passwordForm.controls.confirmPassword.dirty && passwordForm.errors?.mismatch">
+                        <p-message severity="error" text="Passwords do not match"></p-message>
+                    </div>
+                </ng-template>
             </div>
         </div>
 

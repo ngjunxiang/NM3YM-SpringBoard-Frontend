@@ -7,56 +7,78 @@
         <h4>Username</h4>
         <p-autoComplete [style]="{'width':'90%', 'margin-bottom': '2%'}" [inputStyle]="{'width':'100%'}" inputStyleClass="form-control" formControlName="username"
             [suggestions]="filteredUsernameList" (completeMethod)="searchUser()" placeholder="Username" [minLength]="1"></p-autoComplete>
-        <div class="error-inline-msg">
-            <span *ngIf="updateUserForm.controls.username.dirty && updateUserForm.controls.username.errors?.required">
-                Please fill in the username field
-            </span>
-            <span *ngIf="updateUserForm.controls.username.dirty && updateUserForm.controls.username.errors?.usernameNoExist">
-                This username does not exist
-            </span>
+
+        <div style="width: 100%; padding-bottom: 2%">
+            <div style="display:inline-block" *ngIf="updateUserForm.controls.username.dirty && updateUserForm.controls.username.errors?.required; else checkExist">
+                <p-message severity="error" text="Field is required"></p-message>
+            </div>
+    
+            <ng-template #checkExist>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.username.dirty && updateUserForm.controls.username.errors?.usernameNoExist">
+                    <p-message severity="error" text="Username does not exist"></p-message>
+                </div>
+            </ng-template>
         </div>
 
         <h4>Password</h4>
-        <div style="display: flex; flex-direction: row;">
-            <div style="display: flex; flex-direction: column; width: 44%">
-                <input type="password" id="inputPassword" class="form-control" placeholder="New Password" formControlName="password" required
-                    pInputText>
+        Passwords must:<br>
+        - not be reused<br>
+        - be at least 6 characters long<br>
+        - contain upper and lowercase letters<br>
+        - contain at least one number<br><br>
+        <div style="width: 100%; padding-bottom: 2%">
+            <input type="password" style="width:30%" id="inputPassword" class="form-control" placeholder="New Password" formControlName="password" required
+                pInputText>
 
-                <div class="error-inline-msg">
-                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.required">
-                        Please fill in the new password field
-                    </span>
-                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.minlength">
-                        Password must be at least 6 characters
-                    </span>
-                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.samePassword">
-                        Password must be different from the previous passwords
-                    </span>
-                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.caseError">
-                        Password must contain upper and lowercase letters
-                    </span>
-                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.numberError">
-                        Password must contain at least 1 number
-                    </span>
-                    <span *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.specialCharError">
-                        Password must contain at least 1 special character
-                    </span>
-                </div>
+            <div style="display:inline-block" *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.required; else checkDif">
+                <p-message severity="error" text="Field is required"></p-message>
             </div>
 
-            <div style="display: flex; flex-direction: column; width: 44%; margin-left: 2%">
-                <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm New Password" formControlName="confirmPassword"
-                    required pInputText>
-
-                <div class="error-inline-msg">
-                    <span *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.controls.confirmPassword.errors?.required">
-                        Please fill in the confirm password field
-                    </span>
-                    <span *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.errors?.mismatch">
-                        Please make sure your passwords match
-                    </span>
+            <ng-template #checkDif>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.samePassword; else checkLength">
+                    <p-message severity="error" text="Cannot use previous passwords"></p-message>
                 </div>
+            </ng-template> 
+
+            <ng-template #checkLength>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.minlength; else checkCase">
+                    <p-message severity="error" text="At least 6 characters"></p-message>
+                </div>
+            </ng-template> 
+
+            <ng-template #checkCase>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.caseError; else checkNum">
+                    <p-message severity="error" text="Contains upper and lowercase letters"></p-message>
+                </div>
+            </ng-template> 
+
+            <ng-template #checkNum>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.numberError; else checkChar">
+                    <p-message severity="error" text="Contains one number"></p-message>
+                </div>
+            </ng-template> 
+
+            <ng-template #checkChar>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.password.dirty && updateUserForm.controls.password.errors?.specialCharError">
+                    <p-message severity="error" text="Contains one special character"></p-message>
+                </div>
+            </ng-template> 
+        </div>
+
+        <h4>Confirm Password</h4>
+        <div style="width: 100%; padding-bottom: 2%">
+            <input type="password" style="width:30%" id="inputConfirmPassword" class="form-control" placeholder="Confirm New Password" formControlName="confirmPassword"
+                required pInputText>
+
+            <div style="display:inline-block" *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.controls.confirmPassword.errors?.required; else checkPass">
+                <p-message severity="error" text="Field is required"></p-message>
             </div>
+
+            <ng-template #checkPass>
+                <div style="display:inline-block" *ngIf="updateUserForm.controls.confirmPassword.dirty && updateUserForm.errors?.mismatch">
+                    <p-message severity="error" text="Passwords do not match"></p-message>
+                </div>
+            </ng-template>
         </div>
 
         <button pButton label="Change Password" class="ui-button-warning" type="button" [disabled]="loading" (click)="updateUser()"></button>
