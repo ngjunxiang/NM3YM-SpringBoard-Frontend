@@ -20,8 +20,8 @@
                     <button pButton pButton class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil" (click)="editChecklist(i)"></button>
                     <button pButton pButton class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteChecklist(i)"></button>
                 </div>
-                <div>
-                    Last Updated:
+                <div *ngFor="let checklistDate of checklistDates; let i=index" style="padding-bottom: 10px">
+                    {{ checklistDate }}
                 </div>
             </p-card>
         </div>

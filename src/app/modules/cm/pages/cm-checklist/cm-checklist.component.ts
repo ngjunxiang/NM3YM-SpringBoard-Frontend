@@ -34,9 +34,11 @@ export class CMChecklistComponent implements OnInit {
 
     loadPage() {
         this.checklistNames = [];
+        this.checklistDates = [];
         this.checklistService.retrieveChecklistNames().subscribe(data => {
             data.clNames.forEach(clName => {
                 this.checklistNames.push(clName.name);
+                this.checklistDates.push(clName.dateCreated);
             });
         }, error => {
             this.msgs.push({
