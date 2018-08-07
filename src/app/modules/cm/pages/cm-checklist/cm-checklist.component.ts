@@ -51,7 +51,7 @@ export class CMChecklistComponent implements OnInit {
     }
 
     editChecklist(index: number) {
-        let selectedChecklist = this.checklistNames[index];
+        let selectedChecklist = this.checklistNames[index].name;
         this.router.navigate(['/cm/checklist/manage/edit', selectedChecklist]);
     }
 
@@ -61,7 +61,7 @@ export class CMChecklistComponent implements OnInit {
             header: 'Delete Confirmation',
             icon: 'pi pi-info-circle',
             accept: () => {
-                let selectedChecklist = this.checklistNames[index];
+                let selectedChecklist = this.checklistNames[index].name;
                 this.checklistService.deleteChecklist(selectedChecklist).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
