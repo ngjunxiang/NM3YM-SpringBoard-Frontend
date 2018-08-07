@@ -65,10 +65,10 @@
             <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
                 <p-tabPanel header="Compliance" leftIcon="fas fa-file-contract">
                     <h4>Mandatory</h4>
-                    <div *ngIf="complianceDocumentsForm.get('mandatory').length === 0">
+                    <div *ngIf="complianceDocumentsForm.get('mandatory').length === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="complianceDocumentsForm.get('mandatory').length !== 0">
+                    <div *ngIf="complianceDocumentsForm.get('mandatory').length !== 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -90,8 +90,8 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -110,10 +110,9 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewMandatory()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -130,10 +129,9 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Save" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewMandatory()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -144,11 +142,11 @@
 
 
                     <h4>Conditional</h4>
-                    <div *ngIf="complianceDocumentsForm.get('conditional').length === 0">
+                    <div *ngIf="complianceDocumentsForm.get('conditional').length === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
 
-                    <div *ngIf="complianceDocumentsForm.get('conditional').length !== 0">
+                    <div *ngIf="complianceDocumentsForm.get('conditional').length !== 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -176,8 +174,8 @@
                                                 <i class="fa fa-times"></i>
                                             </td>
                                             <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
-                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
-                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
                                             </td>
                                         </ng-container>
                                     </tr>
@@ -185,17 +183,20 @@
                             </ng-template>
                         </p-table>
                     </div>
-
-                    <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                        (click)="showCDialog()"></button>
+                    
+                    <button pButton class="cButton" label="Conditional" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                    (click)="showCDialog()"></button>
+                    
                     <p-dialog [formGroup]="cDialogForm" header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
                         <h4>Conditions</h4>
                         <div formArrayName="conditions">
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
                                     <h5>Condition {{ i + 1 }}</h5>
-                                    <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
-                                        formControlName="conditionName"></p-dropdown>
+                                    <div style="display: inline-block; margin-right:10px">
+                                        <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
+                                            formControlName="conditionName"></p-dropdown>
+                                    </div>
                                     <p-dropdown [options]="dropdownData.conditionOptions[i]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                     <button pButton [disabled]="cDialogForm.get('conditions')['length'] < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                         type="button" icon="fa fa-times" (click)="deleteConditionalCondition(i)"></button>
@@ -210,13 +211,13 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
                                 icon="fa fa-plus" (click)="addNewConditional()"></button>
                             <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
@@ -230,8 +231,10 @@
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
                                     <h5>Condition {{ i + 1 }}</h5>
-                                    <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
-                                        formControlName="conditionName"></p-dropdown>
+                                    <div style="display: inline-block; margin-right:10px">
+                                        <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
+                                            formControlName="conditionName"></p-dropdown>
+                                    </div>
                                     <p-dropdown [options]="dropdownData.conditionOptions[i]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                     <button pButton [disabled]="cDialogForm.get('conditions')['length'] < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                         type="button" icon="fa fa-times" (click)="deleteConditionalCondition(i)"></button>
@@ -249,10 +252,9 @@
                         <h4>Remarks</h4>
                         <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
                         <div class="ui-g" style="padding-right:4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton label="Save" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
                                 icon="fa fa-plus" (click)="addNewConditional()"></button>
                             <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
@@ -262,10 +264,10 @@
 
 
                     <h4>Optional</h4>
-                    <div *ngIf="complianceDocumentsForm.get('optional').length == 0">
+                    <div *ngIf="complianceDocumentsForm.get('optional').length == 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="complianceDocumentsForm.get('optional').length !== 0">
+                    <div *ngIf="complianceDocumentsForm.get('optional').length !== 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -287,8 +289,8 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -307,10 +309,9 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewOptional()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -327,10 +328,9 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Save" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewOptional()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -344,10 +344,10 @@
 
                 <p-tabPanel header="Legal" leftIcon="fa fa-balance-scale">
                     <h4>Mandatory</h4>
-                    <div *ngIf="legalDocumentsForm.get('mandatory').length === 0">
+                    <div *ngIf="legalDocumentsForm.get('mandatory').length === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="legalDocumentsForm.get('mandatory').length !== 0">
+                    <div *ngIf="legalDocumentsForm.get('mandatory').length !== 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -375,8 +375,8 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -395,14 +395,12 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
                         <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewMandatory()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -419,14 +417,12 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
                         <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Save" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewMandatory()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -437,11 +433,11 @@
 
 
                     <h4>Conditional</h4>
-                    <div *ngIf="legalDocumentsForm.get('conditional').length === 0">
+                    <div *ngIf="legalDocumentsForm.get('conditional').length === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
 
-                    <div *ngIf="legalDocumentsForm.get('conditional').length !== 0">
+                    <div *ngIf="legalDocumentsForm.get('conditional').length !== 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -475,8 +471,8 @@
                                                 <i class="fa fa-times"></i>
                                             </td>
                                             <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
-                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
-                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
                                             </td>
                                         </ng-container>
                                     </tr>
@@ -485,7 +481,7 @@
                         </p-table>
                     </div>
 
-                    <button pButton label="Conditional" class="ui-button-info" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
+                    <button pButton label="Conditional" class="cButton" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
                         (click)="showCDialog()"></button>
                     <p-dialog [formGroup]="cDialogForm" header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
                         <h4>Conditions</h4>
@@ -493,8 +489,10 @@
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
                                     <h5>Condition {{ i + 1 }}</h5>
-                                    <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
-                                        formControlName="conditionName"></p-dropdown>
+                                    <div style="display: inline-block; margin-right:10px">
+                                        <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
+                                            formControlName="conditionName"></p-dropdown>
+                                    </div>
                                     <p-dropdown [options]="dropdownData.conditionOptions[i]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                     <button pButton [disabled]="cDialogForm.get('conditions')['length'] < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                         type="button" icon="fa fa-times" (click)="deleteConditionalCondition(i)"></button>
@@ -509,17 +507,16 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
                         <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton label="Add" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
                                 icon="fa fa-plus" (click)="addNewConditional()"></button>
                             <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
@@ -533,8 +530,10 @@
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
                                     <h5>Condition {{ i + 1 }}</h5>
-                                    <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
-                                        formControlName="conditionName"></p-dropdown>
+                                    <div style="display: inline-block; margin-right:10px">
+                                        <p-dropdown [options]="dropdownData.conditions" (onChange)="onConditionNameSelect($event.value, i)" placeholder="Select a condition"
+                                            formControlName="conditionName"></p-dropdown>
+                                    </div>
                                     <p-dropdown [options]="dropdownData.conditionOptions[i]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                     <button pButton [disabled]="cDialogForm.get('conditions')['length'] < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                         type="button" icon="fa fa-times" (click)="deleteConditionalCondition(i)"></button>
@@ -552,14 +551,12 @@
                         <h4>Remarks</h4>
                         <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
                         <div class="ui-g" style="padding-right:4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
                         <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton label="Save" class="ui-button-success" style="display: inline-block; width: 20%; margin-right:4%" type="button"
                                 icon="fa fa-plus" (click)="addNewConditional()"></button>
                             <button pButton label="Cancel" class="ui-button-danger" style="display: inline-block; width: 20%" type="button" icon="fa fa-minus"
@@ -569,10 +566,10 @@
 
 
                     <h4>Optional</h4>
-                    <div *ngIf="legalDocumentsForm.get('optional').length == 0">
+                    <div *ngIf="legalDocumentsForm.get('optional').length == 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="legalDocumentsForm.get('optional').length !== 0">
+                    <div *ngIf="legalDocumentsForm.get('optional').length !== 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -600,8 +597,8 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -620,14 +617,12 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
                         <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Add" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewOptional()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
@@ -644,14 +639,12 @@
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
-                            <p-checkbox binary="true" formControlName="signature"></p-checkbox>
-                            <h4>Signature required</h4>
+                            <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
                         <div class="ui-g">
-                            <p-checkbox binary="true" formControlName="canWaiver"></p-checkbox>
-                            <h4>Can be waived</h4>
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
-                        <div class="ui-g-12">
+                        <div class="ui-g" style="padding-top:2%">
                             <button pButton style="display: inline-block; width: 20%; margin-right:4%" label="Save" class="ui-button-success" type="button"
                                 icon="fa fa-plus" (click)="addNewOptional()"></button>
                             <button pButton style="display: inline-block; width: 20%" label="Cancel" class="ui-button-danger" type="button" icon="fa fa-minus"
