@@ -1,6 +1,7 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-blockUI [blocked]=blocked></p-blockUI>
 
-<div *ngIf="!loading">
+<div #form *ngIf="!loading">
     <div class="form-create" [formGroup]="currentChecklistForm">
         <!-- Checklist Name -->
         <div style="padding-bottom: 10px" id="checklistName">
@@ -210,6 +211,7 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
@@ -247,7 +249,8 @@
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <h4>Remarks</h4>
-                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                        <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
+                            pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>
@@ -550,7 +553,8 @@
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <h4>Remarks</h4>
-                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
+                        <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
+                            pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox binary="true" formControlName="signature"></p-checkbox>
                             <h4>Signature required</h4>

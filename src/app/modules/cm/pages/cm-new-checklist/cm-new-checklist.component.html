@@ -1,6 +1,7 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-blockUI [blocked]=blocked></p-blockUI>
 
-<div *ngIf="!loading">
+<div #form *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
         <!-- Checklist Name -->
         <div style="padding-bottom: 10px" id="checklistName">

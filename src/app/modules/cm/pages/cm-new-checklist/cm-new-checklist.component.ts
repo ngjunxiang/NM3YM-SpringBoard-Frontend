@@ -16,6 +16,7 @@ export class CMNewChecklistComponent implements OnInit {
 
     // UI Control
     loading = false;
+    blocked = false;
     msgs: Message[] = [];
     tabs: MenuItem[];
     activeTab: number;
@@ -208,6 +209,7 @@ export class CMNewChecklistComponent implements OnInit {
             remarks: new FormControl('')
         });
 
+        this.blocked = true;
         this.mDisplay = true;
     }
 
@@ -236,6 +238,7 @@ export class CMNewChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
             this.editMode = false;
+            this.blocked = false;
             this.mEditDisplay = false;
             return;
         }
@@ -243,12 +246,14 @@ export class CMNewChecklistComponent implements OnInit {
         control.push(this.dialogForm);
 
         this.mDisplay = false;
+        this.blocked = false;
     }
 
     cancelAddNewMandatory() {
         this.editMode = false;
         this.mDisplay = false;
         this.mEditDisplay = false;
+        this.blocked = false;
     }
 
     editMandatoryDoc(index: number) {
@@ -268,6 +273,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.editMode = true;
         this.docIndex = index;
+        this.blocked = true;
         this.mEditDisplay = true;
     }
 
@@ -311,6 +317,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.retrieveConditionalConditions();
 
+        this.blocked = true;
         this.cDisplay = true;
     }
 
@@ -423,6 +430,7 @@ export class CMNewChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
             this.editMode = false;
+            this.blocked = false;
             this.cEditDisplay = false;
             return;
         }
@@ -430,6 +438,7 @@ export class CMNewChecklistComponent implements OnInit {
         control.push(this.cDialogForm);
 
         this.dropdownData.conditionOptions = [];
+        this.blocked = false;
         this.cDisplay = false;
     }
 
@@ -437,6 +446,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.editMode = false;
         this.dropdownData.conditionOptions = [];
         this.cEditDisplay = false;
+        this.blocked = false;
         this.cDisplay = false;
     }
 
@@ -470,6 +480,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.docIndex = index;
         this.editMode = true;
+        this.blocked = true;
         this.cEditDisplay = true;
     }
 
@@ -493,6 +504,7 @@ export class CMNewChecklistComponent implements OnInit {
             remarks: new FormControl('')
         });
 
+        this.blocked = true;
         this.oDisplay = true;
     }
 
@@ -521,18 +533,21 @@ export class CMNewChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
             this.editMode = false;
+            this.blocked = false;
             this.oEditDisplay = false;
             return;
         }
 
         control.push(this.dialogForm);
 
+        this.blocked = false;
         this.oDisplay = false;
     }
 
     cancelAddNewOptional() {
         this.editMode = false;
         this.oDisplay = false;
+        this.blocked = false;
         this.oEditDisplay = false;
     }
 
@@ -553,6 +568,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.editMode = true;
         this.docIndex = index;
+        this.blocked = true;
         this.oEditDisplay = true;
     }
 

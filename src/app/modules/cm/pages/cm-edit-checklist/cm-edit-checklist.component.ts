@@ -16,6 +16,7 @@ export class CMEditChecklistComponent implements OnInit {
 
     // UI Control
     loading = false;
+    blocked = false;
     msgs: Message[] = [];
     tabs: MenuItem[];
     activeTab: number;
@@ -173,6 +174,8 @@ export class CMEditChecklistComponent implements OnInit {
                 );
             });
 
+            this.retrieveConditionalConditions()
+
             // Update Compliance Documents
             Object.keys(res.complianceDocuments['mandatory']).forEach(mandatoryDoc => {
                 let complianceMandatoryArr = <FormArray>this.complianceDocumentsForm.controls.mandatory;
@@ -181,6 +184,7 @@ export class CMEditChecklistComponent implements OnInit {
                         documentName: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['documentName'], Validators.required),
                         agmtCode: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['signature']),
+                        canWaiver: new FormControl(false),
                         remarks: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['remarks'])
                     })
                 );
@@ -203,6 +207,7 @@ export class CMEditChecklistComponent implements OnInit {
                         documentName: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['documentName'], Validators.required),
                         agmtCode: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['signature']),
+                        canWaiver: new FormControl(false),
                         remarks: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['remarks'])
                     })
                 );
@@ -215,6 +220,7 @@ export class CMEditChecklistComponent implements OnInit {
                         documentName: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentName'], Validators.required),
                         agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.complianceDocuments['optional'][optionalDoc]['signature']),
+                        canWaiver: new FormControl(false),
                         remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks'])
                     })
                 );
@@ -339,6 +345,7 @@ export class CMEditChecklistComponent implements OnInit {
             remarks: new FormControl('')
         });
 
+        this.blocked = true;
         this.mDisplay = true;
     }
 
@@ -367,18 +374,21 @@ export class CMEditChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
             this.editMode = false;
+            this.blocked = false;
             this.mEditDisplay = false;
             return;
         }
 
         control.push(this.dialogForm);
 
+        this.blocked = false;
         this.mDisplay = false;
     }
 
     cancelAddNewMandatory() {
         this.editMode = false;
         this.mDisplay = false;
+        this.blocked = false;
         this.mEditDisplay = false;
     }
 
@@ -399,6 +409,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.editMode = true;
         this.docIndex = index;
+        this.blocked = true;
         this.mEditDisplay = true;
     }
 
@@ -442,6 +453,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.retrieveConditionalConditions();
 
+        this.blocked = true;
         this.cDisplay = true;
     }
 
@@ -554,6 +566,7 @@ export class CMEditChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
             this.editMode = false;
+            this.blocked = false;
             this.cEditDisplay = false;
             return;
         }
@@ -561,6 +574,7 @@ export class CMEditChecklistComponent implements OnInit {
         control.push(this.cDialogForm);
 
         this.dropdownData.conditionOptions = [];
+        this.blocked = false;
         this.cDisplay = false;
     }
 
@@ -568,6 +582,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.editMode = false;
         this.dropdownData.conditionOptions = [];
         this.cEditDisplay = false;
+        this.blocked = false;
         this.cDisplay = false;
     }
 
@@ -601,6 +616,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.docIndex = index;
         this.editMode = true;
+        this.blocked = true;
         this.cEditDisplay = true;
     }
 
@@ -624,6 +640,7 @@ export class CMEditChecklistComponent implements OnInit {
             remarks: new FormControl('')
         });
 
+        this.blocked = true;
         this.oDisplay = true;
     }
 
@@ -652,18 +669,21 @@ export class CMEditChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
             this.editMode = false;
+            this.blocked = false;
             this.oEditDisplay = false;
             return;
         }
 
         control.push(this.dialogForm);
 
+        this.blocked = false;
         this.oDisplay = false;
     }
 
     cancelAddNewOptional() {
         this.editMode = false;
         this.oDisplay = false;
+        this.blocked = false;
         this.oEditDisplay = false;
     }
 
@@ -673,7 +693,7 @@ export class CMEditChecklistComponent implements OnInit {
         if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
-
+        
         this.dialogForm = this.fb.group({
             documentName: new FormControl(form.get('optional').get(index + '').get('documentName').value, Validators.required),
             agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, Validators.required),
@@ -684,6 +704,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.editMode = true;
         this.docIndex = index;
+        this.blocked = true;
         this.oEditDisplay = true;
     }
 
