@@ -19,7 +19,7 @@ interface ChecklistNames {
 
 interface ChecklistName {
     name: string,
-    lastUpdated: Date
+    dateCreated: Date
 }
 
 interface Response {

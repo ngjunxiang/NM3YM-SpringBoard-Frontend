@@ -19,7 +19,7 @@ export class CMChecklistComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Component
-    checklistNames: string[];
+    checklistNames: any[];
 
     constructor(
         private checklistService: ChecklistService,
@@ -34,12 +34,14 @@ export class CMChecklistComponent implements OnInit {
 
     loadPage() {
         this.checklistNames = [];
-        this.checklistDates = [];
         this.checklistService.retrieveChecklistNames().subscribe(data => {
-            data.clNames.forEach(clName => {
-                this.checklistNames.push(clName.name);
-                this.checklistDates.push(clName.dateCreated);
+            data.clNames.forEach(cl => {
+                this.checklistNames.push({
+                    'name': cl.name,
+                    'dateCreated': cl.dateCreated
+                });
             });
+            console.log(this.checklistNames)
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Server Error', detail: error

@@ -13,15 +13,15 @@
         No checklist currently
     </div>
     <div *ngIf="checklistNames.length > 0">
-        <div *ngFor="let checklistName of checklistNames; let i=index" style="padding-bottom: 10px">
+        <div *ngFor="let checklist of checklistNames; let i=index" style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
-                {{ checklistName }}
+                {{ checklist.name }}
                 <div style="float: right">
                     <button pButton pButton class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil" (click)="editChecklist(i)"></button>
                     <button pButton pButton class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteChecklist(i)"></button>
                 </div>
-                <div *ngFor="let checklistDate of checklistDates; let i=index" style="padding-bottom: 10px">
-                    {{ checklistDate }}
+                <div> 
+                    Last Updated: {{ checklist.dateCreated }}
                 </div>
             </p-card>
         </div>
