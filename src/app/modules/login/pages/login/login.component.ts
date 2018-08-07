@@ -14,7 +14,7 @@ import { AuthenticationService } from '../../../../core/authentication/authentic
 })
 
 export class LoginComponent implements OnInit {
-    
+
     // UI Control
     isValidUser = true;
     loading = false;
@@ -84,6 +84,9 @@ export class LoginComponent implements OnInit {
             this.isValidUser = true;
             if (loginData.error) {
                 this.isValidUser = false;
+                this.loginForm.controls['password'].setValue('');
+                this.loginForm.controls['password'].markAsPristine();
+                this.loginForm.updateValueAndValidity();
             }
 
             if (this.isValidUser) {
@@ -105,6 +108,9 @@ export class LoginComponent implements OnInit {
             this.loading = false;
         }, error => {
             this.isValidUser = false;
+            this.loginForm.controls['password'].setValue('');
+            this.loginForm.controls['password'].markAsPristine();
+            this.loginForm.updateValueAndValidity();
             this.msgs.push({ severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin.' });
             this.loading = false;
         });
