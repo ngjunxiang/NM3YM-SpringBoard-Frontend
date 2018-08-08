@@ -37,6 +37,7 @@
         <div style="padding-bottom: 10px" id="conditions">
             <p-card styleClass="ui-card-shadow">
                 <h3>Checklist Conditions</h3>
+                *Separate condition options with a comma<br><br>
                 <div formArrayName="conditions">
                     <div *ngFor="let condition of newChecklistForm.get('conditions').controls; let i=index">
                         <h4>Condition {{i+1}}</h4>
