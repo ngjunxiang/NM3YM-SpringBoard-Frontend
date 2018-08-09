@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { RMComponent } from './pages/rm.component';
 import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
+import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
 
 const routes: Routes = [
     {
@@ -17,14 +18,14 @@ const routes: Routes = [
                     urls: [{ title: 'Dashboard' }]
                 }
             },
-            // {
-            //     path: 'checklist/manage',
-            //     component: CMChecklistComponent,
-            //     data: {
-            //         title: 'Client Management',
-            //         urls: [{ title: 'Checklists' }, { title: 'Manage' }]
-            //     }
-            // },
+            {
+                path: 'onboard/create',
+                component: RMNewOnboardComponent,
+                data: {
+                    title: 'Relationship Manager',
+                    urls: [{ title: 'Onboard' }, { title: 'Create' }]
+                }
+            }
             // {
             //     path: 'checklist/create',
             //     component: CMNewChecklistComponent,
