@@ -28,7 +28,7 @@ import { CMRoutingModule } from './cm-routing.module';
 import { CMComponent } from './pages/cm.component';
 import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.component';
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
-import { ChecklistService } from '../../core/cm/checklist.service';
+import { ChecklistService } from '../../core/services/checklist.service';
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 

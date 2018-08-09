@@ -1,0 +1,38 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+
+<!-- Select Checklist -->
+<p-card [formGroup]="checklistForm" *ngIf="step === 1" styleClass="ui-card-shadow">
+    <h4>Select Checklist</h4>
+    <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistName"></p-dropdown>
+    <button pButton label="Next" class="ui-button-success" style="width: 30%" type="button" icon="fas fa-arrow-right" (click)="submitChecklistName()"></button>
+</p-card>
+
+<!-- Enter Required and Condition Fields -->
+<div *ngIf="step === 2" [formGroup]="checklistForm">
+    <div style="padding-bottom: 10px">
+        <p-card styleClass="ui-card-shadow" id="requiredFields">
+            <h4>Required Fields</h4>
+            <div formArrayName="requiredFields">
+                <div *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index" [formGroupName]="i">
+                    <h5>{{ selectedChecklistData.requiredFields[i] }}</h5>
+                    <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="{{ selectedChecklistData.requiredFields[i] }}"
+                        formControlName="field" required pInputText>
+                </div>
+            </div>
+        </p-card>
+    </div>
+    <div style="padding-bottom: 10px">
+        <p-card styleClass="ui-card-shadow" id="conditions">
+            <h4>Conditions</h4>
+            <div formArrayName="conditions">
+                <div *ngFor="let condition of checklistForm.get('conditions').controls; let i=index" [formGroupName]="i">
+                    <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
+                    <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select a checklist" formControlName="conditionOption"></p-dropdown>
+                </div>
+            </div>
+            <button pButton label="Back" class="ui-button-secondary" style="width: 30%" type="button" icon="fas fa-arrow-left"
+                (click)="back()"></button>
+            <button pButton label="Next" class="ui-button-success" style="width: 30%" type="button" icon="fas fa-arrow-right" (click)="submitFieldsConditions()"></button>
+        </p-card>
+    </div>
+</div>

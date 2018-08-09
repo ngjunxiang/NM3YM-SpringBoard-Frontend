@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/cm/checklist.service';
+import { ChecklistService } from '../../../../core/services/checklist.service';
 
 @Component({
     selector: 'cm-edit-checklist',
@@ -148,7 +148,7 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     retrieveChecklistDetails(checklistName) {
-        this.checklistService.retrieveChecklistDetails(checklistName).subscribe(res => {
+        this.checklistService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
             // Update Checklist Name
             this.currentChecklistForm.get('checklistName').setValue(res.name);
 
@@ -860,7 +860,7 @@ export class CMEditChecklistComponent implements OnInit {
             });
         }
 
-        this.checklistService.updateChecklist(this.checklist.name, this.checklist).subscribe(res => {
+        this.checklistService.updateCMChecklist(this.checklist.name, this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

@@ -4,6 +4,13 @@
     <div class="form-create" [formGroup]="createUserForm">
         <h3>Create New User</h3>
         <br>
+        <h4>Name</h4>
+        <input type="text" id="inputName" class="form-control" placeholder="Name" formControlName="name" required pInputText>
+        <div class="error-inline-msg">
+            <span *ngIf="createUserForm.controls.name.dirty && createUserForm.controls.name.errors?.required">
+                Please fill in the name field
+            </span>
+        </div>
         <h4>Username</h4>
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
         <div class="error-inline-msg">

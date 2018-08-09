@@ -23,7 +23,7 @@ const routes: Routes = [
                 component: RMNewOnboardComponent,
                 data: {
                     title: 'Relationship Manager',
-                    urls: [{ title: 'Onboard' }, { title: 'Create' }]
+                    urls: [{ title: 'Onboard' }, { title: 'New' }]
                 }
             }
             // {

@@ -5,7 +5,7 @@ import { Message } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
+import { UserMgmtService } from '../../../../core/services/user-mgmt.service';
 
 @Component({
     selector: 'admin-delete',

@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http
 import { throwError, Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
-import { AuthenticationService } from '../authentication/authentication.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 interface Checklist {
     name: string;
@@ -34,17 +34,19 @@ interface Response {
 export class ChecklistService {
 
     private host = "http://localhost:8000";
-    private retrieveChecklistNamesURL = this.host + '/app/cm-retrieve-checklistNames';
-    private retrieveDeleteChecklistURL = this.host + '/app/cm-manage-checklist';
-    private updateChecklistURL = this.host + '/app/update-checklist';
-    private createChecklistURL = this.host + '/app/create-checklist';
+    private retrieveCMChecklistNamesURL = this.host + '/app/cm-retrieve-checklistNames';
+    private retrieveRMChecklistNamesURL = this.host + '/app/rm-retrieve-checklistNames';
+    private retrieveRMChecklistURL = this.host + '/app/rm-retrieve-checklist';
+    private retrieveDeleteCMChecklistURL = this.host + '/app/cm-manage-checklist';
+    private updateCMChecklistURL = this.host + '/app/update-checklist';
+    private createCMChecklistURL = this.host + '/app/create-checklist';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
 
-    retrieveChecklistNames() {
+    retrieveCMChecklistNames() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -53,14 +55,14 @@ export class ChecklistService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<ChecklistNames>(this.retrieveChecklistNamesURL, postData, httpOptions)
+        return this.http.post<ChecklistNames>(this.retrieveCMChecklistNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    retrieveChecklistDetails(checklistName) {
+    retrieveCMChecklistDetails(checklistName) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -73,14 +75,14 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistNameData);
 
-        return this.http.post<Checklist>(this.retrieveDeleteChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveDeleteCMChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    createChecklist(checklist) {
+    createCMChecklist(checklist) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -93,14 +95,14 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.createChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.createCMChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    updateChecklist(checklistName, checklist) {
+    updateCMChecklist(checklistName, checklist) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -114,14 +116,14 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.updateChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.updateCMChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    deleteChecklist(checklistName) {
+    deleteCMChecklist(checklistName) {
         const checklistData = {
             'clName': checklistName
         };
@@ -135,12 +137,53 @@ export class ChecklistService {
             body: postData
         };
 
-        return this.http.delete<Response>(this.retrieveDeleteChecklistURL, httpOptions)
+        return this.http.delete<Response>(this.retrieveDeleteCMChecklistURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
+
+
+
+    retrieveRMChecklistNames() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<ChecklistNames>(this.retrieveRMChecklistNamesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+    
+    retrieveRMChecklistDetails(checklistName) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistNameData = {
+            'clName': checklistName
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistNameData);
+
+        return this.http.post<Checklist>(this.retrieveRMChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+
+    
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

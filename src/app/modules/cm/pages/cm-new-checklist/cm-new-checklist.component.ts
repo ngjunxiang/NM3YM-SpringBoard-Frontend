@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/cm/checklist.service';
+import { ChecklistService } from '../../../../core/services/checklist.service';
 
 @Component({
     selector: 'cm-new-checklist',
@@ -724,7 +724,7 @@ export class CMNewChecklistComponent implements OnInit {
             });
         }
 
-        this.checklistService.createChecklist(this.checklist).subscribe(res => {
+        this.checklistService.createCMChecklist(this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

@@ -10,7 +10,7 @@ import { MessageModule } from 'primeng/message';
 
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './pages/login/login.component';
-import { AuthenticationService } from '../../core/authentication/authentication.service';
+import { AuthenticationService } from '../../core/services/authentication.service';
 import { LoginForgotPwComponent } from './pages/login-forgot-pw/login-forgot-pw.component';
 
 @NgModule({

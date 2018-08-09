@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { retry, catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-import { AuthenticationService } from '../authentication/authentication.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 interface User {
     username: string;
@@ -41,7 +41,7 @@ export class UserMgmtService {
         private http: HttpClient
     ) { }
 
-    createUser(newUsername, newEmail, newUserType, newPassword) {
+    createUser(newName, newUsername, newEmail, newUserType, newPassword) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -49,6 +49,7 @@ export class UserMgmtService {
         };
 
         const userData = {
+            'newName': newName,
             'newUsername': newUsername,
             'newEmail': newEmail,
             'newUserType': newUserType,

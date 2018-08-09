@@ -5,7 +5,7 @@ import { Message } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
-import { UserMgmtService } from '../../../../core/admin/user-mgmt.service';
+import { UserMgmtService } from '../../../../core/services/user-mgmt.service';
 
 interface UserType {
     name: string;
@@ -63,7 +63,8 @@ export class CreateAdminComponent implements OnInit {
             });
 
         this.createUserForm = this.fb.group({
-            username: new FormControl('', [Validators.required]),
+            name: new FormControl('', Validators.required),
+            username: new FormControl('', Validators.required),
             email: new FormControl('', [Validators.required, Validators.email]),
             userType: new FormControl('', Validators.required),
             passwordForm: this.passwordForm
@@ -170,7 +171,8 @@ export class CreateAdminComponent implements OnInit {
         this.createUserForm.controls.passwordForm.get('password').markAsDirty();
         this.createUserForm.controls.passwordForm.get('confirmPassword').markAsDirty();
 
-        if (this.createUserForm.controls.username.invalid ||
+        if (this.createUserForm.controls.name.invalid ||
+            this.createUserForm.controls.username.invalid ||
             this.createUserForm.controls.email.invalid ||
             this.createUserForm.controls.passwordForm.get('password').invalid ||
             this.createUserForm.controls.passwordForm.get('confirmPassword').invalid ||
@@ -183,12 +185,13 @@ export class CreateAdminComponent implements OnInit {
             return;
         }
 
+        let newName = this.createUserForm.controls.name.value;
         let newUsername = this.createUserForm.controls.username.value;
         let newPassword = this.createUserForm.controls.passwordForm.get('password').value;
         let newEmail = this.createUserForm.controls.email.value;
         let newUserType = this.createUserForm.controls.userType.value.code;
 
-        this.userMgmtService.createUser(newUsername, newEmail, newUserType, newPassword).subscribe(res => {
+        this.userMgmtService.createUser(newName, newUsername, newEmail, newUserType, newPassword).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

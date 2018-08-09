@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 
 import { Message } from 'primeng/components/common/api';
 
-import { AuthenticationService } from '../../../../core/authentication/authentication.service';
+import { AuthenticationService } from '../../../../core/services/authentication.service';
 
 @Component({
     selector: 'app-login',
