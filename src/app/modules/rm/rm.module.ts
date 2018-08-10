@@ -6,6 +6,7 @@ import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLL
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { GrowlModule } from 'primeng/growl';
@@ -13,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { SharedModule } from '../../shared/shared.module';
+import { TableModule } from 'primeng/table';
 
 import { RMRoutingModule } from './rm-routing.module';
 import { RMComponent } from './pages/rm.component';
@@ -29,6 +31,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RMRoutingModule,
         ButtonModule,
         CardModule,
+        CheckboxModule,
         CommonModule,
         DialogModule,
         DropdownModule,
@@ -40,7 +43,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgbModule.forRoot(),
         PerfectScrollbarModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        TableModule
     ],
     declarations: [
         RMComponent,

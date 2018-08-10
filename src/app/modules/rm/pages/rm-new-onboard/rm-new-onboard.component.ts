@@ -21,11 +21,17 @@ export class RMNewOnboardComponent implements OnInit {
     step = 1;
 
     // UI Component
+    complianceMOCols: any[];
+    complianceCCols: any[];
+    legalMOCols: any[];
+    legalCCols: any[];
+
     checklistNameDropdownData: SelectItem[];
     checklistForm: FormGroup;
 
     selectedChecklistName: string;
     selectedChecklistData: any;
+    processData: any;
 
     constructor(
         private checklistService: ChecklistService,
@@ -44,8 +50,18 @@ export class RMNewOnboardComponent implements OnInit {
         this.retrieveChecklistNames();
         this.checklistForm = this.fb.group({
             selectedChecklistName: new FormControl('', Validators.required),
-            requiredFields: this.fb.array([]),
-            conditions: this.fb.array([])
+            requiredFields: new FormArray([]),
+            conditions: new FormArray([]),
+            complianceDocuments: this.fb.group({
+                mandatory: new FormArray([]),
+                conditional: new FormArray([]),
+                optional: new FormArray([])
+            }),
+            legalDocuments: this.fb.group({
+                mandatory: new FormArray([]),
+                conditional: new FormArray([]),
+                optional: new FormArray([])
+            })
         });
         this.loading = false;
     }
@@ -53,8 +69,18 @@ export class RMNewOnboardComponent implements OnInit {
     createChecklistForm() {
         this.checklistForm = this.fb.group({
             selectedChecklistName: new FormControl('', Validators.required),
-            requiredFields: this.fb.array([]),
-            conditions: this.fb.array([])
+            requiredFields: new FormArray([]),
+            conditions: new FormArray([]),
+            complianceDocuments: this.fb.group({
+                mandatory: new FormArray([]),
+                conditional: new FormArray([]),
+                optional: new FormArray([])
+            }),
+            legalDocuments: this.fb.group({
+                mandatory: new FormArray([]),
+                conditional: new FormArray([]),
+                optional: new FormArray([])
+            })
         });
 
         this.route.snapshot.data['urls'] = [
@@ -101,13 +127,82 @@ export class RMNewOnboardComponent implements OnInit {
                 complianceDocuments: res.complianceDocuments,
                 legalDocuments: res.legalDocuments
             };
-
-            console.log(this.selectedChecklistData)
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
         });
+        this.loading = false;
+    }
+
+    createDocumentsForm() {
+        this.legalMOCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' },
+            { field: 'canWaiver', header: 'Can be Waivered' }
+        ];
+
+        this.legalCCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'conditionName', header: 'Condition Name' },
+            { field: 'conditionOptions', header: 'Condition Options' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' },
+            { field: 'canWaiver', header: 'Can be Waivered' }
+        ];
+
+        this.complianceMOCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' }
+        ];
+
+        this.complianceCCols = [
+            { field: 'documentName', header: 'Document Name' },
+            { field: 'conditionName', header: 'Condition Name' },
+            { field: 'conditionOptions', header: 'Condition Options' },
+            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'signature', header: 'Signature Required' }
+        ];
+
+        // Compliance Documents
+        let formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].mandatory;
+        this.selectedChecklistData.complianceDocuments.mandatory.forEach(doc => {
+            formArray.push(new FormControl(false));
+        });
+
+        formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].conditional;
+        this.selectedChecklistData.complianceDocuments.conditional.forEach(doc => {
+            formArray.push(new FormControl(false));
+        });
+
+        formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].optional;
+        this.selectedChecklistData.complianceDocuments.optional.forEach(doc => {
+            formArray.push(new FormControl(false));
+        });
+
+        // Legal Documents
+        formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].mandatory;
+        this.selectedChecklistData.legalDocuments.mandatory.forEach(doc => {
+            formArray.push(new FormControl(false));
+        });
+
+        formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].conditional;
+        this.selectedChecklistData.legalDocuments.conditional.forEach(doc => {
+            formArray.push(new FormControl(false));
+        });
+
+        formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].optional;
+        this.selectedChecklistData.legalDocuments.optional.forEach(doc => {
+            formArray.push(new FormControl(false));
+        });
+
+        console.log(this.selectedChecklistData);
         this.loading = false;
     }
 
@@ -170,9 +265,18 @@ export class RMNewOnboardComponent implements OnInit {
                 return;
             }
         });
+
+        this.loading = true;
+        this.createDocumentsForm();
+        this.step++;
     }
 
     back() {
         this.step--;
+    }
+
+    createProcess() {
+        this.processData = {};
+        this.processData['name'] = this.selectedChecklistName;
     }
 }
