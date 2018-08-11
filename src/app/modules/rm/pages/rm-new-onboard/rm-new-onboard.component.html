@@ -1,21 +1,21 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
-
 <!-- Select Checklist -->
-<p-card [formGroup]="checklistForm" *ngIf="step === 1" styleClass="ui-card-shadow">
-    <h4>Select Checklist</h4>
-    <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistName"></p-dropdown>
-    <button pButton label="Next" class="ui-button-success" style="width: 30%" type="button" icon="fas fa-arrow-right" (click)="submitChecklistName()"></button>
-</p-card>
-
+<div *ngIf="step === 1">
+    <p-card [formGroup]="checklistForm" styleClass="ui-card-shadow">
+        <h4>Select Checklist</h4>
+        <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistName"></p-dropdown>
+    </p-card>
+    <button pButton label="Next" class="ui-button-success" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-arrow-right" (click)="submitChecklistName()"></button>
+</div>
 <!-- Enter Required and Condition Fields -->
 <div *ngIf="step === 2" [formGroup]="checklistForm">
     <div style="padding-bottom: 10px">
         <p-card styleClass="ui-card-shadow" id="requiredFields">
             <h4>Required Fields</h4>
             <div formArrayName="requiredFields">
-                <div *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index" [formGroupName]="i">
+                <div class="field" *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index" [formGroupName]="i">
                     <h5>{{ selectedChecklistData.requiredFields[i] }}</h5>
-                    <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="{{ selectedChecklistData.requiredFields[i] }}"
+                    <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
                         formControlName="field" required pInputText>
                 </div>
             </div>
@@ -25,15 +25,16 @@
         <p-card styleClass="ui-card-shadow" id="conditions">
             <h4>Conditions</h4>
             <div formArrayName="conditions">
-                <div *ngFor="let condition of checklistForm.get('conditions').controls; let i=index" [formGroupName]="i">
+                <div class="field" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index" [formGroupName]="i">
                     <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
-                    <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select a checklist" formControlName="conditionOption"></p-dropdown>
+                    <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option" formControlName="conditionOption"></p-dropdown>
                 </div>
             </div>
-            <button pButton label="Back" class="ui-button-secondary" style="width: 30%" type="button" icon="fas fa-arrow-left" (click)="back()"></button>
-            <button pButton label="Next" class="ui-button-success" style="width: 30%" type="button" icon="fas fa-arrow-right" (click)="submitFieldsConditions()"></button>
         </p-card>
     </div>
+
+    <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left" (click)="back()"></button>
+    <button pButton label="Next" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-arrow-right" (click)="submitFieldsConditions()"></button>
 </div>
 
 <!-- Check Documents Required -->
@@ -155,7 +156,7 @@
     <!-- Legal Documents -->
     <div style="padding-bottom: 10px">
         <p-card styleClass="ui-card-shadow" formGroupName="legalDocuments">
-            <h4>Compliance Documents</h4>
+            <h4>Legal Documents</h4>
             <h5>Mandatory</h5>
             <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
                 No documents in this section
@@ -282,4 +283,5 @@
             </div>
         </p-card>
     </div>
+    <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left" (click)="back()"></button>
 </div>
