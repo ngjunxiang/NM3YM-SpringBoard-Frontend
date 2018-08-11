@@ -5,22 +5,22 @@
         <img id="profile-img" class="profile-img-card" src="assets/images/sb-logo.png" />
         <div class="form-signin" [formGroup]="loginForm">
             <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
-            <div class="error-inline-msg">
-                <span *ngIf="loginForm.controls['username'].dirty && !loginForm.controls['username'].valid">
-                    Please enter your username
-                </span>
-            </div>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
                 pInputText>
-            <div class="error-inline-msg">
-                <span *ngIf="loginForm.controls['password'].dirty && !loginForm.controls['password'].valid">
-                    Please enter your password
-                </span>
-            </div>
-            <div class="error-label">
-                <span *ngIf="!isValidUser">
-                    Invalid username/password
-                </span>
+            <div class="error-label" style="padding-top:2%">
+                <div *ngIf="loginForm.controls['username'].dirty && !loginForm.controls['username'].valid; else checkPass">
+                    Please enter username
+                </div>
+                <ng-template #checkPass>
+                    <div *ngIf="loginForm.controls['password'].dirty && !loginForm.controls['password'].valid; else checkValid">
+                        Please enter password
+                    </div>
+                </ng-template>
+                <ng-template #checkValid>
+                    <div *ngIf="!isValidUser">
+                        Invalid username/password
+                    </div>
+                </ng-template>
             </div>
             <div id="remember" class="checkbox">
                 <label>
