@@ -6,6 +6,12 @@ import { Observable, throwError } from 'rxjs';
 interface LoginData {
     token: string;
     userType: string;
+    name: string;
+    error: string;
+}
+
+interface Response {
+    results: string;
     error: string;
 }
 
@@ -17,13 +23,40 @@ export class AuthenticationService {
 
     private host = "http://localhost:8000";
     private loginURL = this.host + '/app/login';
-    private authURL = this.host + '/app/api-auth';
+    private authURL = this.host + '/app/authenticate';
 
     constructor(private http: HttpClient) { }
 
-    authenticate() {
-        return true;
-        // return this.http.get(this.authURL, localStorage.getItem('JSESSIONID'););
+    authenticate(userType): Promise<any> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authItems;
+
+        return this.http.post<Response>(this.authURL + userType, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            ).toPromise();
+    }
+
+    checkAuth(userType) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authItems;
+
+        return this.http.post<Response>(this.authURL + userType, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
 
     validateUser(username, password): Observable<LoginData> {
