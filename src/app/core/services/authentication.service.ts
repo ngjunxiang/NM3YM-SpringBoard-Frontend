@@ -43,22 +43,6 @@ export class AuthenticationService {
             ).toPromise();
     }
 
-    checkAuth(userType) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        const postData = this.authItems;
-
-        return this.http.post<Response>(this.authURL + userType, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-
     validateUser(username, password): Observable<LoginData> {
         const httpOptions = {
             headers: new HttpHeaders({
