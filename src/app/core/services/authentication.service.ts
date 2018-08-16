@@ -3,6 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { retry, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 interface LoginData {
     token: string;
     userType: string;
@@ -21,9 +23,8 @@ interface Response {
 
 export class AuthenticationService {
 
-    private host = "http://localhost:8000";
-    private loginURL = this.host + '/app/login';
-    private authURL = this.host + '/app/authenticate';
+    private loginURL = environment.host + '/app/login';
+    private authURL = environment.host + '/app/authenticate';
 
     constructor(private http: HttpClient) { }
 

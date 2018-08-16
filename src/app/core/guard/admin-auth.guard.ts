@@ -17,7 +17,7 @@ export class AdminAuthGuard implements CanActivate {
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.authService.authenticate('ADMIN').then(res => {
+        return this.authService.authenticate('Admin').then(res => {
             if (res.results === 'success' &&  localStorage.getItem('USERTYPE') === 'ADMIN') {
                 return true;
             }

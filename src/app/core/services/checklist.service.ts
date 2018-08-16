@@ -4,6 +4,7 @@ import { throwError, Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
+import { environment } from '../../../environments/environment';
 
 interface Checklist {
     name: string;
@@ -33,13 +34,12 @@ interface Response {
 
 export class ChecklistService {
 
-    private host = "http://localhost:8000";
-    private retrieveCMChecklistNamesURL = this.host + '/app/cm-retrieve-checklistNames';
-    private retrieveRMChecklistNamesURL = this.host + '/app/rm-retrieve-checklistNames';
-    private retrieveRMChecklistURL = this.host + '/app/rm-retrieve-checklist';
-    private retrieveDeleteCMChecklistURL = this.host + '/app/cm-manage-checklist';
-    private updateCMChecklistURL = this.host + '/app/update-checklist';
-    private createCMChecklistURL = this.host + '/app/create-checklist';
+    private retrieveCMChecklistNamesURL = environment.host + '/app/cm-retrieve-checklistNames';
+    private retrieveRMChecklistNamesURL = environment.host + '/app/rm-retrieve-checklistNames';
+    private retrieveRMChecklistURL = environment.host + '/app/rm-retrieve-checklist';
+    private retrieveDeleteCMChecklistURL = environment.host + '/app/cm-manage-checklist';
+    private updateCMChecklistURL = environment.host + '/app/update-checklist';
+    private createCMChecklistURL = environment.host + '/app/create-checklist';
 
     constructor(
         private authService: AuthenticationService,

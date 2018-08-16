@@ -4,6 +4,7 @@ import { retry, catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 import { AuthenticationService } from '../services/authentication.service';
+import { environment } from '../../../environments/environment';
 
 interface User {
     username: string;
@@ -28,10 +29,9 @@ interface Response {
 
 export class UserMgmtService {
 
-    private host = "http://localhost:8000";
-    private retrieveUsersURL = this.host + '/app/retrieve-users';
-    private CDUsersURL = this.host + '/app/manage-users';
-    private UUsersURL = this.host + '/app/update-users';
+    private retrieveUsersURL = environment.host + '/app/retrieve-users';
+    private CDUsersURL = environment.host + '/app/manage-users';
+    private UUsersURL = environment.host + '/app/update-users';
 
     usernames = [];
     emails = [];
