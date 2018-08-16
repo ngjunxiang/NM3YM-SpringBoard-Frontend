@@ -1,6 +1,27 @@
-<h4>Current Onboarding</h4>
+<span>
+    Current Onboarding
+    <a routerLink="../onboard/create">
+        <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button" icon="fa fa-plus"></button>
+    </a>
+</span>
 
-<div *ngFor="let client of clients; let i=index">
-    <p-card styleClass="ui-card-shadow">{{ client }}</p-card>
-    <div style="height: 10px"></div>
+<div *ngIf="!loading" style="padding-top: 20px">
+    <div *ngFor="let client of clients; let i=index">
+        <p-card styleClass="ui-card-shadow">
+            <span><b>Name: </b>{{ client.name }}</span>
+
+            <div>
+                <span><b>Type: </b>{{ client.type }}</span>
+                <span><b>Booking Centre: </b>{{ client.bookingCentre }}</span>
+                <span><b>Progress: </b>{{ client.progress }}</span>
+            </div>
+            <div>
+                <span><b>Account Number: </b>{{ client.accNum }}</span>
+                <span><b>Business Centre: </b>{{ client.businessCentre }}</span>
+            </div>
+
+            <p-progressBar class="progress-bar" [value]="client.progress" [style]="{'height': '6px'}"></p-progressBar>
+        </p-card>
+        <div style="height: 10px"></div>
+    </div>
 </div>

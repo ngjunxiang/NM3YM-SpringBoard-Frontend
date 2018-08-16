@@ -13,6 +13,7 @@ import { GrowlModule } from 'primeng/growl';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ProgressBarModule} from 'primeng/progressbar';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
 
@@ -42,6 +43,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MessagesModule,
         NgbModule.forRoot(),
         PerfectScrollbarModule,
+        ProgressBarModule,
         ReactiveFormsModule,
         SharedModule,
         TableModule

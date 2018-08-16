@@ -8,7 +8,25 @@ import { Component, OnInit } from '@angular/core';
 
 export class RMDashboardComponent implements OnInit {
 
-    clients = ["Testing 1", "Testing 2"];
+    clients = [
+        {
+            'name': 'Melvin Ng',
+            'type': 'Account Opening',
+            'accNum': '123-456-789',
+            'bookingCentre': 'Singapore',
+            'businessCentre': 'Singapore',
+            'urgent': false,
+            'progress': 85
+        },
+        {
+            'name': 'Jarrett Goh',
+            'type': 'Account Opening',
+            'accNum': '123-456-789',
+            'bookingCentre': 'Hong Kong',
+            'businessCentre': 'Hong Kong',
+            'urgent': false,
+            'progress': 40
+        }];
 
     constructor() { }
 
