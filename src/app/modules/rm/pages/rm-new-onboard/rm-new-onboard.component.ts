@@ -176,10 +176,21 @@ export class RMNewOnboardComponent implements OnInit {
             formArray.push(new FormControl(false));
         });
 
+        let conditionalDocs = [];
         formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].conditional;
         this.selectedChecklistData.complianceDocuments.conditional.forEach(doc => {
-            formArray.push(new FormControl(false));
+            for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                for (let j = 0; j < doc.conditions.length; j++) {
+                    if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                        formArray.push(new FormControl(false));
+                        conditionalDocs.push(doc);
+                    }
+                }
+            }
         });
+        this.selectedChecklistData.complianceDocuments.conditional = conditionalDocs;
 
         formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].optional;
         this.selectedChecklistData.complianceDocuments.optional.forEach(doc => {
@@ -192,17 +203,27 @@ export class RMNewOnboardComponent implements OnInit {
             formArray.push(new FormControl(false));
         });
 
+        conditionalDocs = [];
         formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].conditional;
         this.selectedChecklistData.legalDocuments.conditional.forEach(doc => {
-            formArray.push(new FormControl(false));
+            for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                for (let j = 0; j < doc.conditions.length; j++) {
+                    if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                        formArray.push(new FormControl(false));
+                        conditionalDocs.push(doc);
+                    }
+                }
+            }
         });
+        this.selectedChecklistData.legalDocuments.conditional = conditionalDocs;
 
         formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].optional;
         this.selectedChecklistData.legalDocuments.optional.forEach(doc => {
             formArray.push(new FormControl(false));
         });
 
-        console.log(this.selectedChecklistData);
         this.loading = false;
     }
 
@@ -246,25 +267,37 @@ export class RMNewOnboardComponent implements OnInit {
             control.markAsDirty();
         });
 
-        this.checklistForm.get('requiredFields')['controls'].forEach(field => {
+        let invalidFields = false;
+        this.checklistForm.get('requiredFields')['controls'].some(field => {
             if (field.invalid) {
+                invalidFields = true;
+                return true;
+            }
+        });
+
+        let invalidConditions = false;
+        this.checklistForm.get('conditions')['controls'].some(field => {
+            if (field.invalid) {
+                invalidConditions = true;
+                return true;
+            }
+        });
+
+        if (invalidFields || invalidConditions) {
+            if (invalidFields) {
                 document.getElementById('requiredFields').scrollIntoView();
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: 'Please enter all required fields'
                 });
-                return;
             }
-        });
-
-        this.checklistForm.get('conditions')['controls'].forEach(field => {
-            if (field.invalid) {
+            if (invalidConditions) {
                 document.getElementById('conditions').scrollIntoView();
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: 'Please enter all condition options'
                 });
-                return;
             }
-        });
+            return;
+        }
 
         this.loading = true;
         this.createDocumentsForm();
