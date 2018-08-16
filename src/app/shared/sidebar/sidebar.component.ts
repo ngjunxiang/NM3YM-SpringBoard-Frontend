@@ -13,6 +13,7 @@ declare var $: any;
 export class SidebarComponent implements OnInit {
     
     @Input('sidebarRoutes') ROUTES: RouteInfo[];
+    @Input('name') name: string;
     
     isLoading = true;
 
