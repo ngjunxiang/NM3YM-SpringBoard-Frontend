@@ -148,6 +148,7 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     retrieveChecklistDetails(checklistName) {
+        this.loading = true;
         this.checklistService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
             // Update Checklist Name
             this.currentChecklistForm.get('checklistName').setValue(res.name);
@@ -276,6 +277,7 @@ export class CMEditChecklistComponent implements OnInit {
                     })
                 );
             });
+            this.loading = false;
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
@@ -693,7 +695,7 @@ export class CMEditChecklistComponent implements OnInit {
         if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
-        
+
         this.dialogForm = this.fb.group({
             documentName: new FormControl(form.get('optional').get(index + '').get('documentName').value, Validators.required),
             agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, Validators.required),
