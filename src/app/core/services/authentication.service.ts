@@ -12,9 +12,9 @@ interface LoginData {
     error: string;
 }
 
-interface Response {
-    results: string;
+interface AuthResponse {
     error: string;
+    newToken: string;
 }
 
 @Injectable({
@@ -37,7 +37,7 @@ export class AuthenticationService {
 
         const postData = this.authItems;
 
-        return this.http.post<Response>(this.authURL + userType, postData, httpOptions)
+        return this.http.post<AuthResponse>(this.authURL + userType, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

@@ -18,7 +18,8 @@ export class RMAuthGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         return this.authService.authenticate('RM').then(res => {
-            if (res.results === 'success' &&  localStorage.getItem('USERTYPE') === 'RM') {
+            if (res.newToken && localStorage.getItem('USERTYPE') === 'RM') {
+                this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
                 return true;
             }
             if (res.error === 'Invalid Token' || res.error === 'Token has expired') {

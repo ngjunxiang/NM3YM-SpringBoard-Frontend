@@ -18,7 +18,8 @@ export class AdminAuthGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         return this.authService.authenticate('Admin').then(res => {
-            if (res.results === 'success' &&  localStorage.getItem('USERTYPE') === 'ADMIN') {
+            if (res.newToken && localStorage.getItem('USERTYPE') === 'ADMIN') {
+                this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
                 return true;
             }
             if (res.error === 'Invalid Token' || res.error === 'Token has expired') {
