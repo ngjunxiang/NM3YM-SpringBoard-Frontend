@@ -196,7 +196,7 @@ export class UpdateAdminComponent implements OnInit {
 
             if (res.results) {
                 this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'User has been created'
+                    severity: 'success', summary: 'Success', detail: 'User password has been updated'
                 });
             } else {
                 this.msgs.push({
