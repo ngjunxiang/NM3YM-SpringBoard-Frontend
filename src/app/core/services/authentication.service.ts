@@ -17,6 +17,12 @@ interface AuthResponse {
     newToken: string;
 }
 
+interface UserDetailsResponse {
+    error: string;
+    name: string;
+    email: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -25,6 +31,9 @@ export class AuthenticationService {
 
     private loginURL = environment.host + '/app/login';
     private authURL = environment.host + '/app/authenticate';
+    private retrieveNameURL = environment.host + '/app/retrieve-user-details';
+
+    userDetails;
 
     constructor(private http: HttpClient) { }
 
@@ -55,7 +64,7 @@ export class AuthenticationService {
             'username': username,
             'password': password
         };
-        
+
         return this.http.post<LoginData>(this.loginURL, postData, httpOptions)
             .pipe(
                 retry(3),
@@ -67,6 +76,22 @@ export class AuthenticationService {
         localStorage.removeItem('USERNAME');
         localStorage.removeItem('JSESSIONID');
         localStorage.removeItem('USERTYPE');
+    }
+
+    retrieveUserDetails() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authItems;
+
+        return this.http.post<UserDetailsResponse>(this.retrieveNameURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            ).toPromise();
     }
 
     setLocalStorage(username, token, userType) {
