@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/services/checklist.service';
+import { AuthenticationService } from '../../../../core/services/authentication.service';
 
 @Component({
     selector: 'cm-new-checklist',
@@ -13,7 +14,7 @@ import { ChecklistService } from '../../../../core/services/checklist.service';
 })
 
 export class CMNewChecklistComponent implements OnInit {
-
+    
     // UI Control
     loading = false;
     blocked = false;
@@ -46,6 +47,7 @@ export class CMNewChecklistComponent implements OnInit {
     checklist: any;
 
     constructor(
+        private authService: AuthenticationService,
         private checklistService: ChecklistService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
@@ -737,7 +739,7 @@ export class CMNewChecklistComponent implements OnInit {
 
             setTimeout(() => {
                 this.router.navigate(['/cm/checklist/manage']);
-            }, 5000);
+            }, 3000);
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error

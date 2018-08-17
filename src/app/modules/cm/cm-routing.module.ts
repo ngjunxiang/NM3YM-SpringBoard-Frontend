@@ -21,7 +21,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'checklist/manage/edit/:name',
+                path: 'checklist/manage/edit/:id',
                 component: CMEditChecklistComponent,
                 data: {
                     title: 'Client Management',

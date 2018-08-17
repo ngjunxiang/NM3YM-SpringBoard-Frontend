@@ -38,6 +38,8 @@ export class CMEditChecklistComponent implements OnInit {
     oEditDisplay = false;
 
     // UI Component
+    clName;
+    originalCl;
     pageInfo;
     currentChecklistForm: FormGroup;
     complianceDocumentsForm: FormGroup;
@@ -54,10 +56,14 @@ export class CMEditChecklistComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            this.clName = params['name'];
+        });
+
         this.route.snapshot.data['urls'] = [
             { title: 'Checklists' },
             { title: 'Edit', url: '/cm/checklist/manage' },
-            { title: this.route.snapshot.paramMap.get('name') }
+            { title: this.clName }
         ];
 
         this.loading = true;
@@ -100,7 +106,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.createForm();
 
-        this.retrieveChecklistDetails(this.route.snapshot.paramMap.get('name'));
+        this.retrieveChecklistDetails(this.route.snapshot.paramMap.get('id'));
     }
 
     createForm() {
@@ -150,6 +156,7 @@ export class CMEditChecklistComponent implements OnInit {
     retrieveChecklistDetails(checklistName) {
         this.loading = true;
         this.checklistService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
+            this.originalCl = res;
             // Update Checklist Name
             this.currentChecklistForm.get('checklistName').setValue(res.name);
 
@@ -861,12 +868,13 @@ export class CMEditChecklistComponent implements OnInit {
                 remarks: optionalDoc.get('remarks').value
             });
         }
-
-        this.checklistService.updateCMChecklist(this.checklist.name, this.checklist).subscribe(res => {
+        
+        this.checklistService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
+                return;
             }
 
             this.msgs.push({
@@ -875,7 +883,7 @@ export class CMEditChecklistComponent implements OnInit {
 
             setTimeout(() => {
                 this.router.navigate(['/cm/checklist/manage']);
-            }, 5000);
+            }, 3000);
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error

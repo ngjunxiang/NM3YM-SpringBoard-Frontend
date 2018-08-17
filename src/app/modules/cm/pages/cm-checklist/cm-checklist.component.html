@@ -1,29 +1,33 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-confirmDialog></p-confirmDialog>
 
-<span>
-    Current Checklists
-    <a routerLink="../create">
-        <button pButton class="ui-button-success" style="float: right;" label="Add New Checklist" type="button" icon="fa fa-plus"></button>
-    </a>
-</span>
+<div *ngIf="!loading">
+    <span>
+        Current Checklists
+        <a routerLink="../create">
+            <button pButton class="ui-button-success" style="float: right;" label="Add New Checklist" type="button" icon="fa fa-plus"></button>
+        </a>
+    </span>
 
-<div *ngIf="!loading" style="padding-top: 20px">
-    <div *ngIf="checklistNames.length === 0">
-        No checklist currently
-    </div>
-    <div *ngIf="checklistNames.length > 0">
-        <div *ngFor="let checklist of checklistNames; let i=index" style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow">
-                <div style="display:inline-block">{{ checklist.name }}</div>
-                <div style="display:inline-block; float:right">
-                    <button pButton pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil" (click)="editChecklist(i)"></button>
-                    <button pButton pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteChecklist(i)"></button>
-                </div>
-                <div> 
-                    Last Updated: {{ checklist.dateCreated }}
-                </div>
-            </p-card>
+    <div style="padding-top: 20px">
+        <div *ngIf="checklistNames.length === 0">
+            No checklist currently
+        </div>
+        <div *ngIf="checklistNames.length > 0">
+            <div *ngFor="let checklist of checklistNames; let i=index" style="padding-bottom: 10px">
+                <p-card styleClass="ui-card-shadow">
+                    <div style="display:inline-block">
+                        <b>{{ checklist.name }}</b> <br> 
+                        Last Updated: {{ checklist.dateCreated }} <br> 
+                        Updated By: {{ checklist.updatedBy }}
+                    </div>
+                    <div style="display:inline-block; float:right">
+                        <button pButton pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil"
+                            (click)="editChecklist(i)"></button>
+                        <button pButton pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteChecklist(i)"></button>
+                    </div>
+                </p-card>
+            </div>
         </div>
     </div>
 </div>

@@ -5,6 +5,7 @@ import { retry, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { environment } from '../../../environments/environment';
+import { markParentViewsForCheckProjectedViews } from '@angular/core/src/view/util';
 
 interface Checklist {
     name: string;
@@ -19,8 +20,11 @@ interface ChecklistNames {
 }
 
 interface ChecklistName {
-    name: string,
-    dateCreated: Date
+    name: string;
+    clID: string;
+    updatedBy: string;
+    version: string;
+    dateCreated: Date;
 }
 
 interface Response {
@@ -62,18 +66,18 @@ export class ChecklistService {
             );
     }
 
-    retrieveCMChecklistDetails(checklistName) {
+    retrieveCMChecklistDetails(checklistId) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
 
-        const checklistNameData = {
-            'clName': checklistName
+        const checklistIdData = {
+            'clID': checklistId
         };
 
-        const postData = Object.assign(this.authService.authItems, checklistNameData);
+        const postData = Object.assign(this.authService.authItems, checklistIdData);
 
         return this.http.post<Checklist>(this.retrieveDeleteCMChecklistURL, postData, httpOptions)
             .pipe(
@@ -90,7 +94,8 @@ export class ChecklistService {
         };
 
         const checklistData = {
-            'checklist': JSON.stringify(checklist)
+            'checklist': JSON.stringify(checklist),
+            'name': this.authService.userDetails.name
         };
 
         const postData = Object.assign(this.authService.authItems, checklistData);
@@ -102,7 +107,7 @@ export class ChecklistService {
             );
     }
 
-    updateCMChecklist(checklistName, checklist) {
+    updateCMChecklist(checklistId, checklist) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -111,7 +116,8 @@ export class ChecklistService {
 
         const checklistData = {
             'checklist': JSON.stringify(checklist),
-            'clName': checklistName
+            'clID': checklistId,
+            'name': this.authService.userDetails.name
         };
 
         const postData = Object.assign(this.authService.authItems, checklistData);
@@ -123,9 +129,9 @@ export class ChecklistService {
             );
     }
 
-    deleteCMChecklist(checklistName) {
+    deleteCMChecklist(checklistId) {
         const checklistData = {
-            'clName': checklistName
+            'clID': checklistId
         };
 
         const postData = Object.assign(this.authService.authItems, checklistData);

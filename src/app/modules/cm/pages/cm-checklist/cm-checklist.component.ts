@@ -38,20 +38,29 @@ export class CMChecklistComponent implements OnInit {
             data.clNames.forEach(cl => {
                 this.checklistNames.push({
                     'name': cl.name,
+                    'clID': cl.clID,
+                    'version': cl.version,
+                    'updatedBy': cl.updatedBy,
                     'dateCreated': cl.dateCreated
                 });
             });
+            console.log(this.checklistNames)
+            this.loading = false;
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
+            this.loading = false;
         });
-        this.loading = false;
     }
 
     editChecklist(index: number) {
-        let selectedChecklist = this.checklistNames[index].name;
-        this.router.navigate(['/cm/checklist/manage/edit', selectedChecklist]);
+        let selectedChecklistId = this.checklistNames[index].clID;
+        this.router.navigate(['/cm/checklist/manage/edit', selectedChecklistId], {
+            queryParams: {
+                name: this.checklistNames[index].name
+            }
+        });
     }
 
     deleteChecklist(index: number) {
@@ -60,24 +69,27 @@ export class CMChecklistComponent implements OnInit {
             header: 'Delete Confirmation',
             icon: 'pi pi-info-circle',
             accept: () => {
-                let selectedChecklist = this.checklistNames[index].name;
+                this.loading = true;
+                let selectedChecklist = this.checklistNames[index].clID;
                 this.checklistService.deleteCMChecklist(selectedChecklist).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error
                         });
                     }
-                    
+
                     if (res.results) {
                         this.loadPage();
                         this.msgs.push({
                             severity: 'success', summary: 'Success', detail: 'Checklist deleted'
                         });
                     }
+                    this.loading = false;
                 }, error => {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: error
                     });
+                    this.loading = false;
                 });
             },
             reject: () => {
