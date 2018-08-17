@@ -33,4 +33,7 @@ export class RMDashboardComponent implements OnInit {
     ngOnInit() {
     }
 
+    toggleUrgent(index: number) {
+        this.clients[index].urgent = !this.clients[index].urgent
+    }
 }

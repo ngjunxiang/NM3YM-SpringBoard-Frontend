@@ -8,16 +8,25 @@
 <div *ngIf="!loading" style="padding-top: 20px">
     <div *ngFor="let client of clients; let i=index">
         <p-card styleClass="ui-card-shadow">
-            <span><b>Name: </b>{{ client.name }}</span>
-
-            <div>
-                <span><b>Type: </b>{{ client.type }}</span>
-                <span><b>Booking Centre: </b>{{ client.bookingCentre }}</span>
-                <span><b>Progress: </b>{{ client.progress }}</span>
+            <div *ngIf="client.urgent">
+                <button pButton class="ui-button-warning" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
             </div>
-            <div>
-                <span><b>Account Number: </b>{{ client.accNum }}</span>
-                <span><b>Business Centre: </b>{{ client.businessCentre }}</span>
+            <div *ngIf="!client.urgent">
+                <button pButton class="ui-button-secondary" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
+            </div>
+
+            <div class="ui-g">
+                <div style="display: inline-block" class="ui-g-4"><b>Name: </b>{{ client.name }}</div>
+
+                <div style="width: 30%" class="ui-g-4">
+                    <p><b>Type: </b>{{ client.type }}</p>
+                    <p><b>Booking Centre: </b>{{ client.bookingCentre }}</p>
+                    <p><b>Progress: </b>{{ client.progress }}</p>
+                </div>
+                <div style="width: 30%; padding-bottom: 1%" class="ui-g-4">
+                    <p><b>Account Number: </b>{{ client.accNum }}</p>
+                    <p><b>Business Centre: </b>{{ client.businessCentre }}</p>
+                </div>
             </div>
 
             <p-progressBar class="progress-bar" [value]="client.progress" [style]="{'height': '6px'}"></p-progressBar>
