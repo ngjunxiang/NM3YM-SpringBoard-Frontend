@@ -342,10 +342,9 @@ export class RMNewOnboardComponent implements OnInit {
         this.processData['requiredFields'] = [];
 
         for (let i = 0; i < this.checklistForm.get('requiredFields')['length']; i++) {
-            this.processData['requiredFields'].push({
-                'fieldName': this.selectedChecklistData.requiredFields[i],
-                'fieldValue': this.checklistForm.get('requiredFields').get(i + '').get('field').value
-            });
+            let field = {};
+            field[this.selectedChecklistData.requiredFields[i]] = this.checklistForm.get('requiredFields').get(i + '').get('field').value;
+            this.processData['requiredFields'].push(field);
         }
 
         // Checklist Conditions
@@ -443,7 +442,7 @@ export class RMNewOnboardComponent implements OnInit {
                 checked: this.checklistForm.get('legalDocuments').get('optional').get(i + '').value
             });
         }
-
+        
         this.onboardService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
