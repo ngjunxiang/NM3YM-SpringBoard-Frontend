@@ -347,103 +347,89 @@ export class RMNewOnboardComponent implements OnInit {
             });
         }
 
+        // Compliance Documents
+        this.processData['complianceDocuments'] = {};
+        this.processData['complianceDocuments']['mandatory'] = [];
 
-        // // Compliance Documents
-        // this.checklist['complianceDocuments'] = {};
-        // this.checklist['complianceDocuments']['mandatory'] = [];
+        for (let i = 0; i < this.selectedChecklistData.complianceDocuments.mandatory.length; i++) {
+            let mandatoryDoc = this.selectedChecklistData.complianceDocuments.mandatory[i];
+            this.processData['complianceDocuments']['mandatory'].push({
+                documentName: mandatoryDoc.documentName,
+                agmtCode: mandatoryDoc.agmtCode,
+                signature: mandatoryDoc.signature,
+                remarks: mandatoryDoc.remarks,
+                checked: this.checklistForm.get('complianceDocuments').get('mandatory').get(i + '').value
+            });
+        }
+        this.processData['complianceDocuments']['conditional'] = [];
 
-        // for (let i = 0; i < this.complianceDocumentsForm.get('mandatory')['length']; i++) {
-        //     let mandatoryDoc = this.complianceDocumentsForm.get('mandatory').get(i + '');
-        //     this.checklist['complianceDocuments']['mandatory'].push({
-        //         documentName: mandatoryDoc.get('documentName').value,
-        //         agmtCode: mandatoryDoc.get('agmtCode').value,
-        //         signature: mandatoryDoc.get('signature').value,
-        //         remarks: mandatoryDoc.get('remarks').value
-        //     });
-        // }
+        for (let i = 0; i < this.selectedChecklistData.complianceDocuments.conditional.length; i++) {
+            let conditionalDoc = this.selectedChecklistData.complianceDocuments.conditional[i];
+            this.processData['complianceDocuments']['conditional'].push({
+                documentName: conditionalDoc.documentName,
+                conditions: conditionalDoc.conditions,
+                agmtCode: conditionalDoc.agmtCode,
+                signature: conditionalDoc.signature,
+                remarks: conditionalDoc.remarks,
+                canWaiver: conditionalDoc.canWaiver,
+                checked: this.checklistForm.get('complianceDocuments').get('conditional').get(i + '').value
+            });
+        }
 
-        // this.checklist['complianceDocuments']['conditional'] = [];
+        this.processData['complianceDocuments']['optional'] = [];
 
-        // for (let i = 0; i < this.complianceDocumentsForm.get('conditional')['length']; i++) {
-        //     let conditionalDoc = this.complianceDocumentsForm.get('conditional').get(i + '');
-        //     let conditions = [];
-        //     for (let j = 0; j < this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
-        //         let condition = this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
-        //         conditions.push({
-        //             conditionName: condition.get('conditionName').value,
-        //             conditionOption: condition.get('conditionOption').value
-        //         })
-        //     }
-        //     this.checklist['complianceDocuments']['conditional'].push({
-        //         conditions: conditions,
-        //         documentName: conditionalDoc.get('documentName').value,
-        //         agmtCode: conditionalDoc.get('agmtCode').value,
-        //         signature: conditionalDoc.get('signature').value,
-        //         remarks: conditionalDoc.get('remarks').value
-        //     });
-        // }
+        for (let i = 0; i < this.selectedChecklistData.complianceDocuments.optional.length; i++) {
+            let optionalDoc = this.selectedChecklistData.complianceDocuments.optional[i];
+            this.processData['complianceDocuments']['optional'].push({
+                documentName: optionalDoc.documentName,
+                agmtCode: optionalDoc.agmtCode,
+                signature: optionalDoc.signature,
+                remarks: optionalDoc.remarks,
+                checked: this.checklistForm.get('complianceDocuments').get('optional').get(i + '').value
+            });
+        }
 
-        // this.checklist['complianceDocuments']['optional'] = [];
+        // Legal Documents
+        this.processData['legalDocuments'] = {};
+        this.processData['legalDocuments']['mandatory'] = [];
 
-        // for (let i = 0; i < this.complianceDocumentsForm.get('optional')['length']; i++) {
-        //     let optionalDoc = this.complianceDocumentsForm.get('optional').get(i + '');
-        //     this.checklist['complianceDocuments']['optional'].push({
-        //         documentName: optionalDoc.get('documentName').value,
-        //         agmtCode: optionalDoc.get('agmtCode').value,
-        //         signature: optionalDoc.get('signature').value,
-        //         remarks: optionalDoc.get('remarks').value
-        //     });
-        // }
+        for (let i = 0; i < this.selectedChecklistData.legalDocuments.mandatory.length; i++) {
+            let mandatoryDoc = this.selectedChecklistData.legalDocuments.mandatory[i];
+            this.processData['legalDocuments']['mandatory'].push({
+                documentName: mandatoryDoc.documentName,
+                agmtCode: mandatoryDoc.agmtCode,
+                signature: mandatoryDoc.signature,
+                remarks: mandatoryDoc.remarks,
+                checked: this.checklistForm.get('legalDocuments').get('mandatory').get(i + '').value
+            });
+        }
+        this.processData['legalDocuments']['conditional'] = [];
 
-        // // Legal Documents
-        // this.checklist['legalDocuments'] = {};
-        // this.checklist['legalDocuments']['mandatory'] = [];
+        for (let i = 0; i < this.selectedChecklistData.legalDocuments.conditional.length; i++) {
+            let conditionalDoc = this.selectedChecklistData.legalDocuments.conditional[i];
+            this.processData['legalDocuments']['conditional'].push({
+                documentName: conditionalDoc.documentName,
+                conditions: conditionalDoc.conditions,
+                agmtCode: conditionalDoc.agmtCode,
+                signature: conditionalDoc.signature,
+                remarks: conditionalDoc.remarks,
+                canWaiver: conditionalDoc.canWaiver,
+                checked: this.checklistForm.get('legalDocuments').get('conditional').get(i + '').value
+            });
+        }
 
-        // for (let i = 0; i < this.legalDocumentsForm.get('mandatory')['length']; i++) {
-        //     let mandatoryDoc = this.legalDocumentsForm.get('mandatory').get(i + '');
-        //     this.checklist['legalDocuments']['mandatory'].push({
-        //         documentName: mandatoryDoc.get('documentName').value,
-        //         agmtCode: mandatoryDoc.get('agmtCode').value,
-        //         signature: mandatoryDoc.get('signature').value,
-        //         canWaiver: mandatoryDoc.get('canWaiver').value,
-        //         remarks: mandatoryDoc.get('remarks').value
-        //     });
-        // }
+        this.processData['legalDocuments']['optional'] = [];
 
-        // this.checklist['legalDocuments']['conditional'] = [];
-
-        // for (let i = 0; i < this.legalDocumentsForm.get('conditional')['length']; i++) {
-        //     let conditionalDoc = this.legalDocumentsForm.get('conditional').get(i + '');
-        //     let conditions = [];
-        //     for (let j = 0; j < this.legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
-        //         let condition = this.legalDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
-        //         conditions.push({
-        //             conditionName: condition.get('conditionName').value,
-        //             conditionOption: condition.get('conditionOption').value
-        //         })
-        //     }
-        //     this.checklist['legalDocuments']['conditional'].push({
-        //         conditions: conditions,
-        //         documentName: conditionalDoc.get('documentName').value,
-        //         agmtCode: conditionalDoc.get('agmtCode').value,
-        //         signature: conditionalDoc.get('signature').value,
-        //         canWaiver: conditionalDoc.get('canWaiver').value,
-        //         remarks: conditionalDoc.get('remarks').value
-        //     });
-        // }
-
-        // this.checklist['legalDocuments']['optional'] = [];
-
-        // for (let i = 0; i < this.legalDocumentsForm.get('optional')['length']; i++) {
-        //     let optionalDoc = this.legalDocumentsForm.get('optional').get(i + '');
-        //     this.checklist['legalDocuments']['optional'].push({
-        //         documentName: optionalDoc.get('documentName').value,
-        //         agmtCode: optionalDoc.get('agmtCode').value,
-        //         signature: optionalDoc.get('signature').value,
-        //         canWaiver: optionalDoc.get('canWaiver').value,
-        //         remarks: optionalDoc.get('remarks').value
-        //     });
-        // }
+        for (let i = 0; i < this.selectedChecklistData.legalDocuments.optional.length; i++) {
+            let optionalDoc = this.selectedChecklistData.legalDocuments.optional[i];
+            this.processData['legalDocuments']['optional'].push({
+                documentName: optionalDoc.documentName,
+                agmtCode: optionalDoc.agmtCode,
+                signature: optionalDoc.signature,
+                remarks: optionalDoc.remarks,
+                checked: this.checklistForm.get('legalDocuments').get('optional').get(i + '').value
+            });
+        }
 
         console.log(this.processData)
     }
