@@ -28,11 +28,11 @@ export class CMChecklistComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loading = true;
         this.loadPage();
     }
 
     loadPage() {
+        this.loading = true;
         this.checklistNames = [];
         this.checklistService.retrieveCMChecklistNames().subscribe(data => {
             data.clNames.forEach(cl => {
@@ -67,15 +67,15 @@ export class CMChecklistComponent implements OnInit {
         this.confirmationService.confirm({
             message: 'Do you want to delete this checklist?',
             header: 'Delete Confirmation',
-            icon: 'pi pi-info-circle',
+            icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.loading = true;
                 let selectedChecklist = this.checklistNames[index].clID;
                 this.checklistService.deleteCMChecklist(selectedChecklist).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error
                         });
+                        return;
                     }
 
                     if (res.results) {
@@ -84,12 +84,10 @@ export class CMChecklistComponent implements OnInit {
                             severity: 'success', summary: 'Success', detail: 'Checklist deleted'
                         });
                     }
-                    this.loading = false;
                 }, error => {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: error
                     });
-                    this.loading = false;
                 });
             },
             reject: () => {
