@@ -383,7 +383,6 @@ export class RMNewOnboardComponent implements OnInit {
                 agmtCode: conditionalDoc.agmtCode,
                 signature: conditionalDoc.signature,
                 remarks: conditionalDoc.remarks,
-                canWaiver: conditionalDoc.canWaiver,
                 checked: this.checklistForm.get('complianceDocuments').get('conditional').get(i + '').value
             });
         }
@@ -412,6 +411,7 @@ export class RMNewOnboardComponent implements OnInit {
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
+                canWaiver: mandatoryDoc.canWaiver,
                 checked: this.checklistForm.get('legalDocuments').get('mandatory').get(i + '').value
             });
         }
@@ -439,6 +439,7 @@ export class RMNewOnboardComponent implements OnInit {
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
+                canWaiver: optionalDoc.canWaiver,
                 checked: this.checklistForm.get('legalDocuments').get('optional').get(i + '').value
             });
         }
