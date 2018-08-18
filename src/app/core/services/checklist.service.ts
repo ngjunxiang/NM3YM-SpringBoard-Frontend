@@ -17,6 +17,7 @@ interface Checklist {
 
 interface ChecklistNames {
     clNames: ChecklistName[];
+    error: string;
 }
 
 interface ChecklistName {
@@ -168,18 +169,18 @@ export class ChecklistService {
             );
     }
     
-    retrieveRMChecklistDetails(checklistName) {
+    retrieveRMChecklistDetails(checklistId) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
 
-        const checklistNameData = {
-            'clName': checklistName
+        const checklistIdData = {
+            'clID': checklistId
         };
 
-        const postData = Object.assign(this.authService.authItems, checklistNameData);
+        const postData = Object.assign(this.authService.authItems, checklistIdData);
 
         return this.http.post<Checklist>(this.retrieveRMChecklistURL, postData, httpOptions)
             .pipe(
@@ -190,7 +191,6 @@ export class ChecklistService {
 
 
     
-
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.

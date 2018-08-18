@@ -4,7 +4,7 @@
     <div *ngIf="step === 1">
         <p-card [formGroup]="checklistForm" styleClass="ui-card-shadow">
             <h4>Select Checklist</h4>
-            <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistName"
+            <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistId"
                 [style]="{'width':'50%'}"></p-dropdown>
         </p-card>
         <button pButton label="Next" class="ui-button-success" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-arrow-right"

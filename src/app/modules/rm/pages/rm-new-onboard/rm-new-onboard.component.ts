@@ -29,6 +29,7 @@ export class RMNewOnboardComponent implements OnInit {
     checklistNameDropdownData: SelectItem[];
     checklistForm: FormGroup;
 
+    selectedChecklistId: string;
     selectedChecklistName: string;
     selectedChecklistData: any;
     processData: any;
@@ -49,7 +50,7 @@ export class RMNewOnboardComponent implements OnInit {
     createForm() {
         this.retrieveChecklistNames();
         this.checklistForm = this.fb.group({
-            selectedChecklistName: new FormControl('', Validators.required),
+            selectedChecklistId: new FormControl('', Validators.required),
             requiredFields: new FormArray([]),
             conditions: new FormArray([]),
             complianceDocuments: this.fb.group({
@@ -68,7 +69,7 @@ export class RMNewOnboardComponent implements OnInit {
 
     createChecklistForm() {
         this.checklistForm = this.fb.group({
-            selectedChecklistName: new FormControl('', Validators.required),
+            selectedChecklistId: new FormControl('', Validators.required),
             requiredFields: new FormArray([]),
             conditions: new FormArray([]),
             complianceDocuments: this.fb.group({
@@ -89,7 +90,7 @@ export class RMNewOnboardComponent implements OnInit {
             { title: this.selectedChecklistName }
         ];
 
-        this.checklistService.retrieveRMChecklistDetails(this.selectedChecklistName).subscribe(res => {
+        this.checklistService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
             this.selectedChecklistData = {};
 
             let requiredFields = [];
@@ -230,10 +231,15 @@ export class RMNewOnboardComponent implements OnInit {
     retrieveChecklistNames() {
         this.checklistNameDropdownData = [];
         this.checklistService.retrieveRMChecklistNames().subscribe(data => {
+            if (data.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: data.error
+                });
+            }
             data.clNames.forEach(cl => {
                 this.checklistNameDropdownData.push({
                     'label': cl.name,
-                    'value': cl.name
+                    'value': cl.clID
                 });
             });
         }, error => {
@@ -244,8 +250,8 @@ export class RMNewOnboardComponent implements OnInit {
     }
 
     submitChecklistName() {
-        this.checklistForm.controls.selectedChecklistName.markAsDirty();
-        if (this.checklistForm.controls.selectedChecklistName.invalid) {
+        this.checklistForm.controls.selectedChecklistId.markAsDirty();
+        if (this.checklistForm.controls.selectedChecklistId.invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please select a checklist'
             });
@@ -253,7 +259,14 @@ export class RMNewOnboardComponent implements OnInit {
         }
 
         this.loading = true;
-        this.selectedChecklistName = this.checklistForm.controls.selectedChecklistName.value;
+        this.selectedChecklistId = this.checklistForm.controls.selectedChecklistId.value;
+
+        this.checklistNameDropdownData.forEach(checklistName => {
+            if (checklistName.value === this.selectedChecklistId) {
+                this.selectedChecklistName = checklistName.label;
+            }
+        });
+
         this.createChecklistForm();
         this.step++;
     }
@@ -308,8 +321,130 @@ export class RMNewOnboardComponent implements OnInit {
         this.step--;
     }
 
-    createProcess() {
+    createOnboardProcess() {
         this.processData = {};
         this.processData['name'] = this.selectedChecklistName;
+
+        // Checklist Required Fields
+        this.processData['requiredFields'] = [];
+
+        for (let i = 0; i < this.checklistForm.get('requiredFields')['length']; i++) {
+            this.processData['requiredFields'].push({
+                'fieldName': this.selectedChecklistData.requiredFields[i],
+                'fieldValue': this.checklistForm.get('requiredFields').get(i + '').get('field').value
+            });
+        }
+
+        // Checklist Conditions
+        this.processData['conditions'] = [];
+
+        for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+            let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+            let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+            this.processData['conditions'].push({
+                'conditionName': conditionName,
+                'conditionOption': conditionOption
+            });
+        }
+
+
+        // // Compliance Documents
+        // this.checklist['complianceDocuments'] = {};
+        // this.checklist['complianceDocuments']['mandatory'] = [];
+
+        // for (let i = 0; i < this.complianceDocumentsForm.get('mandatory')['length']; i++) {
+        //     let mandatoryDoc = this.complianceDocumentsForm.get('mandatory').get(i + '');
+        //     this.checklist['complianceDocuments']['mandatory'].push({
+        //         documentName: mandatoryDoc.get('documentName').value,
+        //         agmtCode: mandatoryDoc.get('agmtCode').value,
+        //         signature: mandatoryDoc.get('signature').value,
+        //         remarks: mandatoryDoc.get('remarks').value
+        //     });
+        // }
+
+        // this.checklist['complianceDocuments']['conditional'] = [];
+
+        // for (let i = 0; i < this.complianceDocumentsForm.get('conditional')['length']; i++) {
+        //     let conditionalDoc = this.complianceDocumentsForm.get('conditional').get(i + '');
+        //     let conditions = [];
+        //     for (let j = 0; j < this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
+        //         let condition = this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
+        //         conditions.push({
+        //             conditionName: condition.get('conditionName').value,
+        //             conditionOption: condition.get('conditionOption').value
+        //         })
+        //     }
+        //     this.checklist['complianceDocuments']['conditional'].push({
+        //         conditions: conditions,
+        //         documentName: conditionalDoc.get('documentName').value,
+        //         agmtCode: conditionalDoc.get('agmtCode').value,
+        //         signature: conditionalDoc.get('signature').value,
+        //         remarks: conditionalDoc.get('remarks').value
+        //     });
+        // }
+
+        // this.checklist['complianceDocuments']['optional'] = [];
+
+        // for (let i = 0; i < this.complianceDocumentsForm.get('optional')['length']; i++) {
+        //     let optionalDoc = this.complianceDocumentsForm.get('optional').get(i + '');
+        //     this.checklist['complianceDocuments']['optional'].push({
+        //         documentName: optionalDoc.get('documentName').value,
+        //         agmtCode: optionalDoc.get('agmtCode').value,
+        //         signature: optionalDoc.get('signature').value,
+        //         remarks: optionalDoc.get('remarks').value
+        //     });
+        // }
+
+        // // Legal Documents
+        // this.checklist['legalDocuments'] = {};
+        // this.checklist['legalDocuments']['mandatory'] = [];
+
+        // for (let i = 0; i < this.legalDocumentsForm.get('mandatory')['length']; i++) {
+        //     let mandatoryDoc = this.legalDocumentsForm.get('mandatory').get(i + '');
+        //     this.checklist['legalDocuments']['mandatory'].push({
+        //         documentName: mandatoryDoc.get('documentName').value,
+        //         agmtCode: mandatoryDoc.get('agmtCode').value,
+        //         signature: mandatoryDoc.get('signature').value,
+        //         canWaiver: mandatoryDoc.get('canWaiver').value,
+        //         remarks: mandatoryDoc.get('remarks').value
+        //     });
+        // }
+
+        // this.checklist['legalDocuments']['conditional'] = [];
+
+        // for (let i = 0; i < this.legalDocumentsForm.get('conditional')['length']; i++) {
+        //     let conditionalDoc = this.legalDocumentsForm.get('conditional').get(i + '');
+        //     let conditions = [];
+        //     for (let j = 0; j < this.legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
+        //         let condition = this.legalDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
+        //         conditions.push({
+        //             conditionName: condition.get('conditionName').value,
+        //             conditionOption: condition.get('conditionOption').value
+        //         })
+        //     }
+        //     this.checklist['legalDocuments']['conditional'].push({
+        //         conditions: conditions,
+        //         documentName: conditionalDoc.get('documentName').value,
+        //         agmtCode: conditionalDoc.get('agmtCode').value,
+        //         signature: conditionalDoc.get('signature').value,
+        //         canWaiver: conditionalDoc.get('canWaiver').value,
+        //         remarks: conditionalDoc.get('remarks').value
+        //     });
+        // }
+
+        // this.checklist['legalDocuments']['optional'] = [];
+
+        // for (let i = 0; i < this.legalDocumentsForm.get('optional')['length']; i++) {
+        //     let optionalDoc = this.legalDocumentsForm.get('optional').get(i + '');
+        //     this.checklist['legalDocuments']['optional'].push({
+        //         documentName: optionalDoc.get('documentName').value,
+        //         agmtCode: optionalDoc.get('agmtCode').value,
+        //         signature: optionalDoc.get('signature').value,
+        //         canWaiver: optionalDoc.get('canWaiver').value,
+        //         remarks: optionalDoc.get('remarks').value
+        //     });
+        // }
+
+        console.log(this.processData)
     }
 }
