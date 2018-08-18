@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/services/checklist.service';
-import { AuthenticationService } from '../../../../core/services/authentication.service';
 
 @Component({
     selector: 'cm-new-checklist',
@@ -47,7 +46,6 @@ export class CMNewChecklistComponent implements OnInit {
     checklist: any;
 
     constructor(
-        private authService: AuthenticationService,
         private checklistService: ChecklistService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
