@@ -5,7 +5,6 @@ import { retry, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { environment } from '../../../environments/environment';
-import { markParentViewsForCheckProjectedViews } from '@angular/core/src/view/util';
 
 interface Checklist {
     name: string;
@@ -43,8 +42,8 @@ export class ChecklistService {
     private retrieveRMChecklistNamesURL = environment.host + '/app/rm-retrieve-checklistNames';
     private retrieveRMChecklistURL = environment.host + '/app/rm-retrieve-checklist';
     private retrieveDeleteCMChecklistURL = environment.host + '/app/cm-manage-checklist';
-    private updateCMChecklistURL = environment.host + '/app/update-checklist';
-    private createCMChecklistURL = environment.host + '/app/create-checklist';
+    private updateCMChecklistURL = environment.host + '/app/cm-update-checklist';
+    private createCMChecklistURL = environment.host + '/app/cm-create-checklist';
 
     constructor(
         private authService: AuthenticationService,
