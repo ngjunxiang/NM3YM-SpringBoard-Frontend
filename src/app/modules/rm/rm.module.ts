@@ -22,6 +22,7 @@ import { RMComponent } from './pages/rm.component';
 import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
 import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
 import { ChecklistService } from '../../core/services/checklist.service';
+import { OnboardService } from '../../core/services/onboard.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -58,7 +59,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
-        ChecklistService
+        ChecklistService,
+        OnboardService
     ]
 })
 

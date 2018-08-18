@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Message, SelectItem } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/services/checklist.service';
+import { OnboardService } from '../../../../core/services/onboard.service';
 
 @Component({
     selector: 'rm-new-onboard',
@@ -28,14 +29,16 @@ export class RMNewOnboardComponent implements OnInit {
 
     checklistNameDropdownData: SelectItem[];
     checklistForm: FormGroup;
-
+    checklistsData: any[];
     selectedChecklistId: string;
     selectedChecklistName: string;
+    selectedChecklistVersion: string;
     selectedChecklistData: any;
     processData: any;
 
     constructor(
         private checklistService: ChecklistService,
+        private onboardService: OnboardService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -236,6 +239,7 @@ export class RMNewOnboardComponent implements OnInit {
                     severity: 'error', summary: 'Server Error', detail: data.error
                 });
             }
+            this.checklistsData = data.clNames;
             data.clNames.forEach(cl => {
                 this.checklistNameDropdownData.push({
                     'label': cl.name,
@@ -323,7 +327,16 @@ export class RMNewOnboardComponent implements OnInit {
 
     createOnboardProcess() {
         this.processData = {};
+        this.processData['clID'] = this.selectedChecklistId;
         this.processData['name'] = this.selectedChecklistName;
+
+        this.checklistsData.forEach(checklist => {
+            if (checklist.name === this.selectedChecklistName && checklist.clID === this.selectedChecklistId) {
+                this.selectedChecklistVersion = checklist.version;
+            }
+        })
+
+        this.processData['version'] = this.selectedChecklistVersion;
 
         // Checklist Required Fields
         this.processData['requiredFields'] = [];
@@ -431,6 +444,24 @@ export class RMNewOnboardComponent implements OnInit {
             });
         }
 
-        console.log(this.processData)
+        this.onboardService.createOnboardProcess(this.processData).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+            }
+
+            this.msgs.push({
+                severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
+            });
+
+            setTimeout(() => {
+                this.router.navigate(['/rm/dashboard']);
+            }, 3000);
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
     }
 }
