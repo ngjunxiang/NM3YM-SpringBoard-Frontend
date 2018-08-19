@@ -5,6 +5,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Message } from 'primeng/components/common/api';
 
 import { ROUTES } from './admin.sidebar-items';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 
 @Component({
     selector: 'app-admin',
@@ -31,6 +32,7 @@ export class AdminComponent implements OnInit {
     public config: PerfectScrollbarConfigInterface = {};
 
     constructor(
+        private authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -47,5 +49,30 @@ export class AdminComponent implements OnInit {
                 });
             }
         });
+
+        this.retrieveUserDetails();
+    }
+
+    async retrieveUserDetails() {
+        await this.authService.retrieveUserDetails().then(res => {
+            if (res.error) {
+                this.appMsgs.push({
+                    severity: 'error', summary: 'Server Error', detail: 'Please contact the admin.'
+                });
+            }
+
+            if (res.name && res.email) {
+                this.name = res.name;
+                this.email = res.email;
+                this.authService.userDetails = {
+                    'name': this.name,
+                    'email': this.email
+                };
+            }
+        }, error => {
+            this.appMsgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        })
     }
 }
