@@ -94,6 +94,13 @@ export class RMNewOnboardComponent implements OnInit {
         ];
 
         this.checklistService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+            
             this.selectedChecklistData = {};
 
             let requiredFields = [];

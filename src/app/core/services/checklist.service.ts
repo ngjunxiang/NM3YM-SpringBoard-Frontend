@@ -12,6 +12,7 @@ interface Checklist {
     conditions: any;
     complianceDocuments: any;
     legalDocuments: any;
+    error: string;
 }
 
 interface ChecklistNames {

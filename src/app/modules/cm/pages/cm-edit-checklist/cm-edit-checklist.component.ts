@@ -156,6 +156,12 @@ export class CMEditChecklistComponent implements OnInit {
     retrieveChecklistDetails(checklistName) {
         this.loading = true;
         this.checklistService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
             this.originalCl = res;
             // Update Checklist Name
             this.currentChecklistForm.get('checklistName').setValue(res.name);
