@@ -196,6 +196,7 @@ export class RMEditOnboardComponent implements OnInit {
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
                 checked: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').value,
+                changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
             });
         }
@@ -211,6 +212,7 @@ export class RMEditOnboardComponent implements OnInit {
                 signature: conditionalDoc.signature,
                 remarks: conditionalDoc.remarks,
                 checked: this.documentsForm.get('complianceDocuments').get('conditional').get(i + '').value,
+                changed: conditionalDoc.changed,
                 docID: conditionalDoc.docID
             });
         }
@@ -225,6 +227,7 @@ export class RMEditOnboardComponent implements OnInit {
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
                 checked: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').value,
+                changed: optionalDoc.changed,
                 docID: optionalDoc.docID
             });
         }
@@ -242,6 +245,7 @@ export class RMEditOnboardComponent implements OnInit {
                 remarks: mandatoryDoc.remarks,
                 canWaiver: mandatoryDoc.canWaiver,
                 checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').value,
+                changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
             });
         }
@@ -257,6 +261,7 @@ export class RMEditOnboardComponent implements OnInit {
                 remarks: conditionalDoc.remarks,
                 canWaiver: conditionalDoc.canWaiver,
                 checked: this.documentsForm.get('legalDocuments').get('conditional').get(i + '').value,
+                changed: conditionalDoc.changed,
                 docID: conditionalDoc.docID
             });
         }
@@ -272,6 +277,7 @@ export class RMEditOnboardComponent implements OnInit {
                 remarks: optionalDoc.remarks,
                 canWaiver: optionalDoc.canWaiver,
                 checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').value,
+                changed: optionalDoc.changed,
                 docID: optionalDoc.docID
             });
         }
