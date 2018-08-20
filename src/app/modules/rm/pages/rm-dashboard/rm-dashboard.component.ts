@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
 
 import { OnboardService } from '../../../../core/services/onboard.service';
@@ -21,12 +22,12 @@ export class RMDashboardComponent implements OnInit {
     obProcesses: any;
 
     constructor(
+        private confirmationService: ConfirmationService,
         private onboardService: OnboardService,
         private router: Router
     ) { }
 
     ngOnInit() {
-        this.loading = true;
         this.retrieveAllOnboardProcesses();
     }
 
@@ -36,6 +37,7 @@ export class RMDashboardComponent implements OnInit {
     }
 
     retrieveAllOnboardProcesses() {
+        this.loading = true;
         this.obProcesses = [];
         this.onboardService.retrieveAllOnboardProcesses().subscribe(res => {
             if (res.error) {
@@ -54,12 +56,11 @@ export class RMDashboardComponent implements OnInit {
                     let progress = obList.progress;
                     let urgent = obList.urgent;
                     Object.keys(obList.requiredFields).forEach(key => {
-                        let rField = obList.requiredFields[key];
                         let fieldName;
-                        for (fieldName in rField);
+                        for (fieldName in obList.requiredFields[key]);
                         requiredFields.push({
                             'fieldName': fieldName,
-                            'fieldValue': rField[fieldName]
+                            'fieldValue': obList.requiredFields[key][fieldName]
                         });
                     });
 
@@ -89,6 +90,39 @@ export class RMDashboardComponent implements OnInit {
         this.router.navigate(['/rm/onboard/edit', selectedOnboardID], {
             queryParams: {
                 name: this.obProcesses[index].type
+            }
+        });
+    }
+
+    deleteOnboardProcess(index: number) {
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this onboard process?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let selectedOnboardID = this.obProcesses[index].obID;
+                this.onboardService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
+                    if (res.error) {
+                        this.msgs.push({
+                            severity: 'error', summary: 'Error', detail: res.error
+                        });
+                        return;
+                    }
+
+                    if (res.results) {
+                        this.retrieveAllOnboardProcesses();
+                        this.msgs.push({
+                            severity: 'success', summary: 'Success', detail: 'Onboard process deleted'
+                        });
+                    }
+                }, error => {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: error
+                    });
+                });
+            },
+            reject: () => {
+                return;
             }
         });
     }

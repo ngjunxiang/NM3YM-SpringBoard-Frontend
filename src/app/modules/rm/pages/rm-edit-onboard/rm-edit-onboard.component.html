@@ -1,3 +1,258 @@
-<p>
-  rm-edit-onboard works!
-</p>
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+
+<div *ngIf="!loading">
+    <div [formGroup]="documentsForm">
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Required Fields</h4>
+                <div *ngFor="let requiredField of obDetails.requiredFields; let i=index">
+                    <b>{{ requiredField.fieldName }}:</b> {{ requiredField.fieldValue }}
+                </div>
+            </p-card>
+        </div>
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Conditions</h4>
+                <div *ngFor="let condition of obDetails.conditions; let i=index">
+                    <b>{{ condition.conditionName }}:</b> {{ condition.conditionOption }}
+                </div>
+            </p-card>
+        </div>
+
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Compliance Documents</h4>
+                <div formGroupName="complianceDocuments">
+                    <h5>Mandatory</h5>
+                    <div *ngIf="obDetails.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="obDetails.complianceDocuments.mandatory.length !== 0" style="padding-bottom:1%" formArrayName="mandatory">
+                        <p-table [value]="obDetails.complianceDocuments.mandatory" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of complianceMOCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <tr>
+                                    <td>{{ doc.documentName }}</td>
+                                    <td>{{ doc.agmtCode }}</td>
+                                    <td>{{ doc.remarks }}</td>
+                                    <td *ngIf="doc.signature">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.signature">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td style="text-align:center; vertical-align:middle;">
+                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+
+                    <h5>Conditional</h5>
+                    <div *ngIf="obDetails.complianceDocuments.conditional.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="obDetails.complianceDocuments.conditional.length !== 0" style="padding-bottom:1%" formArrayName="conditional">
+                        <p-table [value]="obDetails.complianceDocuments.conditional" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of complianceCCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngFor="let condition of obDetails.complianceDocuments.conditional[i].conditions; let j=index">
+                                    <tr>
+                                        <ng-container *ngIf="j === 0">
+                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                                doc.documentName }}</td>
+                                        </ng-container>
+                                        <td>{{ condition.conditionName }}</td>
+                                        <td>{{ condition.conditionOption }}</td>
+                                        <ng-container *ngIf="j === 0">
+                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                                doc.agmtCode }}</td>
+                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                                doc.remarks }}</td>
+                                            <td *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle;">
+                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
+
+                    <h5>Optional</h5>
+                    <div *ngIf="obDetails.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="obDetails.complianceDocuments.optional.length !== 0" style="padding-bottom:1%" formArrayName="optional">
+                        <p-table [value]="obDetails.complianceDocuments.optional" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of complianceMOCols">
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <tr>
+                                    <td>{{ doc.documentName }}</td>
+                                    <td>{{ doc.agmtCode }}</td>
+                                    <td>{{ doc.remarks }}</td>
+                                    <td *ngIf="doc.signature">
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                    <td *ngIf="!doc.signature">
+                                        <i class="fa fa-times"></i>
+                                    </td>
+                                    <td style="text-align:center; vertical-align:middle;">
+                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+
+        <div style="padding-bottom: 10px">
+                <p-card styleClass="ui-card-shadow">
+                    <h4>Legal Documents</h4>
+                    <div formGroupName="legalDocuments">
+                        <h5>Mandatory</h5>
+                        <div *ngIf="obDetails.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
+                            No documents in this section
+                        </div>
+                        <div *ngIf="obDetails.legalDocuments.mandatory.length !== 0" style="padding-bottom:1%" formArrayName="mandatory">
+                            <p-table [value]="obDetails.legalDocuments.mandatory" selectionMode="single">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th *ngFor="let col of complianceMOCols">
+                                            {{ col.header }}
+                                        </th>
+                                        <th style="width: 10%">Checked?</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                    <tr>
+                                        <td>{{ doc.documentName }}</td>
+                                        <td>{{ doc.agmtCode }}</td>
+                                        <td>{{ doc.remarks }}</td>
+                                        <td *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle;">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+    
+                        <h5>Conditional</h5>
+                        <div *ngIf="obDetails.legalDocuments.conditional.length === 0" style="padding-bottom:1%">
+                            No documents in this section
+                        </div>
+                        <div *ngIf="obDetails.legalDocuments.conditional.length !== 0" style="padding-bottom:1%" formArrayName="conditional">
+                            <p-table [value]="obDetails.legalDocuments.conditional" selectionMode="single">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th *ngFor="let col of complianceCCols">
+                                            {{ col.header }}
+                                        </th>
+                                        <th style="width: 10%">Checked?</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.conditional[i].conditions; let j=index">
+                                        <tr>
+                                            <ng-container *ngIf="j === 0">
+                                                <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{
+                                                    doc.documentName }}</td>
+                                            </ng-container>
+                                            <td>{{ condition.conditionName }}</td>
+                                            <td>{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{
+                                                    doc.agmtCode }}</td>
+                                                <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{
+                                                    doc.remarks }}</td>
+                                                <td *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle;">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-template>
+                            </p-table>
+                        </div>
+    
+                        <h5>Optional</h5>
+                        <div *ngIf="obDetails.legalDocuments.optional.length === 0" style="padding-bottom:1%">
+                            No documents in this section
+                        </div>
+                        <div *ngIf="obDetails.legalDocuments.optional.length !== 0" style="padding-bottom:1%" formArrayName="optional">
+                            <p-table [value]="obDetails.legalDocuments.optional" selectionMode="single">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th *ngFor="let col of complianceMOCols">
+                                            {{ col.header }}
+                                        </th>
+                                        <th style="width: 10%">Checked?</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                    <tr>
+                                        <td>{{ doc.documentName }}</td>
+                                        <td>{{ doc.agmtCode }}</td>
+                                        <td>{{ doc.remarks }}</td>
+                                        <td *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle;">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+
+        <button pButton label="Save Changes" class="ui-button-success" style="width: 100%" type="button" icon="far fa-save" (click)="updateOnboardProcess()"></button>
+    </div>
+</div>

@@ -19,11 +19,16 @@ interface AllOBResponse {
 interface ObList {
     name: string;
     obID: string;
+    clID: string;
+    version: string;
     progress: number;
     requiredFields: any[];
     conditions: any[];
     dateCreated: Date;
     urgent: boolean;
+    complianceDocuments: any;
+    legalDocuments: any;
+    error: string;
 }
 
 @Injectable({
@@ -34,6 +39,8 @@ export class OnboardService {
 
     private createOnboardProcessURL = environment.host + '/app/rm-create-onboard';
     private retrieveAllOnboardProcessesURL = environment.host + '/app/rm-retrieve-all-onboard';
+    private retrieveOnboardProcessDetailsURL = environment.host + '/app/rm-retrieve-selected-onboard';
+    private deleteUpdateOnboardProcessURL = environment.host + '/app/rm-manage-onboard';
 
     constructor(
         private authService: AuthenticationService,
@@ -50,6 +57,26 @@ export class OnboardService {
         const postData = this.authService.authItems;
 
         return this.http.post<AllOBResponse>(this.retrieveAllOnboardProcessesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveOnboardProcessDetails(obID) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const obIDData = {
+            'obID': obID
+        };
+
+        const postData = Object.assign(this.authService.authItems, obIDData);
+
+        return this.http.post<ObList>(this.retrieveOnboardProcessDetailsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -75,7 +102,49 @@ export class OnboardService {
                 catchError(this.handleError)
             );
     }
+
+    updateOnboardProcess(onboardProcessData) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const onboardData = {
+            'obID': onboardProcessData.obID,
+            'checklist': JSON.stringify(onboardProcessData)
+        };
+
+        const postData = Object.assign(this.authService.authItems, onboardData);
+
+        return this.http.post<Response>(this.deleteUpdateOnboardProcessURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
     
+    deleteOnboardProcess(obID) {
+        const obIDData = {
+            'obID': obID
+        };
+
+        const postData = Object.assign(this.authService.authItems, obIDData);
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            }),
+            body: postData
+        };
+
+        return this.http.delete<Response>(this.deleteUpdateOnboardProcessURL, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.

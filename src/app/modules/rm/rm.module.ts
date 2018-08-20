@@ -7,6 +7,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { GrowlModule } from 'primeng/growl';
@@ -21,9 +23,9 @@ import { RMRoutingModule } from './rm-routing.module';
 import { RMComponent } from './pages/rm.component';
 import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
 import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
+import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
 import { ChecklistService } from '../../core/services/checklist.service';
 import { OnboardService } from '../../core/services/onboard.service';
-import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -36,6 +38,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CardModule,
         CheckboxModule,
         CommonModule,
+        ConfirmDialogModule,
         DialogModule,
         DropdownModule,
         FormsModule,
@@ -62,6 +65,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
         ChecklistService,
+        ConfirmationService,
         OnboardService
     ]
 })

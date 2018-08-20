@@ -1,3 +1,6 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+
 <span>
     Current Onboarding
     <a routerLink="../onboard/create">
@@ -11,7 +14,13 @@
     </div>
     <div *ngIf="obProcesses.length > 0">
         <div *ngFor="let obProcess of obProcesses; let i=index">
-            <p-card styleClass="ui-card-shadow" (click)="editOnboardProcess(i)">
+            <p-card styleClass="ui-card-shadow">
+                <div style="float:right">
+                    <button pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil"
+                        (click)="editOnboardProcess(i)"></button>
+                    <button pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteOnboardProcess(i)"></button>
+                </div>
+
                 <div *ngIf="obProcess.progress === 100">
                     <div *ngIf="obProcess.urgent">
                         <button pButton class="ui-button-warning" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
