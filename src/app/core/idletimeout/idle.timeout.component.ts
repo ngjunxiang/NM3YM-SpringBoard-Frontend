@@ -51,6 +51,7 @@ export class IdleTimeoutComponent implements OnInit, OnDestroy {
 
     extendSession() {
         this.onResetTimer();
+        window.location.reload();
     }
 
     onStartWatching() {
