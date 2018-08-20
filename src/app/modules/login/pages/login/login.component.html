@@ -3,7 +3,7 @@
 <div class="container">
     <div class="card card-container">
         <img id="profile-img" class="profile-img-card" src="assets/images/sb-logo.png" />
-        <div class="form-signin" [formGroup]="loginForm">
+        <form class="form-signin" [formGroup]="loginForm">
             <input type="text" id="inputUsername" class="form-control" placeholder="Username" formControlName="username" required pInputText>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" formControlName="password" required
                 pInputText>
@@ -27,8 +27,8 @@
                     <input type="checkbox" value="remember-me"> Remember me
                 </label>
             </div>
-            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="loginUser()">Sign In</button>
-        </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" [disabled]="loading" (click)="loginUser()">Sign In</button>
+        </form>
         <!-- /form -->
         <a routerLink="/login/forgotpw" class="forgot-password">
             Forgot the password?

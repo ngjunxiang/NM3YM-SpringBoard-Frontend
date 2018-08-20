@@ -3,7 +3,7 @@
 <div class="container">
     <div class="card card-container">
         <img id="profile-img" class="profile-img-card" src="assets/images/sb-logo.png" />
-        <div class="form-signin" [formGroup]="forgotPwForm">
+        <form class="form-signin" [formGroup]="forgotPwForm">
             <div style="text-align: center">
                 <p>Forgot your account's password?</p>
                 <p>Enter your email address and we'll send you a recovery link.</p>
@@ -15,8 +15,8 @@
                 </span>
             </div>
 
-            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" [disabled]="loading" (click)="sendEmail()">Send Recovery Email</button>
-        </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" [disabled]="loading" (click)="sendEmail()">Send Recovery Email</button>
+        </form>
         <!-- /form -->
     </div>
     <!-- /card-container -->
