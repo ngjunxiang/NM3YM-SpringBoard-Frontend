@@ -966,7 +966,6 @@ export class CMEditChecklistComponent implements OnInit {
                 changed: optionalDoc.get('changed').value
             });
         }
-        console.log(this.checklist)
         this.checklistService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -975,9 +974,11 @@ export class CMEditChecklistComponent implements OnInit {
                 return;
             }
 
-            this.msgs.push({
-                severity: 'success', summary: 'Success', detail: 'Checklist updated <br> You will be redirected shortly'
-            });
+            if (res.results) {
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'Checklist updated <br> You will be redirected shortly'
+                });
+            }
 
             setTimeout(() => {
                 this.router.navigate(['/cm/checklist/manage']);

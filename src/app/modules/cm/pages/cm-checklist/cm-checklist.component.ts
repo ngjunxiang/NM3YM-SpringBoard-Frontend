@@ -44,7 +44,6 @@ export class CMChecklistComponent implements OnInit {
                     'dateCreated': cl.dateCreated
                 });
             });
-            console.log(this.checklistNames)
             this.loading = false;
         }, error => {
             this.msgs.push({
