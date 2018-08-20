@@ -9,7 +9,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [
             { path: '/cm/checklist/manage', title: 'Manage Checklists', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/cm/checklist/create', title: 'New Checklist', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
-            { path: '/cm/checklist/logs', title: 'View Logs', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
+            // { path: '/cm/checklist/logs', title: 'View Logs', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
     }
 ];
