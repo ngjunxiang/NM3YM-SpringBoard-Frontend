@@ -73,9 +73,26 @@ export class AuthenticationService {
     }
 
     invalidateUser() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = {
+            'username': this.authItems.username,
+            'token': this.authItems.token
+        };
+
         localStorage.removeItem('USERNAME');
         localStorage.removeItem('JSESSIONID');
         localStorage.removeItem('USERTYPE');
+
+        return this.http.post(this.loginURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
 
     retrieveUserDetails() {
