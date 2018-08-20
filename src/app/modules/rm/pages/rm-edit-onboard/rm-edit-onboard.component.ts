@@ -195,7 +195,8 @@ export class RMEditOnboardComponent implements OnInit {
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
-                checked: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').value
+                checked: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').value,
+                docID: mandatoryDoc.docID
             });
         }
 
@@ -209,7 +210,8 @@ export class RMEditOnboardComponent implements OnInit {
                 agmtCode: conditionalDoc.agmtCode,
                 signature: conditionalDoc.signature,
                 remarks: conditionalDoc.remarks,
-                checked: this.documentsForm.get('complianceDocuments').get('conditional').get(i + '').value
+                checked: this.documentsForm.get('complianceDocuments').get('conditional').get(i + '').value,
+                docID: conditionalDoc.docID
             });
         }
 
@@ -222,7 +224,8 @@ export class RMEditOnboardComponent implements OnInit {
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
-                checked: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').value
+                checked: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').value,
+                docID: optionalDoc.docID
             });
         }
 
@@ -238,7 +241,8 @@ export class RMEditOnboardComponent implements OnInit {
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
                 canWaiver: mandatoryDoc.canWaiver,
-                checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').value
+                checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').value,
+                docID: mandatoryDoc.docID
             });
         }
         processData['legalDocuments']['conditional'] = [];
@@ -252,7 +256,8 @@ export class RMEditOnboardComponent implements OnInit {
                 signature: conditionalDoc.signature,
                 remarks: conditionalDoc.remarks,
                 canWaiver: conditionalDoc.canWaiver,
-                checked: this.documentsForm.get('legalDocuments').get('conditional').get(i + '').value
+                checked: this.documentsForm.get('legalDocuments').get('conditional').get(i + '').value,
+                docID: conditionalDoc.docID
             });
         }
 
@@ -266,7 +271,8 @@ export class RMEditOnboardComponent implements OnInit {
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
                 canWaiver: optionalDoc.canWaiver,
-                checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').value
+                checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').value,
+                docID: optionalDoc.docID
             });
         }
         
