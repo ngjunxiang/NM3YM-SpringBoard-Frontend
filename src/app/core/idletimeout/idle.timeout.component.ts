@@ -5,6 +5,8 @@ import { UserIdleService } from 'angular-user-idle';
 import { Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { AuthenticationService } from '../services/authentication.service';
+
 @Component({
     selector: 'app-idletimeout',
     templateUrl: './idle.timeout.component.html',
@@ -28,6 +30,7 @@ export class IdleTimeoutComponent implements OnInit, OnDestroy {
     private pingSubscription: Subscription;
 
     constructor(
+        private authService: AuthenticationService,
         private router: Router,
         private userIdleService: UserIdleService
     ) { }
@@ -51,7 +54,35 @@ export class IdleTimeoutComponent implements OnInit, OnDestroy {
 
     extendSession() {
         this.onResetTimer();
-        window.location.reload();
+        
+        let userType = this.authService.authItems.userType;
+        if (userType === 'ADMIN') {
+            userType = 'Admin';
+        }
+
+        this.authService.authenticate('Admin').then(res => {
+            if (res.newToken) {
+                this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
+                return true;
+            }
+            if (res.error === 'Invalid Token' || res.error === 'Token has expired') {
+                this.router.navigate(['/login'], {
+                    queryParams: {
+                        err: 'auth001'
+                    }
+                });
+                return false;
+            }
+
+            if (res.error === 'Invalid userType') {
+                this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase() + '/dashboard'], {
+                    queryParams: {
+                        err: 'auth001'
+                    }
+                });
+                return false;
+            }
+        });
     }
 
     onStartWatching() {
@@ -62,7 +93,7 @@ export class IdleTimeoutComponent implements OnInit, OnDestroy {
             timeout: this.timeout,
             ping: this.ping
         });
-        
+
         // Start watching for user inactivity.
         this.userIdleService.startWatching();
 
