@@ -4,9 +4,9 @@
     <div [formGroup]="documentsForm">
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
-                <h4>Required Fields</h4>
-                <div *ngFor="let requiredField of obDetails.requiredFields; let i=index">
-                    <b>{{ requiredField.fieldName }}:</b> {{ requiredField.fieldValue }}
+                <h4>Requi#FD726D Fields</h4>
+                <div *ngFor="let requi#FD726DField of obDetails.requi#FD726DFields; let i=index">
+                    <b>{{ requi#FD726DField.fieldName }}:</b> {{ requi#FD726DField.fieldValue }}
                 </div>
             </p-card>
         </div>
@@ -52,7 +52,7 @@
                                         <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
                                     </td>
                                 </tr>
-                                <tr *ngIf="doc.changed === '1'" style="background-color: yellow">
+                                <tr *ngIf="doc.changed === '1'" style="background-color: #FFD082">
                                     <td>{{ doc.documentName }}</td>
                                     <td>{{ doc.agmtCode }}</td>
                                     <td>{{ doc.remarks }}</td>
@@ -66,7 +66,7 @@
                                         <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
                                     </td>
                                 </tr>
-                                <tr *ngIf="doc.changed === '2'" style="background-color: green">
+                                <tr *ngIf="doc.changed === '2'" style="background-color: #95B181">
                                     <td>{{ doc.documentName }}</td>
                                     <td>{{ doc.agmtCode }}</td>
                                     <td>{{ doc.remarks }}</td>
@@ -80,7 +80,7 @@
                                         <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
                                     </td>
                                 </tr>
-                                <tr *ngIf="doc.changed === '3'" style="background-color: red">
+                                <tr *ngIf="doc.changed === '3'" style="background-color: #FD726D">
                                     <td>{{ doc.documentName }}</td>
                                     <td>{{ doc.agmtCode }}</td>
                                     <td>{{ doc.remarks }}</td>
@@ -137,7 +137,7 @@
                                             </td>
                                         </ng-container>
                                     </tr>
-                                    <tr *ngIf="doc.changed === '1'" style="background-color: yellow">
+                                    <tr *ngIf="doc.changed === '1'" style="background-color: #FFD082">
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{
                                                 doc.documentName }}</td>
@@ -160,7 +160,7 @@
                                             </td>
                                         </ng-container>
                                     </tr>
-                                    <tr *ngIf="doc.changed === '2'" style="background-color: green">
+                                    <tr *ngIf="doc.changed === '2'" style="background-color: #95B181">
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{
                                                 doc.documentName }}</td>
@@ -183,7 +183,7 @@
                                             </td>
                                         </ng-container>
                                     </tr>
-                                    <tr *ngIf="doc.changed === '3'" style="background-color: red">
+                                    <tr *ngIf="doc.changed === '3'" style="background-color: #FD726D">
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{
                                                 doc.documentName }}</td>
@@ -240,7 +240,7 @@
                                         <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
                                     </td>
                                 </tr>
-                                <tr *ngIf="doc.changed === '1'" style="background-color: yellow">
+                                <tr *ngIf="doc.changed === '1'" style="background-color: #FFD082">
                                     <td>{{ doc.documentName }}</td>
                                     <td>{{ doc.agmtCode }}</td>
                                     <td>{{ doc.remarks }}</td>
@@ -254,7 +254,7 @@
                                         <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
                                     </td>
                                 </tr>
-                                <tr *ngIf="doc.changed === '2'" style="background-color: green">
+                                <tr *ngIf="doc.changed === '2'" style="background-color: #95B181">
                                     <td>{{ doc.documentName }}</td>
                                     <td>{{ doc.agmtCode }}</td>
                                     <td>{{ doc.remarks }}</td>
@@ -268,7 +268,7 @@
                                         <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
                                     </td>
                                 </tr>
-                                <tr *ngIf="doc.changed === '3'" style="background-color: red">
+                                <tr *ngIf="doc.changed === '3'" style="background-color: #FD726D">
                                     <td>{{ doc.documentName }}</td>
                                     <td>{{ doc.agmtCode }}</td>
                                     <td>{{ doc.remarks }}</td>
