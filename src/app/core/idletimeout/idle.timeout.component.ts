@@ -60,18 +60,18 @@ export class IdleTimeoutComponent implements OnInit, OnDestroy {
             userType = 'Admin';
         }
 
-        this.authService.authenticate('Admin').then(res => {
+        this.authService.authenticate(userType).then(res => {
             if (res.newToken) {
                 this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
-                return true;
+                return;
             }
+
             if (res.error === 'Invalid Token' || res.error === 'Token has expired') {
                 this.router.navigate(['/login'], {
                     queryParams: {
                         err: 'auth001'
                     }
                 });
-                return false;
             }
 
             if (res.error === 'Invalid userType') {
@@ -80,7 +80,6 @@ export class IdleTimeoutComponent implements OnInit, OnDestroy {
                         err: 'auth001'
                     }
                 });
-                return false;
             }
         });
     }
