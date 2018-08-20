@@ -66,10 +66,10 @@
             <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
                 <p-tabPanel header="Compliance" leftIcon="fas fa-file-contract">
                     <h4>Mandatory</h4>
-                    <div *ngIf="complianceDocumentsForm.get('mandatory').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="complianceDocumentsForm.get('mandatory').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs !== 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -80,7 +80,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr>
+                                <tr *ngIf="doc.get('changed').value !== '3'">
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
                                     <td>{{ doc.get('remarks').value }}</td>
@@ -143,11 +143,11 @@
 
 
                     <h4>Conditional</h4>
-                    <div *ngIf="complianceDocumentsForm.get('conditional').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numConditionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
 
-                    <div *ngIf="complianceDocumentsForm.get('conditional').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numConditionalDocs !== 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -159,7 +159,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
                                 <ng-container *ngFor="let condition of complianceDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
-                                    <tr>
+                                    <tr *ngIf="doc.get('changed').value !== '3'">
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
                                         </ng-container>
@@ -265,10 +265,10 @@
 
 
                     <h4>Optional</h4>
-                    <div *ngIf="complianceDocumentsForm.get('optional').length == 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="complianceDocumentsForm.get('optional').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs !== 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -279,7 +279,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr>
+                                <tr *ngIf="doc.get('changed').value !== '3'">
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
                                     <td>{{ doc.get('remarks').value }}</td>
@@ -345,10 +345,10 @@
 
                 <p-tabPanel header="Legal" leftIcon="fa fa-balance-scale">
                     <h4>Mandatory</h4>
-                    <div *ngIf="legalDocumentsForm.get('mandatory').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="legalDocumentsForm.get('mandatory').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs !== 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -359,7 +359,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr>
+                                <tr *ngIf="doc.get('changed').value !== '3'">
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
                                     <td>{{ doc.get('remarks').value }}</td>
@@ -434,11 +434,11 @@
 
 
                     <h4>Conditional</h4>
-                    <div *ngIf="legalDocumentsForm.get('conditional').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numConditionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
 
-                    <div *ngIf="legalDocumentsForm.get('conditional').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numConditionalDocs !== 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -450,7 +450,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
                                 <ng-container *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
-                                    <tr>
+                                    <tr *ngIf="doc.get('changed').value !== '3'">
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
                                         </ng-container>
@@ -567,10 +567,10 @@
 
 
                     <h4>Optional</h4>
-                    <div *ngIf="legalDocumentsForm.get('optional').length == 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="legalDocumentsForm.get('optional').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs !== 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -581,7 +581,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr>
+                                <tr *ngIf="doc.get('changed').value !== '3'">
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
                                     <td>{{ doc.get('remarks').value }}</td>

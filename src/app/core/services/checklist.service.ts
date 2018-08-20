@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http';
-import { throwError, Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { environment } from '../../../environments/environment';
 
 interface Checklist {
+    clID: string;
     name: string;
     requiredFields: string[];
     conditions: any;

@@ -38,9 +38,7 @@ export class CMEditChecklistComponent implements OnInit {
     oEditDisplay = false;
 
     // UI Component
-    clName;
-    originalCl;
-    pageInfo;
+    clName: string;
     currentChecklistForm: FormGroup;
     complianceDocumentsForm: FormGroup;
     legalDocumentsForm: FormGroup;
@@ -133,7 +131,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl('', Validators.required),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
-            remarks: new FormControl('')
+            remarks: new FormControl(''),
+            docID: new FormControl(''),
+            changed: new FormControl('2')
         });
 
         this.cDialogForm = this.fb.group({
@@ -147,7 +147,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl('', Validators.required),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
-            remarks: new FormControl('')
+            remarks: new FormControl(''),
+            docID: new FormControl(''),
+            changed: new FormControl('2')
         });
 
         this.loading = false;
@@ -162,7 +164,7 @@ export class CMEditChecklistComponent implements OnInit {
                 });
                 return;
             }
-            this.originalCl = res;
+
             // Update Checklist Name
             this.currentChecklistForm.get('checklistName').setValue(res.name);
 
@@ -199,7 +201,9 @@ export class CMEditChecklistComponent implements OnInit {
                         agmtCode: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['signature']),
                         canWaiver: new FormControl(false),
-                        remarks: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['remarks'])
+                        remarks: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['remarks']),
+                        docID: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['docID']),
+                        changed: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['changed'])
                     })
                 );
             });
@@ -222,7 +226,9 @@ export class CMEditChecklistComponent implements OnInit {
                         agmtCode: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['signature']),
                         canWaiver: new FormControl(false),
-                        remarks: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['remarks'])
+                        remarks: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['remarks']),
+                        docID: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['docID']),
+                        changed: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['changed'])
                     })
                 );
             });
@@ -235,7 +241,9 @@ export class CMEditChecklistComponent implements OnInit {
                         agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.complianceDocuments['optional'][optionalDoc]['signature']),
                         canWaiver: new FormControl(false),
-                        remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks'])
+                        remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks']),
+                        docID: new FormControl(res.complianceDocuments['optional'][optionalDoc]['docID']),
+                        changed: new FormControl(res.complianceDocuments['optional'][optionalDoc]['changed'])
                     })
                 );
             });
@@ -250,7 +258,9 @@ export class CMEditChecklistComponent implements OnInit {
                         agmtCode: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['signature']),
                         canWaiver: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['canWaiver']),
-                        remarks: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['remarks'])
+                        remarks: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['remarks']),
+                        docID: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['docID']),
+                        changed: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['changed'])
                     })
                 );
             });
@@ -273,7 +283,9 @@ export class CMEditChecklistComponent implements OnInit {
                         agmtCode: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['signature']),
                         canWaiver: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['canWaiver']),
-                        remarks: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['remarks'])
+                        remarks: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['remarks']),
+                        docID: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['docID']),
+                        changed: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['changed'])
                     })
                 );
             });
@@ -286,7 +298,9 @@ export class CMEditChecklistComponent implements OnInit {
                         agmtCode: new FormControl(res.legalDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
                         signature: new FormControl(res.legalDocuments['optional'][optionalDoc]['signature']),
                         canWaiver: new FormControl(res.legalDocuments['optional'][optionalDoc]['canWaiver']),
-                        remarks: new FormControl(res.legalDocuments['optional'][optionalDoc]['remarks'])
+                        remarks: new FormControl(res.legalDocuments['optional'][optionalDoc]['remarks']),
+                        docID: new FormControl(res.legalDocuments['optional'][optionalDoc]['docID']),
+                        changed: new FormControl(res.legalDocuments['optional'][optionalDoc]['changed'])
                     })
                 );
             });
@@ -357,7 +371,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl('', Validators.required),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
-            remarks: new FormControl('')
+            remarks: new FormControl(''),
+            docID: new FormControl(''),
+            changed: new FormControl('2')
         });
 
         this.blocked = true;
@@ -383,11 +399,27 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         if (this.editMode) {
-            control.get(this.docIndex + '').get('documentName').setValue(this.dialogForm.get('documentName').value);
-            control.get(this.docIndex + '').get('agmtCode').setValue(this.dialogForm.get('agmtCode').value);
-            control.get(this.docIndex + '').get('signature').setValue(this.dialogForm.get('signature').value);
-            control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
-            control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
+            if (control.get(this.docIndex + '').get('documentName').value !== this.dialogForm.get('documentName').value) {
+                control.get(this.docIndex + '').get('documentName').setValue(this.dialogForm.get('documentName').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('agmtCode').value !== this.dialogForm.get('agmtCode').value) {
+                control.get(this.docIndex + '').get('agmtCode').setValue(this.dialogForm.get('agmtCode').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('signature').value !== this.dialogForm.get('signature').value) {
+                control.get(this.docIndex + '').get('signature').setValue(this.dialogForm.get('signature').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('canWaiver').value !== this.dialogForm.get('canWaiver').value) {
+                control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('remarks').value !== this.dialogForm.get('remarks').value) {
+                control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+
             this.editMode = false;
             this.blocked = false;
             this.mEditDisplay = false;
@@ -419,7 +451,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl(form.get('mandatory').get(index + '').get('agmtCode').value, Validators.required),
             signature: new FormControl(form.get('mandatory').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('mandatory').get(index + '').get('canWaiver').value),
-            remarks: new FormControl(form.get('mandatory').get(index + '').get('remarks').value)
+            remarks: new FormControl(form.get('mandatory').get(index + '').get('remarks').value),
+            docID: new FormControl(form.get('mandatory').get(index + '').get('docID').value),
+            changed: new FormControl(form.get('mandatory').get(index + '').get('changed').value)
         });
 
         this.editMode = true;
@@ -436,7 +470,7 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         let control = <FormArray>form.get('mandatory');
-        control.removeAt(index);
+        control.get(index + '').get('changed').setValue('3');
     }
 
     showCDialog() {
@@ -463,7 +497,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl('', Validators.required),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
-            remarks: new FormControl('')
+            remarks: new FormControl(''),
+            docID: new FormControl(''),
+            changed: new FormControl('2')
         });
 
         this.retrieveConditionalConditions();
@@ -535,11 +571,13 @@ export class CMEditChecklistComponent implements OnInit {
                 conditionOption: new FormControl('', Validators.required)
             })
         );
+        this.cDialogForm.get('changed').setValue('1');
     }
 
     deleteConditionalCondition(index) {
         let control = <FormArray>this.cDialogForm.get('conditions');
         control.removeAt(index);
+        this.cDialogForm.get('changed').setValue('1');
     }
 
     addNewConditional() {
@@ -574,12 +612,32 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         if (this.editMode) {
-            control.get(this.docIndex + '').get('conditions').setValue(this.cDialogForm.get('conditions').value);
-            control.get(this.docIndex + '').get('documentName').setValue(this.cDialogForm.get('documentName').value);
-            control.get(this.docIndex + '').get('agmtCode').setValue(this.cDialogForm.get('agmtCode').value);
-            control.get(this.docIndex + '').get('signature').setValue(this.cDialogForm.get('signature').value);
-            control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
-            control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
+            if (control.get(this.docIndex + '').get('conditions').value !== this.cDialogForm.get('conditions').value) {
+                control.get(this.docIndex + '').get('conditions').setValue(this.cDialogForm.get('conditions').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+
+            if (control.get(this.docIndex + '').get('documentName').value !== this.cDialogForm.get('documentName').value) {
+                control.get(this.docIndex + '').get('documentName').setValue(this.cDialogForm.get('documentName').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('agmtCode').value !== this.cDialogForm.get('agmtCode').value) {
+                control.get(this.docIndex + '').get('agmtCode').setValue(this.cDialogForm.get('agmtCode').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('signature').value !== this.cDialogForm.get('signature').value) {
+                control.get(this.docIndex + '').get('signature').setValue(this.cDialogForm.get('signature').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('canWaiver').value !== this.cDialogForm.get('canWaiver').value) {
+                control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('remarks').value !== this.cDialogForm.get('remarks').value) {
+                control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+
             this.editMode = false;
             this.blocked = false;
             this.cEditDisplay = false;
@@ -614,7 +672,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl(form.get('conditional').get(index + '').get('agmtCode').value, Validators.required),
             signature: new FormControl(form.get('conditional').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('conditional').get(index + '').get('canWaiver').value),
-            remarks: new FormControl(form.get('conditional').get(index + '').get('remarks').value)
+            remarks: new FormControl(form.get('conditional').get(index + '').get('remarks').value),
+            docID: new FormControl(form.get('conditional').get(index + '').get('docID').value),
+            changed: new FormControl(form.get('conditional').get(index + '').get('changed').value)
         });
 
         form.get('conditional').get(index + '').get('conditions')['controls'].forEach(control => {
@@ -643,7 +703,7 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         let control = <FormArray>form.get('conditional');
-        control.removeAt(index);
+        control.get(index + '').get('changed').setValue('3');
     }
 
     showODialog() {
@@ -652,7 +712,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl('', Validators.required),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
-            remarks: new FormControl('')
+            remarks: new FormControl(''),
+            docID: new FormControl(''),
+            changed: new FormControl('2')
         });
 
         this.blocked = true;
@@ -678,11 +740,27 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         if (this.editMode) {
-            control.get(this.docIndex + '').get('documentName').setValue(this.dialogForm.get('documentName').value);
-            control.get(this.docIndex + '').get('agmtCode').setValue(this.dialogForm.get('agmtCode').value);
-            control.get(this.docIndex + '').get('signature').setValue(this.dialogForm.get('signature').value);
-            control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
-            control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
+            if (control.get(this.docIndex + '').get('documentName').value !== this.dialogForm.get('documentName').value) {
+                control.get(this.docIndex + '').get('documentName').setValue(this.dialogForm.get('documentName').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('agmtCode').value !== this.dialogForm.get('agmtCode').value) {
+                control.get(this.docIndex + '').get('agmtCode').setValue(this.dialogForm.get('agmtCode').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('signature').value !== this.dialogForm.get('signature').value) {
+                control.get(this.docIndex + '').get('signature').setValue(this.dialogForm.get('signature').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('canWaiver').value !== this.dialogForm.get('canWaiver').value) {
+                control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+            if (control.get(this.docIndex + '').get('remarks').value !== this.dialogForm.get('remarks').value) {
+                control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
+                control.get(this.docIndex + '').get('changed').setValue('1');
+            }
+
             this.editMode = false;
             this.blocked = false;
             this.oEditDisplay = false;
@@ -714,7 +792,9 @@ export class CMEditChecklistComponent implements OnInit {
             agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, Validators.required),
             signature: new FormControl(form.get('optional').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('optional').get(index + '').get('canWaiver').value),
-            remarks: new FormControl(form.get('optional').get(index + '').get('remarks').value)
+            remarks: new FormControl(form.get('optional').get(index + '').get('remarks').value),
+            docID: new FormControl(form.get('mandatory').get(index + '').get('docID').value),
+            changed: new FormControl(form.get('mandatory').get(index + '').get('changed').value)
         });
 
         this.editMode = true;
@@ -731,7 +811,7 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         let control = <FormArray>form.get('optional');
-        control.removeAt(index);
+        control.get(index + '').get('changed').setValue('3');
     }
 
     changeTab(event) {
@@ -788,7 +868,9 @@ export class CMEditChecklistComponent implements OnInit {
                 documentName: mandatoryDoc.get('documentName').value,
                 agmtCode: mandatoryDoc.get('agmtCode').value,
                 signature: mandatoryDoc.get('signature').value,
-                remarks: mandatoryDoc.get('remarks').value
+                remarks: mandatoryDoc.get('remarks').value,
+                docID: mandatoryDoc.get('docID').value,
+                changed: mandatoryDoc.get('changed').value
             });
         }
 
@@ -809,7 +891,9 @@ export class CMEditChecklistComponent implements OnInit {
                 documentName: conditionalDoc.get('documentName').value,
                 agmtCode: conditionalDoc.get('agmtCode').value,
                 signature: conditionalDoc.get('signature').value,
-                remarks: conditionalDoc.get('remarks').value
+                remarks: conditionalDoc.get('remarks').value,
+                docID: conditionalDoc.get('docID').value,
+                changed: conditionalDoc.get('changed').value
             });
         }
 
@@ -821,7 +905,9 @@ export class CMEditChecklistComponent implements OnInit {
                 documentName: optionalDoc.get('documentName').value,
                 agmtCode: optionalDoc.get('agmtCode').value,
                 signature: optionalDoc.get('signature').value,
-                remarks: optionalDoc.get('remarks').value
+                remarks: optionalDoc.get('remarks').value,
+                docID: optionalDoc.get('docID').value,
+                changed: optionalDoc.get('changed').value
             });
         }
 
@@ -836,7 +922,9 @@ export class CMEditChecklistComponent implements OnInit {
                 agmtCode: mandatoryDoc.get('agmtCode').value,
                 signature: mandatoryDoc.get('signature').value,
                 canWaiver: mandatoryDoc.get('canWaiver').value,
-                remarks: mandatoryDoc.get('remarks').value
+                remarks: mandatoryDoc.get('remarks').value,
+                docID: mandatoryDoc.get('docID').value,
+                changed: mandatoryDoc.get('changed').value
             });
         }
 
@@ -858,7 +946,9 @@ export class CMEditChecklistComponent implements OnInit {
                 agmtCode: conditionalDoc.get('agmtCode').value,
                 signature: conditionalDoc.get('signature').value,
                 canWaiver: conditionalDoc.get('canWaiver').value,
-                remarks: conditionalDoc.get('remarks').value
+                remarks: conditionalDoc.get('remarks').value,
+                docID: conditionalDoc.get('docID').value,
+                changed: conditionalDoc.get('changed').value
             });
         }
 
@@ -871,10 +961,12 @@ export class CMEditChecklistComponent implements OnInit {
                 agmtCode: optionalDoc.get('agmtCode').value,
                 signature: optionalDoc.get('signature').value,
                 canWaiver: optionalDoc.get('canWaiver').value,
-                remarks: optionalDoc.get('remarks').value
+                remarks: optionalDoc.get('remarks').value,
+                docID: optionalDoc.get('docID').value,
+                changed: optionalDoc.get('changed').value
             });
         }
-        
+        console.log(this.checklist)
         this.checklistService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -895,5 +987,32 @@ export class CMEditChecklistComponent implements OnInit {
                 severity: 'error', summary: 'Error', detail: error
             });
         });
+    }
+
+    get numMandatoryDocs(): number {
+        let formArray = <FormArray>this.complianceDocumentsForm.get('mandatory');
+
+        if (this.activeTab === 1) {
+            formArray = <FormArray>this.legalDocumentsForm.get('mandatory');
+        }
+        return formArray.value.filter(doc => doc.changed !== '3').length;
+    }
+
+    get numConditionalDocs(): number {
+        let formArray = <FormArray>this.complianceDocumentsForm.get('conditional');
+
+        if (this.activeTab === 1) {
+            formArray = <FormArray>this.legalDocumentsForm.get('conditional');
+        }
+        return formArray.value.filter(doc => doc.changed !== '3').length;
+    }
+
+    get numOptionalDocs(): number {
+        let formArray = <FormArray>this.complianceDocumentsForm.get('optional');
+
+        if (this.activeTab === 1) {
+            formArray = <FormArray>this.legalDocumentsForm.get('optional');
+        }
+        return formArray.value.filter(doc => doc.changed !== '3').length;
     }
 }
