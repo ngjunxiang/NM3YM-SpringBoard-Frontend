@@ -17,7 +17,6 @@ export class RMNewOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
-    blocked = false;
     msgs: Message[] = [];
     step = 1;
 
@@ -100,7 +99,7 @@ export class RMNewOnboardComponent implements OnInit {
                 });
                 return;
             }
-            
+
             this.selectedChecklistData = {};
 
             let requiredFields = [];
