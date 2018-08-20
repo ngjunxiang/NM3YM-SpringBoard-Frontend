@@ -143,7 +143,7 @@ export class RMEditOnboardComponent implements OnInit {
                 });
                 return;
             }
-            
+
             this.obDetails = {
                 clID: res.clID,
                 complianceDocuments: res.complianceDocuments,
@@ -174,6 +174,16 @@ export class RMEditOnboardComponent implements OnInit {
 
     updateOnboardProcess() {
         let processData = Object.assign({}, this.obDetails);
+
+        // Required Fields
+        processData['requiredFields'] = [];
+
+        this.obDetails.requiredFields.forEach(requiredField => {
+            let field = {};
+            field[requiredField.fieldName] = requiredField.fieldValue;
+            processData['requiredFields'].push(field);
+        });
+
         // Compliance Documents
         processData['complianceDocuments'] = {};
         processData['complianceDocuments']['mandatory'] = [];
@@ -273,7 +283,7 @@ export class RMEditOnboardComponent implements OnInit {
                     severity: 'success', summary: 'Success', detail: 'Onboard process updated <br> You will be redirected shortly'
                 });
             }
-            
+
             setTimeout(() => {
                 this.router.navigate(['/rm/dashboard']);
             }, 3000);
