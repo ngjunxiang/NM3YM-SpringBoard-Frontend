@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CMDashboardComponent implements OnInit {
     
-    clients = ["Testing 1", "Testing 2"];
+    clients = [];
+    // clients = ["Testing 1", "Testing 2"];
 
     constructor() { }
 
