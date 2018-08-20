@@ -1,0 +1,19 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+
+<div *ngIf="!loading">
+    <p-card styleClass="ui-card-shadow">
+        <h3>Checklist Logs</h3>
+        <div>
+            <h4>Select a checklist: </h4>
+            <p-dropdown [options]="" placeholder="Select a checklist" [(ngModel)]="checklistName" [style]="{'width':'50%'}"></p-dropdown>
+            <p-dropdown [options]="" placeholder="Select a version" [(ngModel)]="version" [style]="{'width':'20%', 'margin-left': '1%'}"></p-dropdown>
+        </div>
+
+        <button pButton label="Retrieve" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-search"
+            (click)="retrieveChecklistDetails()"></button>
+    </p-card>
+
+    <p-card>
+        
+    </p-card>
+</div>
