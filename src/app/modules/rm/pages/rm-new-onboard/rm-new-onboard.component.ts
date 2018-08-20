@@ -455,12 +455,15 @@ export class RMNewOnboardComponent implements OnInit {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
+                return;
             }
 
-            this.msgs.push({
-                severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
-            });
-
+            if (res.results) {
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
+                });
+            }
+            
             setTimeout(() => {
                 this.router.navigate(['/rm/dashboard']);
             }, 3000);
