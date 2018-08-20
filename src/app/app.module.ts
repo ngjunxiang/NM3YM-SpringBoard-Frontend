@@ -51,7 +51,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PanelModule,
         PerfectScrollbarModule,
         ReactiveFormsModule,
-        UserIdleModule.forRoot({ idle: 300, timeout: 300, ping: 30 }),
+        UserIdleModule.forRoot({ idle: 1500, timeout: 300, ping: 30 }),
         SharedModule
     ],
     providers: [

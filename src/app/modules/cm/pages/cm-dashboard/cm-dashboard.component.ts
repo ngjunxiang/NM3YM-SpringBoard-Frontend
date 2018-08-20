@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CMDashboardComponent implements OnInit {
     
+    // UI Control
+    loading = false;
     clients = [];
     // clients = ["Testing 1", "Testing 2"];
 
