@@ -11,6 +11,21 @@ interface Response {
     error: string;
 }
 
+interface AllOBResponse {
+    error: string;
+    obLists: ObList[];
+}
+
+interface ObList {
+    name: string;
+    obID: string;
+    progress: number;
+    requiredFields: any[];
+    conditions: any[];
+    dateCreated: Date;
+    urgent: boolean;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -18,12 +33,29 @@ interface Response {
 export class OnboardService {
 
     private createOnboardProcessURL = environment.host + '/app/rm-create-onboard';
+    private retrieveAllOnboardProcessesURL = environment.host + '/app/rm-retrieve-all-onboard';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
 
+    retrieveAllOnboardProcesses() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<AllOBResponse>(this.retrieveAllOnboardProcessesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+    
     createOnboardProcess(onboardProcessData) {
         const httpOptions = {
             headers: new HttpHeaders({
