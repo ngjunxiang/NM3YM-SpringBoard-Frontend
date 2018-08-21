@@ -16,7 +16,7 @@ const routes: Routes = [
                 path: 'dashboard',
                 component: RMDashboardComponent,
                 data: {
-                    title: 'Relationship Manager',
+                    title: 'Marketing Assistant',
                     urls: [{ title: 'Dashboard' }]
                 }
             },
@@ -24,7 +24,7 @@ const routes: Routes = [
                 path: 'onboard/create',
                 component: RMNewOnboardComponent,
                 data: {
-                    title: 'Relationship Manager',
+                    title: 'Marketing Assistant',
                     urls: [{ title: 'Onboard' }, { title: 'New' }]
                 }
             },
@@ -32,7 +32,7 @@ const routes: Routes = [
                 path: 'onboard/edit/:id',
                 component: RMEditOnboardComponent,
                 data: {
-                    title: 'Relationship Manager',
+                    title: 'Marketing Assistant',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
                 }
             }
