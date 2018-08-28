@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { SelectItem, Message } from 'primeng/components/common/api';
+
 import { ChecklistService } from '../../../../core/services/checklist.service';
 
 @Component({
@@ -13,17 +16,22 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
     // UI Control
     loading = false;
+    searched = false;
     msgs: Message[] = [];
 
     // UI Components
-    checklistNameDropdownData: SelectItem[];
+    checklistNameData: SelectItem[];
+    checklistVersionData: SelectItem[];
     complianceMOCols: any[];
     complianceCCols: any[];
     legalMOCols: any[];
     legalCCols: any[];
 
     constructor(
-        checklistService: ChecklistService
+        private checklistService: ChecklistService,
+        private fb: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     ngOnInit() {

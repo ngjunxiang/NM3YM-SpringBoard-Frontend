@@ -13,7 +13,556 @@
             (click)="retrieveChecklistDetails()"></button>
     </p-card>
 
-    <p-card>
-        
-    </p-card>
+
+    <!-- Checklist Details -->
+    <div *ngIf="searched">
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Required Fields</h4>
+                <div *ngFor="let requiredField of checklistDetails.requiredFields; let i=index">
+                    <b>{{ requiredField.fieldName }}:</b> {{ requiredField.fieldValue }}
+                </div>
+            </p-card>
+        </div>
+
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Conditions</h4>
+                <div *ngFor="let condition of checklistDetails.conditions; let i=index">
+                    <b>{{ condition.conditionName }}:</b> {{ condition.conditionOption }}
+                </div>
+            </p-card>
+        </div>
+
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Compliance Documents</h4>
+                <h5>Mandatory</h5>
+                <div *ngIf="checklistDetails.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
+                    No documents in this section
+                </div>
+                <div *ngIf="checklistDetails.complianceDocuments.mandatory.length !== 0" style="padding-bottom:1%">
+                    <p-table [value]="checklistDetails.complianceDocuments.mandatory" selectionMode="single">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of complianceMOCols">
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                            <tr *ngIf="doc.changed === '0'">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '1'" class="edited-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '2'" class="new-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '3'" class="deleted-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <h5>Conditional</h5>
+                <div *ngIf="checklistDetails.complianceDocuments.conditional.length === 0" style="padding-bottom:1%">
+                    No documents in this section
+                </div>
+                <div *ngIf="checklistDetails.complianceDocuments.conditional.length !== 0" style="padding-bottom:1%">
+                    <p-table [value]="checklistDetails.complianceDocuments.conditional" selectionMode="single">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of complianceCCols">
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                            <ng-container *ngFor="let condition of checklistDetails.complianceDocuments.conditional[i].conditions; let j=index">
+                                <tr *ngIf="doc.changed === '0'">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="doc.changed === '1'" class="edited-field">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="doc.changed === '2'" class="new-field">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="doc.changed === '3'" class="deleted-field">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <h5>Optional</h5>
+                <div *ngIf="checklistDetails.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
+                    No documents in this section
+                </div>
+                <div *ngIf="checklistDetails.complianceDocuments.optional.length !== 0" style="padding-bottom:1%">
+                    <p-table [value]="checklistDetails.complianceDocuments.optional" selectionMode="single">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of complianceMOCols">
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                            <tr *ngIf="doc.changed === '0'">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '1'" class="edited-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '2'" class="new-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '3'" class="deleted-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-card>
+        </div>
+
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>Legal Documents</h4>
+                <h5>Mandatory</h5>
+                <div *ngIf="checklistDetails.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
+                    No documents in this section
+                </div>
+                <div *ngIf="checklistDetails.legalDocuments.mandatory.length !== 0" style="padding-bottom:1%">
+                    <p-table [value]="checklistDetails.legalDocuments.mandatory" selectionMode="single">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of legalMOCols">
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                            <tr *ngIf="doc.changed === '0'">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '1'" class="edited-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '2'" class="new-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '3'" class="deleted-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <h5>Conditional</h5>
+                <div *ngIf="checklistDetails.legalDocuments.conditional.length === 0" style="padding-bottom:1%">
+                    No documents in this section
+                </div>
+                <div *ngIf="checklistDetails.legalDocuments.conditional.length !== 0" style="padding-bottom:1%">
+                    <p-table [value]="checklistDetails.legalDocuments.conditional" selectionMode="single">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of legalCCols">
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                            <ng-container *ngFor="let condition of checklistDetails.legalDocuments.conditional[i].conditions; let j=index">
+                                <tr *ngIf="doc.changed === '0'">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td *ngIf="doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="doc.changed === '1'" class="edited-field">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td *ngIf="doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="doc.changed === '2'" class="new-field">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td *ngIf="doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <tr *ngIf="doc.changed === '3'" class="deleted-field">
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
+                                    </ng-container>
+                                    <td>{{ condition.conditionName }}</td>
+                                    <td>{{ condition.conditionOption }}</td>
+                                    <ng-container *ngIf="j === 0">
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.remarks }}</td>
+                                        <td *ngIf="doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.signature" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td *ngIf="doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.canWaiver" [attr.rowspan]="checklistDetails.complianceDocuments.conditional[i].conditions.length">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <h5>Optional</h5>
+                <div *ngIf="checklistDetails.legalDocuments.optional.length === 0" style="padding-bottom:1%">
+                    No documents in this section
+                </div>
+                <div *ngIf="checklistDetails.legalDocuments.optional.length !== 0" style="padding-bottom:1%">
+                    <p-table [value]="checklistDetails.legalDocuments.optional" selectionMode="single">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of legalMOCols">
+                                    {{ col.header }}
+                                </th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                            <tr *ngIf="doc.changed === '0'">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '1'" class="edited-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '2'" class="new-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="doc.changed === '3'" class="deleted-field">
+                                <td>{{ doc.documentName }}</td>
+                                <td>{{ doc.agmtCode }}</td>
+                                <td>{{ doc.remarks }}</td>
+                                <td *ngIf="doc.signature">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.signature">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                                <td *ngIf="doc.canWaiver">
+                                    <i class="fa fa-check"></i>
+                                </td>
+                                <td *ngIf="!doc.canWaiver">
+                                    <i class="fa fa-times"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-card>
+        </div>
+    </div>
 </div>
