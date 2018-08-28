@@ -1,5 +1,6 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-blockUI [blocked]=blocked></p-blockUI>
+<p-confirmDialog></p-confirmDialog>
 
 <div #form *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
@@ -9,6 +10,11 @@
                 <h3>Checklist Name</h3>
                 <input type="text" id="input" style="width: 83%" class="form-control" placeholder="Enter Checklist Name" formControlName="checklistName"
                     required pInputText>
+                <div class="error-inline-msg">
+                    <span *ngIf="newChecklistForm.get('checklistName').dirty && newChecklistForm.get('checklistName').hasError('checklistNameExists')">
+                        Checklist name exists
+                    </span>
+                </div>
             </p-card>
         </div>
 
@@ -20,11 +26,15 @@
                     <div *ngFor="let field of newChecklistForm.get('requiredFields').controls; let i=index">
                         <h4>Field {{i+1}}</h4>
                         <div [formGroupName]="i" class="ui-g">
-                            <div class="ui-g-12 ui-md-10" style="margin-left: -8px">
+                            <div *ngIf="i < 4" class="ui-g-12 ui-md-10" style="margin-left: -8px">
+                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Field (e.g. Client A/C Number)"
+                                    formControlName="fieldName" pInputText>
+                            </div>
+                            <div *ngIf="i > 3" class="ui-g-12 ui-md-10" style="margin-left: -8px">
                                 <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Field (e.g. Client A/C Number)"
                                     formControlName="fieldName" required pInputText>
-                                <button pButton [disabled]="newChecklistForm.get('requiredFields').length < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
-                                    type="button" icon="fa fa-times" (click)="deleteField(i)"></button>
+                                <button pButton class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%" type="button" icon="fa fa-times"
+                                    (click)="deleteField(i)"></button>
                             </div>
                         </div>
                     </div>
@@ -49,6 +59,11 @@
                                     formControlName="conditionOptions" required pInputText>
                                 <button pButton [disabled]="newChecklistForm.get('conditions').length < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                     type="button" icon="fa fa-times" (click)="deleteCondition(i)"></button>
+                                <div class="error-inline-msg">
+                                    <span *ngIf="newChecklistForm.get('conditions').get(i + '').get('conditionName').dirty && newChecklistForm.get('conditions').get(i + '').get('conditionName').hasError('isDuplicate')">
+                                        Condition name exists
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,8 +107,10 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil"
+                                            (click)="editMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times"
+                                            (click)="deleteMandatoryDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -162,13 +179,16 @@
                                 <ng-container *ngFor="let condition of complianceDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
                                     <tr>
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
+                                                doc.get('documentName').value }}</td>
                                         </ng-container>
                                         <td>{{ condition.get('conditionName').value }}</td>
                                         <td>{{ condition.get('conditionOption').value }}</td>
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('agmtCode').value }}</td>
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('remarks').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
+                                                doc.get('agmtCode').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
+                                                doc.get('remarks').value }}</td>
                                             <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-check"></i>
                                             </td>
@@ -176,8 +196,10 @@
                                                 <i class="fa fa-times"></i>
                                             </td>
                                             <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
-                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
-                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil"
+                                                    (click)="editConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times"
+                                                    (click)="deleteConditionalDoc(i)"></button>
                                             </td>
                                         </ng-container>
                                     </tr>
@@ -185,10 +207,10 @@
                             </ng-template>
                         </p-table>
                     </div>
-                    
+
                     <button pButton class="cButton" label="Conditional" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
-                    (click)="showCDialog()"></button>
-                    
+                        (click)="showCDialog()"></button>
+
                     <p-dialog [formGroup]="cDialogForm" header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
                         <h4>Conditions</h4>
                         <div formArrayName="conditions">
@@ -291,8 +313,10 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil"
+                                            (click)="editOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times"
+                                            (click)="deleteOptionalDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -377,8 +401,10 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editMandatoryDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil"
+                                            (click)="editMandatoryDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times"
+                                            (click)="deleteMandatoryDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -453,13 +479,16 @@
                                 <ng-container *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
                                     <tr>
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
+                                                doc.get('documentName').value }}</td>
                                         </ng-container>
                                         <td>{{ condition.get('conditionName').value }}</td>
                                         <td>{{ condition.get('conditionOption').value }}</td>
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('agmtCode').value }}</td>
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('remarks').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
+                                                doc.get('agmtCode').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
+                                                doc.get('remarks').value }}</td>
                                             <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-check"></i>
                                             </td>
@@ -473,8 +502,10 @@
                                                 <i class="fa fa-times"></i>
                                             </td>
                                             <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
-                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editConditionalDoc(i)"></button>
-                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil"
+                                                    (click)="editConditionalDoc(i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times"
+                                                    (click)="deleteConditionalDoc(i)"></button>
                                             </td>
                                         </ng-container>
                                     </tr>
@@ -599,8 +630,10 @@
                                         <i class="fa fa-times"></i>
                                     </td>
                                     <td>
-                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil" (click)="editOptionalDoc(i)"></button>
-                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times" (click)="deleteOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%" type="button" icon="fa fa-pencil"
+                                            (click)="editOptionalDoc(i)"></button>
+                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%" type="button" icon="fa fa-times"
+                                            (click)="deleteOptionalDoc(i)"></button>
                                     </td>
                                 </tr>
                             </ng-template>
