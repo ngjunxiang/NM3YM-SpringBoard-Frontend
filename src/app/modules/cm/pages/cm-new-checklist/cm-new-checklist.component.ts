@@ -194,6 +194,19 @@ export class CMNewChecklistComponent implements OnInit {
         return null;
     }
 
+    checkDuplicateRequiredField(control: FormControl): { [key: string]: boolean } | null {
+        let currentReqFields = this.newChecklistForm.getRawValue().requiredFields;
+        for (let i = 0; i < currentReqFields.length - 1; i++) {
+            let requiredField = currentReqFields[i];
+            if (requiredField.fieldName === control.value) {
+                return {
+                    isDuplicate: true
+                };
+            }
+        }
+        return null;
+    }
+
     addNewCondition() {
         let i = (+this.newChecklistForm.get('conditions')['length'] - 1) + '';
 
@@ -248,7 +261,7 @@ export class CMNewChecklistComponent implements OnInit {
         let control = <FormArray>this.newChecklistForm.controls.requiredFields;
         control.push(
             this.fb.group({
-                fieldName: new FormControl('', Validators.required)
+                fieldName: new FormControl('', [Validators.required, this.checkDuplicateRequiredField.bind(this)])
             })
         );
     }
