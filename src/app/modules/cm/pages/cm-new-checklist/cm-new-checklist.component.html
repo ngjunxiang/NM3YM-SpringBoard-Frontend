@@ -1,9 +1,6 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-blockUI [blocked]=blocked></p-blockUI>
 <p-confirmDialog></p-confirmDialog>
-<p-overlayPanel #tip1>
-    <img src='assets/images/tooltips/checklistName.png' style="width: 50%" />
-</p-overlayPanel>
 
 <div #form *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
