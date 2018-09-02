@@ -41,6 +41,8 @@ interface Response {
 export class ChecklistService {
 
     private retrieveCMChecklistNamesURL = environment.host + '/app/cm-retrieve-checklistNames';
+    private retrieveCMChecklistLogNamesURL = environment.host + '/app/cm-retrieve-clIDWithVersion';
+    private retrieveCMChecklistLogDetailsURL = environment.host + '/app/cm-retrieveLoggedLists';
     private retrieveRMChecklistNamesURL = environment.host + '/app/rm-retrieve-checklistNames';
     private retrieveRMChecklistURL = environment.host + '/app/rm-retrieve-checklist';
     private retrieveDeleteCMChecklistURL = environment.host + '/app/cm-manage-checklist';
@@ -152,7 +154,42 @@ export class ChecklistService {
             );
     }
 
+    retrieveCMChecklistLogNames() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
 
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveCMChecklistLogNamesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveCMChecklistLogDetails(clID, version) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const logData = {
+            'clID': clID,
+            'version': JSON.stringify(version)
+        };
+
+        const postData = Object.assign(this.authService.authItems, logData);
+
+        return this.http.post<Response>(this.retrieveCMChecklistLogDetailsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveRMChecklistNames() {
         const httpOptions = {

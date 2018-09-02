@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SelectItem, Message } from 'primeng/components/common/api';
+import { Message } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/services/checklist.service';
 
@@ -20,8 +20,9 @@ export class CMViewChecklistLogsComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Components
-    checklistNameData: SelectItem[];
-    checklistVersionData: SelectItem[];
+    checklistNameVersionData: any[];
+    checklistLogData: any;
+    checklistLogForm: FormGroup;
     complianceMOCols: any[];
     complianceCCols: any[];
     legalMOCols: any[];
@@ -71,10 +72,112 @@ export class CMViewChecklistLogsComponent implements OnInit {
             { field: 'signature', header: 'Signature Required' }
         ];
 
-        this.retrieveChecklistNames();
+        this.checklistLogForm = this.fb.group({
+            clID: new FormControl('', Validators.required),
+            version: new FormControl('', Validators.required)
+        });
+
+        this.retrieveChecklistNamesAndVersions();
     }
 
-    retrieveChecklistNames() {
+    get checklistNameData() {
+        let clNames = [];
+        this.checklistNameVersionData.forEach(cl => {
+            clNames.push(cl.name);
+        });
+        return clNames;
+    }
 
+    get checklistVersionData() {
+        let clVersions;
+        let selectedClID = this.checklistLogForm.get('clID').value;
+        this.checklistNameVersionData.forEach(cl => {
+            if (cl.clID === selectedClID) {
+                clVersions = cl.versions;
+            }
+        });
+        return clVersions;
+    }
+
+    retrieveChecklistNamesAndVersions() {
+        this.checklistService.retrieveCMChecklistLogNames().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: res.error
+                });
+            }
+            if (res.results) {
+                this.checklistNameVersionData = [];
+                res.results['current'].forEach(cl => {
+                    let clData = {};
+                    clData['clID'] = cl.clID;
+                    clData['name'] = {
+                        'label': cl.name,
+                        'value': cl.clID
+                    };
+                    clData['versions'] = [];
+                    cl.versions.forEach(version => {
+                        clData['versions'].push({
+                            'label': version,
+                            'value': version
+                        });
+                    });
+                    this.checklistNameVersionData.push(clData);
+                });
+
+                res.results['deleted'].forEach(cl => {
+                    let clData = {};
+                    clData['clID'] = cl.clID;
+                    clData['name'] = {
+                        'label': cl.name + ' (Deleted)',
+                        'value': cl.clID
+                    };
+                    clData['versions'] = [];
+                    cl.versions.forEach(version => {
+                        clData['versions'].push({
+                            'label': version,
+                            'value': version
+                        });
+                    });
+                    this.checklistNameVersionData.push(clData);
+                });
+                this.loading = false;
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
+    }
+
+    retrieveChecklistDetails() {
+        let selectedClID = this.checklistLogForm.get('clID').value;
+        let selectedVersion = this.checklistLogForm.get('version').value;
+
+        this.checklistService.retrieveCMChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: res.error
+                });
+            }
+
+            if (res.results) {
+                this.checklistLogData = res.results;
+                let conditions = [];
+                let conditionNames = Object.keys(res.results['conditions']);
+                conditionNames.forEach(conditionName => {
+                    conditions.push({
+                        conditionName: conditionName,
+                        conditionOptions: this.checklistLogData['conditions'][conditionName]
+                    });
+                });
+                this.checklistLogData['conditions'] = conditions;
+                this.searched = true;
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
     }
 }
