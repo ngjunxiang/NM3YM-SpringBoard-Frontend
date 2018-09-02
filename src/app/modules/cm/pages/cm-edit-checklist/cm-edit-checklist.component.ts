@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
 import { ChecklistService } from '../../../../core/services/checklist.service';
@@ -16,6 +17,7 @@ export class CMEditChecklistComponent implements OnInit {
 
     // UI Control
     loading = false;
+    processing = false;
     blocked = false;
     msgs: Message[] = [];
     tabs: MenuItem[];
@@ -44,10 +46,12 @@ export class CMEditChecklistComponent implements OnInit {
     legalDocumentsForm: FormGroup;
     dialogForm: FormGroup;
     cDialogForm: FormGroup;
+    checklistNames: string[] = [];
     checklist: any;
 
     constructor(
         private checklistService: ChecklistService,
+        private confirmationService: ConfirmationService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -105,11 +109,13 @@ export class CMEditChecklistComponent implements OnInit {
         this.createForm();
 
         this.retrieveChecklistDetails(this.route.snapshot.paramMap.get('id'));
+
+        this.retrieveChecklistNames();
     }
 
     createForm() {
         this.currentChecklistForm = this.fb.group({
-            checklistName: new FormControl('', [Validators.required]),
+            checklistName: new FormControl('', [Validators.required, this.checklistNameExists.bind(this)]),
             requiredFields: this.fb.array([]),
             conditions: this.fb.array([])
         });
@@ -128,7 +134,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
@@ -144,7 +150,7 @@ export class CMEditChecklistComponent implements OnInit {
                 })
             ]),
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
@@ -153,6 +159,100 @@ export class CMEditChecklistComponent implements OnInit {
         });
 
         this.loading = false;
+    }
+
+    checklistNameExists(control: FormControl): { [key: string]: boolean } | null {
+        if (this.checklistNames.includes(control.value) && control.value !== this.currentChecklistForm.get('checklistName').value) {
+            return {
+                checklistNameExists: true
+            };
+        }
+        return null;
+    }
+
+    checkDuplicateConditionName(control: FormControl): { [key: string]: boolean } | null {
+        if (typeof this.currentChecklistForm !== 'undefined' && this.currentChecklistForm.get('conditions')['length'] > 1) {
+            for (let i = 0; i < this.currentChecklistForm.get('conditions')['length'] - 1; i++) {
+                let condition = (<FormArray>this.currentChecklistForm.controls.conditions).value[i];
+                if (condition.conditionName === control.value) {
+                    return {
+                        isDuplicate: true
+                    };
+                }
+            }
+        }
+        return null;
+    }
+
+    checkConditionInUse() {
+        let currentConditions = this.currentChecklistForm.getRawValue().conditions;
+
+        for (let i = 0; i < currentConditions.length; i++) {
+            let condition = currentConditions[i];
+            let toDisable = false;
+            this.complianceDocumentsForm.getRawValue().conditional.forEach(cDoc => {
+                cDoc.conditions.forEach(docCondition => {
+                    if (docCondition.conditionName == condition.conditionName
+                        && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                        toDisable = true;
+                    }
+                });
+            });
+            if (toDisable) {
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').disable();
+            } else {
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
+            }
+        }
+    }
+
+    checkDuplicateRequiredField(control: FormControl): { [key: string]: boolean } | null {
+        let currentReqFields = this.currentChecklistForm.getRawValue().requiredFields;
+        for (let i = 0; i < currentReqFields.length - 1; i++) {
+            let requiredField = currentReqFields[i];
+            if (requiredField.fieldName === control.value) {
+                return {
+                    isDuplicate: true
+                };
+            }
+        }
+        return null;
+    }
+
+    checkDuplicateAgmtCode(control: FormControl): { [key: string]: boolean } | null {
+        let agmtCodes = [];
+        let currentForm = this.complianceDocumentsForm.getRawValue();
+
+        for (let mDoc of currentForm.mandatory) {
+            agmtCodes.push(mDoc.agmtCode);
+        }
+
+        for (let cDoc of currentForm.conditional) {
+            agmtCodes.push(cDoc.agmtCode);
+        }
+
+        for (let oDoc of currentForm.optional) {
+            agmtCodes.push(oDoc.agmtCode);
+        }
+
+        if (agmtCodes.includes(control.value)) {
+            return {
+                isDuplicate: true
+            }
+        }
+        return null;
+    }
+
+    retrieveChecklistNames() {
+        this.checklistService.retrieveCMChecklistNames().subscribe(data => {
+            data.clNames.forEach(cl => {
+                this.checklistNames.push(cl.name);
+            });
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
     }
 
     retrieveChecklistDetails(checklistName) {
@@ -169,14 +269,23 @@ export class CMEditChecklistComponent implements OnInit {
             this.currentChecklistForm.get('checklistName').setValue(res.name);
 
             // Update Required Fields
-            res.requiredFields.forEach(fieldName => {
+            for (let i = 0; i < res.requiredFields.length; i++) {
+                let requiredField = res.requiredFields[i];
                 let rFArr = <FormArray>this.currentChecklistForm.controls.requiredFields
-                rFArr.push(
-                    this.fb.group({
-                        fieldName: new FormControl(fieldName, Validators.required)
-                    })
-                );
-            });
+                if (i < 4) {
+                    rFArr.push(
+                        this.fb.group({
+                            fieldName: new FormControl({ value: requiredField, disabled: true }, Validators.required)
+                        })
+                    );
+                } else {
+                    rFArr.push(
+                        this.fb.group({
+                            fieldName: new FormControl(requiredField, Validators.required)
+                        })
+                    );
+                }
+            }
 
             // Update Conditions
             Object.keys(res.conditions).forEach(conditionName => {
@@ -184,8 +293,8 @@ export class CMEditChecklistComponent implements OnInit {
                 let conditionsArr = <FormArray>this.currentChecklistForm.controls.conditions
                 conditionsArr.push(
                     this.fb.group({
-                        conditionName: new FormControl(conditionName, Validators.required),
-                        conditionOptions: new FormControl(conditionOptionsArr.join(', '), Validators.required)
+                        conditionName: new FormControl(conditionName, [Validators.required, this.checkDuplicateConditionName.bind(this)]),
+                        conditionOptions: new FormControl(conditionOptionsArr, Validators.required)
                     })
                 );
             });
@@ -329,15 +438,26 @@ export class CMEditChecklistComponent implements OnInit {
         let control = <FormArray>this.currentChecklistForm.controls.conditions;
         control.push(
             this.fb.group({
-                conditionName: new FormControl('', Validators.required),
+                conditionName: new FormControl('', [Validators.required, this.checkDuplicateConditionName.bind(this)]),
                 conditionOptions: new FormControl('', Validators.required)
             })
         );
     }
 
     deleteCondition(index) {
-        let control = <FormArray>this.currentChecklistForm.controls.conditions;
-        control.removeAt(index);
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this condition?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let control = <FormArray>this.currentChecklistForm.controls.conditions;
+                control.removeAt(index);
+                control.patchValue(control.value);
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 
     addNewField() {
@@ -355,20 +475,31 @@ export class CMEditChecklistComponent implements OnInit {
         let control = <FormArray>this.currentChecklistForm.controls.requiredFields;
         control.push(
             this.fb.group({
-                fieldName: new FormControl('', Validators.required)
+                fieldName: new FormControl('', [Validators.required, this.checkDuplicateRequiredField.bind(this)])
             })
         );
     }
 
     deleteField(index) {
-        let control = <FormArray>this.currentChecklistForm.controls.requiredFields;
-        control.removeAt(index);
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this required field?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let control = <FormArray>this.currentChecklistForm.controls.requiredFields;
+                control.removeAt(index);
+                control.patchValue(control.value);
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 
     showMDialog() {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
@@ -448,7 +579,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.dialogForm = this.fb.group({
             documentName: new FormControl(form.get('mandatory').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('mandatory').get(index + '').get('agmtCode').value, Validators.required),
+            agmtCode: new FormControl(form.get('mandatory').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(form.get('mandatory').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('mandatory').get(index + '').get('canWaiver').value),
             remarks: new FormControl(form.get('mandatory').get(index + '').get('remarks').value),
@@ -463,14 +594,24 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     deleteMandatoryDoc(index: number) {
-        let form = this.complianceDocumentsForm;
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this mandatory document?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let form = this.complianceDocumentsForm;
 
-        if (this.activeTab === 1) {
-            form = this.legalDocumentsForm;
-        }
+                if (this.activeTab === 1) {
+                    form = this.legalDocumentsForm;
+                }
 
-        let control = <FormArray>form.get('mandatory');
-        control.get(index + '').get('changed').setValue('3');
+                let control = <FormArray>form.get('mandatory');
+                control.get(index + '').get('changed').setValue('3');
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 
     showCDialog() {
@@ -494,7 +635,7 @@ export class CMEditChecklistComponent implements OnInit {
                 })
             ]),
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
@@ -525,7 +666,7 @@ export class CMEditChecklistComponent implements OnInit {
         let conditionOptions: SelectItem[] = [];
         for (let i = 0; i < this.currentChecklistForm.get('conditions')['length']; i++) {
             if (conditionName === this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value) {
-                let options = this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').value.split(',');
+                let options = this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').value;
                 options.forEach(option => {
                     conditionOptions.push({
                         'label': option.trim(),
@@ -575,9 +716,19 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     deleteConditionalCondition(index) {
-        let control = <FormArray>this.cDialogForm.get('conditions');
-        control.removeAt(index);
-        this.cDialogForm.get('changed').setValue('1');
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this condition?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let control = <FormArray>this.cDialogForm.get('conditions');
+                control.removeAt(index);
+                this.cDialogForm.get('changed').setValue('1');
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 
     addNewConditional() {
@@ -669,7 +820,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.cDialogForm = this.fb.group({
             conditions: new FormArray([]),
             documentName: new FormControl(form.get('conditional').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('conditional').get(index + '').get('agmtCode').value, Validators.required),
+            agmtCode: new FormControl(form.get('conditional').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(form.get('conditional').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('conditional').get(index + '').get('canWaiver').value),
             remarks: new FormControl(form.get('conditional').get(index + '').get('remarks').value),
@@ -696,20 +847,32 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     deleteConditionalDoc(index: number) {
-        let form = this.complianceDocumentsForm;
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this conditional document?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let form = this.complianceDocumentsForm;
 
-        if (this.activeTab === 1) {
-            form = this.legalDocumentsForm;
-        }
+                if (this.activeTab === 1) {
+                    form = this.legalDocumentsForm;
+                }
 
-        let control = <FormArray>form.get('conditional');
-        control.get(index + '').get('changed').setValue('3');
+                let control = <FormArray>form.get('conditional');
+                control.get(index + '').get('changed').setValue('3');
+
+                this.checkConditionInUse();
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 
     showODialog() {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
@@ -789,12 +952,12 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.dialogForm = this.fb.group({
             documentName: new FormControl(form.get('optional').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, Validators.required),
+            agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(form.get('optional').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('optional').get(index + '').get('canWaiver').value),
             remarks: new FormControl(form.get('optional').get(index + '').get('remarks').value),
-            docID: new FormControl(form.get('mandatory').get(index + '').get('docID').value),
-            changed: new FormControl(form.get('mandatory').get(index + '').get('changed').value)
+            docID: new FormControl(form.get('optional').get(index + '').get('docID').value),
+            changed: new FormControl(form.get('optional').get(index + '').get('changed').value)
         });
 
         this.editMode = true;
@@ -804,14 +967,24 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     deleteOptionalDoc(index: number) {
-        let form = this.complianceDocumentsForm;
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this optional document?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let form = this.complianceDocumentsForm;
 
-        if (this.activeTab === 1) {
-            form = this.legalDocumentsForm;
-        }
+                if (this.activeTab === 1) {
+                    form = this.legalDocumentsForm;
+                }
 
-        let control = <FormArray>form.get('optional');
-        control.get(index + '').get('changed').setValue('3');
+                let control = <FormArray>form.get('optional');
+                control.get(index + '').get('changed').setValue('3');
+            },
+            reject: () => {
+                return;
+            }
+        });
     }
 
     changeTab(event) {
@@ -819,6 +992,8 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     updateChecklist() {
+        this.processing = true;
+
         this.checklist = {};
         if (this.currentChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
@@ -849,7 +1024,7 @@ export class CMEditChecklistComponent implements OnInit {
                 && (this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value === ''
                     || this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').value === ''))) {
                 let conditionName = this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value;
-                let conditionOptionsArr = this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').value.split(',');
+                let conditionOptionsArr = this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').value;
                 this.checklist['conditions'][conditionName] = [];
                 conditionOptionsArr.forEach(option => {
                     this.checklist['conditions'][conditionName].push(option.trim());
@@ -971,6 +1146,7 @@ export class CMEditChecklistComponent implements OnInit {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
+                this.processing = false;
                 return;
             }
 
@@ -978,15 +1154,17 @@ export class CMEditChecklistComponent implements OnInit {
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: 'Checklist updated <br> You will be redirected shortly'
                 });
-            }
 
-            setTimeout(() => {
-                this.router.navigate(['/cm/checklist/manage']);
-            }, 3000);
+                setTimeout(() => {
+                    this.router.navigate(['/cm/checklist/manage']);
+                }, 3000);
+            }
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
+            this.processing = false;
+            return;
         });
     }
 
