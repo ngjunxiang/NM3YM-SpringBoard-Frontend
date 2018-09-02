@@ -19,6 +19,7 @@ export class CMNewChecklistComponent implements OnInit {
 
     // UI Control
     loading = false;
+    processing = false;
     blocked = false;
     msgs: Message[] = [];
     tabs: MenuItem[];
@@ -136,7 +137,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
@@ -150,7 +151,7 @@ export class CMNewChecklistComponent implements OnInit {
                 })
             ]),
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
@@ -194,6 +195,28 @@ export class CMNewChecklistComponent implements OnInit {
         return null;
     }
 
+    checkConditionInUse() {
+        let currentConditions = this.newChecklistForm.getRawValue().conditions;
+
+        for (let i = 0; i < currentConditions.length; i++) {
+            let condition = currentConditions[i];
+            let toDisable = false;
+            this.complianceDocumentsForm.getRawValue().conditional.forEach(cDoc => {
+                cDoc.conditions.forEach(docCondition => {
+                    if (docCondition.conditionName == condition.conditionName 
+                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                        toDisable = true;
+                    }
+                });
+            });
+            if (toDisable) {
+                this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').disable();
+            } else {
+                this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
+            }
+        }
+    }
+
     checkDuplicateRequiredField(control: FormControl): { [key: string]: boolean } | null {
         let currentReqFields = this.newChecklistForm.getRawValue().requiredFields;
         for (let i = 0; i < currentReqFields.length - 1; i++) {
@@ -202,6 +225,30 @@ export class CMNewChecklistComponent implements OnInit {
                 return {
                     isDuplicate: true
                 };
+            }
+        }
+        return null;
+    }
+
+    checkDuplicateAgmtCode(control: FormControl): { [key: string]: boolean } | null {
+        let agmtCodes = [];
+        let currentForm = this.complianceDocumentsForm.getRawValue();
+
+        for (let mDoc of currentForm.mandatory) {
+            agmtCodes.push(mDoc.agmtCode);
+        }
+
+        for (let cDoc of currentForm.conditional) {
+            agmtCodes.push(cDoc.agmtCode);
+        }
+
+        for (let oDoc of currentForm.optional) {
+            agmtCodes.push(oDoc.agmtCode);
+        }
+
+        if (agmtCodes.includes(control.value)) {
+            return {
+                isDuplicate: true
             }
         }
         return null;
@@ -285,7 +332,7 @@ export class CMNewChecklistComponent implements OnInit {
     showMDialog() {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
@@ -401,7 +448,7 @@ export class CMNewChecklistComponent implements OnInit {
                 })
             ]),
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
@@ -430,7 +477,7 @@ export class CMNewChecklistComponent implements OnInit {
         let conditionOptions: SelectItem[] = [];
         for (let i = 0; i < this.newChecklistForm.get('conditions')['length']; i++) {
             if (conditionName === this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value) {
-                let options = this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').value.split(',');
+                let options = this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').value;
                 options.forEach(option => {
                     conditionOptions.push({
                         'label': option.trim(),
@@ -539,6 +586,8 @@ export class CMNewChecklistComponent implements OnInit {
 
         control.push(this.cDialogForm);
 
+        this.checkConditionInUse();
+
         this.dropdownData.conditionOptions = [];
         this.blocked = false;
         this.cDisplay = false;
@@ -600,6 +649,8 @@ export class CMNewChecklistComponent implements OnInit {
 
                 let control = <FormArray>form.get('conditional');
                 control.removeAt(index);
+
+                this.checkConditionInUse();
             },
             reject: () => {
                 return;
@@ -610,7 +661,7 @@ export class CMNewChecklistComponent implements OnInit {
     showODialog() {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', Validators.required),
+            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(true),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
@@ -710,6 +761,8 @@ export class CMNewChecklistComponent implements OnInit {
     }
 
     createChecklist() {
+        this.processing = true;
+
         this.checklist = {};
         if (this.newChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
@@ -740,7 +793,7 @@ export class CMNewChecklistComponent implements OnInit {
                 && (this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value === ''
                     || this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').value === ''))) {
                 let conditionName = this.newChecklistForm.get('conditions').get(i + '').get('conditionName').value;
-                let conditionOptionsArr = this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').value.split(',');
+                let conditionOptionsArr = this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').value;
                 this.checklist['conditions'][conditionName] = [];
                 conditionOptionsArr.forEach(option => {
                     this.checklist['conditions'][conditionName].push(option.trim());
@@ -845,7 +898,7 @@ export class CMNewChecklistComponent implements OnInit {
                 remarks: optionalDoc.get('remarks').value
             });
         }
-
+        
         this.checklistService.createCMChecklist(this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({

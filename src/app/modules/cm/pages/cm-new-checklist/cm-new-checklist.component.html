@@ -1,13 +1,22 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-blockUI [blocked]=blocked></p-blockUI>
 <p-confirmDialog></p-confirmDialog>
+<p-overlayPanel #tip1>
+    <img src='assets/images/tooltips/checklistName.png' style="width: 50%" />
+</p-overlayPanel>
 
 <div #form *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
         <!-- Checklist Name -->
         <div style="padding-bottom: 10px" id="checklistName">
             <p-card styleClass="ui-card-shadow">
-                <h3>Checklist Name</h3>
+                <h3>
+                    Checklist Name
+                    <!-- <i class="fas fa-question" (mouseenter)="tip1.show($event)" (mouseout)="tip1.hide()"></i>
+                    <p-overlayPanel #tip1 [appendTo]="'body'">
+                        <img src="assets/images/tooltips/checklistName.png" style="width: 100%" />
+                    </p-overlayPanel> -->
+                </h3>
                 <input type="text" id="input" style="width: 83%" class="form-control" placeholder="Enter Checklist Name" formControlName="checklistName"
                     required pInputText>
                 <div class="error-inline-msg">
@@ -21,7 +30,13 @@
         <!-- Required Fields -->
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
-                <h3>Required Fields</h3>
+                <h3>
+                    Required Fields
+                    <!-- <i class="fas fa-question" (mouseenter)="tip2.show($event)" (mouseout)="tip2.hide()"></i>
+                    <p-overlayPanel #tip2 [appendTo]="'body'">
+                        <img src="assets/images/tooltips/checklistRequiredFields.png" style="width: 100%" />
+                    </p-overlayPanel> -->
+                </h3>
                 <div formArrayName="requiredFields">
                     <div *ngFor="let field of newChecklistForm.get('requiredFields').controls; let i=index">
                         <h4>Field {{i+1}}</h4>
@@ -37,7 +52,7 @@
                                     (click)="deleteField(i)"></button>
                                 <div class="error-inline-msg">
                                     <span *ngIf="newChecklistForm.get('requiredFields').get(i + '').get('fieldName').dirty && newChecklistForm.get('requiredFields').get(i + '').get('fieldName').hasError('isDuplicate')">
-                                        Required field exists
+                                        Duplicate required field
                                     </span>
                                 </div>
                             </div>
@@ -51,8 +66,14 @@
         <!-- Checklist Conditions -->
         <div style="padding-bottom: 10px" id="conditions">
             <p-card styleClass="ui-card-shadow">
-                <h3>Checklist Conditions</h3>
-                *Separate condition options with a comma<br><br>
+                <h3>
+                    Checklist Conditions
+                    <!-- <i class="fas fa-question" (mouseenter)="tip3.show($event)" (mouseout)="tip3.hide()"></i> -->
+                    <!-- <p-overlayPanel #tip3 [appendTo]="'body'">
+                        <img src="assets/images/tooltips/checklistConditions.png" style="width: 100%" />
+                    </p-overlayPanel> -->
+                </h3>
+                *Input condition options by pressing 'enter'<br><br>
                 <div formArrayName="conditions">
                     <div *ngFor="let condition of newChecklistForm.get('conditions').controls; let i=index">
                         <h4>Condition {{i+1}}</h4>
@@ -60,13 +81,13 @@
                             <div class="ui-g-12 ui-md-10" style="margin-left: -8px">
                                 <input type="text" id="input" class="form-control" style="display: inline-block; width: 35%" placeholder="Condition (e.g. Booking Center)"
                                     formControlName="conditionName" required pInputText>
-                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 55%; margin-left: 2%" placeholder="Condition Options* (e.g. Singapore, Hong Kong)"
-                                    formControlName="conditionOptions" required pInputText>
+                                <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false" formControlName="conditionOptions"
+                                    [addOnTab]="true" [addOnBlur]="true"></p-chips>
                                 <button pButton [disabled]="newChecklistForm.get('conditions').length < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                     type="button" icon="fa fa-times" (click)="deleteCondition(i)"></button>
                                 <div class="error-inline-msg">
                                     <span *ngIf="newChecklistForm.get('conditions').get(i + '').get('conditionName').dirty && newChecklistForm.get('conditions').get(i + '').get('conditionName').hasError('isDuplicate')">
-                                        Condition name exists
+                                        Duplicate condition name
                                     </span>
                                 </div>
                             </div>
@@ -130,6 +151,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -149,6 +175,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -240,6 +271,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -278,6 +314,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
                         <div class="ui-g" style="padding-right:4%">
@@ -336,6 +377,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -355,6 +401,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -424,6 +475,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -446,6 +502,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -545,6 +606,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -586,6 +652,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
                         <div class="ui-g" style="padding-right:4%">
@@ -653,6 +724,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -675,6 +751,11 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h4>Agmt Code</h4>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <div class="error-inline-msg">
+                            <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
+                                Duplicate agmt code
+                            </span>
+                        </div>
                         <h4>Remarks</h4>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
@@ -695,5 +776,6 @@
             </p-tabView>
         </p-card>
     </div>
-    <button pButton label="Create Checklist" class="ui-button-success" style="width: 100%" type="button" icon="fa fa-plus" (click)="createChecklist()"></button>
+    <button pButton label="Create Checklist" class="ui-button-success" style="width: 100%" type="button" icon="fa fa-plus" [disabled]="processing"
+        (click)="createChecklist()"></button>
 </div>
