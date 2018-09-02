@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
@@ -394,7 +392,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.dialogForm = this.fb.group({
             documentName: new FormControl(form.get('mandatory').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('mandatory').get(index + '').get('agmtCode').value, Validators.required),
+            agmtCode: new FormControl(form.get('mandatory').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(form.get('mandatory').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('mandatory').get(index + '').get('canWaiver').value),
             remarks: new FormControl(form.get('mandatory').get(index + '').get('remarks').value)
@@ -527,7 +525,7 @@ export class CMNewChecklistComponent implements OnInit {
 
     deleteConditionalCondition(index) {
         this.confirmationService.confirm({
-            message: 'Do you want to delete this conditon?',
+            message: 'Do you want to delete this condition?',
             header: 'Delete Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -611,7 +609,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.cDialogForm = this.fb.group({
             conditions: new FormArray([]),
             documentName: new FormControl(form.get('conditional').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('conditional').get(index + '').get('agmtCode').value, Validators.required),
+            agmtCode: new FormControl(form.get('conditional').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(form.get('conditional').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('conditional').get(index + '').get('canWaiver').value),
             remarks: new FormControl(form.get('conditional').get(index + '').get('remarks').value)
@@ -637,7 +635,7 @@ export class CMNewChecklistComponent implements OnInit {
 
     deleteConditionalDoc(index: number) {
         this.confirmationService.confirm({
-            message: 'Do you want to delete this conditon?',
+            message: 'Do you want to delete this conditional document?',
             header: 'Delete Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -723,7 +721,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.dialogForm = this.fb.group({
             documentName: new FormControl(form.get('optional').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, Validators.required),
+            agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(form.get('optional').get(index + '').get('signature').value),
             canWaiver: new FormControl(form.get('optional').get(index + '').get('canWaiver').value),
             remarks: new FormControl(form.get('optional').get(index + '').get('remarks').value)
@@ -737,7 +735,7 @@ export class CMNewChecklistComponent implements OnInit {
 
     deleteOptionalDoc(index: number) {
         this.confirmationService.confirm({
-            message: 'Do you want to delete this conditon?',
+            message: 'Do you want to delete this optional document?',
             header: 'Delete Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -898,12 +896,14 @@ export class CMNewChecklistComponent implements OnInit {
                 remarks: optionalDoc.get('remarks').value
             });
         }
-        
+
         this.checklistService.createCMChecklist(this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
+                this.processing = false;
+                return;
             }
 
             this.msgs.push({
@@ -917,6 +917,8 @@ export class CMNewChecklistComponent implements OnInit {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
+            this.processing = false;
+            return;
         });
     }
 }
