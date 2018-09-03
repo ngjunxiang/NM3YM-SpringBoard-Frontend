@@ -13,7 +13,7 @@ interface User {
     password: string;
 }
 
-interface Data {
+interface UsersData {
     users: User[];
 }
 
@@ -118,7 +118,7 @@ export class UserMgmtService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<Data>(this.retrieveUsersURL, postData, httpOptions)
+        return this.http.post<UsersData>(this.retrieveUsersURL, postData, httpOptions)
             .pipe(
                 map(data => users = data.users),
                 retry(3),

@@ -6,7 +6,7 @@ import { AdminComponent } from './pages/admin.component';
 import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
-import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 
 const routes: Routes = [
     {
@@ -14,11 +14,11 @@ const routes: Routes = [
         component: AdminComponent,
         children: [
             {
-                path: 'dashboard',
-                component: AdminDashboardComponent,
+                path: 'panel',
+                component: AdminPanelComponent,
                 data: {
                     title: 'Admin',
-                    urls: [{ title: 'Dashboard' }]
+                    urls: [{ title: 'Admin Panel' }]
                 }
             },
             {
@@ -49,7 +49,7 @@ const routes: Routes = [
     }, 
     {
         path: '**',
-        redirectTo: 'dashboard', 
+        redirectTo: 'panel', 
         pathMatch: 'full' 
     }
 ];

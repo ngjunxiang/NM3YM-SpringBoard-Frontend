@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { SharedModule } from '../../shared/shared.module';
+import { TableModule } from 'primeng/table';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
@@ -21,7 +22,7 @@ import { CreateAdminComponent } from './pages/create-admin/create-admin.componen
 import { UserMgmtService } from '../../core/services/user-mgmt.service';
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
-import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -44,14 +45,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgbModule.forRoot(),
         PerfectScrollbarModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        TableModule
     ],
     declarations: [
         AdminComponent,
+        AdminPanelComponent,
         CreateAdminComponent,
         UpdateAdminComponent,
-        DeleteAdminComponent,
-        AdminDashboardComponent
+        DeleteAdminComponent
     ],
     providers: [
         {
