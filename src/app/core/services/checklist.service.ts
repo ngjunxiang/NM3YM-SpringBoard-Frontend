@@ -40,14 +40,17 @@ interface Response {
 
 export class ChecklistService {
 
-    private retrieveCMChecklistNamesURL = environment.host + '/app/cm-retrieve-checklistNames';
-    private retrieveCMChecklistLogNamesURL = environment.host + '/app/cm-retrieve-clIDWithVersion';
-    private retrieveCMChecklistLogDetailsURL = environment.host + '/app/cm-retrieveLoggedLists';
-    private retrieveRMChecklistNamesURL = environment.host + '/app/rm-retrieve-checklistNames';
-    private retrieveRMChecklistURL = environment.host + '/app/rm-retrieve-checklist';
-    private retrieveDeleteCMChecklistURL = environment.host + '/app/cm-manage-checklist';
-    private updateCMChecklistURL = environment.host + '/app/cm-update-checklist';
-    private createCMChecklistURL = environment.host + '/app/cm-create-checklist';
+    // CM Endpoints
+    private retrieveCMChecklistNamesURL = environment.host + '/app/cm/retrieve-checklistNames';
+    private retrieveCMChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
+    private retrieveCMChecklistLogDetailsURL = environment.host + '/app/cm/retrieve-loggedLists';
+    private updateCMChecklistURL = environment.host + '/app/cm/update-checklist';
+    private createCMChecklistURL = environment.host + '/app/cm/create-checklist';
+    private retrieveDeleteCMChecklistURL = environment.host + '/app/cm/manage-checklist';
+
+    // RM Endpoints
+    private retrieveRMChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
+    private retrieveRMChecklistURL = environment.host + '/app/rm/retrieve-checklist';
 
     constructor(
         private authService: AuthenticationService,

@@ -37,10 +37,10 @@ interface ObList {
 
 export class OnboardService {
 
-    private createOnboardProcessURL = environment.host + '/app/rm-create-onboard';
-    private retrieveAllOnboardProcessesURL = environment.host + '/app/rm-retrieve-all-onboard';
-    private retrieveOnboardProcessDetailsURL = environment.host + '/app/rm-retrieve-selected-onboard';
-    private deleteUpdateOnboardProcessURL = environment.host + '/app/rm-manage-onboard';
+    private createOnboardProcessURL = environment.host + '/app/rm/create-onboard';
+    private retrieveAllOnboardProcessesURL = environment.host + '/app/rm/retrieve-all-onboard';
+    private retrieveOnboardProcessDetailsURL = environment.host + '/app/rm/retrieve-selected-onboard';
+    private deleteUpdateOnboardProcessURL = environment.host + '/app/rm/manage-onboard';
 
     constructor(
         private authService: AuthenticationService,
