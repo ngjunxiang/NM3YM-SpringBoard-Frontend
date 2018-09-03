@@ -141,6 +141,11 @@ export class CMViewChecklistLogsComponent implements OnInit {
                     });
                     this.checklistNameVersionData.push(clData);
                 });
+
+                this.checklistNameVersionData.sort((a, b) => a.name.localeCompare(b.name));
+                this.checklistNameVersionData.forEach(cl => {
+                    cl.versions.sort((a, b) => a.label - b.label);
+                });
                 this.loading = false;
             }
         }, error => {
