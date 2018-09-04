@@ -2,7 +2,7 @@
 
 <p-card *ngIf="!loading" styleClass="ui-card-shadow">
     <h3>User List</h3>
-    <p-table [columns]="cols" [value]="users">
+    <p-table [columns]="cols" [value]="users" selectionMode="single">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns" [pSortableColumn]="col.field">

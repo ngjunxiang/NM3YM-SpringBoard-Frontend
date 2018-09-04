@@ -28,7 +28,7 @@ export class AdminPanelComponent implements OnInit {
             { field: 'name', header: 'Name' },
             { field: 'username', header: 'Username' },
             { field: 'userType', header: 'User Type' },
-            { field: 'email', header:'email' }
+            { field: 'email', header:'Email' }
         ];
 
         this.retrieveAllUsers();
