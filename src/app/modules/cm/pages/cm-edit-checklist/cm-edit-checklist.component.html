@@ -7,7 +7,7 @@
         <!-- Checklist Name -->
         <div style="padding-bottom: 10px" id="checklistName">
             <p-card styleClass="ui-card-shadow">
-                <h3>Checklist Name</h3>
+                <h4>Checklist Name</h4>
                 <input type="text" id="input" style="width: 83%" class="form-control" placeholder="Enter Checklist Name" formControlName="checklistName"
                     required pInputText>
                 <div class="error-inline-msg">
@@ -21,10 +21,10 @@
         <!-- Required Fields -->
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
-                <h3>Required Fields</h3>
+                <h4>Required Fields</h4>
                 <div formArrayName="requiredFields">
                     <div *ngFor="let field of currentChecklistForm.get('requiredFields').controls; let i=index">
-                        <h4>Field {{i+1}}</h4>
+                        <h5>Field {{i+1}}</h5>
                         <div [formGroupName]="i" class="ui-g">
                             <div *ngIf="i < 4" class="ui-g-12 ui-md-10" style="margin-left: -8px">
                                 <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Field (e.g. Client A/C Number)"
@@ -51,11 +51,11 @@
         <!-- Checklist Conditions -->
         <div style="padding-bottom: 10px" id="conditions">
             <p-card styleClass="ui-card-shadow">
-                <h3>Checklist Conditions</h3>
+                <h4>Checklist Conditions</h4>
                 *Input condition options by pressing 'enter'<br><br>
                 <div formArrayName="conditions">
                     <div *ngFor="let condition of currentChecklistForm.get('conditions').controls; let i=index">
-                        <h4>Condition {{i+1}}</h4>
+                        <h5>Condition {{i+1}}</h5>
                         <div [formGroupName]="i" class="ui-g">
                             <div class="ui-g-12 ui-md-10" style="margin-left: -8px">
                                 <input type="text" id="input" class="form-control" style="display: inline-block; width: 35%" placeholder="Condition (e.g. Booking Center)"
@@ -81,12 +81,12 @@
     <!-- Documents -->
     <div class="form-create" style="padding-bottom: 10px">
         <p-card styleClass="ui-card-shadow">
-            <h3>Documents</h3>
+            <h4>Documents</h4>
 
             <!-- Compliance Documents -->
             <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
                 <p-tabPanel header="Compliance" leftIcon="fas fa-file-contract">
-                    <h4>Mandatory</h4>
+                    <h5>Mandatory</h5>
                     <div *ngIf="numMandatoryDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
@@ -126,16 +126,16 @@
                         (click)="showMDialog()"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -150,16 +150,16 @@
                     </p-dialog>
 
                     <p-dialog [formGroup]="dialogForm" header="Edit Mandatory Document" [(visible)]="mEditDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -175,7 +175,7 @@
 
 
 
-                    <h4>Conditional</h4>
+                    <h5>Conditional</h5>
                     <div *ngIf="numConditionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
@@ -227,7 +227,7 @@
                         (click)="showCDialog()"></button>
 
                     <p-dialog [formGroup]="cDialogForm" header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
-                        <h4>Conditions</h4>
+                        <h5>Conditions</h5>
                         <div formArrayName="conditions">
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
@@ -246,16 +246,16 @@
                                     (click)="addNewConditionalCondition()"></button>
                             </div>
                         </div>
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
@@ -270,7 +270,7 @@
                     </p-dialog>
 
                     <p-dialog [formGroup]="cDialogForm" header="Edit Conditional Document" [(visible)]="cEditDisplay" [closable]="false" [width]="800">
-                        <h4>Conditions</h4>
+                        <h5>Conditions</h5>
                         <div formArrayName="conditions">
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
@@ -289,16 +289,16 @@
                                     (click)="addNewConditionalCondition()"></button>
                             </div>
                         </div>
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
@@ -312,7 +312,7 @@
                     </p-dialog>
 
 
-                    <h4>Optional</h4>
+                    <h5>Optional</h5>
                     <div *ngIf="numOptionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
@@ -352,16 +352,16 @@
                         (click)="showODialog()"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -376,16 +376,16 @@
                     </p-dialog>
 
                     <p-dialog [formGroup]="dialogForm" header="Edit Optional Document" [(visible)]="oEditDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -404,7 +404,7 @@
                 <!-- Legal Documents -->
 
                 <p-tabPanel header="Legal" leftIcon="fa fa-balance-scale">
-                    <h4>Mandatory</h4>
+                    <h5>Mandatory</h5>
                     <div *ngIf="numMandatoryDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
@@ -450,16 +450,16 @@
                         (click)="showMDialog()"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Mandatory Document" [(visible)]="mDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -477,16 +477,16 @@
                     </p-dialog>
 
                     <p-dialog [formGroup]="dialogForm" header="Edit Mandatory Document" [(visible)]="mEditDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -505,7 +505,7 @@
 
 
 
-                    <h4>Conditional</h4>
+                    <h5>Conditional</h5>
                     <div *ngIf="numConditionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
@@ -562,7 +562,7 @@
                     <button pButton label="Conditional" class="cButton" style="display: inline-block; width: 20%" type="button" icon="fa fa-plus"
                         (click)="showCDialog()"></button>
                     <p-dialog [formGroup]="cDialogForm" header="Add Conditional Document" [(visible)]="cDisplay" [closable]="false" [width]="800">
-                        <h4>Conditions</h4>
+                        <h5>Conditions</h5>
                         <div formArrayName="conditions">
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
@@ -581,16 +581,16 @@
                                     (click)="addNewConditionalCondition()"></button>
                             </div>
                         </div>
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
@@ -608,7 +608,7 @@
                     </p-dialog>
 
                     <p-dialog [formGroup]="cDialogForm" header="Edit Conditional Document" [(visible)]="cEditDisplay" [closable]="false" [width]="800">
-                        <h4>Conditions</h4>
+                        <h5>Conditions</h5>
                         <div formArrayName="conditions">
                             <div *ngFor="let condition of cDialogForm.get('conditions').controls; let i=index">
                                 <div style="padding-top:1%" *ngIf="cDialogForm.get('conditions')['length'] >= 0" [formGroupName]="i">
@@ -627,16 +627,16 @@
                                     (click)="addNewConditionalCondition()"></button>
                             </div>
                         </div>
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <input type="text" id="input" class="form-control" placeholder="Additional Remarks" formControlName="remarks" pInputText>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
@@ -653,7 +653,7 @@
                     </p-dialog>
 
 
-                    <h4>Optional</h4>
+                    <h5>Optional</h5>
                     <div *ngIf="numOptionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
@@ -699,16 +699,16 @@
                         (click)="showODialog()"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Optional Document" [(visible)]="oDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
@@ -726,16 +726,16 @@
                     </p-dialog>
 
                     <p-dialog [formGroup]="dialogForm" header="Edit Optional Document" [(visible)]="oEditDisplay" [closable]="false" [width]="800">
-                        <h4>Document Name</h4>
+                        <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
-                        <h4>Agmt Code</h4>
+                        <h5>Agmt Code</h5>
                         <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
                             </span>
                         </div>
-                        <h4>Remarks</h4>
+                        <h5>Remarks</h5>
                         <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks" [rows]="10" [cols]="20"
                             pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right: 4%">
