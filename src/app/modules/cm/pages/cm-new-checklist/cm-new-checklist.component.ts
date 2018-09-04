@@ -145,7 +145,7 @@ export class CMNewChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl('', Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: true }, Validators.required)
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -251,6 +251,22 @@ export class CMNewChecklistComponent implements OnInit {
         }
         return null;
     }
+
+    // checkDuplicateConditionalCondition(control: FormControl): { [key: string]: boolean } | null {
+    //     let i = +(this.cDialogForm.get('conditions')['length'] - 1);
+
+    //     if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
+    //         for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
+    //             let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
+    //             if (condition.conditionName === control.value && condition.conditionOption === this.cDialogForm.get('condition').get(i + '').get('conditionOption').value) {
+    //                 return {
+    //                     isDuplicate: true
+    //                 };
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
 
     addNewCondition() {
         let i = (+this.newChecklistForm.get('conditions')['length'] - 1) + '';
@@ -442,7 +458,7 @@ export class CMNewChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl('', Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: true }, Validators.required)
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -484,6 +500,9 @@ export class CMNewChecklistComponent implements OnInit {
                 });
             }
         }
+        
+        let lastPos = this.cDialogForm.get('conditions')['length'] - 1;
+        this.cDialogForm.get('conditions').get(lastPos + '').get('conditionOption').enable();
         this.dropdownData['conditionOptions'][index] = conditionOptions;
     }
 
@@ -518,7 +537,7 @@ export class CMNewChecklistComponent implements OnInit {
         control.push(
             this.fb.group({
                 conditionName: new FormControl('', Validators.required),
-                conditionOption: new FormControl('', Validators.required)
+                conditionOption: new FormControl({ value: '', disabled: true }, Validators.required)
             })
         );
     }
@@ -550,13 +569,9 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.cDialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
         this.cDialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
-        this.cDialogForm.get('documentName').markAsDirty();
-        this.cDialogForm.get('agmtCode').markAsDirty();
-
+        
         if (this.cDialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid ||
-            this.cDialogForm.get('documentName').invalid ||
-            this.cDialogForm.get('agmtCode').invalid) {
+            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
@@ -761,14 +776,35 @@ export class CMNewChecklistComponent implements OnInit {
     createChecklist() {
         this.processing = true;
 
-        this.checklist = {};
+        this.newChecklistForm.get('checklistName').markAsDirty();
+
+        for (let control of this.newChecklistForm.get('conditions')['controls']) {
+            control.get('conditionName').markAsDirty();
+            control.get('conditionOptions').markAsDirty();
+        }
+
         if (this.newChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please enter/correct the checklist name'
             });
+            this.processing = false;
             return;
         }
+
+        let i = (+this.newChecklistForm.get('conditions')['length'] - 1) + '';
+        
+        if (this.newChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
+            this.newChecklistForm.get('conditions').get(i).get('conditionOption').invalid) {
+            document.getElementById('conditions').scrollIntoView();
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            });
+            this.processing = false;
+            return;
+        }
+
+        this.checklist = {};
 
         // Checklist Name
         this.checklist['name'] = this.newChecklistForm.get('checklistName').value;

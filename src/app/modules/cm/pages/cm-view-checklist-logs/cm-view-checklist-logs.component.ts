@@ -21,6 +21,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
     // UI Components
     checklistNameVersionData: any[];
+    checklistNameData: string[];
+    checklistVersionData: string[];
     checklistLogData: any;
     checklistLogForm: FormGroup;
     complianceMOCols: any[];
@@ -74,29 +76,20 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
         this.checklistLogForm = this.fb.group({
             clID: new FormControl('', Validators.required),
-            version: new FormControl('', Validators.required)
+            version: new FormControl({ value: '' , disabled: true }, Validators.required)
         });
 
         this.retrieveChecklistNamesAndVersions();
     }
 
-    get checklistNameData() {
-        let clNames = [];
-        this.checklistNameVersionData.forEach(cl => {
-            clNames.push(cl.name);
-        });
-        return clNames;
-    }
-
-    get checklistVersionData() {
-        let clVersions;
+    reloadVersions(event) {
         let selectedClID = this.checklistLogForm.get('clID').value;
         this.checklistNameVersionData.forEach(cl => {
             if (cl.clID === selectedClID) {
-                clVersions = cl.versions;
+                this.checklistVersionData = cl.versions;
             }
         });
-        return clVersions;
+        this.checklistLogForm.get('version').enable();
     }
 
     retrieveChecklistNamesAndVersions() {
@@ -142,9 +135,14 @@ export class CMViewChecklistLogsComponent implements OnInit {
                     this.checklistNameVersionData.push(clData);
                 });
 
-                this.checklistNameVersionData.sort((a, b) => a.name.localeCompare(b.name));
+                this.checklistNameVersionData.sort((a, b) => (a > b ? 1 : -1));
                 this.checklistNameVersionData.forEach(cl => {
                     cl.versions.sort((a, b) => a.label - b.label);
+                });
+
+                this.checklistNameData = [];
+                this.checklistNameVersionData.forEach(cl => {
+                    this.checklistNameData.push(cl.name);
                 });
                 this.loading = false;
             }

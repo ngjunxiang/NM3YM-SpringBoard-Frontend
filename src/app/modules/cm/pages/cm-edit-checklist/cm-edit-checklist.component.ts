@@ -146,7 +146,7 @@ export class CMEditChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl('', Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: '' }, Validators.required)
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -631,7 +631,7 @@ export class CMEditChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl('', Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: '' }, Validators.required)
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -675,6 +675,9 @@ export class CMEditChecklistComponent implements OnInit {
                 });
             }
         }
+        
+        let lastPos = this.cDialogForm.get('conditions')['length'] - 1;
+        this.cDialogForm.get('conditions').get(lastPos + '').get('conditionOption').enable();
         this.dropdownData['conditionOptions'][index] = conditionOptions;
     }
 
@@ -709,7 +712,7 @@ export class CMEditChecklistComponent implements OnInit {
         control.push(
             this.fb.group({
                 conditionName: new FormControl('', Validators.required),
-                conditionOption: new FormControl('', Validators.required)
+                conditionOption: new FormControl({ value: '', disabled: '' }, Validators.required)
             })
         );
         this.cDialogForm.get('changed').setValue('1');
@@ -743,13 +746,9 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.cDialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
         this.cDialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
-        this.cDialogForm.get('documentName').markAsDirty();
-        this.cDialogForm.get('agmtCode').markAsDirty();
 
         if (this.cDialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid ||
-            this.cDialogForm.get('documentName').invalid ||
-            this.cDialogForm.get('agmtCode').invalid) {
+            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
@@ -994,14 +993,35 @@ export class CMEditChecklistComponent implements OnInit {
     updateChecklist() {
         this.processing = true;
 
-        this.checklist = {};
+        this.currentChecklistForm.get('checklistName').markAsDirty();
+
+        for (let control of this.currentChecklistForm.get('conditions')['controls']) {
+            control.get('conditionName').markAsDirty();
+            control.get('conditionOptions').markAsDirty();
+        }
+
         if (this.currentChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
             this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please enter the checklist name'
+                severity: 'error', summary: 'Error', detail: 'Please enter/correct the checklist name'
             });
+            this.processing = false;
             return;
         }
+
+        let i = (+this.currentChecklistForm.get('conditions')['length'] - 1) + '';
+        
+        if (this.currentChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
+            this.currentChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
+            document.getElementById('conditions').scrollIntoView();
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            });
+            this.processing = false;
+            return;
+        }
+
+        this.checklist = {};
 
         // Checklist Name
         this.checklist['name'] = this.currentChecklistForm.get('checklistName').value;

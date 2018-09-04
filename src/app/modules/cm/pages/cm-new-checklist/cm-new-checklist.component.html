@@ -257,6 +257,11 @@
                                     <p-dropdown [options]="dropdownData.conditionOptions[i]" placeholder="Select a condition option" formControlName="conditionOption"></p-dropdown>
                                     <button pButton [disabled]="cDialogForm.get('conditions')['length'] < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                         type="button" icon="fa fa-times" (click)="deleteConditionalCondition(i)"></button>
+                                    <!-- <div class="error-inline-msg">
+                                        <span *ngIf="cDialogForm.get('conditions').get(i + '').get('conditionName').dirty && cDialogForm.get('conditions').get(i + '').get('conditionName').hasError('isDuplicate')">
+                                            Duplicate condition
+                                        </span>
+                                    </div> -->
                                 </div>
                             </div>
                             <div style="padding-top:1%">
