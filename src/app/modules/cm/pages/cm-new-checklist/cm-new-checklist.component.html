@@ -73,13 +73,13 @@
                 *Input condition options by pressing 'enter'<br><br>
                 <div formArrayName="conditions">
                     <div *ngFor="let condition of newChecklistForm.get('conditions').controls; let i=index">
-                        <h5>Condition {{i+1}}</h5>
+                        <h5>Condition {{ i + 1 }}</h5>
                         <div [formGroupName]="i" class="ui-g">
                             <div class="ui-g-12 ui-md-10" style="margin-left: -8px">
-                                <input type="text" id="input" class="form-control" style="display: inline-block; width: 35%" placeholder="Condition (e.g. Booking Center)"
+                                <input type="text" class="form-control ui-g-6 ui-md-5" style="display: inline-block; width: 35%" placeholder="Condition (e.g. Booking Center)"
                                     formControlName="conditionName" required pInputText>
                                 <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false" formControlName="conditionOptions"
-                                    [addOnTab]="true" [addOnBlur]="true"></p-chips>
+                                    [addOnTab]="true" [addOnBlur]="true" class="ui-g-6 ui-md-5"></p-chips>
                                 <button pButton [disabled]="newChecklistForm.get('conditions').length < 2" class="ui-button-danger" style="display: inline-block; width: 6%; margin-left: 2%"
                                     type="button" icon="fa fa-times" (click)="deleteCondition(i)"></button>
                                 <div class="error-inline-msg">
