@@ -1,129 +1,119 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { ConfirmationService } from 'primeng/components/common/confirmationservice';
-import { Message } from 'primeng/components/common/api';
+interface Client {
+    name: string;
+    type: string;
+}
 
-import { OnboardService } from '../../../../core/services/onboard.service';
+interface Document {
+    name: string;
+    changes: string;
+    date: string;
+}
+
+interface Year {
+    label: string;
+    value: number;
+}
 
 @Component({
     selector: 'rm-dashboard',
     templateUrl: './rm-dashboard.component.html',
-    styleUrls: ['./rm-dashboard.component.scss']
+    styleUrls: ['./rm-dashboard.component.css']
 })
 
 export class RMDashboardComponent implements OnInit {
 
-    // UI Control
-    loading = false;
-    msgs: Message[] = [];
+    data1: any;
+    data: any;
+    years: Year[];
+    documents: Document[];
+    clients: Client[];
+    selectedCity: number;
+    cols: any[];
+    colsDoc: any[];
+    frozenCol: any[];
 
-    // UI Components
-    obProcesses: any;
-
-    constructor(
-        private confirmationService: ConfirmationService,
-        private onboardService: OnboardService,
-        private router: Router
-    ) { }
+    constructor() { }
 
     ngOnInit() {
-        this.retrieveAllOnboardProcesses();
-    }
+        this.data1 = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'],
+            datasets: [
+                {
+                    label: '2018',
+                    data: [65, 59, 80, 81, 56, 55, 40, 43],
+                    fill: false,
+                    borderColor: '#4bc0c0'
+                },
+                {
+                    label: '2017',
+                    data: [28, 48, 40, 19, 86, 27, 90, 60],
+                    fill: false,
+                    borderColor: '#565656'
+                },
+            ]
+        }
 
-    toggleUrgent(index: number) {
-        this.obProcesses[index].urgent = !this.obProcesses[index].urgent
-        // invoke service
-    }
+        this.data = {
+            labels: ['Individual', 'Corporate'],
+            datasets: [
+                {
+                    data: [100, 50],
+                    backgroundColor: [
+                        "#45B39D",
+                        "#F4D03F",
+                    ],
+                    hoverBackgroundColor: [
+                        "#45B39D",
+                        "#F4D03F",
+                    ]
+                }
+            ]
+        };
 
-    retrieveAllOnboardProcesses() {
-        this.loading = true;
-        this.obProcesses = [];
-        this.onboardService.retrieveAllOnboardProcesses().subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
-            
-            if (res.obLists) {
-                res.obLists.forEach(obList => {
-                    let requiredFields = [];
-                    let type = obList.name;
-                    let obID = obList.obID;
-                    let conditions = [];
-                    let progress = obList.progress;
-                    let urgent = obList.urgent;
-                    Object.keys(obList.requiredFields).forEach(key => {
-                        let fieldName;
-                        for (fieldName in obList.requiredFields[key]);
-                        requiredFields.push({
-                            'fieldName': fieldName,
-                            'fieldValue': obList.requiredFields[key][fieldName]
-                        });
-                    });
+        this.years = [
+            { label: "2018", value: 2018 },
+            { label: "2017", value: 2017 },
+            { label: "2016", value: 2016 },
+        ];
 
-                    obList.conditions.forEach(condition => {
-                        conditions.push({
-                            'conditionName': condition.conditionName,
-                            'conditionValue': condition.conditionOption
-                        });
-                    });
+        this.documents = [
+            { name: "SOL", changes: "Modified", date: "12-04-2018" },
+            { name: "SOL", changes: "New", date: "12-04-2018" },
+            { name: "SOL", changes: "Deleted", date: "12-04-2018" },
+            { name: "SOL", changes: "Modified", date: "12-04-2018" }
+        ];
 
-                    this.obProcesses.push({
-                        'obID': obID,
-                        'type': type,
-                        'requiredFields': requiredFields,
-                        'conditions': conditions,
-                        'progress': progress,
-                        'urgent': urgent
-                    });
-                });
-            }
-            this.loading = false;
-        });
-    }
+        this.colsDoc = [
+            { field: 'name', header: 'Client' },
+            { field: 'changes', header: 'Changes' },
+            { field: 'date', header: 'Date' }
+        ];
 
-    editOnboardProcess(index: number) {
-        let selectedOnboardID = this.obProcesses[index].obID;
-        this.router.navigate(['/rm/onboard/edit', selectedOnboardID], {
-            queryParams: {
-                name: this.obProcesses[index].type
-            }
-        });
-    }
 
-    deleteOnboardProcess(index: number) {
-        this.confirmationService.confirm({
-            message: 'Do you want to delete this onboard process?',
-            header: 'Delete Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                let selectedOnboardID = this.obProcesses[index].obID;
-                this.onboardService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
-                    if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
-                        });
-                        return;
-                    }
+        this.clients = [
+            { name: "Jarrett", type: "Individual" },
+            { name: "Melissa", type: "Corporate" },
+            { name: "Joel", type: "Individual" },
+            { name: "Lindsay", type: "Corporate" },
+            { name: "Jarrett", type: "Individual" },
+            { name: "Melissa", type: "Corporate" },
+            { name: "Joel", type: "Individual" },
+            { name: "Lindsay", type: "Corporate" },
+            { name: "Jarrett", type: "Individual" },
+            { name: "Melissa", type: "Corporate" },
+            { name: "Joel", type: "Individual" },
+            { name: "Lindsay", type: "Corporate" },
+            { name: "Jarrett", type: "Individual" },
+            { name: "Melissa", type: "Corporate" },
+            { name: "Joel", type: "Individual" },
+            { name: "Lindsay", type: "Corporate" },
+        ]
 
-                    if (res.results) {
-                        this.retrieveAllOnboardProcesses();
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Onboard process deleted'
-                        });
-                    }
-                }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
-                    });
-                });
-            },
-            reject: () => {
-                return;
-            }
-        });
+        this.cols = [
+            { field: 'name', header: 'Client' },
+            { field: 'type', header: 'Type' }
+        ];
     }
 }

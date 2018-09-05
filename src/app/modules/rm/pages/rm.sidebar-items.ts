@@ -7,7 +7,8 @@ export const ROUTES: RouteInfo[] = [
     {
         path: '/rm/onboard', title: 'Client Onboarding', icon: 'mdi mdi-account-multiple', class: 'has-arrow', label: '', labelClass: '', extralink: false,
         submenu: [
-            { path: '/rm/onboard/create', title: 'New', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
+            { path: '/rm/onboard/create', title: 'New', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+            { path: '/rm/onboard/manage', title: 'Manage', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
     }
 ];

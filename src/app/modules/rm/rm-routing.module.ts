@@ -4,9 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { RMComponent } from './pages/rm.component';
 import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
+import { RMManageOnboardComponent } from './pages/rm-manage-onboard/rm-manage-onboard.component';
 import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
 import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
-import { RMNewDashboardComponent } from './pages/new-dashboard/new-dashboard.component';
 
 const routes: Routes = [
     {
@@ -22,11 +22,11 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'newDashboard',
-                component: RMNewDashboardComponent,
+                path: 'onboard/manage',
+                component: RMManageOnboardComponent,
                 data: {
                     title: 'Marketing Assistant',
-                    urls: [{ title: 'newDashboard' }]
+                    urls: [{ title: 'Onboard' }, { title: 'Manage' }]
                 }
             },
             {
