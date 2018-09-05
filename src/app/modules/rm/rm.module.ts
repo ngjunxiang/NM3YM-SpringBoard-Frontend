@@ -1,6 +1,9 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -18,6 +21,12 @@ import { MessageModule } from 'primeng/message';
 import { ProgressBarModule} from 'primeng/progressbar';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
+import { ChartModule } from 'primeng/chart';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { DataTableModule, Panel } from 'primeng/primeng';
+import { PanelModule } from 'primeng/panel';
+import { AccordionModule } from 'primeng/accordion';
+
 
 import { RMRoutingModule } from './rm-routing.module';
 import { RMComponent } from './pages/rm.component';
@@ -26,6 +35,7 @@ import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.com
 import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
 import { ChecklistService } from '../../core/services/checklist.service';
 import { OnboardService } from '../../core/services/onboard.service';
+import { RMNewDashboardComponent } from './pages/new-dashboard/new-dashboard.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -35,7 +45,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     imports: [
         RMRoutingModule,
         ButtonModule,
-        CardModule,
+        CardModule, 
         CheckboxModule,
         CommonModule,
         ConfirmDialogModule,
@@ -51,13 +61,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ProgressBarModule,
         ReactiveFormsModule,
         SharedModule,
-        TableModule
+        TableModule,
+        ScrollPanelModule,
+        DataTableModule,
+        PanelModule,
+        AccordionModule,
+        ChartModule
     ],
     declarations: [
         RMComponent,
         RMDashboardComponent,
         RMNewOnboardComponent,
-        RMEditOnboardComponent
+        RMEditOnboardComponent,
+        RMNewDashboardComponent
     ],
     providers: [
         {

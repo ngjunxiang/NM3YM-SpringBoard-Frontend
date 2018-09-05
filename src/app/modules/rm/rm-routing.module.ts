@@ -6,6 +6,7 @@ import { RMComponent } from './pages/rm.component';
 import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
 import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
 import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
+import { RMNewDashboardComponent } from './pages/new-dashboard/new-dashboard.component';
 
 const routes: Routes = [
     {
@@ -18,6 +19,14 @@ const routes: Routes = [
                 data: {
                     title: 'Marketing Assistant',
                     urls: [{ title: 'Dashboard' }]
+                }
+            },
+            {
+                path: 'newDashboard',
+                component: RMNewDashboardComponent,
+                data: {
+                    title: 'Marketing Assistant',
+                    urls: [{ title: 'newDashboard' }]
                 }
             },
             {

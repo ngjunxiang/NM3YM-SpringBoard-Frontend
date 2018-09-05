@@ -33,7 +33,8 @@
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
-                            "node_modules/pace-js/pace.min.js"
+                            "node_modules/pace-js/pace.min.js",
+                            "./node_modules/chart.js/dist/Chart.js"
                         ]
                     },
                     "configurations": {
@@ -91,7 +92,8 @@
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
-                            "node_modules/pace-js/pace.min.js"
+                            "node_modules/pace-js/pace.min.js",
+                            "./node_modules/chart.js/dist/Chart.js"
                         ],
                         "assets": [
                             "src/favicon.ico",
