@@ -1,0 +1,25 @@
+.deleted-field { background-color: #FF756B !important}
+.edited-field { background-color: #FFE073 !important}
+.new-field { background-color: #AADD81 !important}
+
+:host >>> .ui-overlaypanel {
+    z-index: 2;
+    margin-left: 10%;
+    margin-right: 14%;
+}
+
+.addedDoc {
+    background-color: #AADD81 !important;
+    color: #000000 !important;
+}
+
+.removedDoc {
+    background-color: #FF756B !important;
+    color: #000000 !important;
+}
+
+.modifiedDoc {
+    background-color: #FFE073 !important;
+    color: #000000 !important;
+}
+
