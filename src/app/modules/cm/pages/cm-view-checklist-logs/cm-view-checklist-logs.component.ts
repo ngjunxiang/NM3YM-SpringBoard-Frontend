@@ -154,6 +154,15 @@ export class CMViewChecklistLogsComponent implements OnInit {
     }
 
     retrieveChecklistDetails() {
+        this.checklistLogForm.get('clID').markAsDirty();
+        this.checklistLogForm.get('version').markAsDirty();
+
+        if (this.checklistLogForm.get('clID').invalid || this.checklistLogForm.get('version').invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please select a checklist name and version'
+            });
+            return;
+        }
         let selectedClID = this.checklistLogForm.get('clID').value;
         let selectedVersion = this.checklistLogForm.get('version').value;
 
@@ -162,6 +171,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error
                 });
+                return;
             }
 
             if (res.results) {
@@ -181,6 +191,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
             this.msgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
+            return;
         });
     }
 }

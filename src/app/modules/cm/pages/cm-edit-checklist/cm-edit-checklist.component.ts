@@ -146,7 +146,7 @@ export class CMEditChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl({ value: '', disabled: '' }, Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: '' }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -198,9 +198,20 @@ export class CMEditChecklistComponent implements OnInit {
                     }
                 });
             });
+            this.legalDocumentsForm.getRawValue().conditional.forEach(cDoc => {
+                cDoc.conditions.forEach(docCondition => {
+                    if (docCondition.conditionName == condition.conditionName
+                        && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                        toDisable = true;
+                    }
+                });
+            });
+
             if (toDisable) {
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').disable();
                 this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').disable();
             } else {
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').enable();
                 this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
             }
         }
@@ -238,6 +249,22 @@ export class CMEditChecklistComponent implements OnInit {
         if (agmtCodes.includes(control.value)) {
             return {
                 isDuplicate: true
+            }
+        }
+        return null;
+    }
+
+    checkDuplicateConditionalCondition(control: FormControl): { [key: string]: boolean } | null {
+        if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
+            let currPos = (this.cDialogForm.get('conditions')['length'] - 1) + '';
+            for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
+                let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
+                if (control.touched && condition.conditionName === this.cDialogForm.get('conditions').get(currPos).get('conditionName').value 
+                        && condition.conditionOption === control.value) {
+                    return {
+                        isDuplicate: true
+                    };
+                }
             }
         }
         return null;
@@ -323,7 +350,7 @@ export class CMEditChecklistComponent implements OnInit {
                     conditionsArr.push(
                         this.fb.group({
                             conditionName: new FormControl(condition.conditionName, Validators.required),
-                            conditionOption: new FormControl(condition.conditionOption, Validators.required)
+                            conditionOption: new FormControl(condition.conditionOption, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                         })
                     );
                 });
@@ -380,7 +407,7 @@ export class CMEditChecklistComponent implements OnInit {
                     conditionsArr.push(
                         this.fb.group({
                             conditionName: new FormControl(condition.conditionName, Validators.required),
-                            conditionOption: new FormControl(condition.conditionOption, Validators.required)
+                            conditionOption: new FormControl(condition.conditionOption, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                         })
                     );
                 });
@@ -430,7 +457,7 @@ export class CMEditChecklistComponent implements OnInit {
         if (this.currentChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.currentChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the condition name and options before adding another condition'
+                severity: 'error', summary: 'Error', detail: 'Please correct the condition name and options highlighted before adding another condition'
             });
             return;
         }
@@ -631,7 +658,7 @@ export class CMEditChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl({ value: '', disabled: '' }, Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: '' }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -675,7 +702,7 @@ export class CMEditChecklistComponent implements OnInit {
                 });
             }
         }
-        
+
         let lastPos = this.cDialogForm.get('conditions')['length'] - 1;
         this.cDialogForm.get('conditions').get(lastPos + '').get('conditionOption').enable();
         this.dropdownData['conditionOptions'][index] = conditionOptions;
@@ -712,7 +739,7 @@ export class CMEditChecklistComponent implements OnInit {
         control.push(
             this.fb.group({
                 conditionName: new FormControl('', Validators.required),
-                conditionOption: new FormControl({ value: '', disabled: '' }, Validators.required)
+                conditionOption: new FormControl({ value: '', disabled: '' }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
             })
         );
         this.cDialogForm.get('changed').setValue('1');
@@ -763,7 +790,16 @@ export class CMEditChecklistComponent implements OnInit {
 
         if (this.editMode) {
             if (control.get(this.docIndex + '').get('conditions').value !== this.cDialogForm.get('conditions').value) {
-                control.get(this.docIndex + '').get('conditions').setValue(this.cDialogForm.get('conditions').value);
+                let conditions = <FormArray>control.get(this.docIndex + '').get('conditions');
+                while (conditions.length != 0) {
+                    conditions.removeAt(0);
+                }
+                this.cDialogForm.get('conditions').value.forEach(condition => {
+                    conditions.push(this.fb.group({
+                        conditionName: condition.conditionName,
+                        conditionOption: condition.conditionOption
+                    }));
+                });
                 control.get(this.docIndex + '').get('changed').setValue('1');
             }
 
@@ -832,11 +868,12 @@ export class CMEditChecklistComponent implements OnInit {
             arr.push(
                 this.fb.group({
                     conditionName: new FormControl(control.get('conditionName').value, Validators.required),
-                    conditionOption: new FormControl(control.get('conditionOption').value, Validators.required)
+                    conditionOption: new FormControl(control.get('conditionOption').value, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                 })
             );
         });
 
+        this.retrieveConditionalConditions();
         this.reloadConditionalConditionOptions(index);
 
         this.docIndex = index;
@@ -1010,7 +1047,7 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         let i = (+this.currentChecklistForm.get('conditions')['length'] - 1) + '';
-        
+
         if (this.currentChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.currentChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             document.getElementById('conditions').scrollIntoView();
@@ -1161,6 +1198,7 @@ export class CMEditChecklistComponent implements OnInit {
                 changed: optionalDoc.get('changed').value
             });
         }
+
         this.checklistService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({

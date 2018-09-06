@@ -145,7 +145,7 @@ export class CMNewChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl({ value: '', disabled: true }, Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: true }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -207,9 +207,19 @@ export class CMNewChecklistComponent implements OnInit {
                     }
                 });
             });
+            this.legalDocumentsForm.getRawValue().conditional.forEach(cDoc => {
+                cDoc.conditions.forEach(docCondition => {
+                    if (docCondition.conditionName == condition.conditionName 
+                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                        toDisable = true;
+                    }
+                });
+            });
             if (toDisable) {
+                this.newChecklistForm.get('conditions').get(i + '').get('conditionName').disable();
                 this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').disable();
             } else {
+                this.newChecklistForm.get('conditions').get(i + '').get('conditionName').enable();
                 this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
             }
         }
@@ -252,21 +262,21 @@ export class CMNewChecklistComponent implements OnInit {
         return null;
     }
 
-    // checkDuplicateConditionalCondition(control: FormControl): { [key: string]: boolean } | null {
-    //     let i = +(this.cDialogForm.get('conditions')['length'] - 1);
-
-    //     if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
-    //         for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
-    //             let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
-    //             if (condition.conditionName === control.value && condition.conditionOption === this.cDialogForm.get('condition').get(i + '').get('conditionOption').value) {
-    //                 return {
-    //                     isDuplicate: true
-    //                 };
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
+    checkDuplicateConditionalCondition(control: FormControl): { [key: string]: boolean } | null {
+        if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
+            let currPos = (this.cDialogForm.get('conditions')['length'] - 1) + '';
+            for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
+                let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
+                if (control.touched && condition.conditionName === this.cDialogForm.get('conditions').get(currPos).get('conditionName').value 
+                        && condition.conditionOption === control.value) {
+                    return {
+                        isDuplicate: true
+                    };
+                }
+            }
+        }
+        return null;
+    }
 
     addNewCondition() {
         let i = (+this.newChecklistForm.get('conditions')['length'] - 1) + '';
@@ -277,7 +287,7 @@ export class CMNewChecklistComponent implements OnInit {
         if (this.newChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.newChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct/fill in the condition name and options before adding another condition'
+                severity: 'error', summary: 'Error', detail: 'Please correct the condition name and options highlighted before adding another condition'
             });
             return;
         }
@@ -458,7 +468,7 @@ export class CMNewChecklistComponent implements OnInit {
             conditions: new FormArray([
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl({ value: '', disabled: true }, Validators.required)
+                    conditionOption: new FormControl({ value: '', disabled: true }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                 })
             ]),
             documentName: new FormControl('', Validators.required),
@@ -537,7 +547,7 @@ export class CMNewChecklistComponent implements OnInit {
         control.push(
             this.fb.group({
                 conditionName: new FormControl('', Validators.required),
-                conditionOption: new FormControl({ value: '', disabled: true }, Validators.required)
+                conditionOption: new FormControl({ value: '', disabled: true }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
             })
         );
     }
@@ -569,7 +579,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.cDialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
         this.cDialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
-        
+
         if (this.cDialogForm.get('conditions').get(i).get('conditionName').invalid ||
             this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid) {
             this.msgs.push({
@@ -585,12 +595,23 @@ export class CMNewChecklistComponent implements OnInit {
         }
 
         if (this.editMode) {
-            control.get(this.docIndex + '').get('conditions').setValue(this.cDialogForm.get('conditions').value);
+            let conditions = <FormArray>control.get(this.docIndex + '').get('conditions');
+            while (conditions.length != 0) {
+                conditions.removeAt(0);
+            }
+            this.cDialogForm.get('conditions').value.forEach(condition => {
+                conditions.push(this.fb.group({ 
+                    conditionName: condition.conditionName,
+                    conditionOption: condition.conditionOption 
+                }));
+            });
             control.get(this.docIndex + '').get('documentName').setValue(this.cDialogForm.get('documentName').value);
             control.get(this.docIndex + '').get('agmtCode').setValue(this.cDialogForm.get('agmtCode').value);
             control.get(this.docIndex + '').get('signature').setValue(this.cDialogForm.get('signature').value);
             control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
+            
+            this.checkConditionInUse();
             this.editMode = false;
             this.blocked = false;
             this.cEditDisplay = false;
@@ -635,11 +656,12 @@ export class CMNewChecklistComponent implements OnInit {
             arr.push(
                 this.fb.group({
                     conditionName: new FormControl(control.get('conditionName').value, Validators.required),
-                    conditionOption: new FormControl(control.get('conditionOption').value, Validators.required)
+                    conditionOption: new FormControl(control.get('conditionOption').value, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
                 })
             );
         });
 
+        this.retrieveConditionalConditions();
         this.reloadConditionalConditionOptions(index);
 
         this.docIndex = index;
@@ -795,7 +817,7 @@ export class CMNewChecklistComponent implements OnInit {
         let i = (+this.newChecklistForm.get('conditions')['length'] - 1) + '';
         
         if (this.newChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.newChecklistForm.get('conditions').get(i).get('conditionOption').invalid) {
+            this.newChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             document.getElementById('conditions').scrollIntoView();
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
