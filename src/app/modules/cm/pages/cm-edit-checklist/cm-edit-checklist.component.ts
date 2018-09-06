@@ -231,39 +231,52 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     checkDuplicateAgmtCode(control: FormControl): { [key: string]: boolean } | null {
-        let agmtCodes = [];
-        let currentForm = this.complianceDocumentsForm.getRawValue();
+        if (this.mDisplay || this.mEditDisplay || this.cDisplay || this.cEditDisplay || this.oDisplay
+            || this.oEditDisplay) {
+            let agmtCodes = [];
+            let currentForm = this.complianceDocumentsForm.getRawValue();
 
-        for (let mDoc of currentForm.mandatory) {
-            agmtCodes.push(mDoc.agmtCode);
-        }
+            currentForm.mandatory.filter((mDoc) => mDoc.changed !== '3')
+                .map(existingMDoc => agmtCodes.push(existingMDoc.agmtCode));
 
-        for (let cDoc of currentForm.conditional) {
-            agmtCodes.push(cDoc.agmtCode);
-        }
+            currentForm.conditional.filter((cDoc) => cDoc.changed !== '3')
+                .map(existingCDoc => agmtCodes.push(existingCDoc.agmtCode));
 
-        for (let oDoc of currentForm.optional) {
-            agmtCodes.push(oDoc.agmtCode);
-        }
+            currentForm.optional.filter((oDoc) => oDoc.changed !== '3')
+                .map(existingODoc => agmtCodes.push(existingODoc.agmtCode));
 
-        if (agmtCodes.includes(control.value)) {
-            return {
-                isDuplicate: true
+            currentForm = this.legalDocumentsForm.getRawValue();
+
+            currentForm.mandatory.filter((mDoc) => mDoc.changed !== '3')
+                .map(existingMDoc => agmtCodes.push(existingMDoc.agmtCode));
+
+            currentForm.conditional.filter((cDoc) => cDoc.changed !== '3')
+                .map(existingCDoc => agmtCodes.push(existingCDoc.agmtCode));
+
+            currentForm.optional.filter((oDoc) => oDoc.changed !== '3')
+                .map(existingODoc => agmtCodes.push(existingODoc.agmtCode));
+
+            if (agmtCodes.includes(control.value)) {
+                return {
+                    isDuplicate: true
+                }
             }
         }
         return null;
     }
 
     checkDuplicateConditionalCondition(control: FormControl): { [key: string]: boolean } | null {
-        if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
-            let currPos = (this.cDialogForm.get('conditions')['length'] - 1) + '';
-            for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
-                let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
-                if (control.touched && condition.conditionName === this.cDialogForm.get('conditions').get(currPos).get('conditionName').value 
+        if (this.cDisplay || this.cEditDisplay) {
+            if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
+                let currPos = (this.cDialogForm.get('conditions')['length'] - 1) + '';
+                for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
+                    let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
+                    if (control.touched && condition.conditionName === this.cDialogForm.get('conditions').get(currPos).get('conditionName').value
                         && condition.conditionOption === control.value) {
-                    return {
-                        isDuplicate: true
-                    };
+                        return {
+                            isDuplicate: true
+                        };
+                    }
                 }
             }
         }
@@ -440,6 +453,9 @@ export class CMEditChecklistComponent implements OnInit {
                     })
                 );
             });
+
+            this.checkConditionInUse();
+            
             this.loading = false;
         }, error => {
             this.msgs.push({
