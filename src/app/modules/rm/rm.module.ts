@@ -18,8 +18,9 @@ import { GrowlModule } from 'primeng/growl';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PanelModule } from 'primeng/panel';
-import { ProgressBarModule} from 'primeng/progressbar';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
@@ -42,7 +43,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RMRoutingModule,
         AccordionModule,
         ButtonModule,
-        CardModule, 
+        CardModule,
         ChartModule,
         CheckboxModule,
         CommonModule,
@@ -55,6 +56,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MessageModule,
         MessagesModule,
         NgbModule.forRoot(),
+        OverlayPanelModule,
         PanelModule,
         PerfectScrollbarModule,
         ProgressBarModule,

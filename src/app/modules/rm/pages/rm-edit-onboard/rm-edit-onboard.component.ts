@@ -9,7 +9,7 @@ import { OnboardService } from '../../../../core/services/onboard.service';
 @Component({
     selector: 'rm-edit-onboard',
     templateUrl: './rm-edit-onboard.component.html',
-    styleUrls: ['./rm-edit-onboard.component.scss']
+    styleUrls: ['./rm-edit-onboard.component.css']
 })
 export class RMEditOnboardComponent implements OnInit {
 
@@ -26,6 +26,11 @@ export class RMEditOnboardComponent implements OnInit {
     obName: string;
     obDetails: any;
     documentsForm: FormGroup;
+
+    // For Colour Legend Table 
+    docChanges: any[];
+    tableCols: any[];
+    
 
     constructor(
         private fb: FormBuilder,
@@ -50,6 +55,18 @@ export class RMEditOnboardComponent implements OnInit {
         this.createForm();
 
         this.retrieveOnboardDetails(this.route.snapshot.paramMap.get('id'));
+
+        //Generating data for Colour Legend Table
+        this.tableCols = [
+            { field: 'typeOfChange', header: 'Type of Change' },
+            { field: 'cellColour', header: 'Cell Colour' },
+        ];
+
+        this.docChanges = [
+            {typeOfChange: "Document Modified", cellColour: "Yellow"},
+            {typeOfChange: "Document Added", cellColour: "Green"},
+            {typeOfChange: "Document Removed", cellColour: "Red"}
+        ];
     }
 
     createForm() {
