@@ -47,7 +47,7 @@ export class RMEditOnboardComponent implements OnInit {
         });
 
         this.route.snapshot.data['urls'] = [
-            { title: 'Onboard List', url: '/rm/dashboard' },
+            { title: 'Onboard List', url: '/rm/onboard/manage' },
             { title: 'Edit' },
             { title: this.obName }
         ];
