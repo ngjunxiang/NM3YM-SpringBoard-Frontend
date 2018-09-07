@@ -314,7 +314,7 @@ export class RMEditOnboardComponent implements OnInit {
             }
 
             setTimeout(() => {
-                this.router.navigate(['/rm/dashboard']);
+                this.router.navigate(['/rm/onboard/manage']);
             }, 3000);
         }, error => {
             this.msgs.push({
