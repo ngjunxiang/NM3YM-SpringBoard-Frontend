@@ -23,7 +23,7 @@
             <ng-template></ng-template>
             <p-card styleClass="ui-card-shadow">
                 <h4 style="display: inline-block;">Compliance Documents</h4>
-                <p-overlayPanel #legendTable1 appendTo='compliance'>
+                <p-overlayPanel #legendTable1 [appendTo]="'compliance'">
                     <p-table [columns]="tableCols" [value]="docChanges">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -43,7 +43,7 @@
                         </ng-template>
                     </p-table>
                 </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info" (mouseenter)="legendTable1.show($event)"
+                <button style="float:right;" pButton type="button" label="Colour Legend" class="ui-button-raised ui-button-info" (mouseover)="legendTable1.show($event)"
                     (mouseout)="legendTable1.hide()"></button>
                 <div formGroupName="complianceDocuments">
                     <h5>Mandatory</h5>
@@ -323,7 +323,7 @@
                         </ng-template>
                     </p-table>
                 </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info" (mouseenter)="legendTable2.show($event)"
+                <button style="float:right;" pButton type="button" label="Colour Legend" class="ui-button-raised ui-button-info" (mouseover)="legendTable2.show($event)"
                     (mouseout)="legendTable2.hide()"></button>
                 <div formGroupName="legalDocuments">
                     <h5>Mandatory</h5>
