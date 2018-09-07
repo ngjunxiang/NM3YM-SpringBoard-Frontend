@@ -35,6 +35,7 @@ export class RMNewOnboardComponent implements OnInit {
     selectedChecklistData: any;
     processData: any;
     rmNames: SelectItem[];
+    maxDateValue = new Date();
 
     constructor(
         private checklistService: ChecklistService,

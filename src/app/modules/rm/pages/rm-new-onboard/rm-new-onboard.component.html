@@ -21,7 +21,7 @@
                         <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" style="display: inline-block; width: 50%" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
                             formControlName="field" required pInputText>
                         <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field"></p-dropdown>
-                        <p-calendar *ngIf="i === 3" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="Enter Date of Submission" formControlName="field"></p-calendar>
+                        <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" dateFormat="dd/mm/yy" placeholder="Enter Date of Submission" formControlName="field"></p-calendar>
                     </div>
                 </div>
             </p-card>
