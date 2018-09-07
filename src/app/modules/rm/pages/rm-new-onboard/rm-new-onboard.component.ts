@@ -34,6 +34,7 @@ export class RMNewOnboardComponent implements OnInit {
     selectedChecklistVersion: string;
     selectedChecklistData: any;
     processData: any;
+    rmNames: SelectItem[];
 
     constructor(
         private checklistService: ChecklistService,
@@ -91,6 +92,29 @@ export class RMNewOnboardComponent implements OnInit {
             { title: 'New' },
             { title: this.selectedChecklistName }
         ];
+
+        this.onboardService.retrieveAllRMNames().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.rmNames = [];
+                res.results.forEach(rmName => {
+                    this.rmNames.push({
+                        'label': rmName,
+                        'value': rmName
+                    });
+                });
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
 
         this.checklistService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
             if (res.error) {
@@ -461,7 +485,7 @@ export class RMNewOnboardComponent implements OnInit {
                 docID: optionalDoc.docID
             });
         }
-        
+
         this.onboardService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -475,9 +499,9 @@ export class RMNewOnboardComponent implements OnInit {
                     severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
                 });
             }
-            
+
             setTimeout(() => {
-                this.router.navigate(['/rm/dashboard']);
+                this.router.navigate(['/rm/onboard/manage']);
             }, 3000);
         }, error => {
             this.msgs.push({

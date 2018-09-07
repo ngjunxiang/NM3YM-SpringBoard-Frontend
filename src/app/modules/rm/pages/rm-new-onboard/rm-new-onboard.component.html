@@ -18,8 +18,10 @@
                 <div formArrayName="requiredFields">
                     <div class="field" *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index" [formGroupName]="i">
                         <h5>{{ selectedChecklistData.requiredFields[i] }}</h5>
-                        <input type="text" id="input" class="form-control" style="display: inline-block; width: 92%" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
+                        <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" style="display: inline-block; width: 50%" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
                             formControlName="field" required pInputText>
+                        <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field"></p-dropdown>
+                        <p-calendar *ngIf="i === 3" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="Enter Date of Submission" formControlName="field"></p-calendar>
                     </div>
                 </div>
             </p-card>
@@ -30,7 +32,8 @@
                 <div formArrayName="conditions">
                     <div class="field" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index" [formGroupName]="i">
                         <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
-                        <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option" formControlName="conditionOption" [style]="{'width':'30%'}"></p-dropdown>
+                        <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option" formControlName="conditionOption"
+                            [style]="{'width':'30%'}"></p-dropdown>
                     </div>
                 </div>
             </p-card>

@@ -7,7 +7,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { environment } from '../../../environments/environment';
 
 interface Response {
-    results: string;
+    results: any;
     error: string;
 }
 
@@ -41,6 +41,7 @@ export class OnboardService {
     private retrieveAllOnboardProcessesURL = environment.host + '/app/rm/retrieve-all-onboard';
     private retrieveOnboardProcessDetailsURL = environment.host + '/app/rm/retrieve-selected-onboard';
     private deleteUpdateOnboardProcessURL = environment.host + '/app/rm/manage-onboard';
+    private retrieveAllRMNamesURL = environment.host + '/app/rm/retrieve-rm-names';
 
     constructor(
         private authService: AuthenticationService,
@@ -63,6 +64,21 @@ export class OnboardService {
             );
     }
 
+    retrieveAllRMNames() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveAllRMNamesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+            );
+    }
+
     retrieveOnboardProcessDetails(obID) {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -82,7 +98,7 @@ export class OnboardService {
                 catchError(this.handleError)
             );
     }
-    
+
     createOnboardProcess(onboardProcessData) {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -123,7 +139,7 @@ export class OnboardService {
                 catchError(this.handleError)
             );
     }
-    
+
     deleteOnboardProcess(obID) {
         const obIDData = {
             'obID': obID
