@@ -308,11 +308,11 @@ export class RMNewOnboardComponent implements OnInit {
 
     submitFieldsConditions() {
         this.checklistForm.get('requiredFields')['controls'].forEach(control => {
-            control.markAsDirty();
+            control.get('field').markAsDirty();
         });
 
         this.checklistForm.get('conditions')['controls'].forEach(control => {
-            control.markAsDirty();
+            control.get('conditionOption').markAsDirty();
         });
 
         let invalidFields = false;
