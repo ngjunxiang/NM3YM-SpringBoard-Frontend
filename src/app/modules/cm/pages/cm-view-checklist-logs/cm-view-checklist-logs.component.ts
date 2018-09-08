@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/services/checklist.service';
+import { CMService } from '../../../../core/services/cm.service';
 
 @Component({
     selector: 'cm-view-checklist-logs',
@@ -31,7 +31,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
     legalCCols: any[];
 
     constructor(
-        private checklistService: ChecklistService,
+        private cmService: CMService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -93,7 +93,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
     }
 
     retrieveChecklistNamesAndVersions() {
-        this.checklistService.retrieveCMChecklistLogNames().subscribe(res => {
+        this.cmService.retrieveCMChecklistLogNames().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error
@@ -166,7 +166,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
         let selectedClID = this.checklistLogForm.get('clID').value;
         let selectedVersion = this.checklistLogForm.get('version').value;
 
-        this.checklistService.retrieveCMChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
+        this.cmService.retrieveCMChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error

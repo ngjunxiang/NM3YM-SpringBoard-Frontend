@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message, SelectItem } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/services/checklist.service';
-import { OnboardService } from '../../../../core/services/onboard.service';
+import { RMService } from '../../../../core/services/rm.service';
 
 @Component({
     selector: 'rm-new-onboard',
@@ -38,8 +37,7 @@ export class RMNewOnboardComponent implements OnInit {
     maxDateValue = new Date();
 
     constructor(
-        private checklistService: ChecklistService,
-        private onboardService: OnboardService,
+        private rmService: RMService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -94,7 +92,7 @@ export class RMNewOnboardComponent implements OnInit {
             { title: this.selectedChecklistName }
         ];
 
-        this.onboardService.retrieveAllRMNames().subscribe(res => {
+        this.rmService.retrieveAllRMNames().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -117,7 +115,7 @@ export class RMNewOnboardComponent implements OnInit {
             });
         });
 
-        this.checklistService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
+        this.rmService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -264,7 +262,7 @@ export class RMNewOnboardComponent implements OnInit {
 
     retrieveChecklistNames() {
         this.checklistNameDropdownData = [];
-        this.checklistService.retrieveRMChecklistNames().subscribe(data => {
+        this.rmService.retrieveRMChecklistNames().subscribe(data => {
             if (data.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: data.error
@@ -487,7 +485,7 @@ export class RMNewOnboardComponent implements OnInit {
             });
         }
 
-        this.onboardService.createOnboardProcess(this.processData).subscribe(res => {
+        this.rmService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/services/checklist.service';
+import { ComplianceService } from '../../../../core/services/compliance.service';
 
 @Component({
     selector: 'compliance-new-checklist',
@@ -49,7 +49,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
     checklist: any;
 
     constructor(
-        private checklistService: ChecklistService,
+        private complianceService: ComplianceService,
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
@@ -159,7 +159,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
     }
 
     retrieveChecklistNames() {
-        this.checklistService.retrieveComplianceChecklistNames().subscribe(data => {
+        this.complianceService.retrieveComplianceChecklistNames().subscribe(data => {
             data.clNames.forEach(cl => {
                 this.checklistNames.push(cl.name);
             });
@@ -975,7 +975,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
             });
         }
 
-        this.checklistService.createComplianceChecklist(this.checklist).subscribe(res => {
+        this.complianceService.createComplianceChecklist(this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

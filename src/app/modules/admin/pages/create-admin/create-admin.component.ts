@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
-import { UserMgmtService } from '../../../../core/services/user-mgmt.service';
+import { AdminService } from '../../../../core/services/admin.service';
 
 interface UserType {
     name: string;
@@ -33,7 +33,7 @@ export class CreateAdminComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private userMgmtService: UserMgmtService
+        private adminService: AdminService
     ) {
         this.userTypes = [
             { name: 'Admin', code: 'ADMIN' },
@@ -79,7 +79,7 @@ export class CreateAdminComponent implements OnInit {
     }
 
     checkUsernameExists(inputUsername: string): Observable<boolean> {
-        this.userMgmtService.retrieveUsersList().subscribe(data => {
+        this.adminService.retrieveUsersList().subscribe(data => {
             data.forEach(user => {
                 this.usernames.push(user.username);
             });
@@ -96,7 +96,7 @@ export class CreateAdminComponent implements OnInit {
     }
 
     checkEmailExists(inputEmail: string): Observable<boolean> {
-        this.userMgmtService.retrieveUsersList().subscribe(data => {
+        this.adminService.retrieveUsersList().subscribe(data => {
             data.forEach(user => {
                 this.emails.push(user.email);
             });
@@ -193,7 +193,7 @@ export class CreateAdminComponent implements OnInit {
         let newEmail = this.createUserForm.controls.email.value;
         let newUserType = this.createUserForm.controls.userType.value.code;
 
-        this.userMgmtService.createUser(newName, newUsername, newEmail, newUserType, newPassword).subscribe(res => {
+        this.adminService.createUser(newName, newUsername, newEmail, newUserType, newPassword).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

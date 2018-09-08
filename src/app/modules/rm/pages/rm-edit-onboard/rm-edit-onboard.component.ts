@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
-import { OnboardService } from '../../../../core/services/onboard.service';
+import { RMService } from '../../../../core/services/rm.service';
 
 @Component({
     selector: 'rm-edit-onboard',
@@ -34,7 +34,7 @@ export class RMEditOnboardComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private onboardService: OnboardService,
+        private rmService: RMService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -177,7 +177,7 @@ export class RMEditOnboardComponent implements OnInit {
 
     retrieveOnboardDetails(obID) {
         this.loading = true;
-        this.onboardService.retrieveOnboardProcessDetails(obID).subscribe(res => {
+        this.rmService.retrieveOnboardProcessDetails(obID).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -323,7 +323,7 @@ export class RMEditOnboardComponent implements OnInit {
             });
         }
 
-        this.onboardService.updateOnboardProcess(processData).subscribe(res => {
+        this.rmService.updateOnboardProcess(processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/services/checklist.service';
+import { ComplianceService } from '../../../../core/services/compliance.service';
 
 @Component({
     selector: 'compliance-view-checklist-logs',
@@ -31,7 +31,7 @@ export class ComplianceViewChecklistLogsComponent implements OnInit {
     legalCCols: any[];
 
     constructor(
-        private checklistService: ChecklistService,
+        private complianceService: ComplianceService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -93,7 +93,7 @@ export class ComplianceViewChecklistLogsComponent implements OnInit {
     }
 
     retrieveChecklistNamesAndVersions() {
-        this.checklistService.retrieveComplianceChecklistLogNames().subscribe(res => {
+        this.complianceService.retrieveComplianceChecklistLogNames().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error
@@ -166,7 +166,7 @@ export class ComplianceViewChecklistLogsComponent implements OnInit {
         let selectedClID = this.checklistLogForm.get('clID').value;
         let selectedVersion = this.checklistLogForm.get('version').value;
 
-        this.checklistService.retrieveComplianceChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
+        this.complianceService.retrieveComplianceChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error

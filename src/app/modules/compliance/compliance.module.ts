@@ -30,10 +30,10 @@ import { TabViewModule } from 'primeng/tabview';
 import { ComplianceRoutingModule } from './compliance-routing.module';
 import { ComplianceComponent } from './pages/compliance.component';
 import { ComplianceChecklistComponent } from './pages/compliance-checklist/compliance-checklist.component';
-import { ChecklistService } from '../../core/services/checklist.service';
 import { ComplianceNewChecklistComponent } from './pages/compliance-new-checklist/compliance-new-checklist.component';
 import { ComplianceEditChecklistComponent } from './pages/compliance-edit-checklist/compliance-edit-checklist.component';
 import { ComplianceViewChecklistLogsComponent } from './pages/compliance-view-checklist-logs/compliance-view-checklist-logs.component';
+import { ComplianceService } from '../../core/services/compliance.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -82,7 +82,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
-        ChecklistService,
+        ComplianceService,
         ConfirmationService
     ]
 })

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
 
-import { OnboardService } from '../../../../core/services/onboard.service';
+import { RMService } from '../../../../core/services/rm.service';
 
 @Component({
     selector: 'rm-manage-onboard',
@@ -23,7 +23,7 @@ export class RMManageOnboardComponent implements OnInit {
 
     constructor(
         private confirmationService: ConfirmationService,
-        private onboardService: OnboardService,
+        private rmService: RMService,
         private router: Router
     ) { }
 
@@ -39,7 +39,7 @@ export class RMManageOnboardComponent implements OnInit {
     retrieveAllOnboardProcesses() {
         this.loading = true;
         this.obProcesses = [];
-        this.onboardService.retrieveAllOnboardProcesses().subscribe(res => {
+        this.rmService.retrieveAllOnboardProcesses().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -101,7 +101,7 @@ export class RMManageOnboardComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 let selectedOnboardID = this.obProcesses[index].obID;
-                this.onboardService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
+                this.rmService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error

@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Message } from 'primeng/components/common/api';
+
 @Component({
-  selector: 'app-upload-agmt',
-  templateUrl: './upload-agmt.component.html',
-  styleUrls: ['./upload-agmt.component.css']
+    selector: 'admin-upload-agmt',
+    templateUrl: './upload-agmt.component.html',
+    styleUrls: ['./upload-agmt.component.scss']
 })
 export class UploadAgmtComponent implements OnInit {
 
-  constructor() { }
+    // UI Control
+    loading = false;
+    msgs: Message[] = [];
 
-  ngOnInit() {
-  }
+    // UI Component
+
+    constructor() { }
+
+    ngOnInit() {
+    }
 
 }

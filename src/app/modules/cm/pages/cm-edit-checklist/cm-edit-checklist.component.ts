@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/services/checklist.service';
+import { CMService } from '../../../../core/services/cm.service';
 
 @Component({
     selector: 'cm-edit-checklist',
@@ -50,7 +50,7 @@ export class CMEditChecklistComponent implements OnInit {
     checklist: any;
 
     constructor(
-        private checklistService: ChecklistService,
+        private cmService: CMService,
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
@@ -291,7 +291,7 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     retrieveChecklistNames() {
-        this.checklistService.retrieveCMChecklistNames().subscribe(data => {
+        this.cmService.retrieveCMChecklistNames().subscribe(data => {
             data.clNames.forEach(cl => {
                 this.checklistNames.push(cl.name);
             });
@@ -304,7 +304,7 @@ export class CMEditChecklistComponent implements OnInit {
 
     retrieveChecklistDetails(checklistName) {
         this.loading = true;
-        this.checklistService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
+        this.cmService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -1222,7 +1222,7 @@ export class CMEditChecklistComponent implements OnInit {
             });
         }
 
-        this.checklistService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
+        this.cmService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

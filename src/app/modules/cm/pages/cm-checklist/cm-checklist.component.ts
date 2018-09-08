@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
 
-import { ChecklistService } from '../../../../core/services/checklist.service';
+import { CMService } from '../../../../core/services/cm.service';
 
 @Component({
     selector: 'cm-checklist',
@@ -22,7 +22,7 @@ export class CMChecklistComponent implements OnInit {
     checklistNames: any[];
 
     constructor(
-        private checklistService: ChecklistService,
+        private cmService: CMService,
         private confirmationService: ConfirmationService,
         private router: Router
     ) { }
@@ -34,7 +34,7 @@ export class CMChecklistComponent implements OnInit {
     loadPage() {
         this.loading = true;
         this.checklistNames = [];
-        this.checklistService.retrieveCMChecklistNames().subscribe(data => {
+        this.cmService.retrieveCMChecklistNames().subscribe(data => {
             data.clNames.forEach(cl => {
                 this.checklistNames.push({
                     'name': cl.name,
@@ -69,7 +69,7 @@ export class CMChecklistComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 let selectedChecklist = this.checklistNames[index].clID;
-                this.checklistService.deleteCMChecklist(selectedChecklist).subscribe(res => {
+                this.cmService.deleteCMChecklist(selectedChecklist).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error

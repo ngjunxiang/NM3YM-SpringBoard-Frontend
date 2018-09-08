@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Message } from 'primeng/components/common/api';
 
-import { UserMgmtService } from '../../../../core/services/user-mgmt.service';
+import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
     selector: 'admin-panel',
@@ -18,7 +18,7 @@ export class AdminPanelComponent implements OnInit {
     cols: any[];
 
     constructor(
-        private userMgmtService: UserMgmtService
+        private adminService: AdminService
     ) { }
 
     ngOnInit() {
@@ -35,7 +35,7 @@ export class AdminPanelComponent implements OnInit {
     }
 
     retrieveAllUsers() {
-        this.userMgmtService.retrieveUsersList().subscribe(res => {
+        this.adminService.retrieveUsersList().subscribe(res => {
             if (!res) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin'

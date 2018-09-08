@@ -5,7 +5,7 @@ import { Message } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { UserMgmtService } from '../../../../core/services/user-mgmt.service';
+import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
     selector: 'admin-delete',
@@ -25,7 +25,7 @@ export class DeleteAdminComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private userMgmtService: UserMgmtService
+        private adminService: AdminService
     ) {
 
     }
@@ -47,7 +47,7 @@ export class DeleteAdminComponent implements OnInit {
     }
 
     retrieveAllUsers() {
-        this.userMgmtService.retrieveUsersList().subscribe(data => {
+        this.adminService.retrieveUsersList().subscribe(data => {
             if (!data) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin'
@@ -75,7 +75,7 @@ export class DeleteAdminComponent implements OnInit {
     }
 
     checkUsernameExists(inputUsername: string): Observable<boolean> {
-        return this.userMgmtService.retrieveUsersList().pipe(map(data => {
+        return this.adminService.retrieveUsersList().pipe(map(data => {
             let exists = false;
             data.forEach(user => {
                 if (user.username === inputUsername) {
@@ -117,7 +117,7 @@ export class DeleteAdminComponent implements OnInit {
 
         let deleteUsername = this.deleteUserForm.controls.username.value;
 
-        this.userMgmtService.deleteUser(deleteUsername).subscribe(res => {
+        this.adminService.deleteUser(deleteUsername).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

@@ -5,7 +5,7 @@ import { Message } from 'primeng/components/common/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { UserMgmtService } from '../../../../core/services/user-mgmt.service';
+import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
     selector: 'admin-update',
@@ -26,7 +26,7 @@ export class UpdateAdminComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private userMgmtService: UserMgmtService
+        private adminService: AdminService
     ) {
 
     }
@@ -59,7 +59,7 @@ export class UpdateAdminComponent implements OnInit {
     }
 
     retrieveAllUsers() {
-        this.userMgmtService.retrieveUsersList().subscribe(data => {
+        this.adminService.retrieveUsersList().subscribe(data => {
             let usernames = [];
             data.forEach(user => {
                 usernames.push(user.username);
@@ -92,7 +92,7 @@ export class UpdateAdminComponent implements OnInit {
     }
 
     checkUsernameExists(inputUsername: string): Observable<boolean> {
-        return this.userMgmtService.retrieveUsersList().pipe(map(data => {
+        return this.adminService.retrieveUsersList().pipe(map(data => {
             let exists = false;
             data.forEach(user => {
                 if (user.username === inputUsername) {
@@ -150,7 +150,7 @@ export class UpdateAdminComponent implements OnInit {
     }
 
     checkDifferentPassword(inputPassword: string): Observable<boolean> {
-        return this.userMgmtService.retrieveUsersList().pipe(map(data => {
+        return this.adminService.retrieveUsersList().pipe(map(data => {
             let exists = false;
             data.forEach(user => {
                 if (user.username === this.updateUserForm.controls.username.value) {
@@ -186,7 +186,7 @@ export class UpdateAdminComponent implements OnInit {
         let updateUsername = this.updateUserForm.controls.username.value;
         let updatePassword = this.updateUserForm.controls.password.value;
 
-        this.userMgmtService.updateUser(updateUsername, updatePassword).subscribe(res => {
+        this.adminService.updateUser(updateUsername, updatePassword).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
