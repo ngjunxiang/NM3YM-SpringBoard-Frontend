@@ -11,6 +11,11 @@ import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-chec
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 
 const routes: Routes = [
+    { 
+        path: '', 
+        redirectTo: 'dashboard', 
+        pathMatch: 'full' 
+    },
     {
         path: '',
         component: CMComponent,

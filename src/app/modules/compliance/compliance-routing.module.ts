@@ -10,6 +10,11 @@ import { ComplianceEditChecklistComponent } from './pages/compliance-edit-checkl
 import { ComplianceViewChecklistLogsComponent } from './pages/compliance-view-checklist-logs/compliance-view-checklist-logs.component';
 
 const routes: Routes = [
+    { 
+        path: '', 
+        redirectTo: 'checklist/manage', 
+        pathMatch: 'full' 
+    },
     {
         path: '',
         component: ComplianceComponent,

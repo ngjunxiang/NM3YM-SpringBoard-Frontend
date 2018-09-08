@@ -11,6 +11,11 @@ import { AdminAuthGuard } from '../../core/guard/admin-auth.guard';
 import { UploadAgmtComponent } from './pages/upload-agmt/upload-agmt.component';
 
 const routes: Routes = [
+    { 
+        path: '', 
+        redirectTo: 'panel', 
+        pathMatch: 'full' 
+    },
     {
         path: '',
         component: AdminComponent,

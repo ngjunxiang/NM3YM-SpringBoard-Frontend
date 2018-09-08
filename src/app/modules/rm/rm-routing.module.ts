@@ -10,6 +10,11 @@ import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.com
 import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
 
 const routes: Routes = [
+    { 
+        path: '', 
+        redirectTo: 'dashboard', 
+        pathMatch: 'full' 
+    },
     {
         path: '',
         component: RMComponent,
