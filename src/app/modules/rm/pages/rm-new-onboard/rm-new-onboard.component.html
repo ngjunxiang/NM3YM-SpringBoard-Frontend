@@ -56,13 +56,13 @@
                     No documents in this section
                 </div>
                 <div *ngIf="selectedChecklistData.complianceDocuments.mandatory.length !== 0" style="padding-bottom:1%" formArrayName="mandatory">
-                    <p-table [value]="selectedChecklistData.complianceDocuments.mandatory" selectionMode="single">
+                    <p-table [value]="selectedChecklistData.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="350px" selectionMode="single">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of complianceMOCols">
                                     {{ col.header }}
                                 </th>
-                                <th style="width: 10%">Checked?</th>
+                                <th style="width: 20%">Checked?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc let-i="rowIndex">
@@ -89,13 +89,13 @@
                     No documents in this section
                 </div>
                 <div *ngIf="selectedChecklistData.complianceDocuments.conditional.length !== 0" style="padding-bottom:1%" formArrayName="conditional">
-                    <p-table [value]="selectedChecklistData.complianceDocuments.conditional" selectionMode="single">
+                    <p-table [value]="selectedChecklistData.complianceDocuments.conditional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of complianceCCols">
                                     {{ col.header }}
                                 </th>
-                                <th style="width: 10%">Checked?</th>
+                                <th style="width: 1fr">Checked?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc let-i="rowIndex">
@@ -133,13 +133,13 @@
                     No documents in this section
                 </div>
                 <div *ngIf="selectedChecklistData.complianceDocuments.optional.length !== 0" style="padding-bottom:1%" formArrayName="optional">
-                    <p-table [value]="selectedChecklistData.complianceDocuments.optional" selectionMode="single">
+                    <p-table [value]="selectedChecklistData.complianceDocuments.optional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of complianceMOCols">
                                     {{ col.header }}
                                 </th>
-                                <th style="width: 10%">Checked?</th>
+                                <th style="width: 20%">Checked?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc let-i="rowIndex">
@@ -172,13 +172,13 @@
                     No documents in this section
                 </div>
                 <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length !== 0" style="padding-bottom:1%" formArrayName="mandatory">
-                    <p-table [value]="selectedChecklistData.legalDocuments.mandatory" selectionMode="single">
+                    <p-table [value]="selectedChecklistData.legalDocuments.mandatory" [scrollable]="true" scrollHeight="350px" selectionMode="single">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of legalMOCols">
                                     {{ col.header }}
                                 </th>
-                                <th style="width: 10%">Checked?</th>
+                                <th style="width: 16.667%">Checked?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc let-i="rowIndex">
@@ -211,13 +211,13 @@
                     No documents in this section
                 </div>
                 <div *ngIf="selectedChecklistData.legalDocuments.conditional.length !== 0" style="padding-bottom:1%" formArrayName="conditional">
-                    <p-table [value]="selectedChecklistData.legalDocuments.conditional" selectionMode="single">
+                    <p-table [value]="selectedChecklistData.legalDocuments.conditional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of legalCCols">
                                     {{ col.header }}
                                 </th>
-                                <th style="width: 10%">Checked?</th>
+                                <th style="width: 12.5%">Checked?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc let-i="rowIndex">
@@ -261,13 +261,13 @@
                     No documents in this section
                 </div>
                 <div *ngIf="selectedChecklistData.legalDocuments.optional.length !== 0" style="padding-bottom:1%" formArrayName="optional">
-                    <p-table [value]="selectedChecklistData.legalDocuments.optional" selectionMode="single">
+                    <p-table [value]="selectedChecklistData.legalDocuments.optional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th *ngFor="let col of legalMOCols">
                                     {{ col.header }}
                                 </th>
-                                <th style="width: 10%">Checked?</th>
+                                <th style="width: 16.667%">Checked?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc let-i="rowIndex">

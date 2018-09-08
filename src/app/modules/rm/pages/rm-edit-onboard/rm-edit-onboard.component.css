@@ -13,6 +13,7 @@
     width: 100% !important;
 }
 
+
 .addedDoc {
     background-color: #AADD81 !important;
     color: #000000 !important;
@@ -28,9 +29,6 @@
     color: #000000 !important;
 }
 
-.Centered {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+.th{
+    text-align: center;
 }

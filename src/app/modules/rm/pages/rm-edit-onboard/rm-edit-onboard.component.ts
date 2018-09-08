@@ -102,9 +102,9 @@ export class RMEditOnboardComponent implements OnInit {
         ];
 
         this.complianceMOCols = [
-            { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
+            { field: 'documentName', header: 'Document Name'},
+            { field: 'agmtCode', header: 'Agmt Code'},
+            { field: 'remarks', header: 'Remarks'},
             { field: 'signature', header: 'Signature Required' }
         ];
 
