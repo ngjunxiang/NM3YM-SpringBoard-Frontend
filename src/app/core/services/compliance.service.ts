@@ -38,26 +38,21 @@ interface Response {
     providedIn: 'root'
 })
 
-export class ChecklistService {
+export class ComplianceService {
 
-    // CM Endpoints
-    private retrieveCMChecklistNamesURL = environment.host + '/app/cm/retrieve-checklistNames';
-    private retrieveCMChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
-    private retrieveCMChecklistLogDetailsURL = environment.host + '/app/cm/retrieve-loggedLists';
-    private updateCMChecklistURL = environment.host + '/app/cm/update-checklist';
-    private createCMChecklistURL = environment.host + '/app/cm/create-checklist';
-    private retrieveDeleteCMChecklistURL = environment.host + '/app/cm/manage-checklist';
-
-    // RM Endpoints
-    private retrieveRMChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
-    private retrieveRMChecklistURL = environment.host + '/app/rm/retrieve-checklist';
+    private retrieveComplianceChecklistNamesURL = environment.host + '/app/compliance/retrieve-checklistNames';
+    private retrieveComplianceChecklistLogNamesURL = environment.host + '/app/compliance/retrieve-clIDWithVersion';
+    private retrieveComplianceChecklistLogDetailsURL = environment.host + '/app/compliance/retrieve-loggedLists';
+    private updateComplianceChecklistURL = environment.host + '/app/compliance/update-checklist';
+    private createComplianceChecklistURL = environment.host + '/app/compliance/create-checklist';
+    private retrieveDeleteComplianceChecklistURL = environment.host + '/app/compliance/manage-checklist';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
 
-    retrieveCMChecklistNames() {
+    retrieveComplianceChecklistNames() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -66,14 +61,14 @@ export class ChecklistService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<ChecklistNames>(this.retrieveCMChecklistNamesURL, postData, httpOptions)
+        return this.http.post<ChecklistNames>(this.retrieveComplianceChecklistNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    retrieveCMChecklistDetails(checklistId) {
+    retrieveComplianceChecklistDetails(checklistId) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -86,14 +81,14 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
-        return this.http.post<Checklist>(this.retrieveDeleteCMChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveDeleteComplianceChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    createCMChecklist(checklist) {
+    createComplianceChecklist(checklist) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -107,14 +102,14 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.createCMChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.createComplianceChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    updateCMChecklist(checklistId, checklist) {
+    updateComplianceChecklist(checklistId, checklist) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -129,14 +124,14 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.updateCMChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.updateComplianceChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    deleteCMChecklist(checklistId) {
+    deleteComplianceChecklist(checklistId) {
         const checklistData = {
             'clID': checklistId
         };
@@ -150,14 +145,14 @@ export class ChecklistService {
             body: postData
         };
 
-        return this.http.delete<Response>(this.retrieveDeleteCMChecklistURL, httpOptions)
+        return this.http.delete<Response>(this.retrieveDeleteComplianceChecklistURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    retrieveCMChecklistLogNames() {
+    retrieveComplianceChecklistLogNames() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -166,14 +161,14 @@ export class ChecklistService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<Response>(this.retrieveCMChecklistLogNamesURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveComplianceChecklistLogNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    retrieveCMChecklistLogDetails(clID, version) {
+    retrieveComplianceChecklistLogDetails(clID, version) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -187,50 +182,12 @@ export class ChecklistService {
 
         const postData = Object.assign(this.authService.authItems, logData);
 
-        return this.http.post<Response>(this.retrieveCMChecklistLogDetailsURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveComplianceChecklistLogDetailsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
-
-    retrieveRMChecklistNames() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        const postData = this.authService.authItems;
-
-        return this.http.post<ChecklistNames>(this.retrieveRMChecklistNamesURL, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-    
-    retrieveRMChecklistDetails(checklistId) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        const checklistIdData = {
-            'clID': checklistId
-        };
-
-        const postData = Object.assign(this.authService.authItems, checklistIdData);
-
-        return this.http.post<Checklist>(this.retrieveRMChecklistURL, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-
-
     
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

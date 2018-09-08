@@ -27,7 +27,7 @@ interface Response {
     providedIn: 'root'
 })
 
-export class UserMgmtService {
+export class AdminService {
 
     private retrieveUsersURL = environment.host + '/app/admin/retrieve-users';
     private CDUsersURL = environment.host + '/app/admin/manage-users';

@@ -11,6 +11,29 @@ interface Response {
     error: string;
 }
 
+interface Checklist {
+    clID: string;
+    name: string;
+    requiredFields: string[];
+    conditions: any;
+    complianceDocuments: any;
+    legalDocuments: any;
+    error: string;
+}
+
+interface ChecklistNames {
+    clNames: ChecklistName[];
+    error: string;
+}
+
+interface ChecklistName {
+    name: string;
+    clID: string;
+    updatedBy: string;
+    version: string;
+    dateCreated: Date;
+}
+
 interface AllOBResponse {
     error: string;
     obLists: ObList[];
@@ -35,8 +58,13 @@ interface ObList {
     providedIn: 'root'
 })
 
-export class OnboardService {
+export class RMService {
 
+    // Checklist Endpoints
+    private retrieveRMChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
+    private retrieveRMChecklistURL = environment.host + '/app/rm/retrieve-checklist';
+
+    // Onboard Endpoints
     private createOnboardProcessURL = environment.host + '/app/rm/create-onboard';
     private retrieveAllOnboardProcessesURL = environment.host + '/app/rm/retrieve-all-onboard';
     private retrieveOnboardProcessDetailsURL = environment.host + '/app/rm/retrieve-selected-onboard';
@@ -47,6 +75,42 @@ export class OnboardService {
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    retrieveRMChecklistNames() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<ChecklistNames>(this.retrieveRMChecklistNamesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveRMChecklistDetails(checklistId) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistIdData = {
+            'clID': checklistId
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistIdData);
+
+        return this.http.post<Checklist>(this.retrieveRMChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveAllOnboardProcesses() {
         const httpOptions = {
