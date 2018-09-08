@@ -96,14 +96,8 @@ export class LoginComponent implements OnInit {
                 if (this.returnUrl !== '/') {
                     this.router.navigate([this.returnUrl]);
                 }
-                if (loginData.userType === 'ADMIN') {
-                    this.router.navigate(['/admin/dashboard']);
-                }
-                if (loginData.userType === 'RM') {
-                    this.router.navigate(['/rm/dashboard']);
-                }
-                if (loginData.userType === 'CM') {
-                    this.router.navigate(['/cm/dashboard']);
+                if (loginData.userType) {
+                    this.router.navigate(['/' + loginData.userType.toLowerCase()]);
                 }
             }
             this.loading = false;

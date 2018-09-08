@@ -38,7 +38,9 @@ export class CreateAdminComponent implements OnInit {
         this.userTypes = [
             { name: 'Admin', code: 'ADMIN' },
             { name: 'Client Management', code: 'CM' },
+            { name: 'Compliance', code: 'COM' },
             { name: 'Relationship Manager', code: 'RM' }
+
         ]
     }
 

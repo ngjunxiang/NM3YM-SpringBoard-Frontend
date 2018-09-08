@@ -17,8 +17,8 @@ export class ComplianceAuthGuard implements CanActivate {
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.authService.authenticate('Compliance').then(res => {
-            if (res.newToken && localStorage.getItem('USERTYPE') === 'Compliance') {
+        return this.authService.authenticate('COM').then(res => {
+            if (res.newToken && localStorage.getItem('USERTYPE') === 'COM') {
                 this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
                 return true;
             }
