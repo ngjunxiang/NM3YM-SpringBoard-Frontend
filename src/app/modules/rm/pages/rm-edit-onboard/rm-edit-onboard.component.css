@@ -8,6 +8,11 @@
     margin-right: 14%;
 }
 
+:host >>> .ui-table-scrollable-header {
+    margin-right: 0 auto;
+    width: 100% !important;
+}
+
 .addedDoc {
     background-color: #AADD81 !important;
     color: #000000 !important;
