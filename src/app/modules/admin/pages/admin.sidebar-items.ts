@@ -11,6 +11,12 @@ export const ROUTES: RouteInfo[] = [
             { path: '/admin/usrmgmt/update', title: 'Update User Account', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/admin/usrmgmt/delete', title: 'Delete User Account', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
+    },
+    {
+        path: '/admin/upload', title: 'Upload Files', icon: 'fas fa-file-upload', class: 'has-arrow', label: '', labelClass: '', extralink: false,
+        submenu: [
+            { path: '/admin/upload/agmtDoc', title: 'Agmt - Doc Mapping', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
+        ]
     }
 ];
 

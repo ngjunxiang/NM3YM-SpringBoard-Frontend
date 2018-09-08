@@ -23,6 +23,7 @@ import { UserMgmtService } from '../../core/services/user-mgmt.service';
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { UploadAgmtComponent } from './pages/upload-agmt/upload-agmt.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -53,7 +54,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AdminPanelComponent,
         CreateAdminComponent,
         UpdateAdminComponent,
-        DeleteAdminComponent
+        DeleteAdminComponent,
+        UploadAgmtComponent
     ],
     providers: [
         {
