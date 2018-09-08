@@ -171,16 +171,23 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     checkDuplicateConditionName(control: FormControl): { [key: string]: boolean } | null {
-        if (typeof this.currentChecklistForm !== 'undefined' && this.currentChecklistForm.get('conditions')['length'] > 1) {
-            for (let i = 0; i < this.currentChecklistForm.get('conditions')['length'] - 1; i++) {
-                let condition = (<FormArray>this.currentChecklistForm.controls.conditions).value[i];
+        let count = 0;
+        if (typeof this.currentChecklistForm !== 'undefined' && this.currentChecklistForm.getRawValue().conditions.length > 1) {
+            let rawConditions = this.currentChecklistForm.getRawValue().conditions;
+            for (let i = 0; i < rawConditions.length; i++) {
+                let condition = rawConditions[i];
                 if (condition.conditionName === control.value) {
-                    return {
-                        isDuplicate: true
-                    };
+                    count++;
                 }
             }
         }
+
+        if (count > 1) {
+            return {
+                isDuplicate: true
+            };
+        }
+        
         return null;
     }
 
@@ -1091,7 +1098,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         // Checklist Conditions
         this.checklist['conditions'] = {};
-
+        
         for (let i = 0; i < this.currentChecklistForm.get('conditions')['length']; i++) {
             if (!(this.currentChecklistForm.get('conditions')['length'] - 1 === i
                 && (this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value === ''
