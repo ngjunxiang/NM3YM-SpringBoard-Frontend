@@ -1,5 +1,19 @@
 <p-growl [(value)]="msgs" [life]="5000"></p-growl>
 
-<p-card *ngIf="!loading" [style]="{width: '60%'}" styleClass="ui-card-shadow">
-
+<p-card [style]="{width: '60%'}" styleClass="ui-card-shadow">
+    <div class="form-create">
+        <h3>Upload Agmt Code - Document Mapping</h3>
+        <br>
+        <h4>Select a file: </h4>
+        <p-fileUpload name="upload[]" (onUpload)="onUpload($event)" accept=".csv" maxFileSize="1000000"
+            [disabled]="loading">
+            <ng-template pTemplate="content">
+                <ul *ngIf="inputFile">
+                    <li>{{ inputFile.name }} - {{ inputFile.size }} bytes</li>
+                </ul>
+            </ng-template>
+        </p-fileUpload>
+        <br>
+        <button pButton label="Upload" class="ui-button-primary" type="button" [disabled]="loading" (click)="uploadFile()"></button>
+    </div>
 </p-card>

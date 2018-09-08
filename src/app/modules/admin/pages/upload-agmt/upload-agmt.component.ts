@@ -14,10 +14,21 @@ export class UploadAgmtComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Component
+    inputFile: any;
 
     constructor() { }
 
     ngOnInit() {
     }
 
+    onUpload(event) {
+        for (let file of event.files) {
+            this.inputFile = file;
+        }
+        console.log('a');
+    }
+
+    uploadFile() {
+
+    }
 }

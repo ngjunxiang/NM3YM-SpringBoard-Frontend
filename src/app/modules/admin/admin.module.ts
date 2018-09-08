@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
 import { GrowlModule } from 'primeng/growl';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
@@ -38,6 +39,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommonModule,
         DialogModule,
         DropdownModule,
+        FileUploadModule,
         FormsModule,
         GrowlModule,
         InputTextModule,
