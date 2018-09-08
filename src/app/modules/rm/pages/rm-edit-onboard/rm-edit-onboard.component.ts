@@ -30,7 +30,7 @@ export class RMEditOnboardComponent implements OnInit {
     // For Colour Legend Table 
     docChanges: any[];
     tableCols: any[];
-    
+
 
     constructor(
         private fb: FormBuilder,
@@ -63,9 +63,9 @@ export class RMEditOnboardComponent implements OnInit {
         ];
 
         this.docChanges = [
-            {typeOfChange: "Document Modified", cellColour: "Yellow"},
-            {typeOfChange: "Document Added", cellColour: "Green"},
-            {typeOfChange: "Document Removed", cellColour: "Red"}
+            { typeOfChange: "Document Modified", cellColour: "Yellow" },
+            { typeOfChange: "Document Added", cellColour: "Green" },
+            { typeOfChange: "Document Removed", cellColour: "Red" }
         ];
     }
 
@@ -122,32 +122,56 @@ export class RMEditOnboardComponent implements OnInit {
         let formArray;
         this.obDetails.complianceDocuments.mandatory.forEach(mandatoryDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('mandatory');
-            formArray.push(new FormControl(mandatoryDoc.checked));
+            if (mandatoryDoc.changed === '3') {
+                formArray.push(new FormControl({ value: false, disabled: true }));
+            } else {
+                formArray.push(new FormControl(mandatoryDoc.checked));
+            }
         });
 
         this.obDetails.complianceDocuments.conditional.forEach(conditionalDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('conditional');
-            formArray.push(new FormControl(conditionalDoc.checked));
+            if (conditionalDoc.changed === '3') {
+                formArray.push(new FormControl({ value: false, disabled: true }));
+            } else {
+                formArray.push(new FormControl(conditionalDoc.checked));
+            }
         });
 
         this.obDetails.complianceDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('optional');
-            formArray.push(new FormControl(optionalDoc.checked));
+            if (optionalDoc.changed === '3') {
+                formArray.push(new FormControl({ value: false, disabled: true }));
+            } else {
+                formArray.push(new FormControl(optionalDoc.checked));
+            }
         });
 
         this.obDetails.legalDocuments.mandatory.forEach(mandatoryDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('mandatory');
-            formArray.push(new FormControl(mandatoryDoc.checked));
+            if (mandatoryDoc.changed === '3') {
+                formArray.push(new FormControl({ value: false, disabled: true }));
+            } else {
+                formArray.push(new FormControl(mandatoryDoc.checked));
+            }
         });
 
         this.obDetails.legalDocuments.conditional.forEach(conditionalDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('conditional');
-            formArray.push(new FormControl(conditionalDoc.checked));
+            if (conditionalDoc.changed === '3') {
+                formArray.push(new FormControl({ value: false, disabled: true }));
+            } else {
+                formArray.push(new FormControl(conditionalDoc.checked));
+            }
         });
 
         this.obDetails.legalDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('optional');
-            formArray.push(new FormControl(optionalDoc.checked));
+            if (optionalDoc.changed === '3') {
+                formArray.push(new FormControl({ value: false, disabled: true }));
+            } else {
+                formArray.push(new FormControl(optionalDoc.checked));
+            }
         });
     }
 
@@ -298,7 +322,7 @@ export class RMEditOnboardComponent implements OnInit {
                 docID: optionalDoc.docID
             });
         }
-        
+
         this.onboardService.updateOnboardProcess(processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
