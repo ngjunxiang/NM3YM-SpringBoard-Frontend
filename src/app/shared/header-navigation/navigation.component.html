@@ -33,6 +33,25 @@
                 <!-- ============================================================== -->
                 <!-- Search -->
                 <!-- ============================================================== -->
+                <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
+                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu animated slideInDown" ngbDropdownMenu>
+                        <ul class="dropdown-user">
+                            <ng-container *ngFor="let notification of notifications; let i = index">
+                                <li>
+                                    <a href="#">{{ notification }}</a>
+                                </li>
+                                <li *ngIf="i !== notifications.length - 1" role="separator" class="divider"></li>
+                            </ng-container>
+                        </ul>
+                    </div>
+                </li>
+                <!-- ============================================================== -->
+                <!-- Search -->
+                <!-- ============================================================== -->
                 <li class="nav-item hidden-sm-down search-box">
                     <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <i class="ti-search"></i>

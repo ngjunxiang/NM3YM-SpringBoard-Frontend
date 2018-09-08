@@ -11,7 +11,8 @@ export class NavigationComponent implements AfterViewInit {
     
     @Input('name') name: string;
     @Input('email') email: string;
-
+    notifications = ['Notification 1', 'Notification 2'];
+    
     constructor(private modalService: NgbModal) { }
 
     ngAfterViewInit() {
