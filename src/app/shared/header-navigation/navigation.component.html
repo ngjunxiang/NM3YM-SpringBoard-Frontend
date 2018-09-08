@@ -40,6 +40,9 @@
                     </a>
                     <div class="dropdown-menu animated slideInDown" ngbDropdownMenu>
                         <ul class="dropdown-user">
+                            <li *ngIf="notifications.length === 0">
+                                <a href="#">No notifications</a>
+                            </li>
                             <ng-container *ngFor="let notification of notifications; let i = index">
                                 <li>
                                     <a href="#">{{ notification }}</a>
