@@ -22,6 +22,7 @@ export class CMAuthGuard implements CanActivate {
                 this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
                 return true;
             }
+
             if (res.error === 'Invalid Token' || res.error === 'Token has expired') {
                 this.router.navigate(['/login'], {
                     queryParams: {

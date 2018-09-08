@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
+import { CMAuthGuard } from '../../core/guard/cm-auth.guard';
 import { CMComponent } from './pages/cm.component';
 import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.component';
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
@@ -20,7 +21,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Dashboard' }]
-                }
+                }, 
+                canActivate: [CMAuthGuard] 
             },
             {
                 path: 'checklist/manage/edit/:id',
@@ -28,7 +30,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'Edit' }]
-                }
+                }, 
+                canActivate: [CMAuthGuard] 
             },
             {
                 path: 'checklist/manage',
@@ -36,7 +39,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'Manage' }]
-                }
+                }, 
+                canActivate: [CMAuthGuard] 
             },
             {
                 path: 'checklist/create',
@@ -44,7 +48,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'New' }]
-                }
+                }, 
+                canActivate: [CMAuthGuard] 
             },
             {
                 path: 'checklist/logs',
@@ -52,7 +57,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'View Logs' }]
-                }
+                }, 
+                canActivate: [CMAuthGuard] 
             }
         ]
     },

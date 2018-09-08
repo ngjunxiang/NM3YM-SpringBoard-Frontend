@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
+import { RMAuthGuard } from '../../core/guard/rm-auth.guard';
 import { RMComponent } from './pages/rm.component';
 import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
 import { RMManageOnboardComponent } from './pages/rm-manage-onboard/rm-manage-onboard.component';
@@ -19,7 +20,8 @@ const routes: Routes = [
                 data: {
                     title: 'Marketing Assistant',
                     urls: [{ title: 'Dashboard' }]
-                }
+                }, 
+                canActivate: [RMAuthGuard] 
             },
             {
                 path: 'onboard/manage',
@@ -27,7 +29,8 @@ const routes: Routes = [
                 data: {
                     title: 'Marketing Assistant',
                     urls: [{ title: 'Onboard' }, { title: 'Manage' }]
-                }
+                }, 
+                canActivate: [RMAuthGuard] 
             },
             {
                 path: 'onboard/create',
@@ -35,7 +38,8 @@ const routes: Routes = [
                 data: {
                     title: 'Marketing Assistant',
                     urls: [{ title: 'Onboard' }, { title: 'New' }]
-                }
+                }, 
+                canActivate: [RMAuthGuard] 
             },
             {
                 path: 'onboard/edit/:id',
@@ -43,7 +47,8 @@ const routes: Routes = [
                 data: {
                     title: 'Marketing Assistant',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
-                }
+                }, 
+                canActivate: [RMAuthGuard] 
             }
         ]
     },

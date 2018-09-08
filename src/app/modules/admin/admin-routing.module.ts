@@ -7,6 +7,7 @@ import { CreateAdminComponent } from './pages/create-admin/create-admin.componen
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { AdminAuthGuard } from '../../core/guard/admin-auth.guard';
 
 const routes: Routes = [
     {
@@ -19,7 +20,8 @@ const routes: Routes = [
                 data: {
                     title: 'Admin',
                     urls: [{ title: 'Admin Panel' }]
-                }
+                }, 
+                canActivate: [AdminAuthGuard] 
             },
             {
                 path: 'usrmgmt/create',
@@ -27,7 +29,8 @@ const routes: Routes = [
                 data: {
                     title: 'Admin',
                     urls: [{ title: 'User Management'}, { title: 'Create User Account' }]
-                }
+                }, 
+                canActivate: [AdminAuthGuard] 
             },
             {
                 path: 'usrmgmt/update',
@@ -35,7 +38,8 @@ const routes: Routes = [
                 data: {
                     title: 'Admin',
                     urls: [{ title: 'User Management'}, { title: 'Update User Account' }]
-                }
+                }, 
+                canActivate: [AdminAuthGuard] 
             },
             {
                 path: 'usrmgmt/delete',
@@ -43,7 +47,8 @@ const routes: Routes = [
                 data: {
                     title: 'Admin',
                     urls: [{ title: 'User Management'}, { title: 'Delete User Account' }]
-                }
+                }, 
+                canActivate: [AdminAuthGuard] 
             }
         ]
     }, 

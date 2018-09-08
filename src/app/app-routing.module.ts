@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdminAuthGuard } from './core/guard/admin-auth.guard';
-import { RMAuthGuard } from './core/guard/rm-auth.guard';
-import { CMAuthGuard } from './core/guard/cm-auth.guard';
-
 export const routes: Routes = [
     { 
         path: '', 
@@ -18,18 +14,15 @@ export const routes: Routes = [
     },
     { 
         path: 'admin', 
-        loadChildren: './modules/admin/admin.module#AdminModule', 
-        canActivate: [AdminAuthGuard] 
+        loadChildren: './modules/admin/admin.module#AdminModule'
     },
     {
         path: 'rm',
-        loadChildren: './modules/rm/rm.module#RMModule',
-        canActivate: [RMAuthGuard]
+        loadChildren: './modules/rm/rm.module#RMModule'
     },
     {
         path: 'cm',
-        loadChildren: './modules/cm/cm.module#CMModule',
-        canActivate: [CMAuthGuard]
+        loadChildren: './modules/cm/cm.module#CMModule'
     },
     {
         path: '**',
