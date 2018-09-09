@@ -6,7 +6,6 @@ import { CMAuthGuard } from '../../core/guard/cm-auth.guard';
 import { CMComponent } from './pages/cm.component';
 import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.component';
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
-import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 
@@ -44,15 +43,6 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'Manage' }]
-                }, 
-                canActivate: [CMAuthGuard] 
-            },
-            {
-                path: 'checklist/create',
-                component: CMNewChecklistComponent,
-                data: {
-                    title: 'Client Management',
-                    urls: [{ title: 'Checklists' }, { title: 'New' }]
                 }, 
                 canActivate: [CMAuthGuard] 
             },

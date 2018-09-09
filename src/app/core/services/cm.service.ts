@@ -44,8 +44,7 @@ export class CMService {
     private retrieveCMChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
     private retrieveCMChecklistLogDetailsURL = environment.host + '/app/cm/retrieve-loggedLists';
     private updateCMChecklistURL = environment.host + '/app/cm/update-checklist';
-    private createCMChecklistURL = environment.host + '/app/cm/create-checklist';
-    private retrieveDeleteCMChecklistURL = environment.host + '/app/cm/manage-checklist';
+    private retrieveCMChecklistURL = environment.host + '/app/cm/manage-checklist';
 
     constructor(
         private authService: AuthenticationService,
@@ -81,28 +80,7 @@ export class CMService {
 
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
-        return this.http.post<Checklist>(this.retrieveDeleteCMChecklistURL, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-
-    createCMChecklist(checklist) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        const checklistData = {
-            'checklist': JSON.stringify(checklist),
-            'name': this.authService.userDetails.name
-        };
-
-        const postData = Object.assign(this.authService.authItems, checklistData);
-
-        return this.http.post<Response>(this.createCMChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveCMChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -125,27 +103,6 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems, checklistData);
 
         return this.http.post<Response>(this.updateCMChecklistURL, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-
-    deleteCMChecklist(checklistId) {
-        const checklistData = {
-            'clID': checklistId
-        };
-
-        const postData = Object.assign(this.authService.authItems, checklistData);
-
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            }),
-            body: postData
-        };
-
-        return this.http.delete<Response>(this.retrieveDeleteCMChecklistURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

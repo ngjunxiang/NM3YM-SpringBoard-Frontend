@@ -61,37 +61,4 @@ export class CMChecklistComponent implements OnInit {
             }
         });
     }
-
-    deleteChecklist(index: number) {
-        this.confirmationService.confirm({
-            message: 'Do you want to delete this checklist?',
-            header: 'Delete Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                let selectedChecklist = this.checklistNames[index].clID;
-                this.cmService.deleteCMChecklist(selectedChecklist).subscribe(res => {
-                    if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
-                        });
-                        return;
-                    }
-
-                    if (res.results) {
-                        this.loadPage();
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Checklist deleted'
-                        });
-                    }
-                }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
-                    });
-                });
-            },
-            reject: () => {
-                return;
-            }
-        });
-    }
 }
