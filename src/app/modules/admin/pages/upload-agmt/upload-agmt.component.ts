@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Message } from 'primeng/components/common/api';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'admin-upload-agmt',
@@ -14,6 +15,7 @@ export class UploadAgmtComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Component
+    uploadUrl: string = environment.host + '/app/admin/upload';
     inputFile: any;
 
     constructor() { }
@@ -25,10 +27,5 @@ export class UploadAgmtComponent implements OnInit {
         for (let file of event.files) {
             this.inputFile = file;
         }
-        console.log('a');
-    }
-
-    uploadFile() {
-
     }
 }

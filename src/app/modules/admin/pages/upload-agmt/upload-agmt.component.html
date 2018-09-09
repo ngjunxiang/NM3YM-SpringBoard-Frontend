@@ -6,7 +6,7 @@
         <br>
         <h4>Select a file: </h4>
         <p-fileUpload name="upload[]" (onUpload)="onUpload($event)" accept=".csv" maxFileSize="1000000"
-            [disabled]="loading">
+            [disabled]="loading" url="{{ uploadUrl }}">
             <ng-template pTemplate="content">
                 <ul *ngIf="inputFile">
                     <li>{{ inputFile.name }} - {{ inputFile.size }} bytes</li>
@@ -14,6 +14,6 @@
             </ng-template>
         </p-fileUpload>
         <br>
-        <button pButton label="Upload" class="ui-button-primary" type="button" [disabled]="loading" (click)="uploadFile()"></button>
+        *Only CSV files are accepted
     </div>
 </p-card>
