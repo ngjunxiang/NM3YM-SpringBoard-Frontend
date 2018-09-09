@@ -16,16 +16,37 @@ export class UploadAgmtComponent implements OnInit {
 
     // UI Component
     uploadUrl: string = environment.host + '/app/admin/upload';
-    inputFile: any;
+    inputFiles: any[];
+    progress: number;
 
     constructor() { }
 
     ngOnInit() {
     }
 
+    onBeforeUpload(event) {
+        this.loading = true;
+    }
+
     onUpload(event) {
+        this.inputFiles = [];
         for (let file of event.files) {
-            this.inputFile = file;
+            this.inputFiles.push(file);
         }
+
+        this.msgs.push({
+            severity: 'success', summary: 'Success', detail: 'File has been uploaded'
+        });
+    }
+
+    onError(event) {
+        this.msgs.push({ 
+            severity: 'error', summary: 'Server Error', detail: 'Please try again later' 
+        });
+        this.loading = false;
+    }
+
+    updateProgress(event) {
+        this.progress = event.progress;
     }
 }
