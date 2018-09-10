@@ -5,20 +5,23 @@
         <h3>Upload Agmt Code - Document Mapping</h3>
         <br>
         <h4>Select a file: </h4>
-        <p-fileUpload name="upload[]" accept=".csv" maxFileSize="1000000" [disabled]="loading" url="{{ uploadUrl }}"
+        <p-fileUpload name="uploadedFile" accept=".csv" maxFileSize="1000000" [disabled]="loading" url="{{ uploadUrl }}"
             (onUpload)="onUpload($event)" (onError)="onError($event)" (onProgress)="updateProgress($event)"
             (onBeforeUpload)="onBeforeUpload($event)">
             <ng-template pTemplate="content">
-                <ul *ngIf="inputFiles">
-                    <li *ngFor="let file of inputFiles">
-                        {{ inputFile.name }} - {{ inputFile.size }} bytes
-                    </li>
-                </ul>
+                <div *ngIf="inputFiles">
+                    <ng-container *ngFor="let file of inputFiles">
+                        <p-message severity="success" text="{{ file.name }} - {{ file.size }} bytes"></p-message>
+                    </ng-container>
+                </div>
+                <div *ngIf="errorFiles">
+                    <ng-container *ngFor="let file of errorFiles">
+                        <p-message severity="error" text="{{ file.name }} - {{ file.size }} bytes"></p-message>
+                    </ng-container>
+                </div>
             </ng-template>
         </p-fileUpload>
         <br>
         *Only CSV files are accepted
-
-        Progress: {{ progress }}
     </div>
 </p-card>
