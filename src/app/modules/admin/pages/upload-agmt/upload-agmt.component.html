@@ -6,8 +6,7 @@
         <br>
         <h4>Select a file: </h4>
         <p-fileUpload name="uploadedFile" accept=".csv" maxFileSize="1000000" [disabled]="loading" url="{{ uploadUrl }}"
-            (onUpload)="onUpload($event)" (onError)="onError($event)" (onProgress)="updateProgress($event)"
-            (onBeforeUpload)="onBeforeUpload($event)">
+            (onUpload)="onUpload($event)" (onError)="onError($event)" (onBeforeUpload)="onBeforeUpload($event)">
             <ng-template pTemplate="content">
                 <div *ngIf="inputFiles">
                     <ng-container *ngFor="let file of inputFiles">
@@ -21,8 +20,8 @@
                 </div>
                 <br>
                 <div *ngIf="response">
-                        <p-message severity="success" text="{{ response.inserted }} records inserted"></p-message>
-                        <p-message *ngIf="response.errors > 0" severity="error" text="{{ response.error }} errors"></p-message>
+                    <p-message severity="success" text="{{ response.inserted }} records inserted"></p-message>
+                    <p-message *ngIf="response.errors > 0" severity="error" text="{{ response.error }} errors"></p-message>
                 </div>
             </ng-template>
         </p-fileUpload>
