@@ -19,6 +19,11 @@
                         <p-message severity="error" text="{{ file.name }} - {{ file.size }} bytes"></p-message>
                     </ng-container>
                 </div>
+                <br>
+                <div *ngIf="response">
+                        <p-message severity="success" text="{{ response.inserted }} records inserted"></p-message>
+                        <p-message *ngIf="response.errors > 0" severity="error" text="{{ response.error }} errors"></p-message>
+                </div>
             </ng-template>
         </p-fileUpload>
         <br>

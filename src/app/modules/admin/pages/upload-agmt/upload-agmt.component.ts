@@ -19,7 +19,7 @@ export class UploadAgmtComponent implements OnInit {
     uploadUrl: string = environment.host + '/app/admin/upload-AgmtCodes';
     inputFiles: any[];
     errorFiles: any[];
-    progress: number;
+    response: any;
 
     constructor(
         private authService: AuthenticationService
@@ -47,20 +47,32 @@ export class UploadAgmtComponent implements OnInit {
     }
 
     onUpload(event) {
-        for (let file of event.files) {
-            this.inputFiles.push(file);
-        }
-
         if (event.xhr.response) {
-            let res = JSON.parse(event.xhr.response);
-            // do smth to the response
+            let res = JSON.parse(event.xhr.response).results;
+            if (res.error === 'file is not csv') {
+                for (let file of event.files) {
+                    this.errorFiles.push(file);
+                }
+                this.msgs.push({ 
+                    severity: 'error', summary: 'File Format Error', detail: 'Please try again with a CSV file' 
+                });
+                this.loading = false;
+                return;
+            }
+            if (res.inserted) {
+                for (let file of event.files) {
+                    this.inputFiles.push(file);
+                }
+                
+                this.response = res;
+
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'File has been uploaded'
+                });
+        
+                this.loading = false;
+            }
         }
-
-        this.msgs.push({
-            severity: 'success', summary: 'Success', detail: 'File has been uploaded'
-        });
-
-        this.loading = false;
     }
 
     onError(event) {
@@ -73,9 +85,5 @@ export class UploadAgmtComponent implements OnInit {
             severity: 'error', summary: 'Server Error', detail: 'Please try again later' 
         });
         this.loading = false;
-    }
-
-    updateProgress(event) {
-        this.progress = event.progress;
     }
 }
