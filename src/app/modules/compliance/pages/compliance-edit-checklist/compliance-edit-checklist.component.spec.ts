@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CMEditChecklistComponent } from './cm-edit-checklist.component';
+import { ComplianceEditChecklistComponent } from './compliance-edit-checklist.component';
 
-describe('CMEditChecklistComponent', () => {
-    let component: CMEditChecklistComponent;
-    let fixture: ComponentFixture<CMEditChecklistComponent>;
+describe('ComplianceEditChecklistComponent', () => {
+    let component: ComplianceEditChecklistComponent;
+    let fixture: ComponentFixture<ComplianceEditChecklistComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CMEditChecklistComponent]
+            declarations: [ComplianceEditChecklistComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CMEditChecklistComponent);
+        fixture = TestBed.createComponent(ComplianceEditChecklistComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
