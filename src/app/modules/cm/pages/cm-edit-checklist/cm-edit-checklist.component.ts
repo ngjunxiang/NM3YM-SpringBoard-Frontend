@@ -10,7 +10,7 @@ import { CMService } from '../../../../core/services/cm.service';
 @Component({
     selector: 'cm-edit-checklist',
     templateUrl: './cm-edit-checklist.component.html',
-    styleUrls: ['./cm-edit-checklist.component.scss']
+    styleUrls: ['./cm-edit-checklist.component.css']
 })
 
 export class CMEditChecklistComponent implements OnInit {
