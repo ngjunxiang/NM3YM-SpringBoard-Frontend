@@ -10,7 +10,7 @@ import { ComplianceService } from '../../../../core/services/compliance.service'
 @Component({
     selector: 'compliance-new-checklist',
     templateUrl: './compliance-new-checklist.component.html',
-    styleUrls: ['./compliance-new-checklist.component.scss']
+    styleUrls: ['./compliance-new-checklist.component.css']
 })
 
 export class ComplianceNewChecklistComponent implements OnInit {
