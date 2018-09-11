@@ -40,16 +40,33 @@ interface Response {
 
 export class CMService {
 
-    private retrieveCMChecklistNamesURL = environment.host + '/app/cm/retrieve-checklistNames';
-    private retrieveCMChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
-    private retrieveCMChecklistLogDetailsURL = environment.host + '/app/cm/retrieve-loggedLists';
-    private updateCMChecklistURL = environment.host + '/app/cm/update-checklist';
-    private retrieveCMChecklistURL = environment.host + '/app/cm/manage-checklist';
+    private retrieveAgmtCodesURL = environment.host + '/app/cm/retrieve-AgmtCodes';
+    private retrieveChecklistNamesURL = environment.host + '/app/cm/retrieve-checklistNames';
+    private retrieveChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
+    private retrieveChecklistLogDetailsURL = environment.host + '/app/cm/retrieve-loggedLists';
+    private updateChecklistURL = environment.host + '/app/cm/update-checklist';
+    private retrieveChecklistURL = environment.host + '/app/cm/manage-checklist';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    retrieveAgmtCodes() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveAgmtCodesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveCMChecklistNames() {
         const httpOptions = {
@@ -60,7 +77,7 @@ export class CMService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<ChecklistNames>(this.retrieveCMChecklistNamesURL, postData, httpOptions)
+        return this.http.post<ChecklistNames>(this.retrieveChecklistNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -80,7 +97,7 @@ export class CMService {
 
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
-        return this.http.post<Checklist>(this.retrieveCMChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -102,7 +119,7 @@ export class CMService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.updateCMChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.updateChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -118,7 +135,7 @@ export class CMService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<Response>(this.retrieveCMChecklistLogNamesURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveChecklistLogNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -139,7 +156,7 @@ export class CMService {
 
         const postData = Object.assign(this.authService.authItems, logData);
 
-        return this.http.post<Response>(this.retrieveCMChecklistLogDetailsURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveChecklistLogDetailsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
