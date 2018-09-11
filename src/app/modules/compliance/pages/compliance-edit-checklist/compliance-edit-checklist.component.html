@@ -66,14 +66,16 @@
                                     class="ui-button-danger" style="display: inline-block; width: 30px; margin-left: 2%" type="button"
                                     icon="fa fa-times" (click)="deleteCondition(i)"></button>
                                 <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false" formControlName="conditionOptions"
-                                    [addOnTab]="true" [addOnBlur]="true"></p-chips>
+                                    [addOnTab]="true" [addOnBlur]="true" class="invalid" *ngIf="currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').errors?.required"></p-chips>
+                                <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false" formControlName="conditionOptions"
+                                    [addOnTab]="true" [addOnBlur]="true" *ngIf="!currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').errors?.required"></p-chips>
                                 <div class="error-inline-msg">
                                     <span *ngIf="currentChecklistForm.get('conditions').get(i + '').get('conditionName').dirty && currentChecklistForm.get('conditions').get(i + '').get('conditionName').hasError('isDuplicate')">
                                         Duplicate condition name
                                     </span>
                                 </div>
                                 <!-- Line Seperator -->
-                                <hr *ngIf="i !== currentChecklistForm.get('conditions').controls.length - 1">  
+                                <hr *ngIf="i !== currentChecklistForm.get('conditions').controls.length - 1">
                             </div>
                         </div>
                     </div>

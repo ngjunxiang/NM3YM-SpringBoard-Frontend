@@ -1,0 +1,113 @@
+<div>
+  <div class="row">
+      <div class="col-lg-3 col-sm-6">
+          <p-card title="COMPLETED CHECKS" class="style1">
+              <hr>
+              <p class="cardP">15</p>
+          </p-card>
+      </div>
+
+      <div class="col-lg-3 col-sm-6">
+          <p-card title="CHECKS IN PROGRESS" class="style1">
+              <hr>
+              <p class="cardP">20</p>
+          </p-card>
+      </div>
+
+      <div class="col-lg-3 col-sm-6">
+          <p-card title="SUBMISSIONS PENDING FOR VERFICATIONS" class="style1">
+              <hr>
+              <p class="cardP">20</p>
+          </p-card>
+      </div>
+
+      <div class="col-lg-3 col-sm-6">
+          <p-card title="SUBMISSIONS REJECTED" class="style1">
+              <hr>
+              <p class="cardP">4</p>
+          </p-card>
+      </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+      <p-card class="pieChart" title="CLIENT BREAKDOWN">
+          <hr>
+          <p-chart type="pie" [data]="data"></p-chart>
+      </p-card>
+  </div>
+  <div class="col-md-6">
+      <p-card class="lineChart" title="NUMBERS OF ONBOARDED CLIENTS">
+          <hr>
+          <p-chart type="line" [data]="data1"></p-chart>
+      </p-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+      <p-card title="RECENT CHANGES IN DOCUMENTS" class="table">
+          <hr>
+          <p>List of changes in documents</p>
+          <p-table [columns]="colsDoc" [value]="documents" [scrollable]="true" scrollHeight="100%">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr>
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+      </p-card>
+  </div>
+
+  <div class="col-md-6">
+      <p-card title="CLIENTS AFFECTED" class="table">
+          <hr>
+          <p>There are {{clients?.length}} affected clients</p>
+          <p-table [columns]="cols" [value]="clients" [scrollable]="true" scrollHeight="100%">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr>
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+      </p-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+      <p-card title="YOUR MOST RECENT QUESTIONS" class="table">
+          <hr>
+          <p-accordion>
+              <p-accordionTab header="Who are the Legal representative to sign off the UBO form?">
+                  Legal representative refers to Authorized signatories as per mandate
+              </p-accordionTab>
+              <p-accordionTab header="What are the process / documents required for onboarding a Business Introducer?">
+                  To refer to BI checklist - New application from : http://drs.asia.echonet/applis/drs/drs.nsf/document.xsp?key=PRO/REG/REL-MGT/000665
+              </p-accordionTab>
+              <p-accordionTab header="If account is opened recently and it is subjected to 6 month review. Do I have to submit filenet?">
+                  Not required. Please submit 6 month review form only. http://fps-co-asia.is.echonet/public/en/corporate-trust-pic-tpm
+              </p-accordionTab>
+          </p-accordion>
+      </p-card>
+  </div>
+</div>
