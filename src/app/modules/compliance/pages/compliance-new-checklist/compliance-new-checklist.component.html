@@ -90,7 +90,8 @@
                                         Duplicate condition name
                                     </span>
                                 </div>
-                                <hr> <!-- Line Seperator -->
+                                 <!-- Line Seperator -->
+                                 <hr *ngIf="i !== newChecklistForm.get('conditions').controls.length - 1">
                             </div>
                             <hr>
                         </div>

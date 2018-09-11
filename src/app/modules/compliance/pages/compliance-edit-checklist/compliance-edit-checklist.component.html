@@ -52,7 +52,9 @@
         <div style="padding-bottom: 10px" id="conditions">
             <p-card styleClass="ui-card-shadow">
                 <h4>Checklist Conditions</h4>
-                *Input condition options by pressing 'enter'<br><br>
+                *Input condition options by pressing 'enter'
+                <br>
+                <br>
                 <div formArrayName="conditions">
                     <div *ngFor="let condition of currentChecklistForm.get('conditions').controls; let i=index">
                         <h5>Condition {{i+1}}</h5>
@@ -70,7 +72,8 @@
                                         Duplicate condition name
                                     </span>
                                 </div>
-                                <hr> <!-- Line Seperator -->
+                                <!-- Line Seperator -->
+                                <hr *ngIf="i !== currentChecklistForm.get('conditions').controls.length - 1">  
                             </div>
                         </div>
                     </div>
@@ -196,16 +199,13 @@
                                 <ng-container *ngFor="let condition of complianceDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
                                     <tr *ngIf="doc.get('changed').value !== '3'">
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('documentName').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
                                         </ng-container>
                                         <td>{{ condition.get('conditionName').value }}</td>
                                         <td>{{ condition.get('conditionOption').value }}</td>
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('agmtCode').value }}</td>
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('remarks').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('agmtCode').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('remarks').value }}</td>
                                             <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-check"></i>
                                             </td>
@@ -526,16 +526,13 @@
                                 <ng-container *ngFor="let condition of legalDocumentsForm.get('conditional').get(i + '').get('conditions').controls; let j=index">
                                     <tr *ngIf="doc.get('changed').value !== '3'">
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('documentName').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('documentName').value }}</td>
                                         </ng-container>
                                         <td>{{ condition.get('conditionName').value }}</td>
                                         <td>{{ condition.get('conditionOption').value }}</td>
                                         <ng-container *ngIf="j === 0">
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('agmtCode').value }}</td>
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('remarks').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('agmtCode').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{ doc.get('remarks').value }}</td>
                                             <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-check"></i>
                                             </td>
