@@ -47,6 +47,8 @@ export class ComplianceNewChecklistComponent implements OnInit {
     cDialogForm: FormGroup;
     checklistNames: string[] = [];
     checklist: any;
+    filteredAgmtCodes: string[];
+    agmtDocMappings: any[];
 
     constructor(
         private complianceService: ComplianceService,
@@ -111,6 +113,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
         });
 
         this.retrieveChecklistNames();
+        this.retrieveAgmtCodes();
 
         let control = <FormArray>this.newChecklistForm.controls.requiredFields;
         ['RM Name', 'Client Name', 'Date of Submission', 'Client A/C Number'].forEach(fieldName => {
@@ -158,6 +161,48 @@ export class ComplianceNewChecklistComponent implements OnInit {
         this.loading = false;
     }
 
+    retrieveAgmtCodes() {
+        this.complianceService.retrieveAgmtCodes().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+            }
+
+            if (res.results) {
+                this.agmtDocMappings = [];
+                Object.keys(res.results).forEach(agmtCode => {
+                    this.agmtDocMappings[agmtCode] = res.results[agmtCode];
+                });
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
+    }
+
+    searchAgmtCodes(event) {
+        let filtered: any[] = [];
+        let agmtCodes = Object.keys(this.agmtDocMappings);
+        for (let i = 0; i < agmtCodes.length; i++) {
+            let agmtCode = agmtCodes[i];
+            if (agmtCode.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                filtered.push(agmtCode);
+            }
+        }
+        this.filteredAgmtCodes = filtered;
+    }
+
+    updateAgmtDocValues(value) {
+        let form = this.dialogForm;
+        if (this.cDisplay || this.cEditDisplay) {
+            form = this.cDialogForm;
+        }
+        form.get('agmtCode').setValue(value);
+        form.get('documentName').setValue(this.agmtDocMappings[value]);
+    }
+
     retrieveChecklistNames() {
         this.complianceService.retrieveComplianceChecklistNames().subscribe(data => {
             data.clNames.forEach(cl => {
@@ -196,7 +241,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
                 isDuplicate: true
             };
         }
-        
+
         return null;
     }
 
@@ -208,16 +253,16 @@ export class ComplianceNewChecklistComponent implements OnInit {
             let toDisable = false;
             this.complianceDocumentsForm.getRawValue().conditional.forEach(cDoc => {
                 cDoc.conditions.forEach(docCondition => {
-                    if (docCondition.conditionName == condition.conditionName 
-                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                    if (docCondition.conditionName == condition.conditionName
+                        && condition.conditionOptions.includes(docCondition.conditionOption)) {
                         toDisable = true;
                     }
                 });
             });
             this.legalDocumentsForm.getRawValue().conditional.forEach(cDoc => {
                 cDoc.conditions.forEach(docCondition => {
-                    if (docCondition.conditionName == condition.conditionName 
-                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                    if (docCondition.conditionName == condition.conditionName
+                        && condition.conditionOptions.includes(docCondition.conditionOption)) {
                         toDisable = true;
                     }
                 });
@@ -530,7 +575,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
                 });
             }
         }
-        
+
         let lastPos = this.cDialogForm.get('conditions')['length'] - 1;
         this.cDialogForm.get('conditions').get(lastPos + '').get('conditionOption').enable();
         this.dropdownData['conditionOptions'][index] = conditionOptions;
@@ -620,9 +665,9 @@ export class ComplianceNewChecklistComponent implements OnInit {
                 conditions.removeAt(0);
             }
             this.cDialogForm.get('conditions').value.forEach(condition => {
-                conditions.push(this.fb.group({ 
+                conditions.push(this.fb.group({
                     conditionName: condition.conditionName,
-                    conditionOption: condition.conditionOption 
+                    conditionOption: condition.conditionOption
                 }));
             });
             control.get(this.docIndex + '').get('documentName').setValue(this.cDialogForm.get('documentName').value);
@@ -630,7 +675,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
             control.get(this.docIndex + '').get('signature').setValue(this.cDialogForm.get('signature').value);
             control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
             control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
-            
+
             this.checkConditionInUse();
             this.editMode = false;
             this.blocked = false;
@@ -835,7 +880,7 @@ export class ComplianceNewChecklistComponent implements OnInit {
         }
 
         let i = (+this.newChecklistForm.get('conditions')['length'] - 1) + '';
-        
+
         if (this.newChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.newChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             document.getElementById('conditions').scrollIntoView();

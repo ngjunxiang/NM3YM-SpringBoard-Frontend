@@ -131,7 +131,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -155,7 +158,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -251,7 +257,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -294,7 +303,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -357,7 +369,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -381,7 +396,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -455,7 +473,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -482,7 +503,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -586,7 +610,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -632,7 +659,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="cDialogForm.get('agmtCode').dirty && cDialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -704,7 +734,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
@@ -731,7 +764,10 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName" required pInputText>
                         <h5>Agmt Code</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Agmt Code" formControlName="agmtCode" required pInputText>
+                        <p-autoComplete [suggestions]="filteredAgmtCodes" (onSelect)="updateAgmtDocValues($event)"
+                            (completeMethod)="searchAgmtCodes($event)" placeholder="Agmt Code" formControlName="agmtCode"
+                            [style]="{'width':'90%', 'margin-bottom': '1%'}" [inputStyle]="{'width':'100%'}"
+                            inputStyleClass="form-control"></p-autoComplete>
                         <div class="error-inline-msg">
                             <span *ngIf="dialogForm.get('agmtCode').dirty && dialogForm.get('agmtCode').hasError('isDuplicate')">
                                 Duplicate agmt code
