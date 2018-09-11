@@ -59,6 +59,8 @@ interface ObList {
 })
 
 export class RMService {
+    // Dashboard Endpoints
+    private retrieveCompletedClientsURL = environment.host + '/app/rm/retrieve-checklistNames';
 
     // Checklist Endpoints
     private retrieveChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';

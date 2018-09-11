@@ -84,16 +84,19 @@
                                     placeholder="Condition (e.g. Booking Center)" formControlName="conditionName"
                                     required pInputText>
                                 <button pButton [disabled]="newChecklistForm.get('conditions').length < 2 || newChecklistForm.get('conditions').get(i + '').get('conditionName').disabled"
-                                    class="ui-button-danger" style="display: inline-block; width: 30px; margin-left: 2%"
-                                    type="button" icon="fa fa-times" (click)="deleteCondition(i)"></button>
-                                <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false"
-                                    formControlName="conditionOptions" [addOnTab]="true" [addOnBlur]="true"></p-chips>
+                                    class="ui-button-danger" style="display: inline-block; width: 30px; margin-left: 2%" type="button"
+                                    icon="fa fa-times" (click)="deleteCondition(i)"></button>
+                                <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false" formControlName="conditionOptions"
+                                    [addOnTab]="true" [addOnBlur]="true" class="invalid" *ngIf="newChecklistForm.get('conditions').get(i + '').get('conditionOptions').errors?.required"></p-chips>
+                                <p-chips placeholder="Condition Options* (e.g. Singapore, Hong Kong)" [allowDuplicate]="false" formControlName="conditionOptions"
+                                    [addOnTab]="true" [addOnBlur]="true" *ngIf="!newChecklistForm.get('conditions').get(i + '').get('conditionOptions').errors?.required"></p-chips>
                                 <div class="error-inline-msg">
                                     <span *ngIf="newChecklistForm.get('conditions').get(i + '').get('conditionName').dirty && newChecklistForm.get('conditions').get(i + '').get('conditionName').hasError('isDuplicate')">
                                         Duplicate condition name
                                     </span>
                                 </div>
-                                <hr> <!-- Line Seperator -->
+                                <!-- Line Seperator -->
+                                <hr *ngIf="i !== newChecklistForm.get('conditions').controls.length - 1">
                             </div>
                             <hr>
                         </div>

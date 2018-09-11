@@ -4,10 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BlockUIModule } from 'primeng/blockui';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -34,6 +36,7 @@ import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.componen
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMService } from '../../core/services/cm.service';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -41,10 +44,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
     imports: [
+        AccordionModule,
         AutoCompleteModule,
         BlockUIModule,
         ButtonModule,
         CardModule,
+        ChartModule,
         CheckboxModule,
         ChipsModule,
         CMRoutingModule,
@@ -75,7 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMChecklistComponent,
         CMEditChecklistComponent,
         CMEditChecklistComponent,
-        CMViewChecklistLogsComponent
+        CMViewChecklistLogsComponent,
+        DashboardComponent
     ],
     providers: [
         {

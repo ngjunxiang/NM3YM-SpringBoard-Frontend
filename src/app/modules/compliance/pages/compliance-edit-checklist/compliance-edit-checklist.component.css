@@ -50,6 +50,13 @@
     min-width: 350px;
 }
 
+/*Condition p-chip's border turns red when empty*/
+:host >>>  .invalid .ui-chips > ul.ui-inputtext {
+    border-color: #bd3f3f;
+}
+
+
+
 /*
  * Card component
  */

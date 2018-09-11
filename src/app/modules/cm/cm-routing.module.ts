@@ -8,12 +8,13 @@ import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.componen
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
-    { 
-        path: '', 
-        redirectTo: 'dashboard', 
-        pathMatch: 'full' 
+    {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
     },
     {
         path: '',
@@ -25,8 +26,17 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Dashboard' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
+            },
+            {
+                path: 'newdashboard',
+                component: DashboardComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'Dashboard' }]
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'checklist/manage/edit/:id',
@@ -34,8 +44,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'Edit' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'checklist/manage',
@@ -43,8 +53,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'Manage' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'checklist/logs',
@@ -52,8 +62,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'View Logs' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
             }
         ]
     },
