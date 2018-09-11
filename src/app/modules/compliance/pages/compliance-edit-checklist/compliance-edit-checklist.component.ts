@@ -847,6 +847,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
                 control.get(this.docIndex + '').get('changed').setValue('1');
             }
 
+            this.checkConditionInUse();
             this.editMode = false;
             this.blocked = false;
             this.cEditDisplay = false;
@@ -854,6 +855,8 @@ export class ComplianceEditChecklistComponent implements OnInit {
         }
 
         control.push(this.cDialogForm);
+
+        this.checkConditionInUse();
 
         this.dropdownData.conditionOptions = [];
         this.blocked = false;
