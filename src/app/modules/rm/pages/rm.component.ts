@@ -6,6 +6,7 @@ import { Message } from 'primeng/components/common/api';
 
 import { ROUTES } from './rm.sidebar-items';
 import { AuthenticationService } from '../../../core/services/authentication.service';
+import { RMService } from '../../../core/services/rm.service';
 
 @Component({
   selector: 'app-rm',
@@ -23,17 +24,20 @@ export class RMComponent implements OnInit {
 
     
     // UI Control
+    loading = true;
     sidebarRoutes = ROUTES;
     appMsgs: Message[] = [];
 
     // Name & Email
     name: string;
     email: string;
+    notifications: any[];
 
     public config: PerfectScrollbarConfigInterface = {};
 
     constructor(
         private authService: AuthenticationService,
+        private rmService: RMService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -52,6 +56,7 @@ export class RMComponent implements OnInit {
         });
 
         this.retrieveUserDetails();
+        this.retrieveNotifications();
     }
 
     async retrieveUserDetails() {
@@ -74,6 +79,26 @@ export class RMComponent implements OnInit {
             this.appMsgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
-        })
+        });
+    }
+
+    retrieveNotifications() {
+        this.rmService.retrieveNotifications().subscribe(res => {
+            if (res.error) {
+                this.appMsgs.push({
+                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                });
+            }
+            if (res.results) {
+                this.notifications = res.results.notifications;
+            }
+            this.loading = false;
+        }, error => {
+            this.appMsgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.notifications = [];
+            this.loading = false;
+        });
     }
 }

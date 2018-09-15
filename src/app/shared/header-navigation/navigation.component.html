@@ -33,29 +33,50 @@
                 <!-- ============================================================== -->
                 <!-- Search -->
                 <!-- ============================================================== -->
-                <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
-                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
+                <li class="nav-item dropdown" ngbDropdown placement="bottom-right" autoClose="false:outside" (openChange)="toggleHasNew($event)">
+                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i *ngIf="!hasNew" class="fas fa-bell fa-lg"></i>
+                        <i *ngIf="hasNew" class="fas fa-bell fa-lg" matBadge="{{ newCount }}" matBadgeColor="warn" matBadgeSize="medium"></i>
                     </a>
-                    <div class="dropdown-menu animated slideInDown" ngbDropdownMenu>
+                    <div class="dropdown-menu animated" ngbDropdownMenu>
                         <ul class="dropdown-user">
-                            <li *ngIf="notifications.length === 0">
-                                <a href="#">No notifications</a>
-                            </li>
-                            <ng-container *ngFor="let notification of notifications; let i = index">
-                                <li>
-                                    <a href="#">{{ notification }}</a>
-                                </li>
-                                <li *ngIf="i !== notifications.length - 1" role="separator" class="divider"></li>
-                            </ng-container>
+                            <div *ngIf="allNotifications.length === 0" style="text-align: center">
+                                <a href="javascript:void(0)">No notifications</a>
+                            </div>
+                            <div *ngIf="!showAll">
+                                <ng-container *ngFor="let notification of latestNotifications; let i = index">
+                                    <li>
+                                        <a href="javascript:void(0)">{{ notification }}</a>
+                                    </li>
+                                    <ng-container *ngIf="i === latestNotifications.length - 1">
+                                        <li role="separator" class="divider"></li>
+                                        <div style="text-align: center">
+                                            <a href="javascript:void(0)" (click)="showMore()">Show more</a>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <div *ngIf="showAll">
+                                <ng-container *ngFor="let notification of allNotifications; let i = index">
+                                    <li>
+                                        <a href="javascript:void(0)">{{ notification }}</a>
+                                    </li>
+                                    <ng-container *ngIf="i === allNotifications.length - 1">
+                                        <li role="separator" class="divider"></li>
+                                        <div style="text-align: center">
+                                            <a href="javascript:void(0)" (click)="showLess()">Show less</a>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
                         </ul>
                     </div>
                 </li>
                 <!-- ============================================================== -->
                 <!-- Search -->
                 <!-- ============================================================== -->
-                <li class="nav-item hidden-sm-down search-box">
+                <!-- <li class="nav-item hidden-sm-down search-box">
                     <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <i class="ti-search"></i>
                     </a>
@@ -65,16 +86,16 @@
                             <i class="ti-close"></i>
                         </a>
                     </form>
-                </li>
+                </li> -->
                 <!-- ============================================================== -->
                 <!-- Profile -->
                 <!-- ============================================================== -->
-                <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
-                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                <li class="nav-item dropdown" ngbDropdown placement="bottom-right" autoClose="outside">
+                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="assets/images/users/avatar.png" alt="user" class="profile-pic" />
                     </a>
-                    <div class="dropdown-menu animated slideInDown" ngbDropdownMenu>
+                    <div class="dropdown-menu animated" ngbDropdownMenu>
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">

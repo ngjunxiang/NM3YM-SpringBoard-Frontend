@@ -54,23 +54,20 @@ interface ObList {
     error: string;
 }
 
-interface DashboardStats {
-    completedClients: number;
-    pendingCount: number;
-    onBoardedClients: any[];
-} 
-
 @Injectable({
     providedIn: 'root'
 })
 
 export class RMService {
-    // Dashboard Endpoints
+    // Dashboard Endpoint
     private retrieveDashboardStatsURL = environment.host + '/app/rm/retrieve-dashboard';
 
     // Checklist Endpoints
     private retrieveChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
     private retrieveChecklistURL = environment.host + '/app/rm/retrieve-checklist';
+
+    // Notifications Endpoint 
+    private retrieveNotificationsURL = environment.host + '/app/rm/retrieve-all-notifications';
 
     // Onboard Endpoints
     private createOnboardProcessURL = environment.host + '/app/rm/create-onboard';
@@ -94,6 +91,22 @@ export class RMService {
         const postData = this.authService.authItems;
 
         return this.http.post<Response>(this.retrieveDashboardStatsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveNotifications() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveNotificationsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

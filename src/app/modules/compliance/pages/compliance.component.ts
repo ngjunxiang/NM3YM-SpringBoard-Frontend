@@ -26,9 +26,10 @@ export class ComplianceComponent implements OnInit {
     sidebarRoutes = ROUTES;
     appMsgs: Message[] = [];
 
-    // Name & Email
+    // Outputs
     name: string;
     email: string;
+    notifications: any[] = [];
 
     public config: PerfectScrollbarConfigInterface = {};
 
@@ -50,7 +51,7 @@ export class ComplianceComponent implements OnInit {
                 });
             }
         });
-
+        
         this.retrieveUserDetails();
     }
 
