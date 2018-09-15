@@ -54,13 +54,19 @@ interface ObList {
     error: string;
 }
 
+interface DashboardStats {
+    completedClients: number;
+    pendingCount: number;
+    onBoardedClients: any[];
+} 
+
 @Injectable({
     providedIn: 'root'
 })
 
 export class RMService {
     // Dashboard Endpoints
-    private retrieveCompletedClientsURL = environment.host + '/app/rm/retrieve-checklistNames';
+    private retrieveDashboardStatsURL = environment.host + '/app/rm/retrieve-dashboard';
 
     // Checklist Endpoints
     private retrieveRMChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
@@ -77,6 +83,22 @@ export class RMService {
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    retrieveDashboardStats() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveDashboardStatsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveRMChecklistNames() {
         const httpOptions = {
@@ -142,7 +164,7 @@ export class RMService {
         return this.http.post<Response>(this.retrieveAllRMNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
-            );
+        );
     }
 
     retrieveOnboardProcessDetails(obID) {

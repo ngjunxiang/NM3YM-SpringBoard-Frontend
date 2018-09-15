@@ -1,16 +1,16 @@
-<div>
+<div *ngIf="!loading">
     <div class="row">
         <div class="col-lg-3 col-sm-6">
             <p-card title="COMPLETED CLIENTS" class="style1">
                 <hr>
-                <p class="cardP">15</p>
+                <p class="cardP">{{completedClients}}</p>
             </p-card>
         </div>
 
         <div class="col-lg-3 col-sm-6">
             <p-card title="PENDING CLIENTS" class="style1">
                 <hr>
-                <p class="cardP">20</p>
+                <p class="cardP">{{pendingClients}}</p>
             </p-card>
         </div>
 
