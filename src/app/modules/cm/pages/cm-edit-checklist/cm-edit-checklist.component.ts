@@ -48,6 +48,8 @@ export class CMEditChecklistComponent implements OnInit {
     cDialogForm: FormGroup;
     checklistNames: string[] = [];
     checklist: any;
+    filteredAgmtCodes: string[];
+    agmtDocMappings: any[];
 
     constructor(
         private cmService: CMService,
@@ -111,6 +113,8 @@ export class CMEditChecklistComponent implements OnInit {
         this.retrieveChecklistDetails(this.route.snapshot.paramMap.get('id'));
 
         this.retrieveChecklistNames();
+
+        this.retrieveAgmtCodes();
     }
 
     createForm() {
@@ -288,6 +292,48 @@ export class CMEditChecklistComponent implements OnInit {
             }
         }
         return null;
+    }
+
+    retrieveAgmtCodes() {
+        this.cmService.retrieveAgmtCodes().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+            }
+
+            if (res.results) {
+                this.agmtDocMappings = [];
+                Object.keys(res.results).forEach(agmtCode => {
+                    this.agmtDocMappings[agmtCode] = res.results[agmtCode];
+                });
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
+    }
+
+    searchAgmtCodes(event) {
+        let filtered: any[] = [];
+        let agmtCodes = Object.keys(this.agmtDocMappings);
+        for (let i = 0; i < agmtCodes.length; i++) {
+            let agmtCode = agmtCodes[i];
+            if (agmtCode.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+                filtered.push(agmtCode);
+            }
+        }
+        this.filteredAgmtCodes = filtered;
+    }
+
+    updateAgmtDocValues(value) {
+        let form = this.dialogForm;
+        if (this.cDisplay || this.cEditDisplay) {
+            form = this.cDialogForm;
+        }
+        form.get('agmtCode').setValue(value);
+        form.get('documentName').setValue(this.agmtDocMappings[value]);
     }
 
     retrieveChecklistNames() {

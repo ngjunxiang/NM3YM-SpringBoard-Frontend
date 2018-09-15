@@ -40,17 +40,34 @@ interface Response {
 
 export class ComplianceService {
 
-    private retrieveComplianceChecklistNamesURL = environment.host + '/app/compliance/retrieve-checklistNames';
-    private retrieveComplianceChecklistLogNamesURL = environment.host + '/app/compliance/retrieve-clIDWithVersion';
-    private retrieveComplianceChecklistLogDetailsURL = environment.host + '/app/compliance/retrieve-loggedLists';
-    private updateComplianceChecklistURL = environment.host + '/app/compliance/update-checklist';
-    private createComplianceChecklistURL = environment.host + '/app/compliance/create-checklist';
-    private retrieveDeleteComplianceChecklistURL = environment.host + '/app/compliance/manage-checklist';
+    private retrieveAgmtCodesURL = environment.host + '/app/compliance/retrieve-AgmtCodes';
+    private retrieveChecklistNamesURL = environment.host + '/app/compliance/retrieve-checklistNames';
+    private retrieveChecklistLogNamesURL = environment.host + '/app/compliance/retrieve-clIDWithVersion';
+    private retrieveChecklistLogDetailsURL = environment.host + '/app/compliance/retrieve-loggedLists';
+    private updateChecklistURL = environment.host + '/app/compliance/update-checklist';
+    private createChecklistURL = environment.host + '/app/compliance/create-checklist';
+    private retrieveDeleteChecklistURL = environment.host + '/app/compliance/manage-checklist';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    retrieveAgmtCodes() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveAgmtCodesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveComplianceChecklistNames() {
         const httpOptions = {
@@ -61,7 +78,7 @@ export class ComplianceService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<ChecklistNames>(this.retrieveComplianceChecklistNamesURL, postData, httpOptions)
+        return this.http.post<ChecklistNames>(this.retrieveChecklistNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -81,7 +98,7 @@ export class ComplianceService {
 
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
-        return this.http.post<Checklist>(this.retrieveDeleteComplianceChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveDeleteChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -102,7 +119,7 @@ export class ComplianceService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.createComplianceChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.createChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -124,7 +141,7 @@ export class ComplianceService {
 
         const postData = Object.assign(this.authService.authItems, checklistData);
 
-        return this.http.post<Response>(this.updateComplianceChecklistURL, postData, httpOptions)
+        return this.http.post<Response>(this.updateChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -145,7 +162,7 @@ export class ComplianceService {
             body: postData
         };
 
-        return this.http.delete<Response>(this.retrieveDeleteComplianceChecklistURL, httpOptions)
+        return this.http.delete<Response>(this.retrieveDeleteChecklistURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -161,7 +178,7 @@ export class ComplianceService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<Response>(this.retrieveComplianceChecklistLogNamesURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveChecklistLogNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -182,7 +199,7 @@ export class ComplianceService {
 
         const postData = Object.assign(this.authService.authItems, logData);
 
-        return this.http.post<Response>(this.retrieveComplianceChecklistLogDetailsURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveChecklistLogDetailsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

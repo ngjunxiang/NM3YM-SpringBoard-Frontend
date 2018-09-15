@@ -69,8 +69,8 @@ export class RMService {
     private retrieveDashboardStatsURL = environment.host + '/app/rm/retrieve-dashboard';
 
     // Checklist Endpoints
-    private retrieveRMChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
-    private retrieveRMChecklistURL = environment.host + '/app/rm/retrieve-checklist';
+    private retrieveChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
+    private retrieveChecklistURL = environment.host + '/app/rm/retrieve-checklist';
 
     // Onboard Endpoints
     private createOnboardProcessURL = environment.host + '/app/rm/create-onboard';
@@ -109,7 +109,7 @@ export class RMService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<ChecklistNames>(this.retrieveRMChecklistNamesURL, postData, httpOptions)
+        return this.http.post<ChecklistNames>(this.retrieveChecklistNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -129,7 +129,7 @@ export class RMService {
 
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
-        return this.http.post<Checklist>(this.retrieveRMChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
