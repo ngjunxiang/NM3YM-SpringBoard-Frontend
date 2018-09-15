@@ -71,11 +71,11 @@ export class RMDashboardComponent implements OnInit {
             }
             this.loading = false;
         }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: error
-                });
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
         })
-        
+
         //Fake data for dashboard 
         this.data1 = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'],

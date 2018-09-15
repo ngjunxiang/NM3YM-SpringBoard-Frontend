@@ -21,21 +21,21 @@ p-card {
 }
 
 :host >>>  .custom-card1 .ui-card {
-background-color: red;
+    background-color: red;
 } 
 
 
 :host >>> .ui-card-title {
-font-size: 15px;
-margin-left: 0px;
-margin-bottom: 0px;
-color: rgb(8, 87, 8);
+    font-size: 15px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    color: rgb(8, 87, 8);
 } 
 
 :host >>> .ui-datatable-thead > tr > th {
-background: red;
-color: red;
-background-color: red;
+    background: red;
+    color: red;
+    background-color: red;
 }
 
 .completed {

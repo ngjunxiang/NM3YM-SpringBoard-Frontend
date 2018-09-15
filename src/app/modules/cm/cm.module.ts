@@ -36,7 +36,6 @@ import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.componen
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMService } from '../../core/services/cm.service';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -81,7 +80,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMEditChecklistComponent,
         CMEditChecklistComponent,
         CMViewChecklistLogsComponent,
-        DashboardComponent
     ],
     providers: [
         {

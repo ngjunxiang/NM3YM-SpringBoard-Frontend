@@ -8,7 +8,6 @@ import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.componen
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
     {
@@ -23,15 +22,6 @@ const routes: Routes = [
             {
                 path: 'dashboard',
                 component: CMDashboardComponent,
-                data: {
-                    title: 'Client Management',
-                    urls: [{ title: 'Dashboard' }]
-                },
-                canActivate: [CMAuthGuard]
-            },
-            {
-                path: 'newdashboard',
-                component: DashboardComponent,
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Dashboard' }]
