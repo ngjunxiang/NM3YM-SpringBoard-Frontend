@@ -49,13 +49,24 @@ export class UploadAgmtComponent implements OnInit {
     onUpload(event) {
         if (event.xhr.response) {
             let res = JSON.parse(event.xhr.response).results;
-            if (res.error === 'file is not csv') {
+            if (res.error) {
                 for (let file of event.files) {
                     this.errorFiles.push(file);
                 }
-                this.msgs.push({ 
-                    severity: 'error', summary: 'File Format Error', detail: 'Please try again with a CSV file' 
-                });
+
+                if (res.error === 'file is not csv') {
+                    this.msgs.push({
+                        severity: 'error', summary: 'File Format Error', detail: 'Please try again with a CSV file'
+                    });
+                } else if (res.error === 'file may be corrupted, check file format and try again.') {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Corrupted File Error', detail: 'File may be corrupted. Please check the file and try again'
+                    });
+                } else {
+                    this.msgs.push({
+                        severity: 'error', summary: 'File Error', detail: res.error
+                    });
+                }
                 this.loading = false;
                 return;
             }
@@ -63,13 +74,13 @@ export class UploadAgmtComponent implements OnInit {
                 for (let file of event.files) {
                     this.inputFiles.push(file);
                 }
-                
+
                 this.response = res;
 
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: 'File has been uploaded'
                 });
-        
+
                 this.loading = false;
             }
         }
@@ -81,8 +92,8 @@ export class UploadAgmtComponent implements OnInit {
             this.errorFiles.push(file);
         }
 
-        this.msgs.push({ 
-            severity: 'error', summary: 'Server Error', detail: 'Please try again later' 
+        this.msgs.push({
+            severity: 'error', summary: 'Server Error', detail: 'Please try again later'
         });
         this.loading = false;
     }
