@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Message } from 'primeng/components/common/api';
+
+import { RMService } from '../../../../core/services/rm.service';
+
 interface Client {
     name: string;
     type: string;
@@ -24,6 +28,11 @@ interface Year {
 
 export class RMDashboardComponent implements OnInit {
 
+    // UI Control
+    loading = false;
+    msgs: Message[] = [];
+
+    //Dummy Variables for Dashboard
     data1: any;
     data: any;
     years: Year[];
@@ -34,9 +43,36 @@ export class RMDashboardComponent implements OnInit {
     colsDoc: any[];
     frozenCol: any[];
 
-    constructor() { }
+    //Actual Variable for Dashboard
+    completedClients: number;
+    pendingClients: number;
+    onboardingClients: any[];
+
+    constructor(
+        private rmService: RMService,
+    ) { }
 
     ngOnInit() {
+        this.loading = true
+        //Calling from endpoints
+        this.rmService.retrieveDashboardStats().subscribe(res => {
+            if (res.error) {
+                // display error
+                console.log("error")
+            }
+
+            if (res.results) {
+                this.completedClients = res.results.completedCount;
+                this.pendingClients = res.results.pendingCount;
+                this.onboardingClients = res.results.onBoardedClients;
+                console.log(res.results)
+            }
+            this.loading = false;
+        }, error => {
+
+        })
+        
+        //Fake data for dashboard 
         this.data1 = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'],
             datasets: [
