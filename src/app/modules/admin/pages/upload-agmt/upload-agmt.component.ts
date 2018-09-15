@@ -48,7 +48,7 @@ export class UploadAgmtComponent implements OnInit {
 
     onUpload(event) {
         if (event.xhr.response) {
-            let res = JSON.parse(event.xhr.response).results;
+            let res = JSON.parse(event.xhr.response);
             if (res.error) {
                 for (let file of event.files) {
                     this.errorFiles.push(file);
@@ -70,12 +70,12 @@ export class UploadAgmtComponent implements OnInit {
                 this.loading = false;
                 return;
             }
-            if (res.inserted) {
+            if (res.results) {
                 for (let file of event.files) {
                     this.inputFiles.push(file);
                 }
 
-                this.response = res;
+                this.response = res.results;
 
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: 'File has been uploaded'
