@@ -367,8 +367,8 @@
                             </span>
                         </div>
                         <h5>Remarks</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks"
-                            formControlName="remarks" pInputText>
+                        <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks"
+                            [rows]="10" [cols]="20" pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
@@ -752,8 +752,8 @@
                             </span>
                         </div>
                         <h5>Remarks</h5>
-                        <input type="text" id="input" class="form-control" placeholder="Additional Remarks"
-                            formControlName="remarks" pInputText>
+                        <textarea id="textarea" class="form-control" placeholder="Additional Remarks" formControlName="remarks"
+                            [rows]="10" [cols]="20" pInputTextarea></textarea>
                         <div class="ui-g" style="padding-right:4%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
                         </div>
