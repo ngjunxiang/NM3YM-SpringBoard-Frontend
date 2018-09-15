@@ -14,7 +14,7 @@
     <!-- Topbar header - style you can find in pages.scss -->
     <!-- ============================================================== -->
 
-    <ui-navigation *ngIf="!loading" [name]="name" [email]="email" [notifications]="notifications"></ui-navigation>
+    <ui-navigation *ngIf="!loading" [name]="name" [email]="email" [notifications]="notifications" (notificationsRead)="updateNotifications($event)"></ui-navigation>
     <!-- ============================================================== -->
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->

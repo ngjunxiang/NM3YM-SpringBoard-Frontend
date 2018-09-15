@@ -101,4 +101,21 @@ export class RMComponent implements OnInit {
             this.loading = false;
         });
     }
+
+    updateNotifications(event) {
+        this.rmService.updateNotifications().subscribe(res => {
+            if (res.error) {
+                this.appMsgs.push({
+                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                });
+            }
+            
+            this.loading = false;
+        }, error => {
+            this.appMsgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
 }

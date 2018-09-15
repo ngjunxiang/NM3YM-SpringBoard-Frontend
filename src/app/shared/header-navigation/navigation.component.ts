@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, Input } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
@@ -12,15 +12,16 @@ export class NavigationComponent implements AfterViewInit, OnInit {
     @Input('name') name: string;
     @Input('email') email: string;
     @Input('notifications') notifications: any[];
+    @Output() notificationsRead = new EventEmitter();
 
     // UI Control
-    hasNew: boolean = true;
+    hasNew: boolean;
     showAll: boolean = false;
 
     // UI Components
     latestNotifications: any[];
     allNotifications: any[];
-    newCount: number = 3;
+    newCount: number;
     
     constructor(private modalService: NgbModal) { }
 
@@ -35,6 +36,11 @@ export class NavigationComponent implements AfterViewInit, OnInit {
             this.allNotifications.push('Changes have been made to ' + notification.name + '. Please review');
             count++;
         });
+        
+        if (this.latestNotifications.length > 0) {
+            this.hasNew = true;
+            this.newCount = this.latestNotifications.length;
+        }
     }
 
     ngAfterViewInit() {
@@ -59,8 +65,9 @@ export class NavigationComponent implements AfterViewInit, OnInit {
     }
 
     toggleHasNew(event) {
-        if (!event) {
+        if (!event && this.hasNew) {
             this.hasNew = false;
+            this.notificationsRead.emit(true);
         }
     }
 
