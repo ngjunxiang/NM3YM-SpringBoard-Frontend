@@ -57,8 +57,10 @@ export class RMDashboardComponent implements OnInit {
         //Calling from endpoints
         this.rmService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
-                // display error
-                console.log("error")
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
             }
 
             if (res.results) {
@@ -69,7 +71,9 @@ export class RMDashboardComponent implements OnInit {
             }
             this.loading = false;
         }, error => {
-
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: error
+                });
         })
         
         //Fake data for dashboard 
