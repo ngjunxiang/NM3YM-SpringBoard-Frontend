@@ -54,23 +54,21 @@ interface ObList {
     error: string;
 }
 
-interface DashboardStats {
-    completedClients: number;
-    pendingCount: number;
-    onBoardedClients: any[];
-} 
-
 @Injectable({
     providedIn: 'root'
 })
 
 export class RMService {
-    // Dashboard Endpoints
+    // Dashboard Endpoint
     private retrieveDashboardStatsURL = environment.host + '/app/rm/retrieve-dashboard';
 
     // Checklist Endpoints
     private retrieveChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
     private retrieveChecklistURL = environment.host + '/app/rm/retrieve-checklist';
+
+    // Notifications Endpoints
+    private retrieveNotificationsURL = environment.host + '/app/rm/retrieve-all-notifications';
+    private updateNotificationsURL = environment.host + '/app/rm/update-notifications';
 
     // Onboard Endpoints
     private createOnboardProcessURL = environment.host + '/app/rm/create-onboard';
@@ -94,6 +92,22 @@ export class RMService {
         const postData = this.authService.authItems;
 
         return this.http.post<Response>(this.retrieveDashboardStatsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveNotifications() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveNotificationsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -164,7 +178,7 @@ export class RMService {
         return this.http.post<Response>(this.retrieveAllRMNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
-        );
+            );
     }
 
     retrieveOnboardProcessDetails(obID) {
@@ -201,6 +215,22 @@ export class RMService {
         const postData = Object.assign(this.authService.authItems, onboardData);
 
         return this.http.post<Response>(this.createOnboardProcessURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateNotifications() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.updateNotificationsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

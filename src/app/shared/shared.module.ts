@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
 
 import { SpinnerComponent } from './spinner.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -19,6 +21,8 @@ import { IdleTimeoutComponent } from '../core/idletimeout/idle.timeout.component
         CommonModule,
         DialogModule,
         RouterModule,
+        MatBadgeModule,
+        MatIconModule,
         NgbModule.forRoot(),
         PerfectScrollbarModule
     ],

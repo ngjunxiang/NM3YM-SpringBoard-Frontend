@@ -29,6 +29,7 @@ export class CMComponent implements OnInit {
     // Name & Email
     name: string;
     email: string;
+    notifications: any[] = [];
 
     public config: PerfectScrollbarConfigInterface = {};
 
