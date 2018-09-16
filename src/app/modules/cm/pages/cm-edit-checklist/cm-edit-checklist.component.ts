@@ -51,6 +51,7 @@ export class CMEditChecklistComponent implements OnInit {
     filteredAgmtCodes: string[];
     agmtDocMappings: any[];
 
+
     constructor(
         private cmService: CMService,
         private confirmationService: ConfirmationService,
@@ -647,6 +648,7 @@ export class CMEditChecklistComponent implements OnInit {
                 control.get(this.docIndex + '').get('changed').setValue('1');
             }
 
+
             this.editMode = false;
             this.blocked = false;
             this.mEditDisplay = false;
@@ -654,7 +656,7 @@ export class CMEditChecklistComponent implements OnInit {
         }
 
         control.push(this.dialogForm);
-
+        
         this.blocked = false;
         this.mDisplay = false;
     }
@@ -681,7 +683,8 @@ export class CMEditChecklistComponent implements OnInit {
             remarks: new FormControl(form.get('mandatory').get(index + '').get('remarks').value),
             docID: new FormControl(form.get('mandatory').get(index + '').get('docID').value),
             changed: new FormControl(form.get('mandatory').get(index + '').get('changed').value)
-        });
+        });   
+
 
         this.editMode = true;
         this.docIndex = index;

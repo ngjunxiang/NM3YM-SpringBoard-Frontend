@@ -39,6 +39,16 @@
     color: white;
 }
 
+:host >>> .sticy .ui-widget-header.ui-datatable-scrollable-header {
+    position: sticky;
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    top: 0;
+    z-index: 100;
+}
+
 
 /*
  * CSS of p-chip for condition's options 
@@ -167,3 +177,12 @@
     margin-top: -15px;
     margin-bottom:15px;
 }
+
+/*
+ * Overwriting PrimeNg's Editor Component
+ */ 
+
+:host >>> .nw-editor{
+    height: 200px;
+}
+

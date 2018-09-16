@@ -164,3 +164,13 @@
     margin-top: -15px;
     margin-bottom:15px;
 }
+
+
+/*
+ * Overwriting PrimeNg's Editor Component
+ */ 
+
+:host >>> .nw-editor{
+    height: 200px;
+}
+

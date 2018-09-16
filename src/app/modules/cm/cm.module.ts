@@ -29,6 +29,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 
+import { NgxWigModule } from 'ngx-wig';
+
 import { CMRoutingModule } from './cm-routing.module';
 import { CMComponent } from './pages/cm.component';
 import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.component';
@@ -36,6 +38,8 @@ import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.componen
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMService } from '../../core/services/cm.service';
+
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -63,6 +67,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MessageModule,
         MessagesModule,
         NgbModule.forRoot(),
+        NgxWigModule,
         OverlayPanelModule,
         PanelModule,
         PerfectScrollbarModule,
