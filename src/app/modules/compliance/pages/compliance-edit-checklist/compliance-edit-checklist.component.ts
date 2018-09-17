@@ -139,7 +139,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
             docID: new FormControl(''),
@@ -155,7 +155,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
             ]),
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
             docID: new FormControl(''),
