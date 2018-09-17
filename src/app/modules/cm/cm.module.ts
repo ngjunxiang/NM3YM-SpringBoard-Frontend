@@ -28,7 +28,6 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
-
 import { NgxWigModule } from 'ngx-wig';
 
 import { CMRoutingModule } from './cm-routing.module';
