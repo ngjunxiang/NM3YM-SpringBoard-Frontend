@@ -30,6 +30,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
     complianceCCols: any[];
     legalMOCols: any[];
     legalCCols: any[];
+    currentAgmtCode: number;
     docIndex: number;
     editMode = false;
     mDisplay = false;
@@ -191,7 +192,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
                 isDuplicate: true
             };
         }
-        
+
         return null;
     }
 
@@ -242,6 +243,16 @@ export class ComplianceEditChecklistComponent implements OnInit {
     }
 
     checkDuplicateAgmtCode(control: FormControl): { [key: string]: boolean } | null {
+        if (control.value === '-') {
+            return null;
+        }
+
+        if (this.mEditDisplay || this.cEditDisplay || this.oEditDisplay) {
+            if (control.value === this.currentAgmtCode) {
+                return null;
+            }
+        }
+
         if (this.mDisplay || this.mEditDisplay || this.cDisplay || this.cEditDisplay || this.oDisplay
             || this.oEditDisplay) {
             let agmtCodes = [];
@@ -508,7 +519,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
             });
 
             this.checkConditionInUse();
-            
+
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -596,7 +607,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
             docID: new FormControl(''),
@@ -684,6 +695,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
         });
 
         this.editMode = true;
+        this.currentAgmtCode = form.get('mandatory').get(index + '').get('agmtCode').value;
         this.docIndex = index;
         this.blocked = true;
         this.mEditDisplay = true;
@@ -723,6 +735,21 @@ export class ComplianceEditChecklistComponent implements OnInit {
             return;
         }
 
+        if (this.currentChecklistForm.get('conditions')['length'] > 1) {
+            let invalidConditions = false;
+            <FormArray>this.currentChecklistForm.get('conditions')['controls'].forEach(control => {
+                if (control.get('conditionName').invalid || control.get('conditionOptions').invalid) {
+                    document.getElementById('conditions').scrollIntoView();
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: 'Please correct the conditions highlighted in red'
+                    });
+                    invalidConditions = true;
+                }
+            });
+
+            if (invalidConditions) return;
+        }
+
         this.cDialogForm = this.fb.group({
             conditions: new FormArray([
                 this.fb.group({
@@ -732,7 +759,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
             ]),
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
             docID: new FormControl(''),
@@ -842,9 +869,13 @@ export class ComplianceEditChecklistComponent implements OnInit {
 
         this.cDialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
         this.cDialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
+        this.cDialogForm.get('documentName').markAsDirty();
+        this.cDialogForm.get('agmtCode').markAsDirty();
 
         if (this.cDialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid) {
+            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid ||
+            this.cDialogForm.get('documentName').invalid ||
+            this.cDialogForm.get('agmtCode').invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
@@ -949,6 +980,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
         this.reloadConditionalConditionOptions(index);
 
         this.docIndex = index;
+        this.currentAgmtCode = form.get('conditional').get(index + '').get('agmtCode').value;
         this.editMode = true;
         this.blocked = true;
         this.cEditDisplay = true;
@@ -981,7 +1013,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl(''),
             docID: new FormControl(''),
@@ -1070,6 +1102,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
 
         this.editMode = true;
         this.docIndex = index;
+        this.currentAgmtCode = form.get('optional').get(index + '').get('agmtCode').value;
         this.blocked = true;
         this.oEditDisplay = true;
     }
@@ -1147,7 +1180,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
 
         // Checklist Conditions
         this.checklist['conditions'] = {};
-        
+
         for (let i = 0; i < this.currentChecklistForm.get('conditions')['length']; i++) {
             if (!(this.currentChecklistForm.get('conditions')['length'] - 1 === i
                 && (this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value === ''
@@ -1188,7 +1221,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
                 conditions.push({
                     conditionName: condition.get('conditionName').value,
                     conditionOption: condition.get('conditionOption').value
-                })
+                });
             }
             this.checklist['complianceDocuments']['conditional'].push({
                 conditions: conditions,
@@ -1242,7 +1275,7 @@ export class ComplianceEditChecklistComponent implements OnInit {
                 conditions.push({
                     conditionName: condition.get('conditionName').value,
                     conditionOption: condition.get('conditionOption').value
-                })
+                });
             }
             this.checklist['legalDocuments']['conditional'].push({
                 conditions: conditions,
