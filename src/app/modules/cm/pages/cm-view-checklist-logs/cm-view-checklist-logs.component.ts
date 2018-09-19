@@ -9,7 +9,7 @@ import { CMService } from '../../../../core/services/cm.service';
 @Component({
     selector: 'cm-view-checklist-logs',
     templateUrl: './cm-view-checklist-logs.component.html',
-    styleUrls: ['./cm-view-checklist-logs.component.scss']
+    styleUrls: ['./cm-view-checklist-logs.component.css']
 })
 
 export class CMViewChecklistLogsComponent implements OnInit {
@@ -29,6 +29,10 @@ export class CMViewChecklistLogsComponent implements OnInit {
     complianceCCols: any[];
     legalMOCols: any[];
     legalCCols: any[];
+
+    // For Colour Legend Table 
+    docChanges: any[];
+    tableCols: any[];
 
     constructor(
         private cmService: CMService,
@@ -76,10 +80,22 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
         this.checklistLogForm = this.fb.group({
             clID: new FormControl('', Validators.required),
-            version: new FormControl({ value: '' , disabled: true }, Validators.required)
+            version: new FormControl({ value: '', disabled: true }, Validators.required)
         });
 
         this.retrieveChecklistNamesAndVersions();
+
+        //Generating data for Colour Legend Table
+        this.tableCols = [
+            { field: 'typeOfChange', header: 'Type of Change' },
+            { field: 'cellColour', header: 'Cell Colour' },
+        ];
+
+        this.docChanges = [
+            { typeOfChange: "Document Modified", cellColour: "Yellow" },
+            { typeOfChange: "Document Added", cellColour: "Green" },
+            { typeOfChange: "Document Removed", cellColour: "Red" }
+        ];
     }
 
     reloadVersions(event) {

@@ -3,16 +3,15 @@
 .new-field { background-color: #AADD81 !important}
 
 :host >>> .ui-overlaypanel {
-    z-index: 2;
-    margin-left: 10%;
-    margin-right: 14%;
+    z-index: 100;
+    left: 40%;
+    right: 10%;
 }
 
 :host >>> .ui-table-scrollable-header {
     margin-right: 0 auto;
     width: 100% !important;
 }
-
 
 .addedDoc {
     background-color: #AADD81 !important;
