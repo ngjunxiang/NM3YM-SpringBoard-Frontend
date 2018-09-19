@@ -160,12 +160,12 @@ export class RMNewOnboardComponent implements OnInit {
                 complianceDocuments: res.complianceDocuments,
                 legalDocuments: res.legalDocuments
             };
+            this.loading = false;
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
         });
-        this.loading = false;
     }
 
     createDocumentsForm() {
