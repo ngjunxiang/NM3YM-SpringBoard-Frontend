@@ -8,6 +8,7 @@ import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.componen
 import { RMManageOnboardComponent } from './pages/rm-manage-onboard/rm-manage-onboard.component';
 import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
 import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
+import { RMFaqComponent } from './pages/rm-faq/rm-faq.component';
 
 const routes: Routes = [
     { 
@@ -52,6 +53,15 @@ const routes: Routes = [
                 data: {
                     title: 'Marketing Assistant',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
+                }, 
+                canActivate: [RMAuthGuard] 
+            },
+            {
+                path: 'faq',
+                component: RMFaqComponent,
+                data: {
+                    title: 'Marketing Assistant',
+                    urls: [{ title: 'FAQ' }]
                 }, 
                 canActivate: [RMAuthGuard] 
             }

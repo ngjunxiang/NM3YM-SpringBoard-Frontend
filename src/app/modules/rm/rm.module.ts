@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
 import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AccordionModule } from 'primeng/accordion';
@@ -33,6 +32,7 @@ import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.
 import { RMManageOnboardComponent } from './pages/rm-manage-onboard/rm-manage-onboard.component';
 import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
 import { RMService } from '../../core/services/rm.service';
+import { RMFaqComponent } from './pages/rm-faq/rm-faq.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -71,7 +71,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RMDashboardComponent,
         RMNewOnboardComponent,
         RMEditOnboardComponent,
-        RMManageOnboardComponent
+        RMManageOnboardComponent,
+        RMFaqComponent
     ],
     providers: [
         {
