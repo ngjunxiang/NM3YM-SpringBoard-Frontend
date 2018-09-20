@@ -2,7 +2,7 @@
 <p-blockUI [blocked]=blocked></p-blockUI>
 <p-confirmDialog></p-confirmDialog>
 
-<div #form *ngIf="!loading">
+<div class="zoom" #form *ngIf="!loading">
     <div class="form-create" [formGroup]="newChecklistForm">
         <!-- Checklist Name -->
         <div style="padding-bottom: 10px" id="checklistName">
@@ -126,7 +126,10 @@
                         <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceMOCols">
+                                    <th *ngFor="let col of complianceMOCols" [ngClass]="col.field === 'documentName' ? 'cMDocName' : 
+                                                                            col.field === 'agmtCode' ? 'cMAgmtCode' : 
+                                                                            col.field === 'remarks' ? 'cMRemark' : 
+                                                                            col.field === 'signature' ? 'cMSignature' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -136,7 +139,7 @@
                                 <tr>
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
-                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td [innerHTML]="doc.get('remarks').value"></td>
                                     <td *ngIf="doc.get('signature').value">
                                         <i class="fa fa-check"></i>
                                     </td>
@@ -224,8 +227,12 @@
                         <p-table [value]="complianceDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceCCols">
-                                        {{ col.header }}
+                                    <th *ngFor="let col of complianceCCols" [ngClass]="col.field === 'documentName' ? 'cCDocName' : 
+                                                                            col.field === 'conditionName' ? 'cCCondName' : 
+                                                                            col.field === 'conditionOptions' ? 'cCCondOption' : 
+                                                                            col.field === 'agmtCode' ? 'cCAgmtCode' :
+                                                                            col.field === 'remarks' ? 'cCRemark' :
+                                                                            col.field === 'signature' ? 'cCSignature' : null">
                                     </th>
                                     <th style="width: 10%"></th>
                                 </tr>
@@ -242,8 +249,7 @@
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
                                                 doc.get('agmtCode').value }}</td>
-                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('remarks').value }}</td>
+                                            <td [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']" [innerHTML]="doc.get('remarks').value"></td>
                                             <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-check"></i>
                                             </td>
@@ -385,7 +391,10 @@
                         <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceMOCols">
+                                    <th *ngFor="let col of complianceMOCols" [ngClass]="col.field === 'documentName' ? 'cODocName' : 
+                                                                            col.field === 'agmtCode' ? 'cOAgmtCode' : 
+                                                                            col.field === 'remarks' ? 'cORemark' : 
+                                                                            col.field === 'signature' ? 'cOSignature' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -395,7 +404,7 @@
                                 <tr>
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
-                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td [innerHTML]="doc.get('remarks').value"></td>
                                     <td *ngIf="doc.get('signature').value">
                                         <i class="fa fa-check"></i>
                                     </td>
@@ -485,9 +494,13 @@
                         <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalMOCols">
-                                        {{ col.header }}
-                                    </th>
+                                    <th *ngFor="let col of legalMOCols" [ngClass]="col.field === 'documentName' ? 'lMDocName' : 
+                                                                        col.field === 'agmtCode' ? 'lMAgmtCode' : 
+                                                                        col.field === 'remarks' ? 'lMRemark' : 
+                                                                        col.field === 'signature' ? 'lMSignature' : 
+                                                                        col.field === 'canWaiver' ? 'lMWaiver' : null">
+                                                                    
+                                </th>
                                     <th style="width: 10%"></th>
                                 </tr>
                             </ng-template>
@@ -495,7 +508,7 @@
                                 <tr>
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
-                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td [innerHTML]="doc.get('remarks').value"></td>
                                     <td *ngIf="doc.get('signature').value">
                                         <i class="fa fa-check"></i>
                                     </td>
@@ -595,7 +608,13 @@
                         <p-table [value]="legalDocumentsForm.get('conditional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalCCols">
+                                    <th *ngFor="let col of legalCCols" [ngClass]="col.field === 'documentName' ? 'lCDocName' : 
+                                                                        col.field === 'conditionName' ? 'lCCondName' : 
+                                                                        col.field === 'conditionOptions' ? 'lCCondOption' : 
+                                                                        col.field === 'agmtCode' ? 'lCAgmtCode' :
+                                                                        col.field === 'remarks' ? 'lCRemark' :
+                                                                        col.field === 'signature' ? 'lCSignature' : 
+                                                                        col.field === 'canWaiver' ? 'lCWaiver' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -613,8 +632,7 @@
                                         <ng-container *ngIf="j === 0">
                                             <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
                                                 doc.get('agmtCode').value }}</td>
-                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">{{
-                                                doc.get('remarks').value }}</td>
+                                            <td [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']" [innerHTML]="doc.get('remarks').value"></td>
                                             <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']">
                                                 <i class="fa fa-check"></i>
                                             </td>
@@ -767,7 +785,11 @@
                         <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalMOCols">
+                                    <th *ngFor="let col of legalMOCols" [ngClass]="col.field === 'documentName' ? 'lODocName' : 
+                                                                        col.field === 'agmtCode' ? 'lOAgmtCode' : 
+                                                                        col.field === 'remarks' ? 'lORRemark' : 
+                                                                        col.field === 'signature' ? 'lOSignature' : 
+                                                                        col.field === 'canWaiver' ? 'lOWaiver' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -777,7 +799,7 @@
                                 <tr>
                                     <td>{{ doc.get('documentName').value }}</td>
                                     <td>{{ doc.get('agmtCode').value }}</td>
-                                    <td>{{ doc.get('remarks').value }}</td>
+                                    <td [innerHTML]="doc.get('remarks').value"> </td>
                                     <td *ngIf="doc.get('signature').value">
                                         <i class="fa fa-check"></i>
                                     </td>

@@ -2,6 +2,10 @@
 .edited-field { background-color: #FFE073 !important}
 .new-field { background-color: #AADD81 !important}
 
+.zoom {
+    zoom: 90%;
+}
+
 :host >>> .ui-overlaypanel {
     z-index: 100;
     left: 40%;
@@ -31,3 +35,142 @@
 .th{
     text-align: center;
 }
+
+/*
+ * All Table Column Widths 
+ */
+
+/* Compliance Mandatory Checklist */
+
+.cMDocName {
+    width: 15%
+}
+
+.cMAgmtCode {
+    width: 7%
+}
+
+.cMRemark {
+    width: 50%
+}
+
+.cMSignature { 
+    width: 10%
+}
+
+/* Compliance Conditional Checklist */
+.cCDocName {
+    width: 15%
+}
+
+.cCCondName{
+    width: 15%
+}
+
+.cCCondOption {
+    width: 10%
+}
+
+.cCAgmtCode {
+    width: 7%
+}
+
+.cCRemark {
+    width: 40%
+}
+
+.cCSignature { 
+    width: 10%
+}
+
+/* Compliance Optional Checklist */
+.cODocName {
+    width: 15%
+}
+
+.cOAgmtCode {
+    width: 7%
+}
+
+.cORemark {
+    width: 50%
+}
+
+.cOSignature { 
+    width: 10%
+}
+
+/* Legal Mandatory Checklist */
+
+.lMDocName {
+    width: 15%
+}
+
+.lMAgmtCode {
+    width: 7%
+}
+
+.lMRemark {
+    width: 50%
+}
+
+.lMSignature { 
+    width: 10%
+}
+
+.lMWaiver { 
+    width: 10%
+}
+
+/* Legal Conditional Checklist */
+
+.lCDocName {
+    width: 15%
+}
+
+.lCCondName{
+    width: 15%
+}
+
+.lCCondOption {
+    width: 10%
+}
+
+.lCAgmtCode {
+    width: 7%
+}
+
+.lCRemark {
+    width: 40%
+}
+
+.lCSignature { 
+    width: 10%
+}
+
+.lCWaiver { 
+    width: 10%
+}
+
+/* Legal Optional Checklist */
+
+.lODocName {
+    width: 15%
+}
+
+.lOAgmtCode {
+    width: 7%
+}
+
+.lORRemark {
+    width: 40%
+}
+
+.lOSignature { 
+    width: 10%
+}
+
+.lOWaiver { 
+    width: 10%
+}
+

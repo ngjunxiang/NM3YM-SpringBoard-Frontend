@@ -2,6 +2,10 @@
 .edited-field { background-color: #FFE073 !important}
 .new-field { background-color: #AADD81 !important}
 
+.zoom {
+    zoom: 90%;
+}
+
 :host >>> .ui-overlaypanel {
     z-index: 100;
     left: 40%;

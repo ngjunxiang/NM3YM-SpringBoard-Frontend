@@ -4,7 +4,7 @@
     <p-progressSpinner strokeWidth="8" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
 </div> -->
 
-<div *ngIf="!loading">
+<div class="zoom" *ngIf="!loading">
     <div style="padding-bottom: 10px">
         <p-card styleClass="ui-card-shadow" [formGroup]="checklistLogForm">
             <h4>Checklist Logs</h4>
@@ -126,7 +126,7 @@
                             <tr *ngIf="doc.changed === '0'">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks">{{ doc.remarks }}</td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -137,7 +137,7 @@
                             <tr *ngIf="doc.changed === '1'" class="edited-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks">{{ doc.remarks }}</td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -148,7 +148,7 @@
                             <tr *ngIf="doc.changed === '2'" class="new-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks">{{ doc.remarks }}</td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -159,7 +159,7 @@
                             <tr *ngIf="doc.changed === '3'" class="deleted-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks">{{ doc.remarks }}</td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -194,7 +194,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -211,7 +211,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -228,7 +228,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -245,7 +245,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -276,7 +276,7 @@
                             <tr *ngIf="doc.changed === '0'">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -287,7 +287,7 @@
                             <tr *ngIf="doc.changed === '1'" class="edited-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -298,7 +298,7 @@
                             <tr *ngIf="doc.changed === '2'" class="new-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -309,7 +309,7 @@
                             <tr *ngIf="doc.changed === '3'" class="deleted-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -343,7 +343,7 @@
                             <tr *ngIf="doc.changed === '0'">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -360,7 +360,7 @@
                             <tr *ngIf="doc.changed === '1'" class="edited-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -377,7 +377,7 @@
                             <tr *ngIf="doc.changed === '2'" class="new-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -394,7 +394,7 @@
                             <tr *ngIf="doc.changed === '3'" class="deleted-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -435,7 +435,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -458,7 +458,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -481,7 +481,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -504,7 +504,7 @@
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
                                         <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.remarks }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -542,7 +542,7 @@
                             <tr *ngIf="doc.changed === '0'">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -559,7 +559,7 @@
                             <tr *ngIf="doc.changed === '1'" class="edited-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -576,7 +576,7 @@
                             <tr *ngIf="doc.changed === '2'" class="new-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
@@ -593,7 +593,7 @@
                             <tr *ngIf="doc.changed === '3'" class="deleted-field">
                                 <td>{{ doc.documentName }}</td>
                                 <td>{{ doc.agmtCode }}</td>
-                                <td>{{ doc.remarks }}</td>
+                                <td [innerHTML]="doc.remarks"></td>
                                 <td *ngIf="doc.signature">
                                     <i class="fa fa-check"></i>
                                 </td>
