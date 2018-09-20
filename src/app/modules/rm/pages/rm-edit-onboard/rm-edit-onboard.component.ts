@@ -210,6 +210,10 @@ export class RMEditOnboardComponent implements OnInit {
             this.initForm();
 
             this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
         });
     }
 

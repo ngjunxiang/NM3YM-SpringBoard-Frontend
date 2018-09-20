@@ -82,6 +82,10 @@ export class RMManageOnboardComponent implements OnInit {
                 });
             }
             this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
         });
     }
 
