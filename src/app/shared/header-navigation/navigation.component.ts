@@ -67,7 +67,7 @@ export class NavigationComponent implements AfterViewInit, OnInit {
     async retrieveNotifications(): Promise<boolean> {
         this.latestNotifications = [];
         this.allNotifications = [];
-        
+        console.log(this.notifications)
         this.notifications.forEach(notification => {
             if (!notification.checked) {
                 if (notification.type.changed === '1') {
@@ -99,7 +99,7 @@ export class NavigationComponent implements AfterViewInit, OnInit {
             this.hasNew = true;
             this.newCount = this.latestNotifications.length;
         }
-
+console.log(this.latestNotifications)
         return true;
     }
 

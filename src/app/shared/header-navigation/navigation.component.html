@@ -55,7 +55,7 @@
                                             <a href="javascript:void(0)" (click)="showMore()">Show more</a>
                                         </div>
                                     </div>
-                                    <ng-container *ngIf="latestNotifications > 0">
+                                    <ng-container *ngIf="latestNotifications.length> 0">
                                         <ng-container *ngFor="let notification of latestNotifications; let i = index">
                                             <li>
                                                 <a style="font-size: 12px" href="javascript:void(0)">{{ notification }}</a>
