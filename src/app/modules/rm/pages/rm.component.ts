@@ -92,6 +92,7 @@ export class RMComponent implements OnInit {
             if (res.results) {
                 this.notifications = res.results.notifications;
             }
+
             this.loading = false;
         }, error => {
             this.appMsgs.push({

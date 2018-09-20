@@ -33,42 +33,55 @@
                 <!-- ============================================================== -->
                 <!-- Search -->
                 <!-- ============================================================== -->
-                <li class="nav-item dropdown" ngbDropdown placement="bottom-right" autoClose="false:outside" (openChange)="toggleHasNew($event)">
+                <li class="nav-item dropdown" ngbDropdown placement="bottom-right" autoClose="false:outside"
+                    (openChange)="toggleHasNew($event)">
                     <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <i *ngIf="!hasNew" class="fas fa-bell fa-lg"></i>
-                        <i *ngIf="hasNew" class="fas fa-bell fa-lg" matBadge="{{ newCount }}" matBadgeColor="warn" matBadgeSize="medium"></i>
+                        <i *ngIf="hasNew" class="fas fa-bell fa-lg" matBadge="{{ newCount }}" matBadgeColor="warn"
+                            matBadgeSize="medium"></i>
                     </a>
                     <div class="dropdown-menu animated" ngbDropdownMenu>
-                        <ul class="dropdown-user">
+                        <ul *ngIf="!loading" class="dropdown-user">
                             <div *ngIf="allNotifications.length === 0" style="text-align: center">
-                                <a href="javascript:void(0)">No notifications</a>
+                                <a style="font-size: 14px" href="javascript:void(0)">No notifications</a>
                             </div>
-                            <div *ngIf="!showAll">
-                                <ng-container *ngFor="let notification of latestNotifications; let i = index">
-                                    <li>
-                                        <a href="javascript:void(0)">{{ notification }}</a>
-                                    </li>
-                                    <ng-container *ngIf="i === latestNotifications.length - 1">
+                            <div *ngIf="allNotifications.length > 0">
+                                <div *ngIf="!showAll">
+                                    <div *ngIf="latestNotifications.length === 0" style="text-align: center">
+                                        <a style="font-size: 14px" href="javascript:void(0)">No new notifications</a>
                                         <li role="separator" class="divider"></li>
                                         <div style="text-align: center">
                                             <a href="javascript:void(0)" (click)="showMore()">Show more</a>
                                         </div>
+                                    </div>
+                                    <ng-container *ngIf="latestNotifications > 0">
+                                        <ng-container *ngFor="let notification of latestNotifications; let i = index">
+                                            <li>
+                                                <a style="font-size: 12px" href="javascript:void(0)">{{ notification }}</a>
+                                            </li>
+                                            <ng-container *ngIf="i === latestNotifications.length - 1">
+                                                <li role="separator" class="divider"></li>
+                                                <div style="text-align: center">
+                                                    <a href="javascript:void(0)" (click)="showMore()">Show more</a>
+                                                </div>
+                                            </ng-container>
+                                        </ng-container>
                                     </ng-container>
-                                </ng-container>
-                            </div>
-                            <div *ngIf="showAll">
-                                <ng-container *ngFor="let notification of allNotifications; let i = index">
-                                    <li>
-                                        <a href="javascript:void(0)">{{ notification }}</a>
-                                    </li>
-                                    <ng-container *ngIf="i === allNotifications.length - 1">
-                                        <li role="separator" class="divider"></li>
-                                        <div style="text-align: center">
-                                            <a href="javascript:void(0)" (click)="showLess()">Show less</a>
-                                        </div>
+                                </div>
+                                <div *ngIf="showAll">
+                                    <ng-container *ngFor="let notification of allNotifications; let i = index">
+                                        <li>
+                                            <a style="font-size: 12px" href="javascript:void(0)">{{ notification }}</a>
+                                        </li>
+                                        <ng-container *ngIf="i === allNotifications.length - 1">
+                                            <li role="separator" class="divider"></li>
+                                            <div style="text-align: center">
+                                                <a href="javascript:void(0)" (click)="showLess()">Show less</a>
+                                            </div>
+                                        </ng-container>
                                     </ng-container>
-                                </ng-container>
+                                </div>
                             </div>
                         </ul>
                     </div>

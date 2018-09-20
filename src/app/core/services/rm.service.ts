@@ -67,7 +67,7 @@ export class RMService {
     private retrieveChecklistURL = environment.host + '/app/rm/retrieve-checklist';
 
     // Notifications Endpoints
-    private retrieveNotificationsURL = environment.host + '/app/rm/retrieve-all-notifications';
+    private retrieveNotificationsURL = environment.host + '/app/rm/retrieve-notifications';
     private updateNotificationsURL = environment.host + '/app/rm/update-notifications';
 
     // Onboard Endpoints
