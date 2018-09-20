@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
-import { RMService } from '../../../../core/services/rm.service';
+import { CMService } from '../../../../core/services/cm.service';
 
 @Component({
-    selector: 'rm-faq',
-    templateUrl: './rm-faq.component.html',
-    styleUrls: ['./rm-faq.component.css']
+    selector: 'cm-faq',
+    templateUrl: './cm-faq.component.html',
+    styleUrls: ['./cm-faq.component.css']
 })
-export class RMFaqComponent implements OnInit {
+export class CMFaqComponent implements OnInit {
 
     // UI Control
     loading = false;
@@ -23,7 +23,7 @@ export class RMFaqComponent implements OnInit {
     faqs: any[];
 
     constructor(
-        private rmService: RMService,
+        private cmService: CMService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -51,23 +51,22 @@ export class RMFaqComponent implements OnInit {
 
         this.loading = true;
 
-        this.rmService.retrieveRMFaq(this.questionForm.get('question').value).subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
+        // call endpoint here 
+        
+        this.faqs = [
+            {
+                question: 'Question 1?',
+                answer: 'Answer 1'
+            },
+            {
+                question: 'Question 2?',
+                answer: 'Answer 2'
+            },
+            {
+                question: 'Question 3?',
+                answer: 'Answer 3'
             }
-
-            if (res.results) {
-                this.faqs = res.results;
-            }
-
-            this.loading = false;
-        }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
-            });
-        });
+        ];
 
         this.searched = true;
         this.loading = false;

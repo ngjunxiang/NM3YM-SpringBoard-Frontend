@@ -35,10 +35,10 @@ import { CMComponent } from './pages/cm.component';
 import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.component';
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
+import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMService } from '../../core/services/cm.service';
-
-
+import { CMFaqComponent } from './pages/cm-faq/cm-faq.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -83,6 +83,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMChecklistComponent,
         CMEditChecklistComponent,
         CMEditChecklistComponent,
+        CMFaqComponent,
+        CMNewChecklistComponent,
         CMViewChecklistLogsComponent,
     ],
     providers: [

@@ -44,8 +44,10 @@ export class CMService {
     private retrieveChecklistNamesURL = environment.host + '/app/cm/retrieve-checklistNames';
     private retrieveChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
     private retrieveChecklistLogDetailsURL = environment.host + '/app/cm/retrieve-loggedLists';
+    private createChecklistURL = environment.host + '/app/cm/create-checklist';
     private updateChecklistURL = environment.host + '/app/cm/update-checklist';
-    private retrieveChecklistURL = environment.host + '/app/cm/manage-checklist';
+    private retrieveDeleteChecklistURL = environment.host + '/app/cm/manage-checklist';
+    private retrieveFAQURL = environment.host + '/app/cm/faq';
 
     constructor(
         private authService: AuthenticationService,
@@ -97,7 +99,48 @@ export class CMService {
 
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
-        return this.http.post<Checklist>(this.retrieveChecklistURL, postData, httpOptions)
+        return this.http.post<Checklist>(this.retrieveDeleteChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveCMFaq(question) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistIdData = {
+            'question': question
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistIdData);
+
+        return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    createCMChecklist(checklist) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistData = {
+            'checklist': JSON.stringify(checklist),
+            'name': this.authService.userDetails.name
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistData);
+
+        return this.http.post<Response>(this.createChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -120,6 +163,27 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems, checklistData);
 
         return this.http.post<Response>(this.updateChecklistURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    deleteCMChecklist(checklistId) {
+        const checklistData = {
+            'clID': checklistId
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistData);
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            }),
+            body: postData
+        };
+
+        return this.http.delete<Response>(this.retrieveDeleteChecklistURL, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

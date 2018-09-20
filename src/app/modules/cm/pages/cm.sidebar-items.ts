@@ -8,8 +8,12 @@ export const ROUTES: RouteInfo[] = [
         path: '/cm/checklist', title: 'Checklists', icon: 'mdi mdi-playlist-check', class: 'has-arrow', label: '', labelClass: '', extralink: false,
         submenu: [
             { path: '/cm/checklist/manage', title: 'Manage Checklists', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+            { path: '/cm/checklist/create', title: 'New Checklist', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/cm/checklist/logs', title: 'View Logs', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
+    },
+    {
+        path: '/cm/faq', title: 'FAQ', icon: 'mdi mdi-comment-question-outline', class: '', label: '', labelClass: '', extralink: false, submenu: []
     }
 ];
 

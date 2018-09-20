@@ -8,6 +8,8 @@ import { CMDashboardComponent } from './pages/cm-dashboard/cm-dashboard.componen
 import { CMChecklistComponent } from './pages/cm-checklist/cm-checklist.component';
 import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
+import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
+import { CMFaqComponent } from './pages/cm-faq/cm-faq.component';
 
 const routes: Routes = [
     {
@@ -47,6 +49,15 @@ const routes: Routes = [
                 canActivate: [CMAuthGuard]
             },
             {
+                path: 'checklist/create',
+                component: CMNewChecklistComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'Checklists' }, { title: 'New' }]
+                }, 
+                canActivate: [CMAuthGuard] 
+            },
+            {
                 path: 'checklist/logs',
                 component: CMViewChecklistLogsComponent,
                 data: {
@@ -54,6 +65,15 @@ const routes: Routes = [
                     urls: [{ title: 'Checklists' }, { title: 'View Logs' }]
                 },
                 canActivate: [CMAuthGuard]
+            },
+            {
+                path: 'faq',
+                component: CMFaqComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'FAQ' }]
+                }, 
+                canActivate: [CMAuthGuard] 
             }
         ]
     },

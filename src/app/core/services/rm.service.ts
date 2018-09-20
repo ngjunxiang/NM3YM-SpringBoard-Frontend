@@ -77,6 +77,9 @@ export class RMService {
     private deleteUpdateOnboardProcessURL = environment.host + '/app/rm/manage-onboard';
     private retrieveAllRMNamesURL = environment.host + '/app/rm/retrieve-rm-names';
 
+    // FAQ Endpoints
+    private retrieveFAQURL = environment.host + '/app/rm/faq';
+
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
@@ -195,6 +198,26 @@ export class RMService {
         const postData = Object.assign(this.authService.authItems, obIDData);
 
         return this.http.post<ObList>(this.retrieveOnboardProcessDetailsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveRMFaq(question) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistIdData = {
+            'question': question
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistIdData);
+
+        return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
