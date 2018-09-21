@@ -5,7 +5,7 @@
         <p-card [formGroup]="checklistForm" styleClass="ui-card-shadow">
             <h4>Select Checklist</h4>
             <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistId"
-                [style]="{'width':'50%'}"></p-dropdown>
+                [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
         </p-card>
         <button pButton label="Next" class="ui-button-success" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-arrow-right"
             (click)="submitChecklistName()"></button>
@@ -20,7 +20,7 @@
                         <h5>{{ selectedChecklistData.requiredFields[i] }}</h5>
                         <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" style="display: inline-block; width: 50%" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
                             formControlName="field" required pInputText>
-                        <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field"></p-dropdown>
+                        <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field" [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
                         <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" dateFormat="dd/mm/yy" placeholder="Enter Date of Submission"
                             formControlName="field"></p-calendar>
                     </div>
@@ -34,7 +34,7 @@
                     <div class="field" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index" [formGroupName]="i">
                         <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
                         <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option" formControlName="conditionOption"
-                            [style]="{'width':'30%'}"></p-dropdown>
+                            [style]="{'width':'30%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
                     </div>
                 </div>
             </p-card>

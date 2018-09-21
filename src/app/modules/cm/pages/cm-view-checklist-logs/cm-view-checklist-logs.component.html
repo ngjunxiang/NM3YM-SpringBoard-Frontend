@@ -11,8 +11,8 @@
             <div>
                 <h5>Select a checklist: </h5>
                 <p-dropdown [options]="checklistNameData" (onChange)="reloadVersions($event)" placeholder="Select a checklist" formControlName="clID"
-                    [style]="{'width':'50%'}"></p-dropdown>
-                <p-dropdown [options]="checklistVersionData" placeholder="Select a version" formControlName="version" [style]="{'width':'20%', 'margin-left': '1%'}"></p-dropdown>
+                    [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
+                <p-dropdown [options]="checklistVersionData" placeholder="Select a version" formControlName="version" [style]="{'width':'20%', 'margin-top': '0.5%', 'margin-left': '1.5%'}"></p-dropdown>
             </div>
 
             <button pButton label="Retrieve" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-search"
