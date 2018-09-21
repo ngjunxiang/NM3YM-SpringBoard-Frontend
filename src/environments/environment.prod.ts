@@ -1,4 +1,9 @@
 export const environment = {
     production: true,
-    host: 'http://13.229.84.127'
+
+    // Team AWS Server
+    // host: 'http://13.229.84.127'
+
+    // BNP AWS Server
+    host: 'http://54.169.159.209'
 };
