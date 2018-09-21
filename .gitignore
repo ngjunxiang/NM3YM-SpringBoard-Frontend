@@ -6,6 +6,9 @@
 /out-tsc
 
 # dependencies
+/node_modules/*
+!/node_modules/primeng/components/overlaypanel/overlaypanel.js
+!/node_modules/primeng/components/fileupload/fileupload.js
 
 # IDEs and editors
 /.idea
