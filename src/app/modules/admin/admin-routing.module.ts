@@ -8,7 +8,6 @@ import { UpdateAdminComponent } from './pages/update-admin/update-admin.componen
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 import { AdminAuthGuard } from '../../core/guard/admin-auth.guard';
-import { UploadAgmtComponent } from './pages/upload-agmt/upload-agmt.component';
 
 const routes: Routes = [
     { 
@@ -53,15 +52,6 @@ const routes: Routes = [
                 data: {
                     title: 'Admin',
                     urls: [{ title: 'User Management'}, { title: 'Delete User Account' }]
-                }, 
-                canActivate: [AdminAuthGuard] 
-            },
-            {
-                path: 'upload/agmtDoc',
-                component: UploadAgmtComponent,
-                data: {
-                    title: 'Admin',
-                    urls: [{ title: 'Upload'}, { title: 'Agmt - Doc Mapping' }]
                 }, 
                 canActivate: [AdminAuthGuard] 
             }

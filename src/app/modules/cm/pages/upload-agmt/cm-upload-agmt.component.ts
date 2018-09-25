@@ -5,18 +5,18 @@ import { environment } from '../../../../../environments/environment';
 import { AuthenticationService } from '../../../../core/services/authentication.service';
 
 @Component({
-    selector: 'admin-upload-agmt',
-    templateUrl: './upload-agmt.component.html',
-    styleUrls: ['./upload-agmt.component.scss']
+    selector: 'cm-upload-agmt',
+    templateUrl: './cm-upload-agmt.component.html',
+    styleUrls: ['./cm-upload-agmt.component.scss']
 })
-export class UploadAgmtComponent implements OnInit {
+export class CMUploadAgmtComponent implements OnInit {
 
     // UI Control
     loading = false;
     msgs: Message[] = [];
 
     // UI Component
-    uploadUrl: string = environment.host + '/app/admin/upload-AgmtCodes';
+    uploadUrl: string = environment.host + '/app/cm/upload-AgmtCodes';
     inputFiles: any[];
     errorFiles: any[];
     response: any;

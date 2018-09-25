@@ -20,9 +20,6 @@ import { MessageModule } from 'primeng/message';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AdminAuthGuard } from './core/guard/admin-auth.guard';
-import { RMAuthGuard } from './core/guard/rm-auth.guard';
-import { CMAuthGuard } from './core/guard/cm-auth.guard';
 import { SharedModule } from './shared/shared.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {

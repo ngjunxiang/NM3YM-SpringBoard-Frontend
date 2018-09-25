@@ -9,7 +9,6 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
 import { GrowlModule } from 'primeng/growl';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
@@ -24,7 +23,6 @@ import { CreateAdminComponent } from './pages/create-admin/create-admin.componen
 import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
 import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
-import { UploadAgmtComponent } from './pages/upload-agmt/upload-agmt.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -39,7 +37,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommonModule,
         DialogModule,
         DropdownModule,
-        FileUploadModule,
         FormsModule,
         GrowlModule,
         InputTextModule,
@@ -56,8 +53,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AdminPanelComponent,
         CreateAdminComponent,
         UpdateAdminComponent,
-        DeleteAdminComponent,
-        UploadAgmtComponent
+        DeleteAdminComponent
     ],
     providers: [
         {

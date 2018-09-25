@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadAgmtComponent } from './upload-agmt.component';
+import { CMUploadAgmtComponent } from './cm-upload-agmt.component';
 
-describe('UploadAgmtComponent', () => {
-    let component: UploadAgmtComponent;
-    let fixture: ComponentFixture<UploadAgmtComponent>;
+describe('CMUploadAgmtComponent', () => {
+    let component: CMUploadAgmtComponent;
+    let fixture: ComponentFixture<CMUploadAgmtComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [UploadAgmtComponent]
+            declarations: [CMUploadAgmtComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(UploadAgmtComponent);
+        fixture = TestBed.createComponent(CMUploadAgmtComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

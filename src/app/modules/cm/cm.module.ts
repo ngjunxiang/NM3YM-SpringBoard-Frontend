@@ -16,6 +16,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
 import { GrowlModule } from 'primeng/growl';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
@@ -39,6 +40,7 @@ import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checkli
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMService } from '../../core/services/cm.service';
 import { CMFaqComponent } from './pages/cm-faq/cm-faq.component';
+import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -59,6 +61,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ConfirmDialogModule,
         DialogModule,
         DropdownModule,
+        FileUploadModule,
         FormsModule,
         GrowlModule,
         InputTextareaModule,
@@ -86,6 +89,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMFaqComponent,
         CMNewChecklistComponent,
         CMViewChecklistLogsComponent,
+        CMUploadAgmtComponent
     ],
     providers: [
         {
