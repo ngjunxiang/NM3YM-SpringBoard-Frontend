@@ -197,8 +197,12 @@ export class UpdateAdminComponent implements OnInit {
 
             if (res.results) {
                 this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'User password has been updated'
+                    severity: 'success', summary: 'Success', detail: updateUsername + `'s password has been updated`
                 });
+
+                this.updateUserForm.controls.username.reset('');
+                this.updateUserForm.controls.password.reset('');
+                this.updateUserForm.controls.confirmPassword.reset('');
             } else {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: 'Username not found'

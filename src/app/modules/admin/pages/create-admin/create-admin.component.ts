@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
-import { Message } from 'primeng/components/common/api';
+import { Message, SelectItem } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
 import { AdminService } from '../../../../core/services/admin.service';
-
-interface UserType {
-    name: string;
-    code: string;
-}
 
 @Component({
     selector: 'admin-create',
@@ -27,25 +22,24 @@ export class CreateAdminComponent implements OnInit {
     // UI Component
     createUserForm: FormGroup;
     passwordForm: FormGroup;
-    userTypes: UserType[];
+    userTypes: SelectItem[];
     usernames = [];
     emails = [];
 
     constructor(
         private fb: FormBuilder,
         private adminService: AdminService
-    ) {
-        this.userTypes = [
-            { name: 'Admin', code: 'ADMIN' },
-            { name: 'Client Management', code: 'CM' },
-            { name: 'Compliance', code: 'COM' },
-            { name: 'Relationship Manager', code: 'RM' }
-
-        ]
-    }
+    ) { }
 
     ngOnInit() {
         this.loading = true;
+
+        this.userTypes = [
+            { label: 'Admin', value: 'ADMIN' },
+            { label: 'Client Management', value: 'CM' },
+            { label: 'Marketing Assistant', value: 'MA' },
+            { label: 'Relationship Manager', value: 'RM' }
+        ];
 
         this.createForm();
     }
@@ -191,7 +185,7 @@ export class CreateAdminComponent implements OnInit {
         let newUsername = this.createUserForm.controls.username.value;
         let newPassword = this.createUserForm.controls.passwordForm.get('password').value;
         let newEmail = this.createUserForm.controls.email.value;
-        let newUserType = this.createUserForm.controls.userType.value.code;
+        let newUserType = this.createUserForm.controls.userType.value;
 
         this.adminService.createUser(newName, newUsername, newEmail, newUserType, newPassword).subscribe(res => {
             if (res.error) {
@@ -203,8 +197,15 @@ export class CreateAdminComponent implements OnInit {
 
             if (res.results) {
                 this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'User has been created'
+                    severity: 'success', summary: 'Success', detail: newUsername + ' has been created'
                 });
+
+                this.createUserForm.controls.name.reset('');
+                this.createUserForm.controls.username.reset('');
+                this.createUserForm.controls.passwordForm.get('password').reset('');
+                this.createUserForm.controls.passwordForm.get('confirmPassword').reset('');
+                this.createUserForm.controls.email.reset('');
+                this.createUserForm.controls.userType.reset('');
             } else {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: 'Something went wrong'

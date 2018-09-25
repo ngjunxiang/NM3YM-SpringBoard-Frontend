@@ -127,8 +127,10 @@ export class DeleteAdminComponent implements OnInit {
 
             if (res.results && res.items_deleted === 1) {
                 this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'User has been deleted'
+                    severity: 'success', summary: 'Success', detail: deleteUsername + ' has been deleted'
                 });
+
+                this.deleteUserForm.controls.username.reset('');
             } else {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: 'Username not found'

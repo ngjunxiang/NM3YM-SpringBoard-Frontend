@@ -36,7 +36,7 @@
         </div>
 
         <h4>User Type</h4>
-        <p-dropdown [options]="userTypes" optionLabel="name" formControlName="userType" placeholder="Select User Type"></p-dropdown>
+        <p-dropdown [options]="userTypes" formControlName="userType" placeholder="Select User Type"></p-dropdown>
         <div class="error-inline-msg" style="padding-top: 10px; padding-bottom: 20px">
             <span *ngIf="createUserForm.controls.userType.dirty && createUserForm.controls.userType.errors?.required">
                 Please fill in the user type field
