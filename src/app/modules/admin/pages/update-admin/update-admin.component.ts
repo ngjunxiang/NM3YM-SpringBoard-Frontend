@@ -173,7 +173,8 @@ export class UpdateAdminComponent implements OnInit {
         this.updateUserForm.controls.password.markAsDirty();
         this.updateUserForm.controls.confirmPassword.markAsDirty();
 
-        if (this.updateUserForm.controls.username.invalid ||
+        if (this.updateUserForm.invalid ||
+            this.updateUserForm.controls.username.invalid ||
             this.updateUserForm.controls.password.invalid ||
             this.updateUserForm.controls.confirmPassword.invalid) {
             this.msgs.push({
