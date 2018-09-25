@@ -24,7 +24,7 @@ const routes: Routes = [
                 path: 'dashboard',
                 component: RMDashboardComponent,
                 data: {
-                    title: 'Marketing Assistant',
+                    title: 'Front Office',
                     urls: [{ title: 'Dashboard' }]
                 }, 
                 canActivate: [RMAuthGuard] 
@@ -33,7 +33,7 @@ const routes: Routes = [
                 path: 'onboard/manage',
                 component: RMManageOnboardComponent,
                 data: {
-                    title: 'Marketing Assistant',
+                    title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'Manage' }]
                 }, 
                 canActivate: [RMAuthGuard] 
@@ -42,7 +42,7 @@ const routes: Routes = [
                 path: 'onboard/create',
                 component: RMNewOnboardComponent,
                 data: {
-                    title: 'Marketing Assistant',
+                    title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'New' }]
                 }, 
                 canActivate: [RMAuthGuard] 
@@ -51,7 +51,7 @@ const routes: Routes = [
                 path: 'onboard/edit/:id',
                 component: RMEditOnboardComponent,
                 data: {
-                    title: 'Marketing Assistant',
+                    title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
                 }, 
                 canActivate: [RMAuthGuard] 
@@ -60,7 +60,7 @@ const routes: Routes = [
                 path: 'faq',
                 component: RMFaqComponent,
                 data: {
-                    title: 'Marketing Assistant',
+                    title: 'Front Office',
                     urls: [{ title: 'FAQ' }]
                 }, 
                 canActivate: [RMAuthGuard] 
