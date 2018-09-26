@@ -342,7 +342,7 @@ export class FOEditOnboardComponent implements OnInit {
             }
 
             setTimeout(() => {
-                this.router.navigate(['/rm/onboard/manage']);
+                this.router.navigate(['/fo/onboard/manage']);
             }, 3000);
         }, error => {
             this.msgs.push({

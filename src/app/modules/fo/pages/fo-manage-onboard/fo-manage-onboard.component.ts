@@ -91,7 +91,7 @@ export class FOManageOnboardComponent implements OnInit {
 
     editOnboardProcess(index: number) {
         let selectedOnboardID = this.obProcesses[index].obID;
-        this.router.navigate(['/rm/onboard/edit', selectedOnboardID], {
+        this.router.navigate(['/fo/onboard/edit', selectedOnboardID], {
             queryParams: {
                 name: this.obProcesses[index].type
             }
