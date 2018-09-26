@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -14,6 +14,10 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { NavigationComponent } from './header-navigation/navigation.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { IdleTimeoutComponent } from '../core/idletimeout/idle.timeout.component';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+    suppressScrollX: true
+}
 
 @NgModule({
     imports: [
@@ -39,6 +43,12 @@ import { IdleTimeoutComponent } from '../core/idletimeout/idle.timeout.component
         NavigationComponent,
         SidebarComponent,
         SpinnerComponent
+    ],
+    providers: [
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        }
     ]
 })
 export class SharedModule { }
