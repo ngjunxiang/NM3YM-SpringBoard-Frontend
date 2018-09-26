@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RMEditOnboardComponent } from './rm-edit-onboard.component';
+import { FOEditOnboardComponent } from './fo-edit-onboard.component';
 
-describe('RMEditOnboardComponent', () => {
-    let component: RMEditOnboardComponent;
-    let fixture: ComponentFixture<RMEditOnboardComponent>;
+describe('FOEditOnboardComponent', () => {
+    let component: FOEditOnboardComponent;
+    let fixture: ComponentFixture<FOEditOnboardComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RMEditOnboardComponent]
+            declarations: [FOEditOnboardComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RMEditOnboardComponent);
+        fixture = TestBed.createComponent(FOEditOnboardComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

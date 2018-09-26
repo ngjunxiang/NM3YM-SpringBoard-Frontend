@@ -4,15 +4,15 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
 
-import { RMService } from '../../../../core/services/rm.service';
+import { FOService } from '../../../../core/services/fo.service';
 
 @Component({
-    selector: 'rm-manage-onboard',
-    templateUrl: './rm-manage-onboard.component.html',
-    styleUrls: ['./rm-manage-onboard.component.scss']
+    selector: 'fo-manage-onboard',
+    templateUrl: './fo-manage-onboard.component.html',
+    styleUrls: ['./fo-manage-onboard.component.scss']
 })
 
-export class RMManageOnboardComponent implements OnInit {
+export class FOManageOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
@@ -23,7 +23,7 @@ export class RMManageOnboardComponent implements OnInit {
 
     constructor(
         private confirmationService: ConfirmationService,
-        private rmService: RMService,
+        private foService: FOService,
         private router: Router
     ) { }
 
@@ -39,7 +39,7 @@ export class RMManageOnboardComponent implements OnInit {
     retrieveAllOnboardProcesses() {
         this.loading = true;
         this.obProcesses = [];
-        this.rmService.retrieveAllOnboardProcesses().subscribe(res => {
+        this.foService.retrieveAllOnboardProcesses().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -105,7 +105,7 @@ export class RMManageOnboardComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 let selectedOnboardID = this.obProcesses[index].obID;
-                this.rmService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
+                this.foService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error

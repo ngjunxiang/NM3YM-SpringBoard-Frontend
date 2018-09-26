@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
-import { RMService } from '../../../../core/services/rm.service';
+import { FOService } from '../../../../core/services/fo.service';
 
 @Component({
-    selector: 'rm-faq',
-    templateUrl: './rm-faq.component.html',
-    styleUrls: ['./rm-faq.component.css']
+    selector: 'fo-faq',
+    templateUrl: './fo-faq.component.html',
+    styleUrls: ['./fo-faq.component.css']
 })
-export class RMFaqComponent implements OnInit {
+export class FOFaqComponent implements OnInit {
 
     // UI Control
     loading = false;
@@ -23,7 +23,7 @@ export class RMFaqComponent implements OnInit {
     faqs: any[];
 
     constructor(
-        private rmService: RMService,
+        private foService: FOService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -51,7 +51,7 @@ export class RMFaqComponent implements OnInit {
 
         this.loading = true;
 
-        this.rmService.retrieveRMFaq(this.questionForm.get('question').value).subscribe(res => {
+        this.foService.retrieveRMFaq(this.questionForm.get('question').value).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

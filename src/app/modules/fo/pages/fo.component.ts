@@ -4,17 +4,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Message } from 'primeng/components/common/api';
 
-import { ROUTES } from './rm.sidebar-items';
+import { ROUTES } from './fo.sidebar-items';
 import { AuthenticationService } from '../../../core/services/authentication.service';
-import { RMService } from '../../../core/services/rm.service';
+import { FOService } from '../../../core/services/fo.service';
 
 @Component({
-  selector: 'app-rm',
-  templateUrl: './rm.component.html',
-  styleUrls: ['./rm.component.scss']
+  selector: 'app-fo',
+  templateUrl: './fo.component.html',
+  styleUrls: ['./fo.component.scss']
 })
 
-export class RMComponent implements OnInit {
+export class FOComponent implements OnInit {
 
     // Theme
     color = 'defaultdark';
@@ -37,7 +37,7 @@ export class RMComponent implements OnInit {
 
     constructor(
         private authService: AuthenticationService,
-        private rmService: RMService,
+        private foService: FOService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -83,7 +83,7 @@ export class RMComponent implements OnInit {
     }
 
     retrieveNotifications() {
-        this.rmService.retrieveNotifications().subscribe(res => {
+        this.foService.retrieveNotifications().subscribe(res => {
             if (res.error) {
                 this.appMsgs.push({
                     severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
@@ -104,7 +104,7 @@ export class RMComponent implements OnInit {
     }
 
     updateNotifications(event) {
-        this.rmService.updateNotifications().subscribe(res => {
+        this.foService.updateNotifications().subscribe(res => {
             if (res.error) {
                 this.appMsgs.push({
                     severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'

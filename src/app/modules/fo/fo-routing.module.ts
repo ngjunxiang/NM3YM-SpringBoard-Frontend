@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { RMAuthGuard } from '../../core/guard/rm-auth.guard';
-import { RMComponent } from './pages/rm.component';
-import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
-import { RMManageOnboardComponent } from './pages/rm-manage-onboard/rm-manage-onboard.component';
-import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
-import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
-import { RMFaqComponent } from './pages/rm-faq/rm-faq.component';
+import { FOAuthGuard } from '../../core/guard/fo-auth.guard';
+import { FOComponent } from './pages/fo.component';
+import { FODashboardComponent } from './pages/fo-dashboard/fo-dashboard.component';
+import { FOManageOnboardComponent } from './pages/fo-manage-onboard/fo-manage-onboard.component';
+import { FONewOnboardComponent } from './pages/fo-new-onboard/fo-new-onboard.component';
+import { FOEditOnboardComponent } from './pages/fo-edit-onboard/fo-edit-onboard.component';
+import { FOFaqComponent } from './pages/fo-faq/fo-faq.component';
 
 const routes: Routes = [
     { 
@@ -18,52 +18,52 @@ const routes: Routes = [
     },
     {
         path: '',
-        component: RMComponent,
+        component: FOComponent,
         children: [
             {
                 path: 'dashboard',
-                component: RMDashboardComponent,
+                component: FODashboardComponent,
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'Dashboard' }]
                 }, 
-                canActivate: [RMAuthGuard] 
+                canActivate: [FOAuthGuard] 
             },
             {
                 path: 'onboard/manage',
-                component: RMManageOnboardComponent,
+                component: FOManageOnboardComponent,
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'Manage' }]
                 }, 
-                canActivate: [RMAuthGuard] 
+                canActivate: [FOAuthGuard] 
             },
             {
                 path: 'onboard/create',
-                component: RMNewOnboardComponent,
+                component: FONewOnboardComponent,
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'New' }]
                 }, 
-                canActivate: [RMAuthGuard] 
+                canActivate: [FOAuthGuard] 
             },
             {
                 path: 'onboard/edit/:id',
-                component: RMEditOnboardComponent,
+                component: FOEditOnboardComponent,
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
                 }, 
-                canActivate: [RMAuthGuard] 
+                canActivate: [FOAuthGuard] 
             },
             {
                 path: 'faq',
-                component: RMFaqComponent,
+                component: FOFaqComponent,
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'FAQ' }]
                 }, 
-                canActivate: [RMAuthGuard] 
+                canActivate: [FOAuthGuard] 
             }
         ]
     },
@@ -85,4 +85,4 @@ const routes: Routes = [
     declarations: []
 })
 
-export class RMRoutingModule { }
+export class FORoutingModule { }

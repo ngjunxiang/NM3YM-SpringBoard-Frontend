@@ -7,7 +7,7 @@ import { AuthenticationService } from '../services/authentication.service';
     providedIn: 'root'
 })
 
-export class RMAuthGuard implements CanActivate {
+export class FOAuthGuard implements CanActivate {
 
     constructor(
         private authService: AuthenticationService,
@@ -17,8 +17,8 @@ export class RMAuthGuard implements CanActivate {
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.authService.authenticate('RM').then(res => {
-            if (res.newToken && localStorage.getItem('USERTYPE') === 'RM') {
+        return this.authService.authenticate('FO').then(res => {
+            if (res.newToken && (localStorage.getItem('USERTYPE') === 'RM' || localStorage.getItem('USERTYPE') === 'MA')) {
                 this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
                 return true;
             }

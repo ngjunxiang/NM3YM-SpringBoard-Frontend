@@ -4,15 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message, SelectItem } from 'primeng/components/common/api';
 
-import { RMService } from '../../../../core/services/rm.service';
+import { FOService } from '../../../../core/services/fo.service';
 
 @Component({
-    selector: 'rm-new-onboard',
-    templateUrl: './rm-new-onboard.component.html',
-    styleUrls: ['./rm-new-onboard.component.scss']
+    selector: 'fo-new-onboard',
+    templateUrl: './fo-new-onboard.component.html',
+    styleUrls: ['./fo-new-onboard.component.scss']
 })
 
-export class RMNewOnboardComponent implements OnInit {
+export class FONewOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
@@ -37,7 +37,7 @@ export class RMNewOnboardComponent implements OnInit {
     maxDateValue = new Date();
 
     constructor(
-        private rmService: RMService,
+        private foService: FOService,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -92,7 +92,7 @@ export class RMNewOnboardComponent implements OnInit {
             { title: this.selectedChecklistName }
         ];
 
-        this.rmService.retrieveAllRMNames().subscribe(res => {
+        this.foService.retrieveAllRMNames().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -115,7 +115,7 @@ export class RMNewOnboardComponent implements OnInit {
             });
         });
 
-        this.rmService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
+        this.foService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -262,7 +262,7 @@ export class RMNewOnboardComponent implements OnInit {
 
     retrieveChecklistNames() {
         this.checklistNameDropdownData = [];
-        this.rmService.retrieveRMChecklistNames().subscribe(data => {
+        this.foService.retrieveRMChecklistNames().subscribe(data => {
             if (data.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: data.error
@@ -485,7 +485,7 @@ export class RMNewOnboardComponent implements OnInit {
             });
         }
 
-        this.rmService.createOnboardProcess(this.processData).subscribe(res => {
+        this.foService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

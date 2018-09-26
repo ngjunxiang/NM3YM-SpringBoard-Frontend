@@ -25,14 +25,14 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
 
-import { RMRoutingModule } from './rm-routing.module';
-import { RMComponent } from './pages/rm.component';
-import { RMDashboardComponent } from './pages/rm-dashboard/rm-dashboard.component';
-import { RMEditOnboardComponent } from './pages/rm-edit-onboard/rm-edit-onboard.component';
-import { RMManageOnboardComponent } from './pages/rm-manage-onboard/rm-manage-onboard.component';
-import { RMNewOnboardComponent } from './pages/rm-new-onboard/rm-new-onboard.component';
-import { RMService } from '../../core/services/rm.service';
-import { RMFaqComponent } from './pages/rm-faq/rm-faq.component';
+import { FORoutingModule } from './fo-routing.module';
+import { FOComponent } from './pages/fo.component';
+import { FODashboardComponent } from './pages/fo-dashboard/fo-dashboard.component';
+import { FOEditOnboardComponent } from './pages/fo-edit-onboard/fo-edit-onboard.component';
+import { FOManageOnboardComponent } from './pages/fo-manage-onboard/fo-manage-onboard.component';
+import { FONewOnboardComponent } from './pages/fo-new-onboard/fo-new-onboard.component';
+import { FOService } from '../../core/services/fo.service';
+import { FOFaqComponent } from './pages/fo-faq/fo-faq.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -40,7 +40,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
     imports: [
-        RMRoutingModule,
+        FORoutingModule,
         AccordionModule,
         ButtonModule,
         CardModule,
@@ -67,12 +67,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TableModule,
     ],
     declarations: [
-        RMComponent,
-        RMDashboardComponent,
-        RMNewOnboardComponent,
-        RMEditOnboardComponent,
-        RMManageOnboardComponent,
-        RMFaqComponent
+        FOComponent,
+        FODashboardComponent,
+        FONewOnboardComponent,
+        FOEditOnboardComponent,
+        FOManageOnboardComponent,
+        FOFaqComponent
     ],
     providers: [
         {
@@ -80,8 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
         ConfirmationService,
-        RMService
+        FOService
     ]
 })
 
-export class RMModule { }
+export class FOModule { }

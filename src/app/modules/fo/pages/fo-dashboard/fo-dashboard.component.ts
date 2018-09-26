@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Message } from 'primeng/components/common/api';
 
-import { RMService } from '../../../../core/services/rm.service';
+import { FOService } from '../../../../core/services/fo.service';
 
 interface Client {
     name: string;
@@ -21,12 +21,12 @@ interface Year {
 }
 
 @Component({
-    selector: 'rm-dashboard',
-    templateUrl: './rm-dashboard.component.html',
-    styleUrls: ['./rm-dashboard.component.css']
+    selector: 'fo-dashboard',
+    templateUrl: './fo-dashboard.component.html',
+    styleUrls: ['./fo-dashboard.component.css']
 })
 
-export class RMDashboardComponent implements OnInit {
+export class FODashboardComponent implements OnInit {
 
     // UI Control
     loading = false;
@@ -49,13 +49,13 @@ export class RMDashboardComponent implements OnInit {
     onboardingClients: any[];
 
     constructor(
-        private rmService: RMService,
+        private foService: FOService,
     ) { }
 
     ngOnInit() {
         this.loading = true
         //Calling from endpoints
-        this.rmService.retrieveDashboardStats().subscribe(res => {
+        this.foService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

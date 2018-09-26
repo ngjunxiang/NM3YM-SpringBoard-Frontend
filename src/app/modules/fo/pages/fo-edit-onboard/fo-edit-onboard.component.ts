@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
-import { RMService } from '../../../../core/services/rm.service';
+import { FOService } from '../../../../core/services/fo.service';
 
 @Component({
-    selector: 'rm-edit-onboard',
-    templateUrl: './rm-edit-onboard.component.html',
-    styleUrls: ['./rm-edit-onboard.component.css']
+    selector: 'fo-edit-onboard',
+    templateUrl: './fo-edit-onboard.component.html',
+    styleUrls: ['./fo-edit-onboard.component.css']
 })
-export class RMEditOnboardComponent implements OnInit {
+export class FOEditOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
@@ -34,7 +34,7 @@ export class RMEditOnboardComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private rmService: RMService,
+        private foService: FOService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -177,7 +177,7 @@ export class RMEditOnboardComponent implements OnInit {
 
     retrieveOnboardDetails(obID) {
         this.loading = true;
-        this.rmService.retrieveOnboardProcessDetails(obID).subscribe(res => {
+        this.foService.retrieveOnboardProcessDetails(obID).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -327,7 +327,7 @@ export class RMEditOnboardComponent implements OnInit {
             });
         }
 
-        this.rmService.updateOnboardProcess(processData).subscribe(res => {
+        this.foService.updateOnboardProcess(processData).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RMNewOnboardComponent } from './rm-new-onboard.component';
+import { FONewOnboardComponent } from './fo-new-onboard.component';
 
-describe('RMNewOnboardComponent', () => {
-    let component: RMNewOnboardComponent;
-    let fixture: ComponentFixture<RMNewOnboardComponent>;
+describe('FONewOnboardComponent', () => {
+    let component: FONewOnboardComponent;
+    let fixture: ComponentFixture<FONewOnboardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        declarations: [ RMNewOnboardComponent ]
+        declarations: [ FONewOnboardComponent ]
     })
     .compileComponents();
   }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RMNewOnboardComponent);
+        fixture = TestBed.createComponent(FONewOnboardComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

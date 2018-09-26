@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http
 import { throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from './authentication.service';
 import { environment } from '../../../environments/environment';
 
 interface Response {
@@ -58,27 +58,27 @@ interface ObList {
     providedIn: 'root'
 })
 
-export class RMService {
+export class FOService {
     // Dashboard Endpoint
-    private retrieveDashboardStatsURL = environment.host + '/app/rm/retrieve-dashboard';
+    private retrieveDashboardStatsURL = environment.host + '/app/fo/retrieve-dashboard';
 
     // Checklist Endpoints
-    private retrieveChecklistNamesURL = environment.host + '/app/rm/retrieve-checklistNames';
-    private retrieveChecklistURL = environment.host + '/app/rm/retrieve-checklist';
+    private retrieveChecklistNamesURL = environment.host + '/app/fo/retrieve-checklistNames';
+    private retrieveChecklistURL = environment.host + '/app/fo/retrieve-checklist';
 
     // Notifications Endpoints
-    private retrieveNotificationsURL = environment.host + '/app/rm/retrieve-notifications';
-    private updateNotificationsURL = environment.host + '/app/rm/update-notifications';
+    private retrieveNotificationsURL = environment.host + '/app/fo/retrieve-notifications';
+    private updateNotificationsURL = environment.host + '/app/fo/update-notifications';
 
     // Onboard Endpoints
-    private createOnboardProcessURL = environment.host + '/app/rm/create-onboard';
-    private retrieveAllOnboardProcessesURL = environment.host + '/app/rm/retrieve-all-onboard';
-    private retrieveOnboardProcessDetailsURL = environment.host + '/app/rm/retrieve-selected-onboard';
-    private deleteUpdateOnboardProcessURL = environment.host + '/app/rm/manage-onboard';
-    private retrieveAllRMNamesURL = environment.host + '/app/rm/retrieve-rm-names';
+    private createOnboardProcessURL = environment.host + '/app/fo/create-onboard';
+    private retrieveAllOnboardProcessesURL = environment.host + '/app/fo/retrieve-all-onboard';
+    private retrieveOnboardProcessDetailsURL = environment.host + '/app/fo/retrieve-selected-onboard';
+    private deleteUpdateOnboardProcessURL = environment.host + '/app/fo/manage-onboard';
+    private retrieveAllRMNamesURL = environment.host + '/app/fo/retrieve-rm-names';
 
     // FAQ Endpoints
-    private retrieveFAQURL = environment.host + '/app/rm/faq';
+    private retrieveFAQURL = environment.host + '/app/fo/faq';
 
     constructor(
         private authService: AuthenticationService,

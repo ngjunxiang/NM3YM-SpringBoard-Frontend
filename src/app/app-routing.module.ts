@@ -9,6 +9,16 @@ export const routes: Routes = [
         pathMatch: 'full' 
     },
     { 
+        path: 'ma', 
+        redirectTo: 'fo', 
+        pathMatch: 'full' 
+    },
+    { 
+        path: 'rm', 
+        redirectTo: 'fo', 
+        pathMatch: 'full' 
+    },
+    { 
         path: 'login', 
         loadChildren: './modules/login/login.module#LoginModule' 
     },
@@ -17,8 +27,8 @@ export const routes: Routes = [
         loadChildren: './modules/admin/admin.module#AdminModule'
     },
     {
-        path: 'rm',
-        loadChildren: './modules/rm/rm.module#RMModule'
+        path: 'fo',
+        loadChildren: './modules/fo/fo.module#FOModule'
     },
     {
         path: 'cm',
