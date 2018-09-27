@@ -4,7 +4,8 @@ declare var $: any;
 
 @Component({
     selector: 'ui-navigation',
-    templateUrl: './navigation.component.html'
+    templateUrl: './navigation.component.html',
+    styleUrls: ['./navigation.component.css']
 })
 
 export class NavigationComponent implements AfterViewInit, OnInit {
@@ -70,28 +71,28 @@ export class NavigationComponent implements AfterViewInit, OnInit {
         
         this.notifications.forEach(notification => {
             if (!notification.checked) {
-                if (notification.type.changed === '1') {
-                    this.latestNotifications.push('Changes have been made to ' + notification.name + '. \n' + notification.type.documentName + ' has been edited.');
+                if (notification.type.changed === '1') { 
+                    this.latestNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.');
                 }
 
                 if (notification.type.changed === '2') {
-                    this.latestNotifications.push('Changes have been made to ' + notification.name + '. \n' + notification.type.documentName + ' has been added.');
+                    this.latestNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.');
                 }
 
                 if (notification.type.changed === '3') {
-                    this.latestNotifications.push('Changes have been made to ' + notification.name + '. \n' + notification.type.documentName + ' has been deleted.');
+                    this.latestNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.');
                 }
             }
             if (notification.type.changed === '1') {
-                this.allNotifications.push('Changes have been made to ' + notification.name + '. \n' + notification.type.documentName + ' has been edited.');
+                this.allNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.');
             }
 
             if (notification.type.changed === '2') {
-                this.allNotifications.push('Changes have been made to ' + notification.name + '. \n' + notification.type.documentName + ' has been added.');
+                this.allNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.');
             }
 
             if (notification.type.changed === '3') {
-                this.allNotifications.push('Changes have been made to ' + notification.name + '. \n' + notification.type.documentName + ' has been deleted.');
+                this.allNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.');
             }
         });
 
