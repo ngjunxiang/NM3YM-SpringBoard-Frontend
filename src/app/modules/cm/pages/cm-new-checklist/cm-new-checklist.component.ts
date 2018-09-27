@@ -117,7 +117,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.retrieveAgmtCodes();
 
         let control = <FormArray>this.newChecklistForm.controls.requiredFields;
-        ['RM Name', 'Client Name', 'Date of Submission', 'Client A/C Number'].forEach(fieldName => {
+        ['Client Name', 'RM Name', 'Date of Submission', 'Client A/C Number'].forEach(fieldName => {
             control.push(
                 this.fb.group({
                     fieldName: new FormControl({ value: fieldName, disabled: true }, Validators.required)
