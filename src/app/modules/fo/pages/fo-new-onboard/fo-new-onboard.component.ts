@@ -9,7 +9,7 @@ import { FOService } from '../../../../core/services/fo.service';
 @Component({
     selector: 'fo-new-onboard',
     templateUrl: './fo-new-onboard.component.html',
-    styleUrls: ['./fo-new-onboard.component.scss']
+    styleUrls: ['./fo-new-onboard.component.css']
 })
 
 export class FONewOnboardComponent implements OnInit {

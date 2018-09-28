@@ -44,6 +44,17 @@
     color: white;
 }
 
+/***********************************
+  Style of invalid and dirty inputs 
+ ***********************************/
+ :host >>> .ui-inputtext.ng-dirty.ng-invalid,
+ :host >>>  p-dropdown.ng-dirty.ng-invalid > .ui-dropdown > label.ui-dropdown-label,
+ :host >>> p-calendar.ng-dirty.ng-invalid > .ui-calendar > .ui-inputtext,
+ :host >>> p-chips.ng-dirty.ng-invalid > .ui-chips > .ui-inputtext,
+ :host >>> p-autocomplete.ng-dirty.ng-invalid > .ui-autocomplete > .ui-inputtext {
+     background-color: #f8bdc3;
+ }
+
 
 /*
  * CSS of p-chip for condition's options 

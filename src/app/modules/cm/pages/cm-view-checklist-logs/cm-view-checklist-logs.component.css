@@ -26,3 +26,10 @@
     background-color: #FFE073 !important;
     color: #000000 !important;
 }
+
+/***********************************
+  Style of invalid and dirty inputs 
+ ***********************************/
+ :host >>>  p-dropdown.ng-dirty.ng-invalid > .ui-dropdown > label.ui-dropdown-label {
+     background-color: #f8bdc3;
+ }
