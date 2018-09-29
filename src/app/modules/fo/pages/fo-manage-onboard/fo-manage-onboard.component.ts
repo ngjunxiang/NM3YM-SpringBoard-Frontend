@@ -17,11 +17,17 @@ export class FOManageOnboardComponent implements OnInit {
     // UI Control
     loading = false;
     msgs: Message[] = [];
-    sortOptions: any[];
-    selectedSortOpt: string;
 
     // UI Components
-    obProcesses: any;
+    obProcesses: any; 
+    sortOptions: any[];
+    filterOptions: any[];
+    selectedSortOpt: string;
+    selectedFilterOpt: string;
+
+    // Temporary storage of return processes from backend
+    allProcesses: any;
+    filteredProcesses: any;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -32,16 +38,29 @@ export class FOManageOnboardComponent implements OnInit {
     ngOnInit() {
         this.retrieveAllOnboardProcesses();
 
+        this.selectedSortOpt = 'none';
+        this.selectedFilterOpt = 'none';
+
         this.sortOptions = [
             { label: 'No Selection', value: 'none' },
+            { label: 'Name', value: 'name' },
             { label: 'Progress', value: 'progress' },
-            { label: 'Date', value: 'date' },
-            { label: 'Name', value: 'name' }
+            { label: 'Date', value: 'date' }
+        ];
+
+        this.filterOptions = [
+            { label: 'No Selection', value: 'none' },
+            { label: 'Completed', value: 'completed' },
+            { label: 'Pending', value: 'pending' }
         ];
     }
 
-    onChange() {
+    onSortChange() {
         this.retrieveSortedOnboardProcesses();
+    }
+
+    onFilterChange() {
+        this.retrieveFilterOnboardProcesses();
     }
 
     toggleUrgent(index: number) {
@@ -53,6 +72,8 @@ export class FOManageOnboardComponent implements OnInit {
     retrieveAllOnboardProcesses() {
         this.loading = true;
         this.obProcesses = [];
+        
+
         this.foService.retrieveAllOnboardProcesses().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -60,9 +81,11 @@ export class FOManageOnboardComponent implements OnInit {
                 });
                 return;
             }
-
-            if (res.obLists) {
-                res.obLists.forEach(obList => {
+            
+            if (res.results) {
+                this.allProcesses = res.results.obLists;
+                this.filteredProcesses = res.results.obLists;
+                res.results.obLists.forEach(obList => {
                     let requiredFields = [];
                     let type = obList.name;
                     let obID = obList.obID;
@@ -105,8 +128,8 @@ export class FOManageOnboardComponent implements OnInit {
 
     retrieveSortedOnboardProcesses() {
         this.loading = true;
-        this.obProcesses = [];
-        this.foService.retrieveSortedOnboardProcesses(this.selectedSortOpt).subscribe(res => {
+        
+        this.foService.retrieveSortedOnboardProcesses(this.selectedSortOpt, this.filteredProcesses).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -114,8 +137,64 @@ export class FOManageOnboardComponent implements OnInit {
                 return;
             }
 
-            if (res.obLists) {
-                res.obLists.forEach(obList => {
+            this.obProcesses = [];
+            if (res.results.obLists) {
+                res.results.obLists.forEach(obList => {
+                    let requiredFields = [];
+                    let type = obList.name;
+                    let obID = obList.obID;
+                    let conditions = [];
+                    let progress = obList.progress;
+                    let urgent = obList.urgent;
+                    Object.keys(obList.requiredFields).forEach(key => {
+                        let fieldName;
+                        for (fieldName in obList.requiredFields[key]);
+                        requiredFields.push({
+                            'fieldName': fieldName,
+                            'fieldValue': obList.requiredFields[key][fieldName]
+                        });
+                    });
+
+                    obList.conditions.forEach(condition => {
+                        conditions.push({
+                            'conditionName': condition.conditionName,
+                            'conditionValue': condition.conditionOption
+                        });
+                    });
+
+                    this.obProcesses.push({
+                        'obID': obID,
+                        'type': type,
+                        'requiredFields': requiredFields,
+                        'conditions': conditions,
+                        'progress': progress,
+                        'urgent': urgent
+                    });
+
+                });
+            }
+            this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
+    }
+
+    retrieveFilterOnboardProcesses() {
+        this.loading = true;
+        this.obProcesses = [];
+        this.foService.retrieveFilteredOnboardProcesses(this.selectedFilterOpt, this.allProcesses).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results.obLists) {
+                this.filteredProcesses = res.results.obLists;
+                res.results.obLists.forEach(obList => {
                     let requiredFields = [];
                     let type = obList.name;
                     let obID = obList.obID;
@@ -147,7 +226,13 @@ export class FOManageOnboardComponent implements OnInit {
                         'urgent': urgent
                     });
                 });
+
             }
+
+            if(this.selectedSortOpt != 'none'){
+                this.retrieveSortedOnboardProcesses() 
+            }
+
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -155,6 +240,7 @@ export class FOManageOnboardComponent implements OnInit {
             });
         });
     }
+
 
     
     editOnboardProcess(index: number) {

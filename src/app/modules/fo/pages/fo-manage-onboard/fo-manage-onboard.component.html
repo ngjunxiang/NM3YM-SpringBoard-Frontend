@@ -3,10 +3,16 @@
 
 <div style="padding-bottom: 8px;">Current Onboarding</div>
 <div class="ui-g" style="display: inline">
-    <div class="ui-g-6" style="padding-left: 0px">
+    <div class="ui-g-3" style="padding-left: 0px">
         Sort by:
-        <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onChange()"></p-dropdown>
+        <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onSortChange()"></p-dropdown>
     </div>
+
+    <div class="ui-g-3" style="padding-left: 0px">
+        Filter by:
+        <p-dropdown [options]="filterOptions" [(ngModel)]="selectedFilterOpt" (onChange)="onFilterChange()"></p-dropdown>
+    </div>
+
     <div class="ui-g-6">
         <a routerLink="../create">
             <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button" icon="fa fa-plus"></button>

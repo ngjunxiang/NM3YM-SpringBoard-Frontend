@@ -34,11 +34,6 @@ interface ChecklistName {
     dateCreated: Date;
 }
 
-interface AllOBResponse {
-    error: string;
-    obLists: ObList[];
-}
-
 interface ObList {
     name: string;
     obID: string;
@@ -74,6 +69,7 @@ export class FOService {
     private createOnboardProcessURL = environment.host + '/app/fo/create-onboard';
     private retrieveAllOnboardProcessesURL = environment.host + '/app/fo/retrieve-all-onboard';
     private retrieveSortedOnboardProcessesURL = environment.host + '/app/fo/filtersort-onboard';
+    private retrieveFilteredOnboardProcessesURL = environment.host + '/app/fo/filterby-onboard';
     private retrieveOnboardProcessDetailsURL = environment.host + '/app/fo/retrieve-selected-onboard';
     private deleteUpdateOnboardProcessURL = environment.host + '/app/fo/manage-onboard';
     private retrieveAllRMNamesURL = environment.host + '/app/fo/retrieve-rm-names';
@@ -163,14 +159,14 @@ export class FOService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<AllOBResponse>(this.retrieveAllOnboardProcessesURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveAllOnboardProcessesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
     }
 
-    retrieveSortedOnboardProcesses(sortValue) {
+    retrieveSortedOnboardProcesses(sortValue, obProcesses) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -181,9 +177,37 @@ export class FOService {
             'sortBy': sortValue
         };
 
-        const postData = Object.assign(this.authService.authItems, sortOption);
+        const obList = {
+            'obList' : obProcesses
+        }
 
-        return this.http.post<AllOBResponse>(this.retrieveSortedOnboardProcessesURL, postData, httpOptions)
+        const postData = Object.assign(this.authService.authItems, sortOption, obList);
+
+        return this.http.post<Response>(this.retrieveSortedOnboardProcessesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveFilteredOnboardProcesses(filterValue, obProcesses) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const filterOption = {
+            'filterBy': filterValue
+        };
+
+        const obList = {
+            'obList' : obProcesses
+        }
+
+        const postData = Object.assign(this.authService.authItems, filterOption, obList);
+
+        return this.http.post<Response>(this.retrieveFilteredOnboardProcessesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
