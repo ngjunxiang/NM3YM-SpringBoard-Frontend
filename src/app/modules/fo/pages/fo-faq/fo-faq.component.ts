@@ -51,6 +51,8 @@ export class FOFaqComponent implements OnInit {
 
         this.loading = true;
 
+        this.faqs = [];
+        
         this.foService.retrieveRMFaq(this.questionForm.get('question').value).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -62,14 +64,15 @@ export class FOFaqComponent implements OnInit {
                 this.faqs = res.results;
             }
 
+            this.searched = true;
             this.loading = false;
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
-        });
 
-        this.searched = true;
-        this.loading = false;
+            this.searched = true;
+            this.loading = false;
+        });
     }
 }

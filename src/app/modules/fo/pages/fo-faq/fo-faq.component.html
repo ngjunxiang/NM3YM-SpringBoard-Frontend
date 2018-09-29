@@ -1,14 +1,18 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 
 <div style="padding-bottom: 10px">
-    <p-card styleClass="ui-card-shadow" [formGroup]="questionForm">
-        <h4>Have a Question?</h4>
-        <div class="ui-g">
-            <input type="text" id="input" class="form-control" style="width: 80%" placeholder="Ask a question"
-                formControlName="question" required pInputText>
-        </div>
-        <button pButton label="Search" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-search"
-            (click)="retrieveFAQ()"></button>
+    <p-card styleClass="ui-card-shadow">
+        <form [formGroup]="questionForm">
+            <h4>Have a Question?</h4>
+            <div class="ui-g">
+                <input type="text" id="input" class="form-control" style="width: 80%" placeholder="Ask a question"
+                    formControlName="question" required pInputText>
+            </div>
+            <button pButton label="Search" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="submit"
+                icon="fas fa-search" (click)="retrieveFAQ()"></button>
+
+            <p-progressSpinner *ngIf="loading" strokeWidth="8" [style]="{'width': '25px', 'height': '25px', 'margin-left': '0.5%'}"></p-progressSpinner>
+        </form>
     </p-card>
 </div>
 
