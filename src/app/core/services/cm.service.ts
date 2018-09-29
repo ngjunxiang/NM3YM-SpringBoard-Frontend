@@ -30,7 +30,7 @@ interface ChecklistName {
 }
 
 interface Response {
-    results: string;
+    results: any;
     error: string;
 }
 
@@ -40,6 +40,7 @@ interface Response {
 
 export class CMService {
 
+    // Checklist Endpoints
     private retrieveAgmtCodesURL = environment.host + '/app/cm/retrieve-AgmtCodes';
     private retrieveChecklistNamesURL = environment.host + '/app/cm/retrieve-checklistNames';
     private retrieveChecklistLogNamesURL = environment.host + '/app/cm/retrieve-clIDWithVersion';
@@ -47,7 +48,10 @@ export class CMService {
     private createChecklistURL = environment.host + '/app/cm/create-checklist';
     private updateChecklistURL = environment.host + '/app/cm/update-checklist';
     private retrieveDeleteChecklistURL = environment.host + '/app/cm/manage-checklist';
-    private retrieveFAQURL = environment.host + '/app/cm/faq';
+
+    // FAQ Endpoints
+    private retrieveUnansweredFAQURL = environment.host + '/app/faq/retrieve-UQ';
+    private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
 
     constructor(
         private authService: AuthenticationService,
@@ -106,20 +110,32 @@ export class CMService {
             );
     }
 
-    retrieveCMFaq(question) {
+    retrieveCMAnsweredFaq() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
 
-        const checklistIdData = {
-            'question': question
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveAnsweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveCMUnansweredFaq() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
         };
 
-        const postData = Object.assign(this.authService.authItems, checklistIdData);
+        const postData = this.authService.authItems;
 
-        return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveUnansweredFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

@@ -1,0 +1,21 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+
+<div *ngIf="!loading">
+    <p-card styleClass="ui-card-shadow">
+        <h4>Frequently Asked Questions</h4>
+        <div *ngIf="faqs.length === 0">
+            <h5>
+                There are no questions yet!
+            </h5>
+        </div>
+        <div *ngIf="faqs.length > 0">
+            <p-accordion [multiple]="true">
+                <ng-container *ngFor="let faq of faqs; let i=index">
+                    <p-accordionTab header="{{ faq.question }}">
+                        {{ faq.answer }}
+                    </p-accordionTab>
+                </ng-container>
+            </p-accordion>
+        </div>
+    </p-card>
+</div>

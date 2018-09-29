@@ -16,6 +16,7 @@ export class FONewOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
+    processing = false;
     msgs: Message[] = [];
     step = 1;
 
@@ -355,6 +356,7 @@ export class FONewOnboardComponent implements OnInit {
     }
 
     createOnboardProcess() {
+        this.processing = true;
         this.processData = {};
         this.processData['clID'] = this.selectedChecklistId;
         this.processData['name'] = this.selectedChecklistName;
@@ -382,6 +384,7 @@ export class FONewOnboardComponent implements OnInit {
         for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
             let conditionName = this.selectedChecklistData.conditions[i].conditionName;
             let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+            
             this.processData['conditions'].push({
                 'conditionName': conditionName,
                 'conditionOption': conditionOption
@@ -490,6 +493,7 @@ export class FONewOnboardComponent implements OnInit {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
+                this.processing = false;
                 return;
             }
 
@@ -506,6 +510,7 @@ export class FONewOnboardComponent implements OnInit {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
+            this.processing = false;
         });
     }
 }

@@ -20,7 +20,6 @@ export class CMEditChecklistComponent implements OnInit {
     processing = false;
     blocked = false;
     msgs: Message[] = [];
-    tabs: MenuItem[];
     activeTab: number;
     dropdownData = {
         conditions: [],
