@@ -37,8 +37,10 @@ export class CMNewChecklistComponent implements OnInit {
     mEditDisplay = false;
     cDisplay = false;
     cEditDisplay = false;
+    cInfoDisplay = false;
     oDisplay = false;
     oEditDisplay = false;
+    
 
     // UI Component
     newChecklistForm: FormGroup;
@@ -276,6 +278,10 @@ export class CMNewChecklistComponent implements OnInit {
                 this.newChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
             }
         }
+    }
+
+    showCInfoDialog() {
+        this.cInfoDisplay = true;
     }
 
     checkDuplicateRequiredField(control: FormControl): { [key: string]: boolean } | null {

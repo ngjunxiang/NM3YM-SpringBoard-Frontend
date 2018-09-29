@@ -17,6 +17,8 @@ export class FOManageOnboardComponent implements OnInit {
     // UI Control
     loading = false;
     msgs: Message[] = [];
+    sortOptions: any[];
+    selectedSortOpt: string;
 
     // UI Components
     obProcesses: any;
@@ -29,12 +31,25 @@ export class FOManageOnboardComponent implements OnInit {
 
     ngOnInit() {
         this.retrieveAllOnboardProcesses();
+
+        this.sortOptions = [
+            { label: 'No Selection', value: 'none' },
+            { label: 'Progress', value: 'progress' },
+            { label: 'Date', value: 'date' },
+            { label: 'Name', value: 'name' }
+        ];
+    }
+
+    onChange() {
+        this.retrieveSortedOnboardProcesses();
+        console.log(this.selectedSortOpt);
     }
 
     toggleUrgent(index: number) {
         this.obProcesses[index].urgent = !this.obProcesses[index].urgent
         // invoke service
     }
+
 
     retrieveAllOnboardProcesses() {
         this.loading = true;
@@ -46,7 +61,7 @@ export class FOManageOnboardComponent implements OnInit {
                 });
                 return;
             }
-            
+
             if (res.obLists) {
                 res.obLists.forEach(obList => {
                     let requiredFields = [];
@@ -89,6 +104,60 @@ export class FOManageOnboardComponent implements OnInit {
         });
     }
 
+    retrieveSortedOnboardProcesses() {
+        this.loading = true;
+        this.obProcesses = [];
+        this.foService.retrieveSortedOnboardProcesses(this.selectedSortOpt).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.obLists) {
+                res.obLists.forEach(obList => {
+                    let requiredFields = [];
+                    let type = obList.name;
+                    let obID = obList.obID;
+                    let conditions = [];
+                    let progress = obList.progress;
+                    let urgent = obList.urgent;
+                    Object.keys(obList.requiredFields).forEach(key => {
+                        let fieldName;
+                        for (fieldName in obList.requiredFields[key]);
+                        requiredFields.push({
+                            'fieldName': fieldName,
+                            'fieldValue': obList.requiredFields[key][fieldName]
+                        });
+                    });
+
+                    obList.conditions.forEach(condition => {
+                        conditions.push({
+                            'conditionName': condition.conditionName,
+                            'conditionValue': condition.conditionOption
+                        });
+                    });
+
+                    this.obProcesses.push({
+                        'obID': obID,
+                        'type': type,
+                        'requiredFields': requiredFields,
+                        'conditions': conditions,
+                        'progress': progress,
+                        'urgent': urgent
+                    });
+                });
+            }
+            this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
+    }
+
+    
     editOnboardProcess(index: number) {
         let selectedOnboardID = this.obProcesses[index].obID;
         this.router.navigate(['/fo/onboard/edit', selectedOnboardID], {

@@ -1,12 +1,18 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-confirmDialog></p-confirmDialog>
 
-<span>
-    Current Onboarding
-    <a routerLink="../create">
-        <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button" icon="fa fa-plus"></button>
-    </a>
-</span>
+<div style="padding-bottom: 8px;">Current Onboarding</div>
+<div class="ui-g" style="display: inline">
+    <div class="ui-g-6" style="padding-left: 0px">
+        Sort by:
+        <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onChange()"></p-dropdown>
+    </div>
+    <div class="ui-g-6">
+        <a routerLink="../create">
+            <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button" icon="fa fa-plus"></button>
+        </a>
+    </div>
+</div>
 
 <div *ngIf="!loading" style="padding-top: 20px">
     <div *ngIf="obProcesses.length === 0">
@@ -43,8 +49,10 @@
                         </div>
                     </div>
                     <div style="width: 30%; padding-bottom: 1%" class="ui-g-4">
-                        <p><b>Type: </b>{{ obProcess.type }}</p>
-                        <p><b>Progress: </b>{{ obProcess.progress }}%</p>
+                        <p>
+                            <b>Type: </b>{{ obProcess.type }}</p>
+                        <p>
+                            <b>Progress: </b>{{ obProcess.progress }}%</p>
                     </div>
                 </div>
 

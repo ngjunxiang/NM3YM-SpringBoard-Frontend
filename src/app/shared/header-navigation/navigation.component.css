@@ -1,0 +1,15 @@
+.navbar-nav .dropdown-menu {
+    min-width: 300px;
+}
+
+.topbar ul.dropdown-user li a:hover {
+    color: #67757c;
+}
+
+.topbar ul.dropdown-user li.divider {
+    margin: 0;
+}
+
+.showMore a:hover {
+    background-color: #e9edf2;
+}

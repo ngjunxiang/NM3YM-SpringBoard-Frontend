@@ -73,6 +73,7 @@ export class FOService {
     // Onboard Endpoints
     private createOnboardProcessURL = environment.host + '/app/fo/create-onboard';
     private retrieveAllOnboardProcessesURL = environment.host + '/app/fo/retrieve-all-onboard';
+    private retrieveSortedOnboardProcessesURL = environment.host + '/app/fo/filtersort-onboard';
     private retrieveOnboardProcessDetailsURL = environment.host + '/app/fo/retrieve-selected-onboard';
     private deleteUpdateOnboardProcessURL = environment.host + '/app/fo/manage-onboard';
     private retrieveAllRMNamesURL = environment.host + '/app/fo/retrieve-rm-names';
@@ -169,6 +170,27 @@ export class FOService {
             );
     }
 
+    retrieveSortedOnboardProcesses(sortValue) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const sortOption = {
+            'sortBy': sortValue
+        };
+
+        const postData = Object.assign(this.authService.authItems, sortOption);
+
+        return this.http.post<AllOBResponse>(this.retrieveSortedOnboardProcessesURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+    
+
     retrieveAllRMNames() {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -183,6 +205,8 @@ export class FOService {
                 retry(3),
             );
     }
+
+    
 
     retrieveOnboardProcessDetails(obID) {
         const httpOptions = {
