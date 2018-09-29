@@ -9,9 +9,9 @@ import { AuthenticationService } from '../../../core/services/authentication.ser
 import { FOService } from '../../../core/services/fo.service';
 
 @Component({
-  selector: 'app-fo',
-  templateUrl: './fo.component.html',
-  styleUrls: ['./fo.component.scss']
+    selector: 'app-fo',
+    templateUrl: './fo.component.html',
+    styleUrls: ['./fo.component.scss']
 })
 
 export class FOComponent implements OnInit {
@@ -19,10 +19,10 @@ export class FOComponent implements OnInit {
     // Theme
     color = 'defaultdark';
     showSettings = false;
-    showMinisidebar = false; 
+    showMinisidebar = false;
     showDarktheme = false;
 
-    
+
     // UI Control
     loading = true;
     sidebarRoutes = ROUTES;
@@ -31,7 +31,7 @@ export class FOComponent implements OnInit {
     // Name & Email
     name: string;
     email: string;
-    notifications: any[];
+    notifications: any;
 
     public config: PerfectScrollbarConfigInterface = {};
 
@@ -90,7 +90,34 @@ export class FOComponent implements OnInit {
                 });
             }
             if (res.results) {
-                this.notifications = res.results.notifications;
+                this.notifications = {};
+                let newNotifications = [];
+                let allNotifications = [];
+
+                res.results.notifications.forEach(notification => {
+                    let notif;
+
+                    if (notification.type.changed === '1') {
+                        notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.';
+                    }
+
+                    if (notification.type.changed === '2') {
+                        notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.';
+                    }
+
+                    if (notification.type.changed === '3') {
+                        notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.';
+                    }
+
+                    if (!notification.checked) {
+                        newNotifications.push(notif);
+                    }
+                    
+                    allNotifications.push(notif);
+                });
+
+                this.notifications['newNotifications'] = newNotifications;
+                this.notifications['allNotifications'] = allNotifications;
             }
 
             this.loading = false;
@@ -98,7 +125,7 @@ export class FOComponent implements OnInit {
             this.appMsgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
-            this.notifications = [];
+
             this.loading = false;
         });
     }
@@ -110,7 +137,7 @@ export class FOComponent implements OnInit {
                     severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
             }
-            
+
             this.loading = false;
         }, error => {
             this.appMsgs.push({

@@ -12,7 +12,7 @@ export class NavigationComponent implements AfterViewInit, OnInit {
 
     @Input('name') name: string;
     @Input('email') email: string;
-    @Input('notifications') notifications: any[];
+    @Input('notifications') notifications: any;
     @Output() notificationsRead = new EventEmitter();
 
     // UI Control
@@ -21,7 +21,7 @@ export class NavigationComponent implements AfterViewInit, OnInit {
     loading = false;
 
     // UI Components
-    latestNotifications: any[];
+    newNotifications: any[];
     allNotifications: any[];
     newCount: number;
 
@@ -66,41 +66,14 @@ export class NavigationComponent implements AfterViewInit, OnInit {
     }
 
     async retrieveNotifications(): Promise<boolean> {
-        this.latestNotifications = [];
-        this.allNotifications = [];
-
         if (this.notifications) {
-            this.notifications.forEach(notification => {
-                if (!notification.checked) {
-                    if (notification.type.changed === '1') {
-                        this.latestNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.');
-                    }
-
-                    if (notification.type.changed === '2') {
-                        this.latestNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.');
-                    }
-
-                    if (notification.type.changed === '3') {
-                        this.latestNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.');
-                    }
-                }
-                if (notification.type.changed === '1') {
-                    this.allNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.');
-                }
-
-                if (notification.type.changed === '2') {
-                    this.allNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.');
-                }
-
-                if (notification.type.changed === '3') {
-                    this.allNotifications.push(notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.');
-                }
-            });
+            this.newNotifications = this.notifications.newNotifications;
+            this.allNotifications = this.notifications.allNotifications;
         }
 
-        if (this.latestNotifications.length > 0) {
+        if (this.newNotifications.length > 0) {
             this.hasNew = true;
-            this.newCount = this.latestNotifications.length;
+            this.newCount = this.newNotifications.length;
         }
 
         return true;

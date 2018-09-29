@@ -29,7 +29,7 @@ export class CMComponent implements OnInit {
     // Name & Email
     name: string;
     email: string;
-    notifications: any[] = [];
+    notifications: any;
 
     public config: PerfectScrollbarConfigInterface = {};
 
@@ -53,6 +53,7 @@ export class CMComponent implements OnInit {
         });
 
         this.retrieveUserDetails();
+        this.retrieveNotifications();
     }
 
     async retrieveUserDetails() {
@@ -76,5 +77,12 @@ export class CMComponent implements OnInit {
                 severity: 'error', summary: 'Server Error', detail: error
             });
         })
+    }
+
+    retrieveNotifications() {
+        this.notifications = {
+            newNotifications: [],
+            allNotifications: []
+        };
     }
 }

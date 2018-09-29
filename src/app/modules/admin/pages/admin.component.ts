@@ -28,7 +28,7 @@ export class AdminComponent implements OnInit {
     // Name & Email
     name = 'Admin';
     email = 'admin@bnpp.com';
-    notifications: any[] = [];
+    notifications: any;
 
     public config: PerfectScrollbarConfigInterface = {};
 
