@@ -79,7 +79,9 @@ export class FOService {
     private retrieveAllRMNamesURL = environment.host + '/app/fo/retrieve-rm-names';
 
     // FAQ Endpoints
-    private retrieveFAQURL = environment.host + '/app/fo/faq';
+    private retrieveFAQURL = environment.host + '/app/faq/retrieve';
+    private retrieveAllFAQURL = environment.host + '/app/faq/retrieve-allAQ';
+    private addUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
 
     constructor(
         private authService: AuthenticationService,
@@ -235,13 +237,49 @@ export class FOService {
             })
         };
 
-        const checklistIdData = {
+        const questionData = {
             'question': question
         };
 
-        const postData = Object.assign(this.authService.authItems, checklistIdData);
+        const postData = Object.assign(this.authService.authItems, questionData);
 
         return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveAllRMFaq() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveAllFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    addUnansweredQuestion(newQuestion) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const newQuestionData = {
+            'question': newQuestion
+        };
+
+        const postData = Object.assign(this.authService.authItems, newQuestionData);
+
+        return this.http.post<Response>(this.addUnansweredQuestionURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

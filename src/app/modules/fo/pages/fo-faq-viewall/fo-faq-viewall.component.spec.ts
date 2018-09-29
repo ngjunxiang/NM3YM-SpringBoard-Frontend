@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FOFaqComponent } from './fo-faq.component';
+import { FOFaqViewAllComponent } from './fo-faq-viewall.component';
 
-describe('FOFaqComponent', () => {
-    let component: FOFaqComponent;
-    let fixture: ComponentFixture<FOFaqComponent>;
+describe('FOFaqViewAllComponent', () => {
+    let component: FOFaqViewAllComponent;
+    let fixture: ComponentFixture<FOFaqViewAllComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [FOFaqComponent]
+            declarations: [FOFaqViewAllComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(FOFaqComponent);
+        fixture = TestBed.createComponent(FOFaqViewAllComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

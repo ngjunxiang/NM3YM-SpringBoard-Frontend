@@ -1,0 +1,56 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="!loading">
+    <!-- Checklist Name -->
+    <div style="padding-bottom: 10px">
+        <p-card styleClass="ui-card-shadow">
+            <h4>Frequently Asked Questions</h4>
+            <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
+                <p-tabPanel header="Answered">
+                    <div *ngIf="faqs.length === 0">
+                        <h5>
+                            There are no questions yet!
+                        </h5>
+                    </div>
+                    <div *ngIf="faqs.length > 0">
+                        <p-accordion [multiple]="false" (onClose)="hideEditArea()">
+                            <ng-container *ngFor="let faq of faqs; let i=index">
+                                <p-accordionTab header="{{ faq.question }}">
+                                    <ng-container *ngIf="!showEditArea">
+                                        {{ faq.answer }}
+                                        <div class="ui-g" style="padding-top: 2%">
+                                            <button pButton style="width:16%; margin-right:1%" class="ui-button-warning"
+                                                label="Edit Answer" type="button" icon="fa fa-pencil" (click)="showEditAnswerArea(i)"></button>
+                                            <button pButton style="width:18%" class="ui-button-danger" label="Delete Question"
+                                                type="button" icon="fa fa-times" (click)="deleteQuestion(i)"></button>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="showEditArea">
+                                        <ngx-wig [formControl]="editAnswerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                    </ng-container>
+                                </p-accordionTab>
+                            </ng-container>
+                        </p-accordion>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Unanswered">
+                    <div *ngIf="faqs.length === 0">
+                        <h5>
+                            There are no questions yet!
+                        </h5>
+                    </div>
+                    <div *ngIf="faqs.length > 0">
+                        <p-accordion [multiple]="true">
+                            <ng-container *ngFor="let faq of faqs; let i=index">
+                                <p-accordionTab header="{{ faq.question }}">
+                                    Not Answered
+                                </p-accordionTab>
+                            </ng-container>
+                        </p-accordion>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </p-card>
+    </div>
+</div>

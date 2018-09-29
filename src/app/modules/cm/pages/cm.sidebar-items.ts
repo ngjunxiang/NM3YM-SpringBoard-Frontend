@@ -12,9 +12,12 @@ export const ROUTES: RouteInfo[] = [
             { path: '/cm/checklist/logs', title: 'View Logs', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
     },
-    // {
-    //     path: '/cm/faq', title: 'FAQ', icon: 'mdi mdi-comment-question-outline', class: '', label: '', labelClass: '', extralink: false, submenu: []
-    // },
+    {
+        path: '/cm/faq', title: 'FAQ', icon: 'mdi mdi-comment-question-outline', class: 'has-arrow', label: '', labelClass: '', extralink: false, 
+        submenu: [
+            { path: '/cm/faq/manage', title: 'Manage', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
+        ]
+    },
     {
         path: '/cm/upload', title: 'Upload Files', icon: 'fas fa-file-upload', class: 'has-arrow', label: '', labelClass: '', extralink: false,
         submenu: [

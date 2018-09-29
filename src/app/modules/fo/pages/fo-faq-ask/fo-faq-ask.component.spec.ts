@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CMFaqComponent } from './cm-faq.component';
+import { FOFaqAskComponent } from './fo-faq-ask.component';
 
-describe('CMFaqComponent', () => {
-    let component: CMFaqComponent;
-    let fixture: ComponentFixture<CMFaqComponent>;
+describe('FOFaqAskComponent', () => {
+    let component: FOFaqAskComponent;
+    let fixture: ComponentFixture<FOFaqAskComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CMFaqComponent]
+            declarations: [FOFaqAskComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CMFaqComponent);
+        fixture = TestBed.createComponent(FOFaqAskComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
