@@ -675,6 +675,6 @@
             </p-card>
         </div>
 
-        <button pButton label="Save Changes" class="ui-button-success" style="width: 100%" type="button" icon="far fa-save" (click)="updateOnboardProcess()"></button>
+        <button pButton label="Save Changes" class="ui-button-success" style="width: 100%" type="button" icon="far fa-save" (click)="updateOnboardProcess()" [disabled]="processing"></button>
     </div>
 </div>

@@ -21,7 +21,7 @@
                         <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" style="display: inline-block; width: 50%" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
                             formControlName="field" required pInputText>
                         <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field" [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
-                        <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" dateFormat="dd/mm/yy" placeholder="Enter Date of Submission"
+                        <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" dateFormat="dd/mm/yy" dataType="string" placeholder="Enter Date of Submission"
                             formControlName="field"></p-calendar>
                     </div>
                 </div>
@@ -318,6 +318,6 @@
         </div>
         <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left"
             (click)="back()"></button>
-        <button pButton label="Create" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-plus" (click)="createOnboardProcess()"></button>
+        <button pButton label="Create" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-plus" (click)="createOnboardProcess()" [disabled]="processing"></button>
     </div>
 </div>

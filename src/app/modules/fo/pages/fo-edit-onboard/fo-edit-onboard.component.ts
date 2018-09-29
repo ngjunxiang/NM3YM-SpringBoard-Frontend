@@ -15,6 +15,7 @@ export class FOEditOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
+    processing = false;
     msgs: Message[] = [];
 
     // UI Component
@@ -218,6 +219,7 @@ export class FOEditOnboardComponent implements OnInit {
     }
 
     updateOnboardProcess() {
+        this.processing = true;
         let processData = Object.assign({}, this.obDetails);
 
         // Required Fields
@@ -332,6 +334,7 @@ export class FOEditOnboardComponent implements OnInit {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
                 });
+                this.processing = false;
                 return;
             }
 
@@ -348,6 +351,7 @@ export class FOEditOnboardComponent implements OnInit {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
+            this.processing = false;
         });
     }
 }
