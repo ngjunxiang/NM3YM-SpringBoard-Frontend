@@ -36,6 +36,7 @@ export class CMEditChecklistComponent implements OnInit {
     mDisplay = false;
     mEditDisplay = false;
     cDisplay = false;
+    cInfoDisplay = false;
     cEditDisplay = false;
     oDisplay = false;
     oEditDisplay = false;
@@ -304,6 +305,10 @@ export class CMEditChecklistComponent implements OnInit {
             }
         }
         return null;
+    }
+
+    showCInfoDialog() {
+        this.cInfoDisplay = true;
     }
 
     retrieveAgmtCodes() {

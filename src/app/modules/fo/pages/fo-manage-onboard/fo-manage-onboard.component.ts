@@ -42,7 +42,6 @@ export class FOManageOnboardComponent implements OnInit {
 
     onChange() {
         this.retrieveSortedOnboardProcesses();
-        console.log(this.selectedSortOpt);
     }
 
     toggleUrgent(index: number) {

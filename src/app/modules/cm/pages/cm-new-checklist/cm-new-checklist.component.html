@@ -71,21 +71,49 @@
                         <img src="assets/images/tooltips/checklistConditions.png" style="width: 100%" />
                     </p-overlayPanel> -->
                 </h4>
-                <p-overlayPanel #condInfo [appendTo]="'body'">
-                    <p>
-                        <strong>
-                            <u>Information on Checklist</u>
-                        </strong>
-                    </p>
-                    <p>Checklist conditions are tied to onboarding documents which are required under certain condition.</p>
-                    <p>
-                        <i>E.G. Financial Intermediary Agreement is only required if Booking Center is Hong Kong.</i>
-                    </p>
-                    <img src="assets/images/CM_Cond_Info_Part_1.jpg" alt="Example of Condition" class="dark-logo" width="450" height="220"/>
-                    <img src="assets/images/CM_Cond_Info_Part_3.jpg" alt="Example of Condition" class="dark-logo" width="450" height="250"/>
-                </p-overlayPanel>
+                <p-dialog header="Information on Checklist Conditions" [(visible)]="cInfoDisplay" [closable]="true" [maximizable]="true">
+                    <font size="3">
+                        <p>
+                            <strong>Checklist conditions are tied to onboarding documents which are required under certain condition.</strong>
+                            <br>
+                            <i>E.G. Financial Intermediary Agreement is only required if Booking Center is Hong Kong.</i>
+                        </p>
+                        <br>
+                        <p>
+                            <strong>In the below image, it shows the creation of a Conditional Document which requires its condition
+                                parameters to be filled.</strong>
+                        </p>
+                        <img src="assets/images/CM_Cond_Info_Part_1.jpg" alt="Example of Condition" class="dark-logo" style="border:1px solid grey; width: 500px; height: 250px"
+                        />
+                        <br>
+                        <br>
+                        <p>
+                            <strong>
+                                To create the condition paramenters, you are required to fill in 'Condition' and 'Condition Options' as shown in the below
+                                image.
+                                <br> In the example below, there are 2 options, 'Singapore' and 'Hong Kong'.
+                                <br> Each option needs be typed into the 'Condition Options' input field.
+                                <br> Press Enter after writing each option.
+                            </strong>
+                        </p>
+                        <img src="assets/images/CM_Cond_Info_Part_2.jpg" alt="Example of Condition" class="dark-logo" style="border:1px solid grey; width: 500px; height: 150px"
+                        />
+                        <br>
+                        <br>
+                        <p>
+                            <strong>
+                                The conditon parameters you have created will be reflected on the creation of Conditional Document.
+                            </strong>
+                        </p>
+                        <img src="assets/images/CM_Cond_Info_Part_3.jpg" alt="Example of Condition" class="dark-logo" style="border:1px solid grey; width: 500px; height: 250px"
+                        />
+                        <br>
+                        <br>
+                    </font>
+                </p-dialog>
                 <div style="float: right">
-                    <button type="button" (click)="condInfo.show($event)" pButton icon="pi pi-info-circle" class="ui-button-rounded ui-button-info"></button>
+                    <button type="button" (click)="showCInfoDialog()" pButton icon="pi pi-info-circle" class="ui-button-rounded ui-button-info"
+                        label="info"></button>
                 </div>
                 <br>
                 <div formArrayName="conditions">
