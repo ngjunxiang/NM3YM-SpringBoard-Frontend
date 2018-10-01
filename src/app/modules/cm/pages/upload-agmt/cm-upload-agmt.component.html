@@ -5,7 +5,7 @@
         <h3>Upload Agmt Code - Document Mapping</h3>
         <br>
         <h4>Select a file: </h4>
-        <p-fileUpload name="uploadedFile" accept=".csv" maxFileSize="1000000" [disabled]="loading" url="{{ uploadUrl }}" (onUpload)="onUpload($event)"
+        <p-fileUpload name="uploadedFile" accept=".csv,.xls,.xlsx" maxFileSize="1000000" [disabled]="loading" url="{{ uploadUrl }}" (onUpload)="onUpload($event)"
             (onError)="onError($event)" (onBeforeUpload)="onBeforeUpload($event)">
             <ng-template pTemplate="content">
                 <div *ngIf="inputFiles">
@@ -25,6 +25,6 @@
                 </div>
             </ng-template>
         </p-fileUpload>
-        <br> *Only CSV files are accepted
+        <br> *Only files with extensions .csv, .xls and .xlsx are accepted
     </div>
 </p-card>
