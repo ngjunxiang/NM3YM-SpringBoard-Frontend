@@ -175,15 +175,12 @@ export class FOService {
             })
         };
 
-        const sortOption = {
-            'sortBy': sortValue
+        const sortData = {
+            'sortBy': sortValue,
+            'obList' : obProcesses
         };
 
-        const obList = {
-            'obList' : obProcesses
-        }
-
-        const postData = Object.assign(this.authService.authItems, sortOption, obList);
+        const postData = Object.assign(this.authService.authItems, sortData);
 
         return this.http.post<Response>(this.retrieveSortedOnboardProcessesURL, postData, httpOptions)
             .pipe(
@@ -199,15 +196,12 @@ export class FOService {
             })
         };
 
-        const filterOption = {
-            'filterBy': filterValue
+        const filterData = {
+            'filterBy': filterValue,
+            'obList' : obProcesses
         };
 
-        const obList = {
-            'obList' : obProcesses
-        }
-
-        const postData = Object.assign(this.authService.authItems, filterOption, obList);
+        const postData = Object.assign(this.authService.authItems, filterData);
 
         return this.http.post<Response>(this.retrieveFilteredOnboardProcessesURL, postData, httpOptions)
             .pipe(
