@@ -11,6 +11,7 @@ interface Response {
     error: string;
 }
 
+
 interface Checklist {
     clID: string;
     name: string;
@@ -32,6 +33,15 @@ interface ChecklistName {
     updatedBy: string;
     version: string;
     dateCreated: Date;
+}
+
+
+interface DashboardResults {
+    results: any;
+    docChanges: any;
+    clientsAffected: any[];  
+    pendingClients: any[];
+    error: string;
 }
 
 interface ObList {
@@ -93,7 +103,7 @@ export class FOService {
 
         const postData = this.authService.authItems;
 
-        return this.http.post<Response>(this.retrieveDashboardStatsURL, postData, httpOptions)
+        return this.http.post<DashboardResults>(this.retrieveDashboardStatsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

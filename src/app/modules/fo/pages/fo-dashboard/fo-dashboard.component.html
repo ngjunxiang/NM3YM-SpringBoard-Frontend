@@ -38,7 +38,7 @@
             <p-card title="RECENT CHANGES IN DOCUMENTS" class="table">
                 <hr>
                 <p>List of changes in documents</p>
-                <p-table [columns]="colsDoc" [value]="documents" [scrollable]="true" scrollHeight="100%">
+                <p-table [columns]="colsDoc" [value]="docChanges" [scrollable]="true" scrollHeight="100%">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th *ngFor="let col of columns">

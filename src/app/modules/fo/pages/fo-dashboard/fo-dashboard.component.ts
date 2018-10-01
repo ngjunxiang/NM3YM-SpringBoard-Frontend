@@ -44,7 +44,8 @@ export class FODashboardComponent implements OnInit {
     //Actual Variable for Dashboard
     completedClients: number;
     pendingClients: number;
-    onboardingClients: any[];
+    docChanges: any[];
+    clientsAffected: any[];
 
     constructor(
         private foService: FOService,
@@ -61,10 +62,28 @@ export class FODashboardComponent implements OnInit {
                 return;
             }
 
+            this.docChanges = [];
+
             if (res.results) {
                 this.completedClients = res.results.completedCount;
                 this.pendingClients = res.results.pendingCount;
-                this.onboardingClients = res.results.onBoardedClients;
+
+
+                res.docChanges.notifications.forEach(docChange => {
+                    var typeOfChange: string;
+                    if (docChange.type.documentName == "1") {
+                        typeOfChange = "Modified"
+                    } else if (docChange.type.documentName == "2") {
+                        typeOfChange = "Added"
+                    } else {
+                        typeOfChange = "Deleted"
+                    }
+                    this.docChanges.push({
+                        name: docChange.type.documentName, changes: typeOfChange, date: docChange.dateCreated
+                    });
+
+                });
+                this.clientsAffected = res.clientsAffected;
             }
             this.loading = false;
         }, error => {
@@ -82,7 +101,7 @@ export class FODashboardComponent implements OnInit {
         ];
 
         this.colsDoc = [
-            { field: 'name', header: 'Client' },
+            { field: 'name', header: 'Document' },
             { field: 'changes', header: 'Changes' },
             { field: 'date', header: 'Date' }
         ];
