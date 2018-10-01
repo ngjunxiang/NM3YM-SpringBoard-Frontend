@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateAdminComponent } from './update-admin.component';
+import { AdminCreateUserComponent } from './admin-create-user.component';
 
-describe('UpdateAdminComponent', () => {
-    let component: UpdateAdminComponent;
-    let fixture: ComponentFixture<UpdateAdminComponent>;
+describe('AdminCreateUserComponent', () => {
+    let component: AdminCreateUserComponent;
+    let fixture: ComponentFixture<AdminCreateUserComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [UpdateAdminComponent]
+            declarations: [AdminCreateUserComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(UpdateAdminComponent);
+        fixture = TestBed.createComponent(AdminCreateUserComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

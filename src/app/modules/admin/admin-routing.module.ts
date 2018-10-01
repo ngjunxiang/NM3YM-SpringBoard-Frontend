@@ -3,16 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { AdminComponent } from './pages/admin.component';
-import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
-import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
-import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
-import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { AdminCreateUserComponent } from './pages/admin-create-user/admin-create-user.component';
+import { AdminUpdateUserComponent } from './pages/admin-update-user/admin-update-user.component';
+import { AdminDeleteUserComponent } from './pages/admin-delete-user/admin-delete-user.component';
+import { AdminViewAllComponent } from './pages/admin-view-all/admin-view-all.component';
 import { AdminAuthGuard } from '../../core/guard/admin-auth.guard';
 
 const routes: Routes = [
     { 
         path: '', 
-        redirectTo: 'panel', 
+        redirectTo: 'panel/viewall', 
         pathMatch: 'full' 
     },
     {
@@ -20,38 +20,38 @@ const routes: Routes = [
         component: AdminComponent,
         children: [
             {
-                path: 'panel',
-                component: AdminPanelComponent,
+                path: 'panel/viewall',
+                component: AdminViewAllComponent,
                 data: {
                     title: 'Admin',
-                    urls: [{ title: 'Admin Panel' }]
+                    urls: [{ title: 'Admin Panel' }, { title: 'View All Users' }]
                 }, 
                 canActivate: [AdminAuthGuard] 
             },
             {
-                path: 'usrmgmt/create',
-                component: CreateAdminComponent,
+                path: 'panel/create',
+                component: AdminCreateUserComponent,
                 data: {
                     title: 'Admin',
-                    urls: [{ title: 'User Management'}, { title: 'Create User Account' }]
+                    urls: [{ title: 'Admin Panel'}, { title: 'Create User Account' }]
                 }, 
                 canActivate: [AdminAuthGuard] 
             },
             {
-                path: 'usrmgmt/update',
-                component: UpdateAdminComponent,
+                path: 'panel/update',
+                component: AdminUpdateUserComponent,
                 data: {
                     title: 'Admin',
-                    urls: [{ title: 'User Management'}, { title: 'Update User Account' }]
+                    urls: [{ title: 'Admin Panel'}, { title: 'Update User Account' }]
                 }, 
                 canActivate: [AdminAuthGuard] 
             },
             {
-                path: 'usrmgmt/delete',
-                component: DeleteAdminComponent,
+                path: 'panel/delete',
+                component: AdminDeleteUserComponent,
                 data: {
                     title: 'Admin',
-                    urls: [{ title: 'User Management'}, { title: 'Delete User Account' }]
+                    urls: [{ title: 'Admin Panel'}, { title: 'Delete User Account' }]
                 }, 
                 canActivate: [AdminAuthGuard] 
             }

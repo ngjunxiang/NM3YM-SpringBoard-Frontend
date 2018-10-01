@@ -8,12 +8,12 @@ import { map } from 'rxjs/operators';
 import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
-    selector: 'admin-update',
-    templateUrl: './update-admin.component.html',
-    styleUrls: ['./update-admin.component.scss']
+    selector: 'admin-update-user',
+    templateUrl: './admin-update-user.component.html',
+    styleUrls: ['./admin-update-user.component.scss']
 })
 
-export class UpdateAdminComponent implements OnInit {
+export class AdminUpdateUserComponent implements OnInit {
 
     // UI Control
     loading = false;

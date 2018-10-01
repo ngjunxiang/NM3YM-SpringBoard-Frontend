@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminPanelComponent } from './admin-panel.component';
+import { AdminViewAllComponent } from './admin-view-all.component';
 
-describe('AdminPanelComponent', () => {
-    let component: AdminPanelComponent;
-    let fixture: ComponentFixture<AdminPanelComponent>;
+describe('AdminViewAllComponent', () => {
+    let component: AdminViewAllComponent;
+    let fixture: ComponentFixture<AdminViewAllComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminPanelComponent]
+            declarations: [AdminViewAllComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AdminPanelComponent);
+        fixture = TestBed.createComponent(AdminViewAllComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

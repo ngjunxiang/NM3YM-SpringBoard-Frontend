@@ -8,12 +8,12 @@ import { of, Observable } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
-    selector: 'admin-create',
-    templateUrl: './create-admin.component.html',
-    styleUrls: ['./create-admin.component.scss']
+    selector: 'admin-create-user',
+    templateUrl: './admin-create-user.component.html',
+    styleUrls: ['./admin-create-user.component.scss']
 })
 
-export class CreateAdminComponent implements OnInit {
+export class AdminCreateUserComponent implements OnInit {
 
     // UI Control
     loading = false;
