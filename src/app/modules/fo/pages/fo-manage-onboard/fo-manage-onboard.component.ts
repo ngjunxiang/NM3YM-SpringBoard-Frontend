@@ -43,9 +43,11 @@ export class FOManageOnboardComponent implements OnInit {
 
         this.sortOptions = [
             { label: 'No Selection', value: 'none' },
-            { label: 'Name', value: 'name' },
-            { label: 'Progress', value: 'progress' },
-            { label: 'Date', value: 'date' }
+            { label: 'Checklist Name', value: 'name' },
+            { label: 'Client Name', value: 'Client Name'},
+            { label: 'Date', value: 'date' },
+            { label: 'Progress', value: 'progress' }
+            
         ];
 
         this.filterOptions = [
