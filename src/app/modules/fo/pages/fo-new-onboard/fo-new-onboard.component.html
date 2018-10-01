@@ -22,7 +22,7 @@
                             formControlName="field" required pInputText>
                         <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field" [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
                         <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" dateFormat="dd/mm/yy" dataType="string" placeholder="Enter Date of Submission"
-                            formControlName="field"></p-calendar>
+                            formControlName="field" readonlyInput="true"></p-calendar>
                     </div>
                 </div>
             </p-card>

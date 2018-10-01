@@ -8,12 +8,12 @@ import { map } from 'rxjs/operators';
 import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
-    selector: 'admin-delete',
-    templateUrl: './delete-admin.component.html',
-    styleUrls: ['./delete-admin.component.scss']
+    selector: 'admin-delete-user',
+    templateUrl: './admin-delete-user.component.html',
+    styleUrls: ['./admin-delete-user.component.scss']
 })
 
-export class DeleteAdminComponent implements OnInit {
+export class AdminDeleteUserComponent implements OnInit {
     // UI Control
     loading = false;
     msgs: Message[] = [];
@@ -26,9 +26,7 @@ export class DeleteAdminComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private adminService: AdminService
-    ) {
-
-    }
+    ) { }
 
     ngOnInit() {
         this.loading = true;

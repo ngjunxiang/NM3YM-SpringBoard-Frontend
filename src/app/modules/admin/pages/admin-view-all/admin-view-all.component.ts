@@ -5,11 +5,12 @@ import { Message } from 'primeng/components/common/api';
 import { AdminService } from '../../../../core/services/admin.service';
 
 @Component({
-    selector: 'admin-panel',
-    templateUrl: './admin-panel.component.html',
-    styleUrls: ['./admin-panel.component.css']
+    selector: 'admin-view-all',
+    templateUrl: './admin-view-all.component.html',
+    styleUrls: ['./admin-view-all.component.css']
 })
-export class AdminPanelComponent implements OnInit {
+
+export class AdminViewAllComponent implements OnInit {
 
     // UI Control
     loading = false;

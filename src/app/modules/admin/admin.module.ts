@@ -19,10 +19,10 @@ import { TableModule } from 'primeng/table';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
 import { AdminService } from '../../core/services/admin.service';
-import { CreateAdminComponent } from './pages/create-admin/create-admin.component';
-import { UpdateAdminComponent } from './pages/update-admin/update-admin.component';
-import { DeleteAdminComponent } from './pages/delete-admin/delete-admin.component';
-import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { AdminViewAllComponent } from './pages/admin-view-all/admin-view-all.component';
+import { AdminCreateUserComponent } from './pages/admin-create-user/admin-create-user.component';
+import { AdminUpdateUserComponent } from './pages/admin-update-user/admin-update-user.component';
+import { AdminDeleteUserComponent } from './pages/admin-delete-user/admin-delete-user.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -50,10 +50,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     declarations: [
         AdminComponent,
-        AdminPanelComponent,
-        CreateAdminComponent,
-        UpdateAdminComponent,
-        DeleteAdminComponent
+        AdminViewAllComponent,
+        AdminCreateUserComponent,
+        AdminUpdateUserComponent,
+        AdminDeleteUserComponent
     ],
     providers: [
         {
