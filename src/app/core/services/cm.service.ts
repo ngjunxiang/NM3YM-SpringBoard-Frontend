@@ -24,9 +24,11 @@ interface ChecklistNames {
 interface ChecklistName {
     name: string;
     clID: string;
+    createdBy: string;
     updatedBy: string;
     version: string;
     dateCreated: Date;
+    dateUpdated: Date;
 }
 
 interface Response {
@@ -52,6 +54,8 @@ export class CMService {
     // FAQ Endpoints
     private retrieveUnansweredFAQURL = environment.host + '/app/faq/retrieve-UQ';
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
+    private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
+    private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
 
     constructor(
         private authService: AuthenticationService,
@@ -104,38 +108,6 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems, checklistIdData);
 
         return this.http.post<Checklist>(this.retrieveDeleteChecklistURL, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-
-    retrieveCMAnsweredFaq() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        const postData = this.authService.authItems;
-
-        return this.http.post<Response>(this.retrieveAnsweredFAQURL, postData, httpOptions)
-            .pipe(
-                retry(3),
-                catchError(this.handleError)
-            );
-    }
-
-    retrieveCMUnansweredFaq() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-
-        const postData = this.authService.authItems;
-
-        return this.http.post<Response>(this.retrieveUnansweredFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -243,6 +215,82 @@ export class CMService {
             );
     }
     
+
+    retrieveAnsweredFAQ() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveAnsweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateAnsweredFAQ(question, answer) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const updateQuestionData = {
+            'qna': {
+                'question': question,
+                'answer': answer
+            }
+        };
+
+        const postData = Object.assign(this.authService.authItems, updateQuestionData);
+        console.log(postData)
+        return this.http.post<Response>(this.updateAnsweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    deleteAnsweredFAQ(question) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const deleteQuestionData = {
+            'question': question
+        };
+
+        const postData = Object.assign(this.authService.authItems, deleteQuestionData);
+
+        return this.http.post<Response>(this.deleteAnsweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveUnansweredFAQ() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveUnansweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.

@@ -23,11 +23,18 @@
                                             <button pButton style="width:16%; margin-right:1%" class="ui-button-warning"
                                                 label="Edit Answer" type="button" icon="fa fa-pencil" (click)="showEditAnswerArea(i)"></button>
                                             <button pButton style="width:18%" class="ui-button-danger" label="Delete Question"
-                                                type="button" icon="fa fa-times" (click)="deleteQuestion(i)"></button>
+                                                type="button" icon="fa fa-times" (click)="deleteAnsweredQuestion(i)"></button>
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="showEditArea">
                                         <ngx-wig [formControl]="editAnswerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                        <div class="ui-g" style="padding-top: 1%">
+                                            <button pButton style="width:18%" class="ui-button-success" label="Save Answer"
+                                                type="button" icon="far fa-save" (click)="saveAnsweredQuestion(i)"
+                                                [disabled]="processing"></button>
+                                            <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger" label="Cancel"
+                                                type="button" icon="fa fa-times" (click)="hideEditArea()"></button>
+                                        </div>
                                     </ng-container>
                                 </p-accordionTab>
                             </ng-container>
