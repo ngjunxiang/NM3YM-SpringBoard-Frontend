@@ -55,7 +55,7 @@ export class FOFaqAskComponent implements OnInit {
 
         this.faqs = [];
 
-        this.foService.retrieveRMFaq(this.questionForm.get('question').value).subscribe(res => {
+        this.foService.retrieveFaq(this.questionForm.get('question').value).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -92,7 +92,7 @@ export class FOFaqAskComponent implements OnInit {
         let newQuestion = this.newQuestionForm.get('newQuestion').value;
         if (newQuestion !== '') {
             this.loading = true;
-            this.foService.addUnansweredQuestion(newQuestion).subscribe(res => {
+            this.foService.createUnansweredQuestion(newQuestion).subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: res.error

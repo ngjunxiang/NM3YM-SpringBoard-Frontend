@@ -116,7 +116,7 @@ export class FONewOnboardComponent implements OnInit {
             });
         });
 
-        this.foService.retrieveRMChecklistDetails(this.selectedChecklistId).subscribe(res => {
+        this.foService.retrieveChecklistDetails(this.selectedChecklistId).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -263,7 +263,7 @@ export class FONewOnboardComponent implements OnInit {
 
     retrieveChecklistNames() {
         this.checklistNameDropdownData = [];
-        this.foService.retrieveRMChecklistNames().subscribe(data => {
+        this.foService.retrieveChecklistNames().subscribe(data => {
             if (data.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: data.error

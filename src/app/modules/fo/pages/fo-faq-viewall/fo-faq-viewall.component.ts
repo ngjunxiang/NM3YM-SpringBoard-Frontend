@@ -34,7 +34,7 @@ export class FOFaqViewAllComponent implements OnInit {
     retrieveFAQ() {
         this.faqs = [];
 
-        this.foService.retrieveAllRMFaq().subscribe(res => {
+        this.foService.retrieveAllFaq().subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

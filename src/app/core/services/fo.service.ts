@@ -87,7 +87,7 @@ export class FOService {
     // FAQ Endpoints
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private retrieveAllFAQURL = environment.host + '/app/faq/retrieve-allAQ';
-    private addUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
+    private createUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
 
     constructor(
         private authService: AuthenticationService,
@@ -126,7 +126,7 @@ export class FOService {
             );
     }
 
-    retrieveRMChecklistNames() {
+    retrieveChecklistNames() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ export class FOService {
             );
     }
 
-    retrieveRMChecklistDetails(checklistId) {
+    retrieveChecklistDetails(checklistId) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -258,7 +258,7 @@ export class FOService {
             );
     }
 
-    retrieveRMFaq(question) {
+    retrieveFaq(question) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -278,7 +278,7 @@ export class FOService {
             );
     }
 
-    retrieveAllRMFaq() {
+    retrieveAllFaq() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -294,7 +294,7 @@ export class FOService {
             );
     }
 
-    addUnansweredQuestion(newQuestion) {
+    createUnansweredQuestion(newQuestion) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -307,7 +307,7 @@ export class FOService {
 
         const postData = Object.assign(this.authService.authItems, newQuestionData);
 
-        return this.http.post<Response>(this.addUnansweredQuestionURL, postData, httpOptions)
+        return this.http.post<Response>(this.createUnansweredQuestionURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
