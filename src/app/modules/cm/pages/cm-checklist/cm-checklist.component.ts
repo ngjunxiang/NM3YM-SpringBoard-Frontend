@@ -40,8 +40,10 @@ export class CMChecklistComponent implements OnInit {
                     'name': cl.name,
                     'clID': cl.clID,
                     'version': cl.version,
+                    'createdBy': cl.createdBy,
                     'updatedBy': cl.updatedBy,
-                    'dateCreated': cl.dateCreated
+                    'dateCreated': cl.dateCreated,
+                    'dateUpdated': cl.dateUpdated
                 });
             });
             this.loading = false;

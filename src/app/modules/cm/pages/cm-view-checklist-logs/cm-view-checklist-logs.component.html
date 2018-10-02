@@ -10,19 +10,30 @@
             <h4>Checklist Logs</h4>
             <div>
                 <h5>Select a checklist: </h5>
-                <p-dropdown [options]="checklistNameData" (onChange)="reloadVersions($event)" placeholder="Select a checklist" formControlName="clID"
-                    [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
-                <p-dropdown [options]="checklistVersionData" placeholder="Select a version" formControlName="version" [style]="{'width':'20%', 'margin-top': '0.5%', 'margin-left': '1.5%'}"></p-dropdown>
+                <p-dropdown [options]="checklistNameData" (onChange)="reloadVersions($event)" placeholder="Select a checklist"
+                    formControlName="clID" [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
+                <p-dropdown [options]="checklistVersionData" placeholder="Select a version" formControlName="version"
+                    [style]="{'width':'20%', 'margin-top': '0.5%', 'margin-left': '1.5%'}"></p-dropdown>
             </div>
 
-            <button pButton label="Retrieve" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-search"
-                (click)="retrieveChecklistDetails()"></button>
+            <button pButton label="Retrieve" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="button"
+                icon="fas fa-search" (click)="retrieveChecklistDetails()"></button>
         </p-card>
     </div>
 
 
     <!-- Checklist Details -->
     <div *ngIf="searched">
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <h4>{{ checklistLogData.name }}</h4>
+                Created By: {{ checklistLogData.createdBy }} <br>
+                Date Created: {{ checklistLogData.dateCreated }} <br>
+                Updated By: {{ checklistLogData.updatedBy }} <br>
+                Last Updated: {{ checklistLogData.dateUpdated }}
+            </p-card>
+        </div>
+
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h4>Required Fields</h4>
@@ -84,7 +95,7 @@
             </p-card>
         </div>
 
-        <div style="padding-bottom: 10px" >
+        <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h4 style="display: inline-block;">Compliance Documents</h4>
                 <p-overlayPanel #legendTable appendTo="'body'">
@@ -107,8 +118,8 @@
                         </ng-template>
                     </p-table>
                 </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info" (mouseover)="legendTable.show($event)"
-                    (mouseout)="legendTable.hide()"></button>
+                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info"
+                    (mouseover)="legendTable.show($event)" (mouseout)="legendTable.hide()"></button>
                 <h5>Mandatory</h5>
                 <div *ngIf="checklistLogData.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
                     No documents in this section
@@ -188,13 +199,16 @@
                             <ng-container *ngFor="let condition of checklistLogData.complianceDocuments.conditional[i].conditions; let j=index">
                                 <tr *ngIf="doc.changed === '0'">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -205,13 +219,16 @@
                                 </tr>
                                 <tr *ngIf="doc.changed === '1'" class="edited-field">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -222,13 +239,16 @@
                                 </tr>
                                 <tr *ngIf="doc.changed === '2'" class="new-field">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -239,13 +259,16 @@
                                 </tr>
                                 <tr *ngIf="doc.changed === '3'" class="deleted-field">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -429,13 +452,16 @@
                             <ng-container *ngFor="let condition of checklistLogData.legalDocuments.conditional[i].conditions; let j=index">
                                 <tr *ngIf="doc.changed === '0'">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -452,13 +478,16 @@
                                 </tr>
                                 <tr *ngIf="doc.changed === '1'" class="edited-field">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -475,13 +504,16 @@
                                 </tr>
                                 <tr *ngIf="doc.changed === '2'" class="new-field">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -498,13 +530,16 @@
                                 </tr>
                                 <tr *ngIf="doc.changed === '3'" class="deleted-field">
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.documentName }}</td>
                                     </ng-container>
                                     <td>{{ condition.conditionName }}</td>
                                     <td>{{ condition.conditionOption }}</td>
                                     <ng-container *ngIf="j === 0">
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length" [innerHTML]="doc.remarks"></td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">{{
+                                            doc.agmtCode }}</td>
+                                        <td [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length"
+                                            [innerHTML]="doc.remarks"></td>
                                         <td *ngIf="doc.signature" [attr.rowspan]="checklistLogData.complianceDocuments.conditional[i].conditions.length">
                                             <i class="fa fa-check"></i>
                                         </td>

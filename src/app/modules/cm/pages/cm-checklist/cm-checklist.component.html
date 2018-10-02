@@ -18,8 +18,10 @@
                 <p-card styleClass="ui-card-shadow">
                     <div style="display:inline-block">
                         <b>{{ checklist.name }}</b> <br> 
-                        Last Updated: {{ checklist.dateCreated }} <br> 
-                        Updated By: {{ checklist.updatedBy }}
+                        Created By: {{ checklist.createdBy }} <br>
+                        Date Created: {{ checklist.dateCreated }} <br> 
+                        Updated By: {{ checklist.updatedBy }} <br>
+                        Last Updated: {{ checklist.dateUpdated }} 
                     </div>
                     <div style="display:inline-block; float:right">
                         <button pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil"
