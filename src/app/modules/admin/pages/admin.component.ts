@@ -52,6 +52,7 @@ export class AdminComponent implements OnInit {
         });
 
         this.retrieveUserDetails();
+        this.retrieveNotifications();
     }
 
     async retrieveUserDetails() {
@@ -75,5 +76,12 @@ export class AdminComponent implements OnInit {
                 severity: 'error', summary: 'Server Error', detail: error
             });
         })
+    }
+
+    retrieveNotifications() {
+        this.notifications = {
+            newNotifications: [],
+            allNotifications: []
+        };
     }
 }
