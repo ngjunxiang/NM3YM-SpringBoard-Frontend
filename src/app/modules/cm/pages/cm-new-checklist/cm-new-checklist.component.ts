@@ -39,7 +39,7 @@ export class CMNewChecklistComponent implements OnInit {
     cInfoDisplay = false;
     oDisplay = false;
     oEditDisplay = false;
-    
+
 
     // UI Component
     newChecklistForm: FormGroup;
@@ -141,7 +141,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
         });
@@ -155,7 +155,7 @@ export class CMNewChecklistComponent implements OnInit {
             ]),
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
         });
@@ -477,7 +477,14 @@ export class CMNewChecklistComponent implements OnInit {
             return;
         }
 
-        control.push(this.dialogForm);
+        control.push(this.fb.group({
+            documentName: new FormControl(this.dialogForm.get('documentName').value, Validators.required),
+            agmtCode: new FormControl(this.dialogForm.get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
+            signature: new FormControl(this.dialogForm.get('signature').value),
+            canWaiver: new FormControl(this.dialogForm.get('canWaiver').value),
+            remarks: new FormControl(this.dialogForm.get('remarks').value)
+        })
+        );
 
         this.mDisplay = false;
         this.blocked = false;
@@ -719,7 +726,15 @@ export class CMNewChecklistComponent implements OnInit {
             return;
         }
 
-        control.push(this.cDialogForm);
+        control.push(this.fb.group({
+            conditions: this.cDialogForm.get('conditions'),
+            documentName: new FormControl(this.cDialogForm.get('documentName').value, Validators.required),
+            agmtCode: new FormControl(this.cDialogForm.get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
+            signature: new FormControl(this.cDialogForm.get('signature').value),
+            canWaiver: new FormControl(this.cDialogForm.get('canWaiver').value),
+            remarks: new FormControl(this.cDialogForm.get('remarks').value)
+        })
+        );
 
         this.checkConditionInUse();
 
@@ -799,7 +814,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm = this.fb.group({
             documentName: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(true),
+            signature: new FormControl(false),
             canWaiver: new FormControl(false),
             remarks: new FormControl('')
         });
@@ -838,7 +853,14 @@ export class CMNewChecklistComponent implements OnInit {
             return;
         }
 
-        control.push(this.dialogForm);
+        control.push(this.fb.group({
+            documentName: new FormControl(this.dialogForm.get('documentName').value, Validators.required),
+            agmtCode: new FormControl(this.dialogForm.get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
+            signature: new FormControl(this.dialogForm.get('signature').value),
+            canWaiver: new FormControl(this.dialogForm.get('canWaiver').value),
+            remarks: new FormControl(this.dialogForm.get('remarks').value)
+        })
+        );
 
         this.blocked = false;
         this.oDisplay = false;
