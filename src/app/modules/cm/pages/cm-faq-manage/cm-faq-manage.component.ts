@@ -18,13 +18,13 @@ export class CMFaqManageComponent implements OnInit {
     processing = false;
     loadingEditArea = false;
     showEditArea = false;
-    selectedFAQIndex: number;
+    selectedFAQ: string;
     activeTab: number;
     msgs: Message[] = [];
 
     // UI Components
     faqs: any[];
-    editAnswerForm: FormGroup;
+    answerForm: FormGroup;
 
     constructor(
         private cmService: CMService,
@@ -57,7 +57,7 @@ export class CMFaqManageComponent implements OnInit {
                     for (let i = 0; i < res.results.length; i++) {
                         let faq = res.results[i];
                         let selected = false;
-                        if (i === this.selectedFAQIndex) {
+                        if (faq.question === this.selectedFAQ) {
                             selected = true;
                         }
 
@@ -120,7 +120,7 @@ export class CMFaqManageComponent implements OnInit {
                     for (let i = 0; i < res.results.length; i++) {
                         let faq = res.results[i];
                         let selected = false;
-                        if (i === this.selectedFAQIndex) {
+                        if (faq.question === this.selectedFAQ) {
                             selected = true;
                         }
 
@@ -176,33 +176,86 @@ export class CMFaqManageComponent implements OnInit {
         }
         this.loadingEditArea = true;
 
-        this.editAnswerForm = this.fb.group({
+        this.answerForm = this.fb.group({
+            addedAnswer: new FormControl('', Validators.required),
             editedAnswer: new FormControl('', Validators.required)
         });
 
-        this.editAnswerForm.get('editedAnswer').setValue(this.faqs[index].answer);
+        this.answerForm.get('editedAnswer').setValue(this.faqs[index].answer);
+
+        this.loadingEditArea = false;
+        this.showEditArea = true;
+    }
+
+    showAddAnswerArea() {
+        if (this.showEditArea) {
+            return;
+        }
+        
+        this.loadingEditArea = true;
+
+        this.answerForm = this.fb.group({
+            addedAnswer: new FormControl('', Validators.required),
+            editedAnswer: new FormControl('', Validators.required)
+        });
 
         this.loadingEditArea = false;
         this.showEditArea = true;
     }
 
     hideEditArea() {
-        this.faqs.map(faq => {
-            faq.selected = false;
-        });
-
-        this.editAnswerForm.get('editedAnswer').setValue('');
+        this.answerForm.get('addedAnswer').setValue('');
+        this.answerForm.get('editedAnswer').setValue('');
         this.showEditArea = false;
     }
 
     deleteAnsweredQuestion(index: number) {
         this.confirmationService.confirm({
-            message: 'Do you want to delete this checklist?',
+            message: 'Do you want to delete this question?',
             header: 'Delete Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.processing = true;
                 this.cmService.deleteAnsweredFAQ(this.faqs[index].question).subscribe(res => {
+                    if (res.error) {
+                        this.msgs.push({
+                            severity: 'error', summary: 'Error', detail: res.error
+                        });
+                        return;
+                    }
+
+                    if (res.results) {
+                        this.loadPage();
+                        this.faqs.map(faq => {
+                            faq.selected = false;
+                        });
+                        this.msgs.push({
+                            severity: 'success', summary: 'Success', detail: 'Question deleted'
+                        });
+                    }
+
+                    this.processing = false;
+                }, error => {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: error
+                    });
+                    this.processing = false;
+                });
+            },
+            reject: () => {
+                return;
+            }
+        });
+    }
+
+    deleteUnansweredQuestion(index: number) {
+        this.confirmationService.confirm({
+            message: 'Do you want to delete this question?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.processing = true;
+                this.cmService.deleteUnansweredFAQ(this.faqs[index].question).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error
@@ -232,18 +285,18 @@ export class CMFaqManageComponent implements OnInit {
     }
 
     saveAnsweredQuestion(index: number) {
-        this.editAnswerForm.controls.editedAnswer.markAsDirty();
+        this.answerForm.controls.editedAnswer.markAsDirty();
 
-        if (this.editAnswerForm.controls.editedAnswer.invalid) {
+        if (this.answerForm.controls.editedAnswer.invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].question, this.editAnswerForm.get('editedAnswer').value).subscribe(res => {
+        this.cmService.updateAnsweredFAQ(this.faqs[index].question, this.answerForm.get('editedAnswer').value).subscribe(res => {
             this.processing = true;
-            this.selectedFAQIndex = index;
+            this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -258,6 +311,46 @@ export class CMFaqManageComponent implements OnInit {
                 });
             }
 
+            this.hideEditArea();
+            
+            this.processing = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+            this.processing = false;
+        });
+    }
+
+    saveUnansweredQuestion(index: number) {
+        this.answerForm.controls.addedAnswer.markAsDirty();
+
+        if (this.answerForm.controls.addedAnswer.invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
+            });
+            return;
+        }
+
+        this.cmService.updateUnansweredFAQ(this.faqs[index].question, this.answerForm.get('addedAnswer').value).subscribe(res => {
+            this.processing = true;
+            
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.loadPage();
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: 'Answer updated'
+                });
+            }
+
+            this.hideEditArea();
+            
             this.processing = false;
         }, error => {
             this.msgs.push({

@@ -18,24 +18,29 @@
 
 <div *ngIf="!loading">
     <div *ngIf="searched">
-        <p-card styleClass="ui-card-shadow">
-            <div *ngIf="faqs.length === 0">
-                <h4>
-                    Sorry, this question has not been asked yet!
-                    <button pButton label="Ask now!" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="button"
-                        icon="fas fa-question" (click)="showNewFAQForm()"></button>
-                </h4>
+        <div style="padding-bottom: 10px">
+            <p-card styleClass="ui-card-shadow">
+                <div>
+                    <h4>
+                        None of the answers helped you?
+                        <button pButton label="Ask now!" class="ui-button-primary" style="width: 15%; margin-top: 1%"
+                            type="button" icon="fas fa-question" (click)="showNewFAQForm()"></button>
+                    </h4>
 
-                <form *ngIf="showNewQnForm" [formGroup]="newQuestionForm">
-                    <div class="ui-g">
-                        <input type="text" id="input" class="form-control" style="width: 80%" placeholder="Ask a new question"
-                            formControlName="newQuestion" pInputText>
-                    </div>
-                    <button pButton label="Post" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="submit"
-                        icon="fas fa-share-square" (click)="postNewQuestion()"></button>
-                </form>
-            </div>
-            <div *ngIf="faqs.length > 0">
+                    <form *ngIf="showNewQnForm" [formGroup]="newQuestionForm">
+                        <div class="ui-g">
+                            <input type="text" id="input" class="form-control" style="width: 80%" placeholder="Ask a new question"
+                                formControlName="newQuestion" pInputText>
+                        </div>
+                        <button pButton label="Post" class="ui-button-primary" style="width: 15%; margin-top: 1%" type="submit"
+                            icon="fas fa-share-square" (click)="postNewQuestion()"></button>
+                    </form>
+                </div>
+            </p-card>
+        </div>
+
+        <p-card styleClass="ui-card-shadow">
+            <div>
                 <h4>Frequently Asked Questions</h4>
                 <p-accordion [multiple]="true">
                     <ng-container *ngFor="let faq of faqs; let i=index">

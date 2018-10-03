@@ -2,7 +2,6 @@
 <p-confirmDialog></p-confirmDialog>
 
 <div *ngIf="!loading">
-    <!-- Checklist Name -->
     <div style="padding-bottom: 10px">
         <p-card styleClass="ui-card-shadow">
             <h4>Frequently Asked Questions</h4>
@@ -14,29 +13,54 @@
                         </h5>
                     </div>
                     <div *ngIf="faqs.length > 0">
-                        <p-accordion [multiple]="false" (onClose)="hideEditArea()">
+                        <p-accordion (onClose)="hideEditArea()" (onOpen)="hideEditArea()">
                             <ng-container *ngFor="let faq of faqs; let i=index">
-                                <p-accordionTab header="{{ faq.question }}">
-                                    <ng-container *ngIf="!showEditArea">
-                                        {{ faq.answer }}
-                                        <div class="ui-g" style="padding-top: 2%">
-                                            <button pButton style="width:16%; margin-right:1%" class="ui-button-warning"
-                                                label="Edit Answer" type="button" icon="fa fa-pencil" (click)="showEditAnswerArea(i)"></button>
-                                            <button pButton style="width:18%" class="ui-button-danger" label="Delete Question"
-                                                type="button" icon="fa fa-times" (click)="deleteAnsweredQuestion(i)"></button>
-                                        </div>
-                                    </ng-container>
-                                    <ng-container *ngIf="showEditArea">
-                                        <ngx-wig [formControl]="editAnswerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
-                                        <div class="ui-g" style="padding-top: 1%">
-                                            <button pButton style="width:18%" class="ui-button-success" label="Save Answer"
-                                                type="button" icon="far fa-save" (click)="saveAnsweredQuestion(i)"
-                                                [disabled]="processing"></button>
-                                            <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger" label="Cancel"
-                                                type="button" icon="fa fa-times" (click)="hideEditArea()"></button>
-                                        </div>
-                                    </ng-container>
-                                </p-accordionTab>
+                                <ng-container *ngIf="faq.selected === true">
+                                    <p-accordionTab header="{{ faq.question }}" [selected]="true">
+                                        <ng-container *ngIf="!showEditArea">
+                                            {{ faq.answer }}
+                                            <div class="ui-g" style="padding-top: 2%">
+                                                <button pButton style="width:16%; margin-right:1%" class="ui-button-warning"
+                                                    label="Edit Answer" type="button" icon="fa fa-pencil" (click)="showEditAnswerArea(i)"></button>
+                                                <button pButton style="width:18%" class="ui-button-danger" label="Delete Question"
+                                                    type="button" icon="fa fa-times" (click)="deleteAnsweredQuestion(i)"></button>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="showEditArea">
+                                            <ngx-wig [formControl]="answerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                            <div class="ui-g" style="padding-top: 1%">
+                                                <button pButton style="width:18%" class="ui-button-success" label="Save Answer"
+                                                    type="button" icon="far fa-save" (click)="saveAnsweredQuestion(i)"
+                                                    [disabled]="processing"></button>
+                                                <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger"
+                                                    label="Cancel" type="button" icon="fa fa-times" (click)="hideEditArea()"></button>
+                                            </div>
+                                        </ng-container>
+                                    </p-accordionTab>
+                                </ng-container>
+                                <ng-container *ngIf="faq.selected === false">
+                                    <p-accordionTab header="{{ faq.question }}">
+                                        <ng-container *ngIf="!showEditArea">
+                                            {{ faq.answer }}
+                                            <div class="ui-g" style="padding-top: 2%">
+                                                <button pButton style="width:16%; margin-right:1%" class="ui-button-warning"
+                                                    label="Edit Answer" type="button" icon="fa fa-pencil" (click)="showEditAnswerArea(i)"></button>
+                                                <button pButton style="width:18%" class="ui-button-danger" label="Delete Question"
+                                                    type="button" icon="fa fa-times" (click)="deleteAnsweredQuestion(i)"></button>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="showEditArea">
+                                            <ngx-wig [formControl]="answerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                            <div class="ui-g" style="padding-top: 1%">
+                                                <button pButton style="width:18%" class="ui-button-success" label="Save Answer"
+                                                    type="button" icon="far fa-save" (click)="saveAnsweredQuestion(i)"
+                                                    [disabled]="processing"></button>
+                                                <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger"
+                                                    label="Cancel" type="button" icon="fa fa-times" (click)="hideEditArea()"></button>
+                                            </div>
+                                        </ng-container>
+                                    </p-accordionTab>
+                                </ng-container>
                             </ng-container>
                         </p-accordion>
                     </div>
@@ -48,10 +72,28 @@
                         </h5>
                     </div>
                     <div *ngIf="faqs.length > 0">
-                        <p-accordion [multiple]="true">
+                        <p-accordion (onClose)="hideEditArea()" (onOpen)="hideEditArea()">
                             <ng-container *ngFor="let faq of faqs; let i=index">
                                 <p-accordionTab header="{{ faq.question }}">
-                                    Not Answered
+                                    <ng-container *ngIf="!showEditArea">
+                                        {{ faq.answer }}
+                                        <div class="ui-g" style="padding-top: 2%">
+                                            <button pButton style="width:16%; margin-right:1%" class="ui-button-success"
+                                                label="Add Answer" type="button" icon="fa fa-plus" (click)="showAddAnswerArea()"></button>
+                                            <button pButton style="width:18%" class="ui-button-danger" label="Delete Question"
+                                                type="button" icon="fa fa-times" (click)="deleteUnansweredQuestion(i)"></button>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="showEditArea">
+                                        <ngx-wig [formControl]="answerForm.controls.addedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                        <div class="ui-g" style="padding-top: 1%">
+                                            <button pButton style="width:18%" class="ui-button-success" label="Save Answer"
+                                                type="button" icon="far fa-save" (click)="saveUnansweredQuestion(i)"
+                                                [disabled]="processing"></button>
+                                            <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger"
+                                                label="Cancel" type="button" icon="fa fa-times" (click)="hideEditArea()"></button>
+                                        </div>
+                                    </ng-container>
                                 </p-accordionTab>
                             </ng-container>
                         </p-accordion>

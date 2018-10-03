@@ -53,6 +53,8 @@ export class CMService {
 
     // FAQ Endpoints
     private retrieveUnansweredFAQURL = environment.host + '/app/faq/retrieve-UQ';
+    private updateUnansweredFAQURL = environment.host + '/app/faq/add-AQ';
+    private deleteUnansweredFAQURL = environment.host + '/app/faq/delete-UQ';
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
@@ -247,7 +249,7 @@ export class CMService {
         };
 
         const postData = Object.assign(this.authService.authItems, updateQuestionData);
-        console.log(postData)
+
         return this.http.post<Response>(this.updateAnsweredFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
@@ -285,6 +287,49 @@ export class CMService {
         const postData = this.authService.authItems;
 
         return this.http.post<Response>(this.retrieveUnansweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateUnansweredFAQ(question, answer) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const updateQuestionData = {
+            'qna': {
+                'question': question,
+                'answer': answer
+            }
+        };
+
+        const postData = Object.assign(this.authService.authItems, updateQuestionData);
+
+        return this.http.post<Response>(this.updateUnansweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    deleteUnansweredFAQ(question) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const deleteQuestionData = {
+            'question': question
+        };
+
+        const postData = Object.assign(this.authService.authItems, deleteQuestionData);
+
+        return this.http.post<Response>(this.deleteUnansweredFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
