@@ -86,13 +86,14 @@ export class CMFaqManageComponent implements OnInit {
                 }
 
                 if (res.results) {
-                    res.results.forEach(faq => {
+                    for(let i = 0; i < res.results.length; i++){
+                        let faq = res.results[i];
                         this.faqs.push({
-                            faqId: faq.qnID,
+                            qnID: faq.qnID,
                             question: faq.question,
                             selected: false
                         });
-                    });
+                    }
                 }
                 this.loading = false;
             }, error => {
@@ -154,6 +155,7 @@ export class CMFaqManageComponent implements OnInit {
                 if (res.results) {
                     res.results.forEach(faq => {
                         this.faqs.push({
+                            qnID: faq.qnID,
                             question: faq.question,
                             selected: false
                         });
@@ -332,8 +334,8 @@ export class CMFaqManageComponent implements OnInit {
             });
             return;
         }
-
-        this.cmService.updateUnansweredFAQ(this.faqs[index].qnId, this.faqs[index].question, this.answerForm.get('addedAnswer').value).subscribe(res => {
+        
+        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value).subscribe(res => {
             this.processing = true;
             
             if (res.error) {
