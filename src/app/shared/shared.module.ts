@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { PerfectScrollbarModule, PerfectScrollbarConfigInterface, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { SpinnerComponent } from './spinner.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -28,7 +29,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatBadgeModule,
         MatIconModule,
         NgbModule.forRoot(),
-        PerfectScrollbarModule
+        PerfectScrollbarModule,
+        ProgressSpinnerModule
     ],
     exports: [
         BreadcrumbComponent,

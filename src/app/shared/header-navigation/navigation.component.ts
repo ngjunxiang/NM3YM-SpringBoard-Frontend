@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, AfterViewInit, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
@@ -8,7 +8,7 @@ declare var $: any;
     styleUrls: ['./navigation.component.css']
 })
 
-export class NavigationComponent implements AfterViewInit, OnInit {
+export class NavigationComponent implements AfterViewInit, OnInit, OnChanges {
 
     @Input('name') name: string;
     @Input('email') email: string;
@@ -27,9 +27,11 @@ export class NavigationComponent implements AfterViewInit, OnInit {
 
     constructor(private modalService: NgbModal) { }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.loading = true;
+    }
 
+    async ngOnChanges() {
         await this.retrieveNotifications().then(res => {
             if (res) {
                 this.loading = false;

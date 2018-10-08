@@ -40,6 +40,10 @@
                         <i *ngIf="hasNew" class="fas fa-bell fa-lg" matBadge="{{ newCount }}" matBadgeColor="warn" matBadgeSize="medium"></i>
                     </a>
                     <div class="dropdown-menu animated" ngbDropdownMenu>
+                        <div *ngIf="loading" style="text-align: center">
+                            Loading Notifications...
+                            <p-progressSpinner strokeWidth="6" [style]="{'width': '30px', 'height': '30px'}"></p-progressSpinner>
+                        </div>
                         <ul *ngIf="!loading" class="dropdown-user">
                             <div *ngIf="allNotifications.length === 0" style="text-align: center">
                                 <a style="font-size: 13px" href="javascript:void(0)">No notifications</a>

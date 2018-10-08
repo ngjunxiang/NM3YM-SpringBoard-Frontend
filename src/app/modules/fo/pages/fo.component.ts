@@ -24,7 +24,6 @@ export class FOComponent implements OnInit {
 
 
     // UI Control
-    loading = true;
     sidebarRoutes = ROUTES;
     appMsgs: Message[] = [];
 
@@ -119,14 +118,10 @@ export class FOComponent implements OnInit {
                 this.notifications['newNotifications'] = newNotifications;
                 this.notifications['allNotifications'] = allNotifications;
             }
-
-            this.loading = false;
         }, error => {
             this.appMsgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
-
-            this.loading = false;
         });
     }
 
@@ -137,13 +132,10 @@ export class FOComponent implements OnInit {
                     severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
             }
-
-            this.loading = false;
         }, error => {
             this.appMsgs.push({
                 severity: 'error', summary: 'Server Error', detail: error
             });
-            this.loading = false;
         });
     }
 }
