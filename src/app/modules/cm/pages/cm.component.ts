@@ -6,6 +6,7 @@ import { Message } from 'primeng/components/common/api';
 
 import { ROUTES } from './cm.sidebar-items';
 import { AuthenticationService } from '../../../core/services/authentication.service';
+import { CMService } from '../../../core/services/cm.service';
 
 @Component({
   selector: 'app-cm',
@@ -35,6 +36,7 @@ export class CMComponent implements OnInit {
 
     constructor(
         private authService: AuthenticationService,
+        private cmService: CMService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -80,9 +82,60 @@ export class CMComponent implements OnInit {
     }
 
     retrieveNotifications() {
-        this.notifications = {
-            newNotifications: [],
-            allNotifications: []
-        };
+        this.cmService.retrieveNotifications().subscribe(res => {
+            if (res.error) {
+                this.appMsgs.push({
+                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                });
+            }
+            if (res.results) {
+                this.notifications = {};
+                let newNotifications = [];
+                let allNotifications = [];
+
+                // res.results.notifications.forEach(notification => {
+                //     let notif;
+
+                //     if (notification.type.changed === '1') {
+                //         notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.';
+                //     }
+
+                //     if (notification.type.changed === '2') {
+                //         notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.';
+                //     }
+
+                //     if (notification.type.changed === '3') {
+                //         notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.';
+                //     }
+
+                //     if (!notification.checked) {
+                //         newNotifications.push(notif);
+                //     }
+                    
+                //     allNotifications.push(notif);
+                // });
+
+                this.notifications['newNotifications'] = newNotifications;
+                this.notifications['allNotifications'] = allNotifications;
+            }
+        }, error => {
+            this.appMsgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
+    }
+
+    updateNotifications(event) {
+        this.cmService.updateNotifications().subscribe(res => {
+            if (res.error) {
+                this.appMsgs.push({
+                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                });
+            }
+        }, error => {
+            this.appMsgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+        });
     }
 }

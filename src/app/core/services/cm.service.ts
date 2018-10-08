@@ -59,6 +59,10 @@ export class CMService {
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
 
+    // Notifications Endpoints
+    private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
+    private updateNotificationsURL = environment.host + '/app/cm/update-notifications';
+
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
@@ -217,6 +221,39 @@ export class CMService {
             );
     }
     
+
+    retrieveNotifications() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.retrieveNotificationsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateNotifications() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<Response>(this.updateNotificationsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
 
     retrieveAnsweredFAQ() {
         const httpOptions = {

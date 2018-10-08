@@ -53,8 +53,8 @@
                                     <div *ngIf="newNotifications.length === 0" style="text-align: center">
                                         <a style="font-size: 13px" href="javascript:void(0)">No new notifications</a>
                                         <li role="separator" style="margin-top: 5px" class="divider"></li>
-                                        <div class="showMore" style="text-align: center">
-                                            <a style="font-size: 13px" href="javascript:void(0)" (click)="showMore()">Show all</a>
+                                        <div class="showMore" style="text-align: center" (click)="showMore()">
+                                            <a style="font-size: 13px" href="javascript:void(0)">Show all</a>
                                         </div>
                                     </div> 
                                     <ng-container *ngIf="newNotifications.length > 0">
@@ -67,8 +67,8 @@
                                                     <li role="separator" class="divider"></li>
                                                     <ng-container *ngIf="i === newNotifications.length - 1">
                                                         <li role="separator" class="divider"></li>
-                                                        <div class="showMore" style="text-align: center">
-                                                            <a style="font-size: 13px" href="javascript:void(0)" (click)="showMore()">Show all</a>
+                                                        <div class="showMore" style="text-align: center" (click)="showMore()">
+                                                            <a style="font-size: 13px" href="javascript:void(0)">Show all</a>
                                                         </div>
                                                     </ng-container>
                                                 </ng-container>
@@ -85,8 +85,8 @@
                                                 </li>
                                                 <li role="separator" class="divider"></li>
                                                 <ng-container *ngIf="i === allNotifications.length - 1">
-                                                    <div class="showMore" style="text-align: center">
-                                                        <a style="font-size: 13px; " href="javascript:void(0)" (click)="showLess()">Show new</a>
+                                                    <div class="showMore" style="text-align: center" (click)="showLess()">
+                                                        <a style="font-size: 13px; " href="javascript:void(0)">Show new</a>
                                                     </div>
                                                 </ng-container>
                                             </ng-container>
