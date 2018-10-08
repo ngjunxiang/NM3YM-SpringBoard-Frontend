@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
+import { ifStmt } from '@angular/compiler/src/output/output_ast';
 
 @Component({
     selector: 'fo-manage-onboard',
@@ -19,7 +20,7 @@ export class FOManageOnboardComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Components
-    obProcesses: any; 
+    obProcesses: any;
     sortOptions: any[];
     filterOptions: any[];
     selectedSortOpt: string;
@@ -32,22 +33,31 @@ export class FOManageOnboardComponent implements OnInit {
     constructor(
         private confirmationService: ConfirmationService,
         private foService: FOService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit() {
-        this.retrieveAllOnboardProcesses();
+        this.route.queryParams.subscribe(params => {
+            this.selectedFilterOpt = params['filterby'];
+        });
 
+        console.log(this.selectedFilterOpt)
+
+        if(this.selectedFilterOpt === undefined){
+            this.selectedFilterOpt = 'none';
+        }
         this.selectedSortOpt = 'none';
-        this.selectedFilterOpt = 'none';
+
+        this.retrieveAllOnboardProcesses();
 
         this.sortOptions = [
             { label: 'No Selection', value: 'none' },
             { label: 'Checklist Name', value: 'name' },
-            { label: 'Client Name', value: 'Client Name'},
+            { label: 'Client Name', value: 'Client Name' },
             { label: 'Date', value: 'date' },
             { label: 'Progress', value: 'progress' }
-            
+
         ];
 
         this.filterOptions = [
@@ -55,6 +65,9 @@ export class FOManageOnboardComponent implements OnInit {
             { label: 'Completed', value: 'completed' },
             { label: 'Pending', value: 'pending' }
         ];
+        
+        
+        
     }
 
     onSortChange() {
@@ -74,7 +87,6 @@ export class FOManageOnboardComponent implements OnInit {
     retrieveAllOnboardProcesses() {
         this.loading = true;
         this.obProcesses = [];
-        
 
         this.foService.retrieveAllOnboardProcesses().subscribe(res => {
             if (res.error) {
@@ -83,7 +95,7 @@ export class FOManageOnboardComponent implements OnInit {
                 });
                 return;
             }
-            
+
             if (res.results) {
                 this.allProcesses = res.results.obLists;
                 this.filteredProcesses = res.results.obLists;
@@ -120,6 +132,10 @@ export class FOManageOnboardComponent implements OnInit {
                     });
                 });
             }
+            if (this.selectedFilterOpt !== "none") {
+                this.retrieveFilterOnboardProcesses();
+            }
+
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -130,7 +146,7 @@ export class FOManageOnboardComponent implements OnInit {
 
     retrieveSortedOnboardProcesses() {
         this.loading = true;
-        
+
         this.foService.retrieveSortedOnboardProcesses(this.selectedSortOpt, this.filteredProcesses).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -186,6 +202,7 @@ export class FOManageOnboardComponent implements OnInit {
     retrieveFilterOnboardProcesses() {
         this.loading = true;
         this.obProcesses = [];
+
         this.foService.retrieveFilteredOnboardProcesses(this.selectedFilterOpt, this.allProcesses).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
@@ -231,8 +248,8 @@ export class FOManageOnboardComponent implements OnInit {
 
             }
 
-            if(this.selectedSortOpt != 'none'){
-                this.retrieveSortedOnboardProcesses() 
+            if (this.selectedSortOpt != 'none') {
+                this.retrieveSortedOnboardProcesses()
             }
 
             this.loading = false;
@@ -244,7 +261,7 @@ export class FOManageOnboardComponent implements OnInit {
     }
 
 
-    
+
     editOnboardProcess(index: number) {
         let selectedOnboardID = this.obProcesses[index].obID;
         this.router.navigate(['/fo/onboard/edit', selectedOnboardID], {

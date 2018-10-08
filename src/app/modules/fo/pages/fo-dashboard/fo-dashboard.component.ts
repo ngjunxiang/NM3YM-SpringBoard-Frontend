@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Message } from 'primeng/components/common/api';
 
@@ -49,6 +50,7 @@ export class FODashboardComponent implements OnInit {
 
     constructor(
         private foService: FOService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -67,13 +69,13 @@ export class FODashboardComponent implements OnInit {
             if (res.results) {
                 this.completedClients = res.results.completedCount;
                 this.pendingClients = res.results.pendingCount;
-
+                this.clientsAffected = res.clientsAffected;
 
                 res.docChanges.notifications.forEach(docChange => {
                     var typeOfChange: string;
-                    if (docChange.type.documentName == "1") {
+                    if (docChange.type.changed == "1") {
                         typeOfChange = "Modified"
-                    } else if (docChange.type.documentName == "2") {
+                    } else if (docChange.type.changed == "2") {
                         typeOfChange = "Added"
                     } else {
                         typeOfChange = "Deleted"
@@ -107,28 +109,25 @@ export class FODashboardComponent implements OnInit {
         ];
 
 
-        this.clients = [
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-        ]
-
         this.cols = [
-            { field: 'name', header: 'Client' },
-            { field: 'type', header: 'Type' }
+            { field: 'Client', header: 'Client' },
+            { field: 'DocName', header: 'Checklist Name' }
         ];
+    }
+
+    redirectPending() {
+        this.router.navigate(['fo/onboard/manage'], {
+            queryParams: {
+                filterby: "Pending"
+            }
+        });
+    }
+
+    redirectAffectedClient(id: number, docName: String) {
+        this.router.navigate(['/fo/onboard/edit', id], {
+            queryParams: {
+                name: docName
+            }
+        });
     }
 }

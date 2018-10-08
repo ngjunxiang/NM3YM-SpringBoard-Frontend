@@ -10,8 +10,8 @@
         </div>
 
         <div class="col-lg-3 col-sm-6">
-            <a routerLink="../onboard/manage">
-                <p-card title="PENDING CLIENTS" class="style1">
+            <a>
+                <p-card title="PENDING CLIENTS" class="style1" (click)="redirectPending()">
                     <hr>
                     <p class="cardP">{{pendingClients}}</p>
                 </p-card>
@@ -60,8 +60,8 @@
         <div class="col-md-6">
             <p-card title="CLIENTS AFFECTED" class="table">
                 <hr>
-                <p>There are {{clients?.length}} affected clients</p>
-                <p-table [columns]="cols" [value]="clients" [scrollable]="true" scrollHeight="100%">
+                <p>There are {{clientsAffected?.length}} affected clients</p>
+                <p-table [columns]="cols" [value]="clientsAffected" [scrollable]="true" scrollHeight="100%">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th *ngFor="let col of columns">
@@ -70,7 +70,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
-                        <tr>
+                        <tr (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])">
                             <td *ngFor="let col of columns">
                                 {{rowData[col.field]}}
                             </td>
