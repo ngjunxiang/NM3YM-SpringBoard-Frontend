@@ -88,6 +88,7 @@ export class CMFaqManageComponent implements OnInit {
                 if (res.results) {
                     res.results.forEach(faq => {
                         this.faqs.push({
+                            faqId: faq.qnID,
                             question: faq.question,
                             selected: false
                         });
@@ -332,7 +333,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateUnansweredFAQ(this.faqs[index].question, this.answerForm.get('addedAnswer').value).subscribe(res => {
+        this.cmService.updateUnansweredFAQ(this.faqs[index].qnId, this.faqs[index].question, this.answerForm.get('addedAnswer').value).subscribe(res => {
             this.processing = true;
             
             if (res.error) {

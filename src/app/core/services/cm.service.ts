@@ -330,7 +330,7 @@ export class CMService {
             );
     }
 
-    updateUnansweredFAQ(question, answer) {
+    updateUnansweredFAQ(qnID, question, answer) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -339,6 +339,7 @@ export class CMService {
 
         const updateQuestionData = {
             'qna': {
+                'qnID': qnID,
                 'question': question,
                 'answer': answer
             }

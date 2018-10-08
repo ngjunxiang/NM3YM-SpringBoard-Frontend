@@ -118,7 +118,15 @@ export class FODashboardComponent implements OnInit {
     redirectPending() {
         this.router.navigate(['fo/onboard/manage'], {
             queryParams: {
-                filterby: "Pending"
+                filterby: "pending"
+            }
+        });
+    }
+
+    redirectCompleted() {
+        this.router.navigate(['fo/onboard/manage'], {
+            queryParams: {
+                filterby: "completed"
             }
         });
     }

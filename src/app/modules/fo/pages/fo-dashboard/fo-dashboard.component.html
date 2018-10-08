@@ -1,21 +1,17 @@
 <div *ngIf="!loading">
     <div class="row">
         <div class="col-lg-3 col-sm-6">
-            <a routerLink="../onboard/manage">
-                <p-card title="COMPLETED CLIENTS" class="style1">
-                    <hr>
-                    <p class="cardP">{{completedClients}}</p>
-                </p-card>
-            </a>
+            <p-card title="COMPLETED CLIENTS" class="style1 clickable" (click)="redirectCompleted()">
+                <hr>
+                <p class="cardP">{{completedClients}}</p>
+            </p-card>
         </div>
 
         <div class="col-lg-3 col-sm-6">
-            <a>
-                <p-card title="PENDING CLIENTS" class="style1" (click)="redirectPending()">
-                    <hr>
-                    <p class="cardP">{{pendingClients}}</p>
-                </p-card>
-            </a>
+            <p-card title="PENDING CLIENTS" class="style1 clickable" (click)="redirectPending()">
+                <hr>
+                <p class="cardP">{{pendingClients}}</p>
+            </p-card>
         </div>
 
         <div class="col-lg-3 col-sm-6">
@@ -70,7 +66,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
-                        <tr (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])">
+                        <tr class="clickable" (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])">
                             <td *ngFor="let col of columns">
                                 {{rowData[col.field]}}
                             </td>
