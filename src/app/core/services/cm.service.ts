@@ -271,7 +271,7 @@ export class CMService {
             );
     }
 
-    updateAnsweredFAQ(question, answer) {
+    updateAnsweredFAQ(qnID, question, answer) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -280,11 +280,12 @@ export class CMService {
 
         const updateQuestionData = {
             'qna': {
+                'qnID': qnID,
                 'question': question,
                 'answer': answer
             }
         };
-
+        
         const postData = Object.assign(this.authService.authItems, updateQuestionData);
 
         return this.http.post<Response>(this.updateAnsweredFAQURL, postData, httpOptions)

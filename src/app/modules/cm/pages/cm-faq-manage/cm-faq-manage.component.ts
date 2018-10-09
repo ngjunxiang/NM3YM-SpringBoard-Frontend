@@ -62,6 +62,7 @@ export class CMFaqManageComponent implements OnInit {
                         }
 
                         this.faqs.push({
+                            qnID: faq.qnID,
                             question: faq.question,
                             answer: faq.answer,
                             selected: selected
@@ -126,6 +127,7 @@ export class CMFaqManageComponent implements OnInit {
                         }
 
                         this.faqs.push({
+                            qnID: faq.qnID,
                             question: faq.question,
                             answer: faq.answer,
                             selected: selected
@@ -296,7 +298,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].question, this.answerForm.get('editedAnswer').value).subscribe(res => {
+        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value).subscribe(res => {
             this.processing = true;
             this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
