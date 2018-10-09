@@ -5,7 +5,6 @@ import { ConfirmationService } from 'primeng/components/common/confirmationservi
 import { Message } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
-import { ifStmt } from '@angular/compiler/src/output/output_ast';
 
 @Component({
     selector: 'fo-manage-onboard',
@@ -42,9 +41,10 @@ export class FOManageOnboardComponent implements OnInit {
             this.selectedFilterOpt = params['filterby'];
         });
 
-        if(this.selectedFilterOpt === undefined){
+        if (this.selectedFilterOpt === undefined) {
             this.selectedFilterOpt = 'none';
         }
+
         this.selectedSortOpt = 'none';
 
         this.retrieveAllOnboardProcesses();
@@ -63,9 +63,6 @@ export class FOManageOnboardComponent implements OnInit {
             { label: 'Completed', value: 'completed' },
             { label: 'Pending', value: 'pending' }
         ];
-        
-        
-        
     }
 
     onSortChange() {
@@ -80,7 +77,6 @@ export class FOManageOnboardComponent implements OnInit {
         this.obProcesses[index].urgent = !this.obProcesses[index].urgent
         // invoke service
     }
-
 
     retrieveAllOnboardProcesses() {
         this.loading = true;
@@ -243,7 +239,6 @@ export class FOManageOnboardComponent implements OnInit {
                         'urgent': urgent
                     });
                 });
-
             }
 
             if (this.selectedSortOpt != 'none') {
@@ -257,8 +252,6 @@ export class FOManageOnboardComponent implements OnInit {
             });
         });
     }
-
-
 
     editOnboardProcess(index: number) {
         let selectedOnboardID = this.obProcesses[index].obID;
