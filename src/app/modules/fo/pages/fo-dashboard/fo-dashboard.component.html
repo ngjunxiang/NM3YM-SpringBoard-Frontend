@@ -1,14 +1,14 @@
 <div *ngIf="!loading">
     <div class="row">
         <div class="col-lg-3 col-sm-6">
-            <p-card title="COMPLETED CLIENTS" class="style1 clickable" (click)="redirectCompleted()">
+            <p-card title="COMPLETED CLIENTS" class="style1 clickable" (click)="redirectCompleted()" pTooltip="View all completed clients" tooltipPosition="right">
                 <hr>
                 <p class="cardP">{{completedClients}}</p>
             </p-card>
         </div>
 
         <div class="col-lg-3 col-sm-6">
-            <p-card title="PENDING CLIENTS" class="style1 clickable" (click)="redirectPending()">
+            <p-card title="PENDING CLIENTS" class="style1 clickable" (click)="redirectPending()" pTooltip="View all pending clients" tooltipPosition="right">
                 <hr>
                 <p class="cardP">{{pendingClients}}</p>
             </p-card>
@@ -17,14 +17,14 @@
         <div class="col-lg-3 col-sm-6">
             <p-card title="TOTAL CHECKLISTS" class="style1">
                 <hr>
-                <p class="cardP">20</p>
+                <p class="cardP">0</p>
             </p-card>
         </div>
 
         <div class="col-lg-3 col-sm-6">
             <p-card title="SUBMISSIONS REJECTED" class="style1">
                 <hr>
-                <p class="cardP">4</p>
+                <p class="cardP">0</p>
             </p-card>
         </div>
     </div>
@@ -66,7 +66,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
-                        <tr class="clickable" (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])">
+                        <tr class="clickable" (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])" pTooltip="View client's checklist" tooltipPosition="right">
                             <td *ngFor="let col of columns">
                                 {{rowData[col.field]}}
                             </td>

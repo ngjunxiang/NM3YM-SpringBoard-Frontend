@@ -25,6 +25,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip'; 
 
 import { FORoutingModule } from './fo-routing.module';
 import { FOComponent } from './pages/fo.component';
@@ -68,6 +69,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ScrollPanelModule,
         SharedModule,
         TableModule,
+        TooltipModule
     ],
     declarations: [
         FOComponent,

@@ -42,8 +42,6 @@ export class FOManageOnboardComponent implements OnInit {
             this.selectedFilterOpt = params['filterby'];
         });
 
-        console.log(this.selectedFilterOpt)
-
         if(this.selectedFilterOpt === undefined){
             this.selectedFilterOpt = 'none';
         }

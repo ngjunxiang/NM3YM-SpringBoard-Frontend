@@ -93,7 +93,7 @@ export class FOComponent implements OnInit {
                 let newNotifications = [];
                 let allNotifications = [];
 
-                res.results.notifications.forEach(notification => {
+                res.results.checkListNotifications.forEach(notification => {
                     let notif;
 
                     if (notification.type.changed === '1') {
