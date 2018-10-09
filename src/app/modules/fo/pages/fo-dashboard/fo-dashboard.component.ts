@@ -45,6 +45,7 @@ export class FODashboardComponent implements OnInit {
     //Actual Variable for Dashboard
     completedClients: number;
     pendingClients: number;
+    totalChecklist: number;
     docChanges: any[];
     clientsAffected: any[];
 
@@ -69,6 +70,7 @@ export class FODashboardComponent implements OnInit {
             if (res.results) {
                 this.completedClients = res.results.completedCount;
                 this.pendingClients = res.results.pendingCount;
+                this.totalChecklist = this.completedClients + this.pendingClients; 
                 this.clientsAffected = res.clientsAffected;
 
                 res.docChanges.notifications.forEach(docChange => {
