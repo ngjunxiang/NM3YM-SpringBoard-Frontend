@@ -1,11 +1,12 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 
 <div *ngIf="!loading">
-    <form class="search-container">
-        <input type="text" id="search-bar" placeholder="What would you like to search for?">
-        <a href="" class="search-icon">
+    <form [formGroup]="questionForm" class="search-container">
+        <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" placeholder="What would you like to search for?" 
+            required pInputText>
+        <div class="search-icon" (click)="searchFAQ()">
             <i class="fa fa-search"></i>
-        </a>
+        </div>
     </form>
     <br>
 

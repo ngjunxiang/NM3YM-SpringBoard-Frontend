@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Message } from 'primeng/components/common/api';
 
@@ -12,75 +13,120 @@ import { FOService } from '../../../../core/services/fo.service';
 })
 export class FOFaqMyQuestionsComponent implements OnInit {
 
-   // UI Control
-   loading = false;
-   msgs: Message[] = [];
-   answerDialog = false;
-   currentQuestion: string;
-   currentAnswer: string;
+    // UI Control
+    loading = false;
+    msgs: Message[] = [];
+    answerDialog = false;
+    currentQuestion: string;
+    currentAnswer: string;
 
-   // UI Components
-   faqs: any[];
-   displayFAQs: any[];
+    // UI Components
+    questionForm: FormGroup;
+    faqs: any[];
+    displayFAQs: any[];
 
-   constructor(
-       private foService: FOService,
-       private route: ActivatedRoute,
-       private router: Router
-   ) { }
+    constructor(
+        private foService: FOService,
+        private fb: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router
 
-   ngOnInit() {
-       this.loading = true;
+    ) { }
 
-       this.retrieveFAQ();
-   }
+    ngOnInit() {
+        this.loading = true;
+        this.questionForm = this.fb.group({
+            question: new FormControl('', Validators.required)
+        });
 
-   retrieveFAQ() {
-       this.faqs = [];
+        this.retrieveFAQ();
+    }
 
-       this.foService.retrieveAllFaq().subscribe(res => {
-           if (res.error) {
-               this.msgs.push({
-                   severity: 'error', summary: 'Error', detail: res.error
-               });
-               this.loading = false;
-               return;
-           }
+    retrieveFAQ() {
+        this.faqs = [];
 
-           if (res.results) {
-               this.faqs = res.results;
-           }
+        this.foService.retrieveAllFaq().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                this.loading = false;
+                return;
+            }
 
-           this.loading = false;
-       }, error => {
-           this.msgs.push({
-               severity: 'error', summary: 'Error', detail: error
-           });
+            if (res.results) {
+                this.faqs = res.results;
+            }
 
-           this.loading = false;
-       });
-   }
+            this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
 
-   showAnswerDialog(qnID, qns, ans) {
-       this.currentAnswer = ans
-       this.currentQuestion = qns
-       this.answerDialog = true;
-       console.log(qnID)
+            this.loading = false;
+        });
+    }
 
-       /*
-        this.foService.increaseView().subscribe(res => {
-           if (res.error) {
-               this.msgs.push({
-                   severity: 'error', summary: 'Error', detail: res.error
-               });
-               return;
-           }
+    searchFAQ() {
+        this.questionForm.get('question').markAsDirty();
 
-       }, error => {
-           this.msgs.push({
-               severity: 'error', summary: 'Error', detail: error
-           });
-       });
-       */
-   }
+        if (this.questionForm.get('question').invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            });
+            return;
+        }
+
+        this.loading = true;
+
+        this.faqs = [];
+
+        this.foService.retrieveFaq(this.questionForm.get('question').value).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                this.loading = false;
+                return;
+            }
+
+            if (res.results) {
+                this.faqs = res.results;
+            }
+
+            this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+
+            this.loading = false;
+        });
+    }
+
+
+
+    showAnswerDialog(qnID, qns, ans) {
+        this.currentAnswer = ans
+        this.currentQuestion = qns
+        this.answerDialog = true;
+
+
+        /*
+         this.foService.increaseView().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
+        */
+    }
 }

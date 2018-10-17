@@ -72,10 +72,12 @@ input#search-bar{
   }
 
 .search-icon .fa-search{
-    position: relative;
-    float: right;
-    width: 75px !important;
-    top: -33px;
-    right: -38px;
-    font-size: 25px;
+  position: relative;
+  float: right;
+  width: 30px !important;
+  top: -33px;
+  right: 8px;
+  font-size: 25px;
+  color: #3989e1;
+  cursor: pointer;
 }

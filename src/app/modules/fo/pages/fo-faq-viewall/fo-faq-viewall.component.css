@@ -69,13 +69,15 @@ input#search-bar{
   font-size: 1rem;
   border: 1px solid #D0CFCE;
   outline: none;
-  }
+}
 
 .search-icon .fa-search{
     position: relative;
     float: right;
-    width: 75px !important;
+    width: 30px !important;
     top: -33px;
-    right: -38px;
+    right: 8px;
     font-size: 25px;
+    color: #3989e1;
+    cursor: pointer;
 }
