@@ -1,0 +1,52 @@
+/**********************************
+ * RESULT PAGE (LIST OF QUESTIONS)*
+ **********************************/
+
+ .clickable{
+    cursor: pointer;
+  }
+  
+  .question{
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  :host >>> .ui-datascroller .ui-datascroller-content {
+    border: 0px
+  }
+  
+  :host >>> .ui-datascroller .ui-datascroller-footer {
+    border: 0px
+  }
+  
+  :host >>> .questions .ui-card {
+    background-color: white;  
+    color: #333333;
+    border: 0.7px #575454 solid;
+    margin-bottom: 7px;
+  }
+  
+  /*********************
+   * ANSWER DIALOG PAGE*
+   *********************/
+  .qnsInDialog{
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .ansInDialog{
+    font-size: 16px;
+    font-weight: 400;
+  }
+  
+  :host >>> .ui-dialog {
+    width: 800px;
+  }
+  
+  hr {
+    margin-top: 0px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  

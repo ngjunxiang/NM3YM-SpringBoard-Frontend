@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 import { Message } from 'primeng/components/common/api';
@@ -24,6 +25,8 @@ export class FOManageOnboardComponent implements OnInit {
     filterOptions: any[];
     selectedSortOpt: string;
     selectedFilterOpt: string;
+    questionForm: FormGroup;
+    searchResult: any;
 
     // Temporary storage of return processes from backend
     allProcesses: any;
@@ -31,6 +34,7 @@ export class FOManageOnboardComponent implements OnInit {
 
     constructor(
         private confirmationService: ConfirmationService,
+        private fb: FormBuilder,
         private foService: FOService,
         private router: Router,
         private route: ActivatedRoute
@@ -48,6 +52,10 @@ export class FOManageOnboardComponent implements OnInit {
         this.selectedSortOpt = 'none';
 
         this.retrieveAllOnboardProcesses();
+
+        this.questionForm = this.fb.group({
+            question: new FormControl('', Validators.required)
+        });
 
         this.sortOptions = [
             { label: 'No Selection', value: 'none' },
@@ -293,5 +301,61 @@ export class FOManageOnboardComponent implements OnInit {
                 return;
             }
         });
+    }
+
+    searchClient() {
+        this.questionForm.get('question').markAsDirty();
+
+        if (this.questionForm.get('question').invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            });
+            return;
+        }
+
+        this.loading = true;
+        this.obProcesses = [];
+
+        this.allProcesses.forEach(client => {
+            if (client.requiredFields[0]["Client Name"].toLowerCase().includes(this.questionForm.get('question').value.toLowerCase())) {
+                let requiredFields = [];
+                let type = client.name;
+                let obID = client.obID;
+                let conditions = [];
+                let progress = client.progress;
+                let urgent = client.urgent;
+
+                Object.keys(client.requiredFields).forEach(key => {
+                    let fieldName;
+                    for (fieldName in client.requiredFields[key]);
+                    requiredFields.push({
+                        'fieldName': fieldName,
+                        'fieldValue': client.requiredFields[key][fieldName]
+                    });
+                });
+
+                client.conditions.forEach(condition => {
+                    conditions.push({
+                        'conditionName': condition.conditionName,
+                        'conditionValue': condition.conditionOption
+                    });
+                });
+
+                this.obProcesses.push({
+                    'obID': obID,
+                    'type': type,
+                    'requiredFields': requiredFields,
+                    'conditions': conditions,
+                    'progress': progress,
+                    'urgent': urgent
+                });
+            };
+        });
+
+        this.loading = false;
+    }
+
+    clearAll(){
+        this.retrieveAllOnboardProcesses();
     }
 }

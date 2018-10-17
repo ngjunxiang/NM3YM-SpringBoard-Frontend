@@ -33,7 +33,7 @@ export class FODashboardComponent implements OnInit {
     loading = false;
     msgs: Message[] = [];
 
-    //Dummy Variables for Dashboard
+    // Dummy Variables for Dashboard
     data1: any;
     data: any;
     years: Year[];
@@ -42,12 +42,13 @@ export class FODashboardComponent implements OnInit {
     cols: any[];
     colsDoc: any[];
 
-    //Actual Variable for Dashboard
+    // UI Component
     completedClients: number;
     pendingClients: number;
     totalChecklist: number;
     docChanges: any[];
     clientsAffected: any[];
+    tempDate : string; 
 
     constructor(
         private foService: FOService,
@@ -74,6 +75,9 @@ export class FODashboardComponent implements OnInit {
                 this.clientsAffected = res.clientsAffected;
 
                 res.docChanges.notifications.forEach(docChange => {
+                    this.tempDate = docChange.dateCreated.slice(0,10)
+                    docChange.dateCreated = this.tempDate
+
                     var typeOfChange: string;
                     if (docChange.type.changed == "1") {
                         typeOfChange = "Modified"

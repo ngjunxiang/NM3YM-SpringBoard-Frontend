@@ -18,11 +18,15 @@ export class FOFaqAskComponent implements OnInit {
     searched = false;
     showNewQnForm = false;
     msgs: Message[] = [];
+    answerDialog = false;
+    currentQuestion: string;
+    currentAnswer: string;
 
     // UI Components
     questionForm: FormGroup;
     newQuestionForm: FormGroup;
     faqs: any[];
+    displayFAQs: any[];
 
     constructor(
         private foService: FOService,
@@ -121,4 +125,27 @@ export class FOFaqAskComponent implements OnInit {
             severity: 'info', summary: 'Please fill in the question field', detail: ''
         });
     }
+    
+    showAnswerDialog(qnID, qns, ans) {
+       this.currentAnswer = ans
+       this.currentQuestion = qns
+       this.answerDialog = true;
+
+
+       /*
+        this.foService.increaseView().subscribe(res => {
+           if (res.error) {
+               this.msgs.push({
+                   severity: 'error', summary: 'Error', detail: res.error
+               });
+               return;
+           }
+
+       }, error => {
+           this.msgs.push({
+               severity: 'error', summary: 'Error', detail: error
+           });
+       });
+       */
+   }
 }

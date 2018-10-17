@@ -12,6 +12,7 @@ import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DataScrollerModule } from 'primeng/datascroller';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { GrowlModule } from 'primeng/growl';
@@ -25,7 +26,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
-import { TooltipModule } from 'primeng/tooltip'; 
+import { TooltipModule } from 'primeng/tooltip';
 
 import { FORoutingModule } from './fo-routing.module';
 import { FOComponent } from './pages/fo.component';
@@ -36,6 +37,8 @@ import { FONewOnboardComponent } from './pages/fo-new-onboard/fo-new-onboard.com
 import { FOService } from '../../core/services/fo.service';
 import { FOFaqAskComponent } from './pages/fo-faq-ask/fo-faq-ask.component';
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
+import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -52,6 +55,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CheckboxModule,
         CommonModule,
         ConfirmDialogModule,
+        DataScrollerModule,
         DialogModule,
         DropdownModule,
         FormsModule,
@@ -78,7 +82,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FOEditOnboardComponent,
         FOManageOnboardComponent,
         FOFaqAskComponent,
-        FOFaqViewAllComponent
+        FOFaqViewAllComponent,
+        FOFaqMyQuestionsComponent
     ],
     providers: [
         {

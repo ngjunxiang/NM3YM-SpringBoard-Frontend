@@ -39,7 +39,7 @@ interface ChecklistName {
 interface DashboardResults {
     results: any;
     docChanges: any;
-    clientsAffected: any[];  
+    clientsAffected: any[];
     pendingClients: any[];
     error: string;
 }
@@ -88,6 +88,7 @@ export class FOService {
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private retrieveAllFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private createUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
+    //private increaseViewURL = environment.host + '/app/faq/add-UQ';
 
     constructor(
         private authService: AuthenticationService,
@@ -187,7 +188,7 @@ export class FOService {
 
         const sortData = {
             'sortBy': sortValue,
-            'obList' : obProcesses
+            'obList': obProcesses
         };
 
         const postData = Object.assign(this.authService.authItems, sortData);
@@ -208,7 +209,7 @@ export class FOService {
 
         const filterData = {
             'filterBy': filterValue,
-            'obList' : obProcesses
+            'obList': obProcesses
         };
 
         const postData = Object.assign(this.authService.authItems, filterData);
@@ -219,7 +220,7 @@ export class FOService {
                 catchError(this.handleError)
             );
     }
-    
+
 
     retrieveAllRMNames() {
         const httpOptions = {
@@ -233,10 +234,10 @@ export class FOService {
         return this.http.post<Response>(this.retrieveAllRMNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
-            );
+        );
     }
 
-    
+
 
     retrieveOnboardProcessDetails(obID) {
         const httpOptions = {
@@ -313,6 +314,24 @@ export class FOService {
                 catchError(this.handleError)
             );
     }
+
+    /*
+    increaseView(qnID) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems, qnID);
+
+        return this.http.post<Response>(this.increaseViewURL, postData, httpOptions)
+        .pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
+    }
+    */
 
     createOnboardProcess(onboardProcessData) {
         const httpOptions = {

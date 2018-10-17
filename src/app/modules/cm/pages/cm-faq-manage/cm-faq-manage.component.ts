@@ -5,6 +5,7 @@ import { Message, MenuItem, ConfirmationService } from 'primeng/components/commo
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
     selector: 'cm-faq-manage',
@@ -21,6 +22,9 @@ export class CMFaqManageComponent implements OnInit {
     selectedFAQ: string;
     activeTab: number;
     msgs: Message[] = [];
+    answeredDialog = false;
+    unansweredDialog = false;
+    currentIndex: number;
 
     // UI Components
     faqs: any[];
@@ -37,6 +41,11 @@ export class CMFaqManageComponent implements OnInit {
     ngOnInit() {
         this.activeTab = 0;
         this.loadPage();
+    }
+
+    showDialogMaximized(event, dialog: Dialog) {
+        dialog.maximized = false;
+        dialog.toggleMaximize(event);
     }
 
     loadPage() {
@@ -108,6 +117,7 @@ export class CMFaqManageComponent implements OnInit {
     changeTab(event) {
         this.loading = true;
         this.faqs = [];
+
         if (event.index === 0) {
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
                 if (res.error) {
@@ -208,8 +218,11 @@ export class CMFaqManageComponent implements OnInit {
     }
 
     hideEditArea() {
-        this.answerForm.get('addedAnswer').setValue('');
-        this.answerForm.get('editedAnswer').setValue('');
+
+        if (this.answerForm) {
+            this.answerForm.get('addedAnswer').setValue('');
+            this.answerForm.get('editedAnswer').setValue('');
+        }
         this.showEditArea = false;
     }
 
@@ -239,11 +252,13 @@ export class CMFaqManageComponent implements OnInit {
                     }
 
                     this.processing = false;
+                    this.answeredDialog = false;
                 }, error => {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
+                    this.answeredDialog = false;
                 });
             },
             reject: () => {
@@ -275,11 +290,13 @@ export class CMFaqManageComponent implements OnInit {
                     }
 
                     this.processing = false;
+                    this.unansweredDialog = false;
                 }, error => {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
+                    this.unansweredDialog = false;
                 });
             },
             reject: () => {
@@ -349,7 +366,7 @@ export class CMFaqManageComponent implements OnInit {
             if (res.results) {
                 this.loadPage();
                 this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Answer updated'
+                    severity: 'success', summary: 'Success', detail: 'Question has been answered'
                 });
             }
 
@@ -362,5 +379,49 @@ export class CMFaqManageComponent implements OnInit {
             });
             this.processing = false;
         });
+    }
+
+    showAnsweredDialog(index) {
+        this.currentIndex = index;
+        this.answeredDialog = true;
+
+
+        /*
+         this.foService.increaseView().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+ 
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
+        */
+    }
+
+    showUnansweredDialog(index) {
+        this.currentIndex = index;
+        this.unansweredDialog = true;
+
+
+        /*
+         this.foService.increaseView().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+ 
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
+        */
     }
 }

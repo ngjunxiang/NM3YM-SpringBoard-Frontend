@@ -16,13 +16,14 @@
                 There are no questions yet!
             </h5>
         </div>
+
         <div *ngIf="faqs.length > 0">
             <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                <ng-template let-faq pTemplate="items" ;>
+                <ng-template let-faq let-i="index" pTemplate="items">
                     <p-card class="questions">
                         <div class="ui-g">
                             <div class="ui-g-9">
-                                <div class="question clickable" style="color:#3989e1; margin-bottom:12px" (click)="showAnswerDialog(faq.qnID, faq.question,faq.answer)">
+                                <div class="question clickable" style="color:#3989e1; margin-bottom:12px" (click)="showAnswerDialog(faq.qnID,faq.question,faq.answer)">
                                     {{faq.question}}
                                 </div>
                                 <strong>Posted on: 19/10/2018</strong>
@@ -74,6 +75,5 @@
         <div style="float: right">
             100 views
         </div>
-
     </p-dialog>
 </div>

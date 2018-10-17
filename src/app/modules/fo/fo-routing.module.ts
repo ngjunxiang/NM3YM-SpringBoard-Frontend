@@ -10,6 +10,7 @@ import { FONewOnboardComponent } from './pages/fo-new-onboard/fo-new-onboard.com
 import { FOEditOnboardComponent } from './pages/fo-edit-onboard/fo-edit-onboard.component';
 import { FOFaqAskComponent } from './pages/fo-faq-ask/fo-faq-ask.component';
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
+import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
 
 const routes: Routes = [
     { 
@@ -60,6 +61,15 @@ const routes: Routes = [
             {
                 path: 'faq/ask',
                 component: FOFaqAskComponent,
+                data: {
+                    title: 'Front Office',
+                    urls: [{ title: 'FAQ' }, { title: 'Ask' }]
+                }, 
+                canActivate: [FOAuthGuard] 
+            },
+            {
+                path: 'faq/myquestions',
+                component: FOFaqMyQuestionsComponent,
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'FAQ' }, { title: 'Ask' }]

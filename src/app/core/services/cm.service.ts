@@ -31,6 +31,13 @@ interface ChecklistName {
     dateUpdated: Date;
 }
 
+interface DashboardResults {
+    results: any; 
+    updatedChecklists: any; 
+    mostRecentQuestions: any;
+    error: string;
+}
+
 interface Response {
     results: any;
     error: string;
@@ -41,6 +48,9 @@ interface Response {
 })
 
 export class CMService {
+    // Dashboard Endpoints
+
+    private retrieveDashboardStatsURL = environment.host + '/app/cm/retrieve-dashboard';
 
     // Checklist Endpoints
     private retrieveAgmtCodesURL = environment.host + '/app/cm/retrieve-AgmtCodes';
@@ -50,6 +60,7 @@ export class CMService {
     private createChecklistURL = environment.host + '/app/cm/create-checklist';
     private updateChecklistURL = environment.host + '/app/cm/update-checklist';
     private retrieveDeleteChecklistURL = environment.host + '/app/cm/manage-checklist';
+
 
     // FAQ Endpoints
     private retrieveUnansweredFAQURL = environment.host + '/app/faq/retrieve-UQ';
@@ -67,6 +78,23 @@ export class CMService {
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    retrieveDashboardStats() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = this.authService.authItems;
+
+        return this.http.post<DashboardResults>(this.retrieveDashboardStatsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+
+    }
 
     retrieveAgmtCodes() {
         const httpOptions = {
@@ -220,7 +248,7 @@ export class CMService {
                 catchError(this.handleError)
             );
     }
-    
+
 
     retrieveNotifications() {
         const httpOptions = {
@@ -285,7 +313,7 @@ export class CMService {
                 'answer': answer
             }
         };
-        
+
         const postData = Object.assign(this.authService.authItems, updateQuestionData);
 
         return this.http.post<Response>(this.updateAnsweredFAQURL, postData, httpOptions)

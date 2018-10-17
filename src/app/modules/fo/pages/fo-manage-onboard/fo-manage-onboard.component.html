@@ -2,7 +2,16 @@
 <p-confirmDialog></p-confirmDialog>
 
 <div style="padding-bottom: 8px;">Current Onboarding</div>
-<div class="ui-g" style="display: inline">
+<form class="search-container" [formGroup]="questionForm">
+    <input type="text" id="search-bar" class="form-control" placeholder="Enter Client Name" (keyup.enter)="searchClient()" formControlName="question" required
+        pInputText>
+    <div class="search-icon" (click)="searchClient()">
+        <i class="fa fa-search"></i>
+    </div>
+</form>
+<br>
+
+<div class="ui-g" style="display: inline; ">
     <div class="ui-g-3" style="padding-left: 0px">
         Sort by:
         <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onSortChange()"></p-dropdown>
@@ -13,10 +22,15 @@
         <p-dropdown [options]="filterOptions" [(ngModel)]="selectedFilterOpt" (onChange)="onFilterChange()"></p-dropdown>
     </div>
 
-    <div class="ui-g-6">
+    <div class="ui-g-2 clickable" style="padding-top: 12px; padding-left: 0px; height: 50.67px" (click)="clearAll()">
+        <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px" >
+        <u>clear all</u>
+    </div>
+
+
+    <div class="ui-g-4">
         <a routerLink="../create">
-            <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button"
-                icon="fa fa-plus"></button>
+            <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button" icon="fa fa-plus"></button>
         </a>
     </div>
 </div>
@@ -29,20 +43,17 @@
         <div *ngFor="let obProcess of obProcesses; let i=index">
             <p-card styleClass="ui-card-shadow">
                 <div style="float:right">
-                    <button pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button"
-                        icon="fa fa-pencil" (click)="editOnboardProcess(i)"></button>
-                    <button pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times"
-                        (click)="deleteOnboardProcess(i)"></button>
+                    <button pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil"
+                        (click)="editOnboardProcess(i)"></button>
+                    <button pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteOnboardProcess(i)"></button>
                 </div>
 
                 <div *ngIf="obProcess.progress === 100">
                     <div *ngIf="obProcess.urgent">
-                        <button pButton class="ui-button-warning" (click)="toggleUrgent(i)" style="float: right;" label="Urgent"
-                            type="button"></button>
+                        <button pButton class="ui-button-warning" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
                     </div>
                     <div *ngIf="!obProcess.urgent">
-                        <button pButton class="ui-button-secondary" (click)="toggleUrgent(i)" style="float: right;"
-                            label="Urgent" type="button"></button>
+                        <button pButton class="ui-button-secondary" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
                     </div>
                 </div>
 

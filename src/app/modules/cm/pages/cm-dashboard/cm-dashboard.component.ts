@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Message } from 'primeng/components/common/api';
+
+import { CMService } from '../../../../core/services/cm.service';
 
 interface Client {
     name: string;
@@ -23,6 +28,18 @@ interface Year {
 
 export class CMDashboardComponent implements OnInit {
 
+    // UI Control
+    loading = false;
+    msgs: Message[] = [];
+
+    // UI Component
+    faqAnsweredCount: number;
+    faqUnansweredCount: number;
+    updatedChecklists: any[];
+    mostRecentQns: any[];
+    tempDate : string; 
+
+    //Fake Data 
     data1: any;
     data: any;
     years: Year[];
@@ -33,11 +50,41 @@ export class CMDashboardComponent implements OnInit {
     colsDoc: any[];
     frozenCol: any[];
 
-    constructor() { }
+    constructor(
+        private cmService: CMService,
+        private router: Router
+    ) { }
 
     ngOnInit() {
+        this.loading = true;
+
+        this.cmService.retrieveDashboardStats().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            this.faqAnsweredCount = res.results.answeredCount;
+            this.faqUnansweredCount = res.results.unansweredCount;
+            this.updatedChecklists = res.updatedChecklists;
+            this.mostRecentQns = res.mostRecentQuestions;
+            
+            this.updatedChecklists.forEach(checklist => {
+                this.tempDate = checklist.dateUpdated.slice(0,10)
+                checklist.dateUpdated = this.tempDate
+            })
+        })
+
+        this.colsDoc = [
+            { field: 'name', header: 'Checklist' },
+            { field: 'dateUpdated', header: 'Date Modified' },
+        ];
+
+
         this.data1 = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep','Oct','Nov','Dec'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
                 {
                     label: '2018',
@@ -53,7 +100,6 @@ export class CMDashboardComponent implements OnInit {
                 },
             ]
         }
-
 
         this.years = [
             { label: "2018", value: 2018 },
@@ -72,34 +118,8 @@ export class CMDashboardComponent implements OnInit {
             { name: "Corporate Review Checklist", modifiedDate: "21/8/2018" },
         ];
 
-        this.colsDoc = [
-            { field: 'name', header: 'Checklist' },
-            { field: 'modifiedDate', header: 'Modified Date' },
-        ];
-
-
-        this.clients = [
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-            { name: "Jarrett", type: "Individual" },
-            { name: "Melissa", type: "Corporate" },
-            { name: "Joel", type: "Individual" },
-            { name: "Lindsay", type: "Corporate" },
-        ]
-
-        this.cols = [
-            { field: 'name', header: 'Client' },
-            { field: 'type', header: 'Type' }
-        ];
+        
+        this.loading = false;
     }
+
 }

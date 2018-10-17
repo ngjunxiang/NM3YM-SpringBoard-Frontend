@@ -16,6 +16,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { DataScrollerModule } from 'primeng/datascroller';
 import { FileUploadModule } from 'primeng/fileupload';
 import { GrowlModule } from 'primeng/growl';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -59,6 +60,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMRoutingModule,
         CommonModule,
         ConfirmDialogModule,
+        DataScrollerModule,
         DialogModule,
         DropdownModule,
         FileUploadModule,

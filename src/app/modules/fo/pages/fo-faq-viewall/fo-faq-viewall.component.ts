@@ -15,9 +15,13 @@ export class FOFaqViewAllComponent implements OnInit {
     // UI Control
     loading = false;
     msgs: Message[] = [];
+    answerDialog = false;
+    currentQuestion: string;
+    currentAnswer: string;
 
     // UI Components
     faqs: any[];
+    displayFAQs: any[];
 
     constructor(
         private foService: FOService,
@@ -55,5 +59,28 @@ export class FOFaqViewAllComponent implements OnInit {
 
             this.loading = false;
         });
+    }
+
+    showAnswerDialog(qnID, qns, ans) {
+        this.currentAnswer = ans
+        this.currentQuestion = qns
+        this.answerDialog = true;
+
+
+        /*
+         this.foService.increaseView().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+        });
+        */
     }
 }
