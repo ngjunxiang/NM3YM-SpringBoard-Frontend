@@ -72,7 +72,7 @@ export class CMFaqManageComponent implements OnInit {
                         }
 
                         this.faqs.push({
-                            qnID: faq.qnID,
+                            username: faq.username,
                             question: faq.question,
                             answer: faq.answer,
                             selected: selected
@@ -99,6 +99,7 @@ export class CMFaqManageComponent implements OnInit {
                 if (res.results) {
                     res.results.forEach(faq => {
                         this.faqs.push({
+                            username: faq.username,
                             qnID: faq.qnID,
                             question: faq.question,
                             selected: false
@@ -363,7 +364,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value).subscribe(res => {
+        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value, this.faqs[index].username).subscribe(res => {
             this.processing = true;
 
             if (res.error) {

@@ -359,7 +359,7 @@ export class CMService {
             );
     }
 
-    updateUnansweredFAQ(qnID, question, answer) {
+    updateUnansweredFAQ(qnID, question, answer, username) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -370,7 +370,8 @@ export class CMService {
             'qna': {
                 'qnID': qnID,
                 'question': question,
-                'answer': answer
+                'answer': answer,
+                'username': username
             }
         };
 
