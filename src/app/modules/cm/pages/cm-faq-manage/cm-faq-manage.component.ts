@@ -18,7 +18,8 @@ export class CMFaqManageComponent implements OnInit {
     loading = false;
     processing = false;
     loadingEditArea = false;
-    showEditArea = false;
+    showAnsEditArea = false;
+    showQnsEditArea = false;
     selectedFAQ: string;
     activeTab: number;
     msgs: Message[] = [];
@@ -185,7 +186,7 @@ export class CMFaqManageComponent implements OnInit {
     }
 
     showEditAnswerArea(index) {
-        if (this.showEditArea) {
+        if (this.showAnsEditArea) {
             return;
         }
         this.loadingEditArea = true;
@@ -198,11 +199,21 @@ export class CMFaqManageComponent implements OnInit {
         this.answerForm.get('editedAnswer').setValue(this.faqs[index].answer);
 
         this.loadingEditArea = false;
-        this.showEditArea = true;
+        this.showAnsEditArea = true;
+    }
+
+    showEditQuestionArea() {
+        this.showQnsEditArea = true;
+    }
+
+    hideEditQuestionArea() {
+        this.showQnsEditArea = false;
+
+        //end point to change question. 
     }
 
     showAddAnswerArea() {
-        if (this.showEditArea) {
+        if (this.showAnsEditArea) {
             return;
         }
 
@@ -214,16 +225,15 @@ export class CMFaqManageComponent implements OnInit {
         });
 
         this.loadingEditArea = false;
-        this.showEditArea = true;
+        this.showAnsEditArea = true;
     }
 
-    hideEditArea() {
-
+    hideAnsEditArea() {
         if (this.answerForm) {
             this.answerForm.get('addedAnswer').setValue('');
             this.answerForm.get('editedAnswer').setValue('');
         }
-        this.showEditArea = false;
+        this.showAnsEditArea = false;
     }
 
     deleteAnsweredQuestion(index: number) {
@@ -332,7 +342,7 @@ export class CMFaqManageComponent implements OnInit {
                 });
             }
 
-            this.hideEditArea();
+            this.hideAnsEditArea();
 
             this.processing = false;
         }, error => {
@@ -370,7 +380,8 @@ export class CMFaqManageComponent implements OnInit {
                 });
             }
 
-            this.hideEditArea();
+            this.hideAnsEditArea();
+            this.unansweredDialog = false;
 
             this.processing = false;
         }, error => {
@@ -378,6 +389,7 @@ export class CMFaqManageComponent implements OnInit {
                 severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
+            this.unansweredDialog = false;
         });
     }
 
