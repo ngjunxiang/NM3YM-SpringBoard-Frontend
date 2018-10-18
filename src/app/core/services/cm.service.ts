@@ -366,6 +366,7 @@ export class CMService {
             })
         };
 
+        console.log(username)
         const updateQuestionData = {
             'qna': {
                 'qnID': qnID,
