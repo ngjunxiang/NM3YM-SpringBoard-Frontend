@@ -15,15 +15,19 @@ export class FOFaqViewAllComponent implements OnInit {
 
     // UI Control
     loading = false;
+    searched = false; //show "Result", hide buttons 
+    showNewQnForm = false;
     msgs: Message[] = [];
     answerDialog = false;
+    askDialog = false; 
+    confirmDialog = false; 
     currentQuestion: string;
     currentAnswer: string;
 
     // UI Components
     questionForm: FormGroup;
+    newQuestionForm: FormGroup;
     faqs: any[];
-    displayFAQs: any[];
 
     constructor(
         private foService: FOService,
@@ -38,6 +42,11 @@ export class FOFaqViewAllComponent implements OnInit {
         this.questionForm = this.fb.group({
             question: new FormControl('', Validators.required)
         });
+
+        this.newQuestionForm = this.fb.group({
+            newQuestion: new FormControl('', Validators.required),
+        });
+
 
         this.retrieveFAQ();
     }
@@ -105,7 +114,68 @@ export class FOFaqViewAllComponent implements OnInit {
         });
     }
 
+    showConfirmDialog() {
+        this.confirmDialog = true;
+    }
 
+    hideConfirmDialog() {
+        this.confirmDialog = false;
+    }
+
+    showAskDialog() {
+        this.askDialog = true;
+
+        if(this.questionForm.get('question').value && this.searched){
+            this.newQuestionForm.get("newQuestion").setValue(this.questionForm.get('question').value)
+        }        
+
+        this.hideConfirmDialog();
+    }
+
+    hideAskDialog() {
+        this.askDialog = false;
+
+        if(this.newQuestionForm.get('newQuestion')){
+            this.newQuestionForm.get("newQuestion").setValue('')
+        }        
+    }
+
+    postNewQuestion() {
+        this.searched = true;
+        let newQuestion = this.newQuestionForm.get('newQuestion').value;
+        if (newQuestion !== '') {
+            this.loading = true;
+            this.foService.createUnansweredQuestion(newQuestion).subscribe(res => {
+                if (res.error) {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    this.loading = false;
+                    this.hideAskDialog()
+                    return;
+                }
+
+                if (res.results) {
+                    this.msgs.push({
+                        severity: 'success', summary: 'Success', detail: 'Your question has been posted'
+                    });
+                }
+                this.loading = false;
+            }, error => {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: error
+                });
+
+                this.loading = false;
+            });
+            this.hideAskDialog()
+            return;
+        }
+
+        this.msgs.push({
+            severity: 'info', summary: 'Please fill in the question field', detail: ''
+        });
+    }
 
     showAnswerDialog(qnID, qns, ans) {
         this.currentAnswer = ans

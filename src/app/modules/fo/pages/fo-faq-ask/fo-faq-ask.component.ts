@@ -26,7 +26,6 @@ export class FOFaqAskComponent implements OnInit {
     questionForm: FormGroup;
     newQuestionForm: FormGroup;
     faqs: any[];
-    displayFAQs: any[];
 
     constructor(
         private foService: FOService,

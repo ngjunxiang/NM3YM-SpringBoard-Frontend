@@ -27,6 +27,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { FORoutingModule } from './fo-routing.module';
@@ -75,6 +76,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ScrollPanelModule,
         SharedModule,
         TableModule,
+        TabViewModule,
         TooltipModule
     ],
     declarations: [

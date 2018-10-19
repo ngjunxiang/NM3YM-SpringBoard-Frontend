@@ -19,11 +19,12 @@
   border: 0px
 }
 
-:host >>> .questions .ui-card {
+:host >>> .questionCard .ui-card {
   background-color: white;  
   color: #333333;
-  border: 0.7px #575454 solid;
+  border: 1px #c1c1c1 solid;
   margin-bottom: 7px;
+  box-shadow: none;
 }
 
 /*********************

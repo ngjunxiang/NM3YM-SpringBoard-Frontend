@@ -55,39 +55,6 @@ export class CMFaqManageComponent implements OnInit {
         this.faqs = [];
 
         if (this.activeTab === 0) {
-            this.cmService.retrieveAnsweredFAQ().subscribe(res => {
-                if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
-                    });
-                    this.loading = false;
-                    return;
-                }
-
-                if (res.results) {
-                    for (let i = 0; i < res.results.length; i++) {
-                        let faq = res.results[i];
-                        let selected = false;
-                        if (faq.question === this.selectedFAQ) {
-                            selected = true;
-                        }
-
-                        this.faqs.push({
-                            username: faq.username,
-                            question: faq.question,
-                            answer: faq.answer,
-                            selected: selected
-                        });
-                    }
-                }
-                this.loading = false;
-            }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
-                });
-                this.loading = false;
-            });
-        } else {
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -106,6 +73,42 @@ export class CMFaqManageComponent implements OnInit {
                             selected: false
                         });
                     });
+                }
+                this.loading = false;
+            }, error => {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: error
+                });
+                this.loading = false;
+            });
+
+        } else {
+            this.cmService.retrieveAnsweredFAQ().subscribe(res => {
+                if (res.error) {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    this.loading = false;
+                    return;
+                }
+
+                if (res.results) {
+                    for (let i = 0; i < res.results.length; i++) {
+                        let faq = res.results[i];
+                        let selected = false;
+                        if (faq.question === this.selectedFAQ) {
+                            selected = true;
+                        }
+
+                        this.faqs.push({
+                            qnID: faq.qnID,
+                            username: faq.username,
+                            question: faq.question,
+                            answer: faq.answer,
+                            selected: selected,
+                            CMusername: faq.CMusername
+                        });
+                    }
                 }
                 this.loading = false;
             }, error => {
@@ -122,42 +125,6 @@ export class CMFaqManageComponent implements OnInit {
         this.faqs = [];
 
         if (event.index === 0) {
-            this.cmService.retrieveAnsweredFAQ().subscribe(res => {
-                if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
-                    });
-                    this.loading = false;
-                    return;
-                }
-
-                if (res.results) {
-                    
-                    for (let i = 0; i < res.results.length; i++) {
-                        let faq = res.results[i];
-                        let selected = false;
-                        if (faq.question === this.selectedFAQ) {
-                            selected = true;
-                        }
-
-                        this.faqs.push({
-                            qnID: faq.qnID,
-                            question: faq.question,
-                            answer: faq.answer,
-                            selected: selected
-                        });
-                    }
-                }
-                this.loading = false;
-            }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
-                });
-                this.loading = false;
-            });
-        }
-
-        if (event.index === 1) {
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -176,6 +143,42 @@ export class CMFaqManageComponent implements OnInit {
                             selected: false
                         });
                     });
+                }
+                this.loading = false;
+            }, error => {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: error
+                });
+                this.loading = false;
+            });
+        }
+
+        if (event.index === 1) {
+            this.cmService.retrieveAnsweredFAQ().subscribe(res => {
+                if (res.error) {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    this.loading = false;
+                    return;
+                }
+
+                if (res.results) {
+
+                    for (let i = 0; i < res.results.length; i++) {
+                        let faq = res.results[i];
+                        let selected = false;
+                        if (faq.question === this.selectedFAQ) {
+                            selected = true;
+                        }
+
+                        this.faqs.push({
+                            qnID: faq.qnID,
+                            question: faq.question,
+                            answer: faq.answer,
+                            selected: selected
+                        });
+                    }
                 }
                 this.loading = false;
             }, error => {
@@ -215,7 +218,7 @@ export class CMFaqManageComponent implements OnInit {
         this.questionForm.get("refinedQns").setValue(this.faqs[this.currentIndex].question);
     }
 
-    refineQuestion(){
+    refineQuestion() {
         this.questionForm.controls.refinedQns.markAsDirty();
 
         if (this.questionForm.controls.refinedQns.invalid) {
@@ -350,6 +353,9 @@ export class CMFaqManageComponent implements OnInit {
             });
             return;
         }
+        console.log(this.faqs)
+        console.log(index)
+        console.log(this.faqs[index].qnID)
 
         this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value).subscribe(res => {
             this.processing = true;
@@ -369,7 +375,6 @@ export class CMFaqManageComponent implements OnInit {
             }
 
             this.hideAnsEditArea();
-
             this.processing = false;
         }, error => {
             this.msgs.push({
