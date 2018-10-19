@@ -30,6 +30,7 @@ export class CMFaqManageComponent implements OnInit {
     // UI Components
     faqs: any[];
     answerForm: FormGroup;
+    questionForm: FormGroup;
 
     constructor(
         private cmService: CMService,
@@ -97,7 +98,6 @@ export class CMFaqManageComponent implements OnInit {
                 }
 
                 if (res.results) {
-               
                     res.results.forEach(faq => {
                         this.faqs.push({
                             username: faq.username,
@@ -208,11 +208,33 @@ export class CMFaqManageComponent implements OnInit {
 
     showEditQuestionArea() {
         this.showQnsEditArea = true;
+        this.questionForm = this.fb.group({
+            refinedQns: new FormControl('', Validators.required),
+        });
+
+        this.questionForm.get("refinedQns").setValue(this.faqs[this.currentIndex].question);
+    }
+
+    refineQuestion(){
+        this.questionForm.controls.refinedQns.markAsDirty();
+
+        if (this.questionForm.controls.refinedQns.invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please fill in the question field'
+            });
+            return;
+        }
+
+        this.faqs[this.currentIndex].question = this.questionForm.get('refinedQns').value
+
+        this.hideEditQuestionArea();
     }
 
     hideEditQuestionArea() {
+        if (this.questionForm) {
+            this.questionForm.get('refinedQns').setValue('');
+        }
         this.showQnsEditArea = false;
-
         //end point to change question. 
     }
 
@@ -247,7 +269,7 @@ export class CMFaqManageComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.processing = true;
-                this.cmService.deleteAnsweredFAQ(this.faqs[index].question).subscribe(res => {
+                this.cmService.deleteAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error
@@ -288,7 +310,7 @@ export class CMFaqManageComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.processing = true;
-                this.cmService.deleteUnansweredFAQ(this.faqs[index].question).subscribe(res => {
+                this.cmService.deleteUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question).subscribe(res => {
                     if (res.error) {
                         this.msgs.push({
                             severity: 'error', summary: 'Error', detail: res.error
@@ -366,7 +388,6 @@ export class CMFaqManageComponent implements OnInit {
             });
             return;
         }
-
 
         this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value, this.faqs[index].username).subscribe(res => {
             this.processing = true;

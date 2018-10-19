@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="ui-g">
                                     <div class="ui-g-10 qnsInDialog" style="color:#3989e1; margin-bottom:12px">
-                                        {{faqs[this.currentIndex]["question"]}}
+                                        {{faqs[currentIndex]["question"]}}
                                     </div>
                                     <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                                         <p>By: Jarrett Goh</p>
@@ -66,7 +66,7 @@
                                 <div class="ui-g">
                                     <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
                                         <ng-container *ngIf="!showAnsEditArea">
-                                            <div [innerHTML]="faqs[this.currentIndex].answer"></div>
+                                            <div [innerHTML]="faqs[currentIndex].answer"></div>
                                             <div class="ui-g" style="padding-top: 2%">
                                                 <button pButton style="width:20%; margin-right:1%;" class="ui-button-warning" label="Edit Answer" type="button" icon="fa fa-pencil"
                                                     (click)="showEditAnswerArea(currentIndex)" (click)="showDialogMaximized($event,dialogAnswered)"></button>
@@ -137,22 +137,26 @@
                                 </div>
                                 <div class="ui-g">
                                     <div class="ui-g-10 qnsInDialog" style="color:#d88629; margin-bottom:12px">
-                                        {{faqs[this.currentIndex].question}}
+                                        <ng-container *ngIf="!showQnsEditArea">
+                                            {{faqs[currentIndex].question}}
+                                        </ng-container>
                                         <ng-container *ngIf="showQnsEditArea">
                                             <div style="padding-top: 2%">
-                                                <textarea style="width: 90%; height: 60px;" size="30" pInputText [(ngModel)]="faqs[this.currentIndex].question"></textarea>
+                                                <form [formGroup]="questionForm">
+                                                    <textarea class="form-control" formControlName="refinedQns" style="width: 90%; height: 60px;" size="30" pInputText></textarea>
+                                                </form>
                                             </div>
                                         </ng-container>
                                     </div>
                                     <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                                        <p>By: Jarrett Goh</p>
+                                        <p>By: {{faqs[currentIndex].username}}</p>
                                         <!--MA's account-->
                                         <p>19/10/2018</p>
                                     </div>
                                 </div>
                                 <div class="ui-g ansInDialog" style="color:black; margin-bottom:12px">
                                     <ng-container *ngIf="!showAnsEditArea && !showQnsEditArea">
-                                        <div [innerHTML]="faqs[this.currentIndex].answer"></div>
+                                        <div [innerHTML]="faqs[currentIndex].answer"></div>
                                         <div class="ui-g-8" style="padding-top: 2%">
                                             <button pButton style="width:30%; margin-right:1%" class="ui-button-warning" label="Refine Question" type="button" icon="fa fa-plus"
                                                 (click)="showEditQuestionArea()"></button>
@@ -166,7 +170,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="showQnsEditArea">
                                         <div class="ui-g-8" style="padding-top: 2%">
-                                            <button pButton style="width:15%; margin-right:1%" class="ui-button-success" label="OK" type="button" (click)="hideEditQuestionArea()"></button>
+                                            <button pButton style="width:15%; margin-right:1%" class="ui-button-success" label="OK" type="button" (click)="refineQuestion()"></button>
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="showAnsEditArea">

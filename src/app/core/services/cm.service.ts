@@ -323,7 +323,7 @@ export class CMService {
             );
     }
 
-    deleteAnsweredFAQ(question) {
+    deleteAnsweredFAQ(qnID, question) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -331,7 +331,8 @@ export class CMService {
         };
 
         const deleteQuestionData = {
-            'question': question
+            'question': question,
+            'qnID': qnID
         };
 
         const postData = Object.assign(this.authService.authItems, deleteQuestionData);
@@ -366,7 +367,6 @@ export class CMService {
             })
         };
 
-        console.log(username)
         const updateQuestionData = {
             'qna': {
                 'qnID': qnID,
@@ -385,7 +385,7 @@ export class CMService {
             );
     }
 
-    deleteUnansweredFAQ(question) {
+    deleteUnansweredFAQ(qnID, question) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -393,7 +393,8 @@ export class CMService {
         };
 
         const deleteQuestionData = {
-            'question': question
+            'question': question,
+            'qnID': qnID
         };
 
         const postData = Object.assign(this.authService.authItems, deleteQuestionData);
