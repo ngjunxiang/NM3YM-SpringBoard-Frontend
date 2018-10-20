@@ -1,0 +1,28 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="!loading">
+    <div style="padding-bottom: 10px">
+        <p-card styleClass="ui-card-shadow">
+            <h4>Create Question and Answer</h4>
+            <div [formGroup]="faqForm">
+
+                <div style="font-weight:600; font-size:14px">
+                    Question:
+                </div>
+                <input class="form-control" formControlName="question" style="font-size: 13px" placeholder="Enter your question here">
+
+                <div style="margin-top:10px; font-weight:600; font-size:14px">
+                    Answer:
+                </div>
+                <ngx-wig [formControl]="faqForm.controls.answer" [placeholder]="'Enter answer here'"></ngx-wig>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12" style="padding-bottom: 0px; padding-right: 0px">
+                    <button pButton style="width:18%; float:right" class="ui-button-success" label="Create FAQ" type="button" icon="far fa-save"
+                        (click)="postFAQ()"></button>
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>
