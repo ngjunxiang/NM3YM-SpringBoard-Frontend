@@ -10,6 +10,7 @@ import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-chec
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
+import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
 
 const routes: Routes = [
@@ -73,6 +74,15 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'FAQ' }, { title: 'Manage' }]
+                }, 
+                canActivate: [CMAuthGuard] 
+            },
+            {
+                path: 'faq/createFAQ',
+                component: CMFaqCreateComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'FAQ' }, { title: 'Create FAQ' }]
                 }, 
                 canActivate: [CMAuthGuard] 
             },

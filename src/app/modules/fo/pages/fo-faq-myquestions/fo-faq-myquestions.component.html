@@ -1,82 +1,121 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 
-<div *ngIf="!loading">
-    <form [formGroup]="questionForm" class="search-container">
-        <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" placeholder="What would you like to search for?"
-            required pInputText>
-        <div class="search-icon" (click)="searchFAQ()">
-            <i class="fa fa-search"></i>
-        </div>
-    </form>
-    <br>
+<form [formGroup]="questionForm" class="search-container">
+    <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" placeholder="What would you like to search for?"
+        required pInputText>
+    <div class="search-icon" (click)="searchFAQ()">
+        <i class="fa fa-search"></i>
+    </div>
+</form>
+<br>
 
+<div *ngIf="!loading">
     <p-card styleClass="ui-card-shadow">
         <h4>My Questions</h4>
-        <div *ngIf="faqs.length === 0">
-            <h5>
-                There are no questions yet!
-            </h5>
-        </div>
+        <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
+            <p-tabPanel header="Answered">
+                <div *ngIf="faqs.length === 0">
+                    <h5>
+                        There are no questions.
+                    </h5>
+                </div>
 
-        <div *ngIf="faqs.length > 0">
-            <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                <ng-template let-faq let-i="index" pTemplate="items">
-                    <p-card class="questionCard clickable" (click)="showAnswerDialog(faq.qnID,faq.question,faq.answer)">
-                        <div class="ui-g">
-                            <div class="ui-g-9">
-                                <div class="question" style="color:#3989e1; margin-bottom:12px">
-                                    {{faq.question}}
+                <div *ngIf="faqs.length > 0">
+                    <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
+                        <ng-template let-faq let-i="index" pTemplate="items">
+                            <p-card class="questionCard clickable" (click)="showAnswerDialog(i)">
+                                <div class="ui-g">
+                                    <div class="ui-g-9">
+                                        <div class="question" style="color:#3989e1; margin-bottom:12px">
+                                            {{faqs[i].question}}
+                                        </div>
+                                        <div style="font-size: 12px; font-weight: 600">
+                                            <p>Posted on: 19/10/2018</p>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-3">
+                                        <div style="float: right; font-size: 12px; font-weight: 400">
+                                            100 views
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style="font-size: 12px; font-weight: 600">
+                            </p-card>
+                        </ng-template>
+                        <p-footer>
+                            <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More"></button>
+                        </p-footer>
+                    </p-dataScroller>
+
+                    <ng-container *ngIf="answerDialog">
+                        <p-dialog header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
+                            <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
+                                <i>Question:</i>
+                            </div>
+                            <div class="ui-g">
+                                <div class="ui-g-10 qnsInDialog" style="color:#3989e1; margin-bottom:12px">
+                                    {{faqs[currentIndex].question}}
+                                </div>
+                                <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
+                                    <!-- <p>Posted by: Jarrett Goh</p> -->
                                     <p>Posted on: 19/10/2018</p>
                                 </div>
                             </div>
-                            <div class="ui-g-3">
-                                <div style="float: right; font-size: 12px; font-weight: 400">
-                                    100 views
+                            <hr>
+
+                            <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
+                                <i>Answer:</i>
+                            </div>
+                            <div class="ui-g">
+                                <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
+                                    {{faqs[currentIndex].answer}}
+                                </div>
+
+                                <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
+                                    <!-- <p>Answered by: Randy Lai</p> -->
+                                    <p>Answered on: 20/10/2018</p>
                                 </div>
                             </div>
-                        </div>
-                    </p-card>
-                </ng-template>
-                <p-footer>
-                    <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load"></button>
-                </p-footer>
-            </p-dataScroller>
-        </div>
+                            <div style="float: right">
+                                100 views
+                            </div>
+                        </p-dialog>
+                    </ng-container>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Unanswered">
+                <div *ngIf="faqs.length === 0">
+                    <h5>
+                        There are no questions.
+                    </h5>
+                </div>
+
+                <div *ngIf="faqs.length > 0">
+                    <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
+                        <ng-template let-faq let-i="index" pTemplate="items">
+                            <p-card class="questionCard">
+                                <div class="ui-g">
+                                    <div class="ui-g-9">
+                                        <div class="question" style="color:#d88629; margin-bottom:12px">
+                                            {{faqs[i].question}}
+                                        </div>
+                                        <div style="font-size: 12px; font-weight: 600">
+                                            <p>Posted on: 19/10/2018</p>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-3">
+                                        <div style="float: right; font-size: 12px; font-weight: 400">
+                                            100 views
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-card>
+                        </ng-template>
+                        <p-footer>
+                            <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More"></button>
+                        </p-footer>
+                    </p-dataScroller>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
     </p-card>
-
-    <p-dialog header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
-        <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
-            <i>Question:</i>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-10 qnsInDialog" style="color:#3989e1; margin-bottom:12px">
-                {{this.currentQuestion}}
-            </div>
-            <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                <!-- <p>Posted by: Jarrett Goh</p> -->
-                <p>Posted on: 19/10/2018</p>
-            </div>
-        </div>
-        <hr>
-
-        <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
-            <i>Answer:</i>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
-                {{this.currentAnswer}}
-            </div>
-
-            <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                <!-- <p>Answered by: Randy Lai</p> -->
-                <p>Answered on: 20/10/2018</p>
-            </div>
-        </div>
-
-        <div style="float: right">
-            100 views
-        </div>
-    </p-dialog>
 </div>

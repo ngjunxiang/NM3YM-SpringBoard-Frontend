@@ -63,6 +63,7 @@ export class CMService {
 
 
     // FAQ Endpoints
+    private createFAQURL = environment.host + '/app/faq/add-CMQ';
     private retrieveUnansweredFAQURL = environment.host + '/app/faq/retrieve-UQ';
     private updateUnansweredFAQURL = environment.host + '/app/faq/add-AQ';
     private deleteUnansweredFAQURL = environment.host + '/app/faq/delete-UQ';
@@ -249,6 +250,30 @@ export class CMService {
             );
     }
 
+    createFAQ(question, answer){
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const createdFAQ = {
+            'qna': {
+                'question': question,
+                'answer': answer
+            }
+        };
+
+        const postData = Object.assign(this.authService.authItems, createdFAQ);
+
+        return this.http.post<Response>(this.createFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+
+
+    }
 
     retrieveNotifications() {
         const httpOptions = {

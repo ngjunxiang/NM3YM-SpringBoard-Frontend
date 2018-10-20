@@ -17,8 +17,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     loading = false;
     msgs: Message[] = [];
     answerDialog = false;
-    currentQuestion: string;
-    currentAnswer: string;
+    currentIndex: number;
+    activeTab: number;
 
     // UI Components
     questionForm: FormGroup;
@@ -35,6 +35,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
     ngOnInit() {
         this.loading = true;
+        this.activeTab = 0;
         this.questionForm = this.fb.group({
             question: new FormControl('', Validators.required)
         });
@@ -45,27 +46,60 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     retrieveFAQ() {
         this.faqs = [];
 
-        this.foService.retrieveAllFaq().subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
+        if (this.activeTab === 0) {
+            //Retrieve answered question 
+            this.foService.retrieveUserFAQ().subscribe(res => {
+                if (res.error) {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    this.loading = false;
+                    return;
+                }
+
+                if (res.results) {
+                    this.faqs = res.results.answered;
+                }
+
                 this.loading = false;
-                return;
-            }
+            }, error => {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: error
+                });
 
-            if (res.results) {
-                this.faqs = res.results;
-            }
-
-            this.loading = false;
-        }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+                this.loading = false;
             });
+        } else {
+            //Retrieve unanswered question 
+            this.foService.retrieveUserFAQ().subscribe(res => {
+                if (res.error) {
+                    this.msgs.push({
+                        severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    this.loading = false;
+                    return;
+                }
 
-            this.loading = false;
-        });
+                if (res.results) {
+                    this.faqs = res.results.unanswered;
+                }
+
+                this.loading = false;
+            }, error => {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: error
+                });
+
+                this.loading = false;
+            });
+        }
+    }
+
+    changeTab(event) {
+        this.loading = true;
+        this.faqs = [];
+        this.activeTab = event.index
+        this.retrieveFAQ()
     }
 
     searchFAQ() {
@@ -107,9 +141,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
 
 
-    showAnswerDialog(qnID, qns, ans) {
-        this.currentAnswer = ans
-        this.currentQuestion = qns
+    showAnswerDialog(index) {
+        this.currentIndex = index
         this.answerDialog = true;
 
 

@@ -48,7 +48,7 @@ export class FOEditOnboardComponent implements OnInit {
         });
 
         this.route.snapshot.data['urls'] = [
-            { title: 'Onboard List', url: '/rm/onboard/manage' },
+            { title: 'Onboard List', url: '/fo/onboard/manage' },
             { title: 'Edit' },
             { title: this.obName }
         ];

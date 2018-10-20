@@ -64,7 +64,7 @@
                 <div *ngFor="let qns of mostRecentQns; let i=index">
                     <div *ngIf="i < 5">
                         <p-accordionTab header = {{qns.question}}>
-                            <strong>{{qns.answer}}</strong>
+                            <div style="font-weight: 500" [innerHTML]="qns.answer"></div>
                         </p-accordionTab>
                     </div>
                 </div>

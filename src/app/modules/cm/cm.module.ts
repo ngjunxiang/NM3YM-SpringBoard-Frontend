@@ -43,6 +43,7 @@ import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-
 import { CMService } from '../../core/services/cm.service';
 import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
+import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -93,7 +94,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMNewChecklistComponent,
         CMViewChecklistLogsComponent,
         CMUploadAgmtComponent,
-        CMFaqManageComponent
+        CMFaqManageComponent,
+        CMFaqCreateComponent
     ],
     providers: [
         {

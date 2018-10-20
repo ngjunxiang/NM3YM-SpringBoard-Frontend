@@ -16,13 +16,13 @@
             <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onSortChange()"></p-dropdown>
         </div>
         <div class="ui-g-6">
-            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%" type="submit"
+            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%; margin" type="submit"
                 icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
         </div>
     </div>
 
     <p-dialog header="Confirmation" [(visible)]="confirmDialog" [modal]="true" [width]="auto">
-        <div style="margin: 10px; font-size: 14px; font-weight: 400">
+        <div style="margin:10px; font-size: 14px; font-weight: 400;">
             Have you searched for your question?
         </div>
         <p-footer>
@@ -81,7 +81,7 @@
                     </p-card>
                 </ng-template>
                 <p-footer>
-                    <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load"></button>
+                    <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More"></button>
                 </p-footer>
             </p-dataScroller>
         </div>

@@ -1,14 +1,14 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-confirmDialog></p-confirmDialog>
+<form class="search-container">
+    <input type="text" id="search-bar" placeholder="What would you like to search for?">
+    <a href="" class="search-icon">
+        <i class="fa fa-search"></i>
+    </a>
+</form>
 
 <div *ngIf="!loading">
     <div style="padding-bottom: 10px">
-        <form class="search-container">
-            <input type="text" id="search-bar" placeholder="What would you like to search for?">
-            <a href="" class="search-icon">
-                <i class="fa fa-search"></i>
-            </a>
-        </form>
         <br>
         <p-card styleClass="ui-card-shadow">
             <h4>Frequently Asked Questions</h4>
@@ -136,7 +136,7 @@
                                 </p-card>
                             </ng-template>
                             <p-footer>
-                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load"></button>
+                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More"></button>
                             </p-footer>
                         </p-dataScroller>
 

@@ -41,6 +41,15 @@ export class CMFaqManageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        //rerouted from create faq page
+        this.route.queryParams.subscribe(params => {
+            this.activeTab = params['activeTab'];
+        });
+
+        if (!this.activeTab) {
+            this.activeTab = 0;
+        }
+
         this.activeTab = 0;
         this.loadPage();
     }
@@ -53,6 +62,7 @@ export class CMFaqManageComponent implements OnInit {
     loadPage() {
         this.loading = true;
         this.faqs = [];
+
 
         if (this.activeTab === 0) {
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
@@ -174,9 +184,11 @@ export class CMFaqManageComponent implements OnInit {
 
                         this.faqs.push({
                             qnID: faq.qnID,
+                            username: faq.username,
                             question: faq.question,
                             answer: faq.answer,
-                            selected: selected
+                            selected: selected,
+                            CMusername: faq.CMusername
                         });
                     }
                 }
@@ -353,11 +365,8 @@ export class CMFaqManageComponent implements OnInit {
             });
             return;
         }
-        console.log(this.faqs)
-        console.log(index)
-        console.log(this.faqs[index].qnID)
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value).subscribe(res => {
+        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
             this.processing = true;
             this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
@@ -381,11 +390,13 @@ export class CMFaqManageComponent implements OnInit {
                 severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
+            this.hideAnsEditArea();
         });
     }
 
     saveUnansweredQuestion(index: number) {
         this.answerForm.controls.addedAnswer.markAsDirty();
+        this.unansweredDialog = false;
 
         if (this.answerForm.controls.addedAnswer.invalid) {
             this.msgs.push({
@@ -394,7 +405,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value, this.faqs[index].username).subscribe(res => {
+        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.faqs[index].username).subscribe(res => {
             this.processing = true;
 
             if (res.error) {
@@ -421,6 +432,7 @@ export class CMFaqManageComponent implements OnInit {
             });
             this.processing = false;
             this.unansweredDialog = false;
+            this.hideAnsEditArea();
         });
     }
 
