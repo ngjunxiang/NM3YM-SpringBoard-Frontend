@@ -79,7 +79,7 @@ export class CMFaqCreateComponent implements OnInit {
                                 activeTab: 1
                             }
                         });
-                    }, 2000);
+                    }, 1500);
                 }
 
                 this.loading = false;

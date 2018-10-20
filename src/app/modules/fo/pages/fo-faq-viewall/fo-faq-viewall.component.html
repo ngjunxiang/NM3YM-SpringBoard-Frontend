@@ -16,8 +16,8 @@
             <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onSortChange()"></p-dropdown>
         </div>
         <div class="ui-g-6">
-            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%; margin" type="submit"
-                icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
+            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%; margin"
+                type="submit" icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
         </div>
     </div>
 
@@ -61,20 +61,20 @@
         </div>
         <div *ngIf="faqs.length > 0">
             <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                <ng-template let-faq pTemplate="items" ;>
-                    <p-card class="questionCard clickable" (click)="showAnswerDialog(faq.qnID, faq.question,faq.answer)">
+                <ng-template let-faq let-i="index" pTemplate="items" ;>
+                    <p-card class="questionCard clickable" (click)="showAnswerDialog(i)">
                         <div class="ui-g">
                             <div class="ui-g-9">
                                 <div class="question" style="color:#3989e1; margin-bottom:12px">
                                     {{faq.question}}
                                 </div>
                                 <div style="font-size: 12px; font-weight: 600">
-                                    <p>Posted on: 19/10/2018</p>
+                                    <p>Posted on: {{faq.dateAsked}}</p>
                                 </div>
                             </div>
                             <div class="ui-g-3">
                                 <div style="float: right; font-size: 12px; font-weight: 400">
-                                    100 views
+                                    {{faq.views}} views
                                 </div>
                             </div>
                         </div>
@@ -87,38 +87,39 @@
         </div>
     </p-card>
 
-    <p-dialog styleClass="ansDialog" header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
-        <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
-            <i>Question:</i>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-10 qnsInDialog" style="color:#3989e1; margin-bottom:12px">
-                {{this.currentQuestion}}
+    <ng-container *ngIf="answerDialog">
+        <p-dialog styleClass="ansDialog" header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
+            <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
+                <i>Question:</i>
             </div>
-            <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                <!-- <p>Posted by: Jarrett Goh</p> -->
-                <p>Posted on: 19/10/2018</p>
+            <div class="ui-g">
+                <div class="ui-g-10 qnsInDialog" style="color:#3989e1; margin-bottom:12px">
+                    {{faqs[currentIndex].question}}
+                </div>
+                <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
+                    <!-- <p>Posted by: Jarrett Goh</p> -->
+                    <p>Posted on: {{faqs[currentIndex].dateAsked}}</p>
+                </div>
             </div>
-        </div>
-        <hr>
+            <hr>
 
-        <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
-            <i>Answer:</i>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
-                {{this.currentAnswer}}
+            <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
+                <i>Answer:</i>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
+                    {{faqs[currentIndex].answer}}
+                </div>
+
+                <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
+                    <!-- <p>Answered by: Randy Lai</p> -->
+                    <p>Answered on: {{faqs[currentIndex].dateAnswered}}</p>
+                </div>
             </div>
 
-            <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                <!-- <p>Answered by: Randy Lai</p> -->
-                <p>Answered on: 20/10/2018</p>
+            <div style="float: right">
+                {{faqs[currentIndex].views}} views
             </div>
-        </div>
-
-        <div style="float: right">
-            100 views
-        </div>
-
-    </p-dialog>
+        </p-dialog>
+    </ng-container>
 </div>

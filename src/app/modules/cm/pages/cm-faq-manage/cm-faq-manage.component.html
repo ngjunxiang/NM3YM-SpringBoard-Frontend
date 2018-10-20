@@ -29,12 +29,7 @@
                                                 {{faqs[i].question}}
                                             </div>
                                             <div style="font-size: 12px; font-weight: 600">
-                                                <p>Posted by: {{faqs[i].username}}, 19/10/2018</p>
-                                            </div>
-                                        </div>
-                                        <div class="ui-g-3">
-                                            <div style="float: right; font-size: 12px; font-weight: 400">
-                                                <p>100 views</p>
+                                                <p>Posted by: {{faqs[i].username}}, {{faqs[i].dateAsked}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -66,8 +61,7 @@
                                     </div>
                                     <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                                         <p>By: {{faqs[currentIndex].username}}</p>
-                                        <!--MA's account-->
-                                        <p>19/10/2018</p>
+                                        <p>{{faqs[currentIndex].dateAsked}}</p>
                                     </div>
                                 </div>
                                 <div class="ui-g ansInDialog" style="color:black; margin-bottom:12px">
@@ -124,12 +118,12 @@
                                                 {{faqs[i].question}}
                                             </div>
                                             <div style="font-size: 12px; font-weight: 600">
-                                                <p>Posted by: {{faqs[i].username}}, 19/10/2018</p>
+                                                <p>Posted by: {{faqs[i].username}}, {{faqs[i].dateAsked}}</p>
                                             </div>
                                         </div>
                                         <div class="ui-g-3">
                                             <div style="float: right; font-size: 12px; font-weight: 400">
-                                                100 views
+                                                {{faqs[i].views}} views
                                             </div>
                                         </div>
                                     </div>
@@ -145,6 +139,9 @@
                                 [maximizable]="true" (onHide)="hideAnsEditArea()">
                                 <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
                                     <i>Question:</i>
+                                    <div style="float: right; padding-right: 6px">
+                                        {{faqs[currentIndex].views}} views
+                                    </div>
                                 </div>
                                 <div class="ui-g">
                                     <div class="ui-g-10 qnsInDialog" style="color:#3989e1; margin-bottom:12px">
@@ -152,7 +149,7 @@
                                     </div>
                                     <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                                         <p>By: {{faqs[currentIndex].username}}</p>
-                                        <p>19/10/2018</p>
+                                        <p>{{faqs[currentIndex].dateAsked}}</p>
                                     </div>
                                 </div>
                                 <hr>
@@ -161,37 +158,67 @@
                                     <i>Answer:</i>
                                 </div>
                                 <div class="ui-g">
-                                    <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
+                                    <div class="ui-g-10 ansInDialog" style="color:black;">
                                         <ng-container *ngIf="!showAnsEditArea">
-                                            <div [innerHTML]="faqs[currentIndex].answer"></div>
-                                            <div class="ui-g" style="padding-top: 2%">
-                                                <button pButton style="width:20%; margin-right:1%;" class="ui-button-warning" label="Edit Answer" type="button" icon="fa fa-pencil"
-                                                    (click)="showEditAnswerArea(currentIndex)" (click)="showDialogMaximized($event,dialogAnswered)"></button>
-                                                <button pButton style="width:25%" class="ui-button-danger" label="Delete Question" type="button" icon="fa fa-times" (click)="deleteAnsweredQuestion(currentIndex)"></button>
-                                            </div>
+                                            <div style="font-size: 14px; font-weight: 600; color:black;" [innerHTML]="faqs[currentIndex].answer"></div>
                                         </ng-container>
                                         <ng-container *ngIf="showAnsEditArea">
                                             <ngx-wig [formControl]="answerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
-                                            <div class="ui-g" style="padding-top: 1%">
-                                                <button pButton style="width:18%" class="ui-button-success" label="Save Answer" type="button" icon="far fa-save" (click)="saveAnsweredQuestion(currentIndex)"
-                                                    [disabled]="processing"></button>
-                                                <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger" label="Cancel" type="button" icon="fa fa-times"
-                                                    (click)="hideAnsEditArea()"></button>
-                                            </div>
                                         </ng-container>
                                     </div>
 
                                     <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                                        <p>By: {{faqs[currentIndex].CMusernamef}}</p>
-                                        <!--CM's account-->
-                                        <p>20/10/2018</p>
+                                        <p>By: {{faqs[currentIndex].CMusername}}</p>
+                                        <p>{{faqs[currentIndex].dateAnswered}}</p>
                                     </div>
                                 </div>
 
-                                <div style="float: right">
-                                    100 views
-                                </div>
+                                <ng-container *ngIf="!showAnsEditArea">
+                                    <div class="ui-g" style="padding-top: 2%">
+                                        <div class="ui-g-8">
+                                            <button pButton style="margin-right:1%;" class="ui-button-warning" label="Edit Answer" type="button" icon="fa fa-pencil"
+                                                (click)="showEditAnswerArea(currentIndex)" (click)="showDialogMaximized($event,dialogAnswered)"></button>
+                                            <ng-container *ngIf="faqs[currentIndex].prevAnswer">
+                                                <button pButton style="margin-right:1%;" class="ui-button-secondary" label="View History" type="button" icon="fas fa-history"
+                                                    (click)="showHistoryDialog()"></button>
+                                            </ng-container>
+                                        </div>
+                                        <div class="ui-g-4">
+                                            <button pButton style="margin-left:1%; float: right" class="ui-button-danger" label="Delete Question" type="button" icon="fa fa-times"
+                                                (click)="deleteAnsweredQuestion(currentIndex)"></button>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="showAnsEditArea">
+                                    <div class="ui-g" style="padding-top: 1%">
+                                        <button pButton style="width:18%" class="ui-button-success" label="Save Answer" type="button" icon="far fa-save" (click)="saveAnsweredQuestion(currentIndex)"
+                                            [disabled]="processing"></button>
+                                        <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger" label="Cancel" type="button" icon="fa fa-times"
+                                            (click)="hideAnsEditArea()"></button>
+                                    </div>
+                                </ng-container>
                             </p-dialog>
+                            <ng-container *ngIf="historyDialog">
+                                <p-dialog #answerHistory header="Past Answers" styleClass="pastAnswers" [minHeight]="50" [autoZIndex]="false" [(visible)]="historyDialog"
+                                    [closable]="true" [maximizable]="true" [modal]="true">
+                                    <ng-container *ngFor="let pastAns of faqs[currentIndex].prevAnswer; let i=index">
+                                        <ng-container *ngIf="faqs[currentIndex].prevAnswer.length !== 0">
+                                            <div class="ui-g">
+                                                <div class="ui-g-10" style="font-size: 14px; font-weight: 600; color:black;">
+                                                    <div [innerHTML]="pastAns.answer"></div>
+                                                </div>
+                                                <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 500">
+                                                    <p>By: {{pastAns.CMusername}}</p>
+                                                    <p>{{pastAns.dateAnswered}}</p>
+                                                </div>
+                                            </div>
+                                            <ng-container *ngIf="i !== faqs[currentIndex].prevAnswer.length-1">
+                                                <hr style="margin: 10px 10px;">
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </p-dialog>
+                            </ng-container>
                         </ng-container>
                     </div>
                 </p-tabPanel>

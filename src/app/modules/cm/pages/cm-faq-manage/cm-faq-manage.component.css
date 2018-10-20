@@ -30,7 +30,6 @@
 /*********************
  * ANSWER DIALOG PAGE*
  *********************/
- 
 
 .qnsInDialog{
   font-weight: bold;
@@ -47,8 +46,20 @@
   z-index: 1000;
 }
 
+:host >>> .ui-dialog.pastAnswers {
+  width: 600px;
+  height: auto;
+  z-index: 1001;
+}
+
+
 :host >>> .ui-widget-overlay.ui-dialog-mask {
   z-index: 900;
+}
+
+:host >>> .ui-button.ui-state-default.ui-button-secondary{
+  background-color: #d8d8d8;
+  border: f1px solid #d8d8d8
 }
 
 

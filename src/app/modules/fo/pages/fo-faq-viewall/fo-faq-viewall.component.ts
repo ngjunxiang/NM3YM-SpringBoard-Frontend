@@ -19,10 +19,9 @@ export class FOFaqViewAllComponent implements OnInit {
     showNewQnForm = false;
     msgs: Message[] = [];
     answerDialog = false;
-    askDialog = false; 
-    confirmDialog = false; 
-    currentQuestion: string;
-    currentAnswer: string;
+    askDialog = false;
+    confirmDialog = false;
+    currentIndex: number;
 
     // UI Components
     questionForm: FormGroup;
@@ -39,6 +38,7 @@ export class FOFaqViewAllComponent implements OnInit {
 
     ngOnInit() {
         this.loading = true;
+
         this.questionForm = this.fb.group({
             question: new FormControl('', Validators.required)
         });
@@ -125,9 +125,9 @@ export class FOFaqViewAllComponent implements OnInit {
     showAskDialog() {
         this.askDialog = true;
 
-        if(this.questionForm.get('question').value && this.searched){
+        if (this.questionForm.get('question').value && this.searched) {
             this.newQuestionForm.get("newQuestion").setValue(this.questionForm.get('question').value)
-        }        
+        }
 
         this.hideConfirmDialog();
     }
@@ -135,9 +135,9 @@ export class FOFaqViewAllComponent implements OnInit {
     hideAskDialog() {
         this.askDialog = false;
 
-        if(this.newQuestionForm.get('newQuestion')){
+        if (this.newQuestionForm.get('newQuestion')) {
             this.newQuestionForm.get("newQuestion").setValue('')
-        }        
+        }
     }
 
     postNewQuestion() {
@@ -173,18 +173,19 @@ export class FOFaqViewAllComponent implements OnInit {
         }
 
         this.msgs.push({
-            severity: 'info', summary: 'Please fill in the question field', detail: ''
+            severity: 'error', summary: 'Error', detail: 'Please fill in the question field'
         });
     }
 
-    showAnswerDialog(qnID, qns, ans) {
-        this.currentAnswer = ans
-        this.currentQuestion = qns
+    showAnswerDialog(index) {
+        this.currentIndex = index;
         this.answerDialog = true;
 
+        let qnID = this.faqs[index].qnID
 
-        /*
-         this.foService.increaseView().subscribe(res => {
+        console.log(qnID)
+
+        this.foService.increaseView(qnID).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -197,6 +198,5 @@ export class FOFaqViewAllComponent implements OnInit {
                 severity: 'error', summary: 'Error', detail: error
             });
         });
-        */
     }
 }

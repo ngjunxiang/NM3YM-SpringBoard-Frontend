@@ -89,7 +89,7 @@ export class FOService {
     private retrieveUserFAQURL = environment.host + '/app/faq/retrieve-userQNA'
     private retrieveAllFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private createUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
-    //private increaseViewURL = environment.host + '/app/faq/add-UQ';
+    private increaseViewURL = environment.host + '/app/faq/increment-QNAViews';
 
     constructor(
         private authService: AuthenticationService,
@@ -294,7 +294,7 @@ export class FOService {
             );
     }
 
-    retrieveUserFAQ(){
+    retrieveUserFAQ() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -331,23 +331,26 @@ export class FOService {
 
     }
 
-    /*
-    increaseView(qnID) {
+    increaseView(quesID) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
 
+        const qnID = {
+            'qnID': quesID
+        };
+
         const postData = Object.assign(this.authService.authItems, qnID);
 
         return this.http.post<Response>(this.increaseViewURL, postData, httpOptions)
-        .pipe(
-            retry(3),
-            catchError(this.handleError)
-        );
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
-    */
+
 
     createOnboardProcess(onboardProcessData) {
         const httpOptions = {

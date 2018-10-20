@@ -6,6 +6,7 @@ import { Message, MenuItem, ConfirmationService } from 'primeng/components/commo
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
+import { filterQueryId } from '@angular/core/src/view/util';
 
 @Component({
     selector: 'cm-faq-manage',
@@ -24,6 +25,7 @@ export class CMFaqManageComponent implements OnInit {
     activeTab: number;
     msgs: Message[] = [];
     answeredDialog = false;
+    historyDialog = false;
     unansweredDialog = false;
     currentIndex: number;
 
@@ -50,7 +52,6 @@ export class CMFaqManageComponent implements OnInit {
             this.activeTab = 0;
         }
 
-        this.activeTab = 0;
         this.loadPage();
     }
 
@@ -62,7 +63,6 @@ export class CMFaqManageComponent implements OnInit {
     loadPage() {
         this.loading = true;
         this.faqs = [];
-
 
         if (this.activeTab === 0) {
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
@@ -80,6 +80,7 @@ export class CMFaqManageComponent implements OnInit {
                             username: faq.username,
                             qnID: faq.qnID,
                             question: faq.question,
+                            dateAsked: faq.dateAsked,
                             selected: false
                         });
                     });
@@ -114,9 +115,14 @@ export class CMFaqManageComponent implements OnInit {
                             qnID: faq.qnID,
                             username: faq.username,
                             question: faq.question,
+                            dateAsked: faq.dateAsked,
+                            views: faq.views,
                             answer: faq.answer,
+                            dateAnswered: faq.dateAnswered,
+                            CMusername: faq.CMusername,
+                            prevAnswer: faq.prevAnswer,
                             selected: selected,
-                            CMusername: faq.CMusername
+
                         });
                     }
                 }
@@ -150,6 +156,7 @@ export class CMFaqManageComponent implements OnInit {
                             username: faq.username,
                             qnID: faq.qnID,
                             question: faq.question,
+                            dateAsked: faq.dateAsked,
                             selected: false
                         });
                     });
@@ -186,9 +193,12 @@ export class CMFaqManageComponent implements OnInit {
                             qnID: faq.qnID,
                             username: faq.username,
                             question: faq.question,
+                            dateAsked: faq.dateAsked,
+                            views: faq.views,
                             answer: faq.answer,
-                            selected: selected,
-                            CMusername: faq.CMusername
+                            dateAnswered: faq.dateAnswered,
+                            CMusername: faq.CMusername,
+                            prevAnswer: faq.prevAnswer,
                         });
                     }
                 }
@@ -439,7 +449,11 @@ export class CMFaqManageComponent implements OnInit {
     showAnsweredDialog(index) {
         this.currentIndex = index;
         this.answeredDialog = true;
+    }
 
+    showHistoryDialog() {
+        this.historyDialog = true;
+        console.log(this.faqs[this.currentIndex].prevAnswer)
 
         /*
          this.foService.increaseView().subscribe(res => {
@@ -461,22 +475,5 @@ export class CMFaqManageComponent implements OnInit {
     showUnansweredDialog(index) {
         this.currentIndex = index;
         this.unansweredDialog = true;
-
-
-        /*
-         this.foService.increaseView().subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
- 
-        }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
-            });
-        });
-        */
     }
 }
