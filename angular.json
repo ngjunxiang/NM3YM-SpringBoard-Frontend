@@ -31,7 +31,6 @@
                             "node_modules/material-design-icons/iconfont/material-icons.css",
                             "src/styles.css",
                             "src/assets/scss/style.scss"
-                            
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
