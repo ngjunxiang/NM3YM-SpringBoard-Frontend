@@ -28,6 +28,8 @@ export class CMFaqManageComponent implements OnInit {
     historyDialog = false;
     unansweredDialog = false;
     currentIndex: number;
+    disableLoadMore = false;
+    LoadMoreClicks: number;
 
     // UI Components
     faqs: any[];
@@ -53,6 +55,13 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         this.loadPage();
+
+        //Showing First 10 results 
+        this.LoadMoreClicks = 10;
+
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
     }
 
     showDialogMaximized(event, dialog: Dialog) {
@@ -160,7 +169,10 @@ export class CMFaqManageComponent implements OnInit {
                             selected: false
                         });
                     });
+
+                    this.checkLoadMore()
                 }
+
                 this.loading = false;
             }, error => {
                 this.msgs.push({
@@ -201,6 +213,7 @@ export class CMFaqManageComponent implements OnInit {
                             prevAnswer: faq.prevAnswer,
                         });
                     }
+                    this.checkLoadMore()
                 }
                 this.loading = false;
             }, error => {
@@ -285,6 +298,7 @@ export class CMFaqManageComponent implements OnInit {
             this.answerForm.get('editedAnswer').setValue('');
         }
         this.showAnsEditArea = false;
+        this.historyDialog = false;
     }
 
     deleteAnsweredQuestion(index: number) {
@@ -475,5 +489,22 @@ export class CMFaqManageComponent implements OnInit {
     showUnansweredDialog(index) {
         this.currentIndex = index;
         this.unansweredDialog = true;
+    }
+
+    //This method determines if "Load More" button should be shown
+    stopShowingLoadMore() {
+        this.LoadMoreClicks += 10
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
+    }
+
+    checkLoadMore(){
+        this.disableLoadMore = false;
+        this.LoadMoreClicks = 10;
+
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
     }
 }

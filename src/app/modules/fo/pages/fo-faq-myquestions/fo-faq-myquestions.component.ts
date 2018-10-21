@@ -19,6 +19,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     answerDialog = false;
     currentIndex: number;
     activeTab: number;
+    disableLoadMore = false;
+    LoadMoreClicks: number;
 
     // UI Components
     questionForm: FormGroup;
@@ -61,6 +63,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
                     this.faqs = res.results.answered;
                 }
 
+                this.checkLoadMore()
                 this.loading = false;
             }, error => {
                 this.msgs.push({
@@ -83,7 +86,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
                 if (res.results) {
                     this.faqs = res.results.unanswered;
                 }
-
+                this.checkLoadMore()
                 this.loading = false;
             }, error => {
                 this.msgs.push({
@@ -129,6 +132,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
                 this.faqs = res.results;
             }
 
+            this.checkLoadMore()
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -161,5 +165,21 @@ export class FOFaqMyQuestionsComponent implements OnInit {
             });
         });
         */
+    }
+
+    stopShowingLoadMore() {
+        this.LoadMoreClicks += 10
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
+    }
+
+    checkLoadMore() {
+        this.disableLoadMore = false;
+        this.LoadMoreClicks = 10;
+
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
     }
 }

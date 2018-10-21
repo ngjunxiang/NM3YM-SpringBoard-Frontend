@@ -22,7 +22,7 @@
     </div>
 
     <p-dialog header="Confirmation" [(visible)]="confirmDialog" [modal]="true" [width]="auto">
-        <div style="margin:10px; font-size: 14px; font-weight: 400;">
+        <div style="font-size: 14px; font-weight: 400; margin:10px;">
             Have you searched for your question?
         </div>
         <p-footer>
@@ -52,7 +52,7 @@
             <h4>Frequently Asked Questions</h4>
         </div>
         <div *ngIf="searched">
-            <h4>Search Result</h4>
+            <h4>Search Results</h4>
         </div>
         <div *ngIf="faqs.length === 0">
             <h5>
@@ -81,7 +81,7 @@
                     </p-card>
                 </ng-template>
                 <p-footer>
-                    <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More"></button>
+                    <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton label="Load More"></button>
                 </p-footer>
             </p-dataScroller>
         </div>
@@ -107,7 +107,7 @@
                 <i>Answer:</i>
             </div>
             <div class="ui-g">
-                <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
+                <div class="ui-g-10 ansInDialog" style="font-size: 14px; font-weight: 600; color:black;">
                     {{faqs[currentIndex].answer}}
                 </div>
 

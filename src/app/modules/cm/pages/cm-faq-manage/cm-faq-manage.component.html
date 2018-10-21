@@ -36,7 +36,7 @@
                                 </p-card>
                             </ng-template>
                             <p-footer>
-                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load"></button>
+                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
                             </p-footer>
                         </p-dataScroller>
 
@@ -130,7 +130,7 @@
                                 </p-card>
                             </ng-template>
                             <p-footer>
-                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More"></button>
+                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
                             </p-footer>
                         </p-dataScroller>
 

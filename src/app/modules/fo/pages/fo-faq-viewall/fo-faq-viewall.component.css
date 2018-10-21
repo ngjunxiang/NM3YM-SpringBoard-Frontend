@@ -75,7 +75,7 @@ input#search-bar{
   height: 40px;
   border-radius: 15px;
   padding: 0 20px;
-  font-size: 1rem;
+  font-size: 14px;
   border: 1px solid #D0CFCE;
   outline: none;
 }

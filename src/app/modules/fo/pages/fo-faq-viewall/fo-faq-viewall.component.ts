@@ -22,6 +22,8 @@ export class FOFaqViewAllComponent implements OnInit {
     askDialog = false;
     confirmDialog = false;
     currentIndex: number;
+    disableLoadMore = false;
+    LoadMoreClicks: number;
 
     // UI Components
     questionForm: FormGroup;
@@ -47,7 +49,6 @@ export class FOFaqViewAllComponent implements OnInit {
             newQuestion: new FormControl('', Validators.required),
         });
 
-
         this.retrieveFAQ();
     }
 
@@ -67,6 +68,8 @@ export class FOFaqViewAllComponent implements OnInit {
                 this.faqs = res.results;
             }
 
+            this.checkLoadMore()
+
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -78,6 +81,7 @@ export class FOFaqViewAllComponent implements OnInit {
     }
 
     searchFAQ() {
+        this.searched = true;
         this.questionForm.get('question').markAsDirty();
 
         if (this.questionForm.get('question').invalid) {
@@ -103,6 +107,8 @@ export class FOFaqViewAllComponent implements OnInit {
             if (res.results) {
                 this.faqs = res.results;
             }
+
+            this.checkLoadMore();
 
             this.loading = false;
         }, error => {
@@ -141,7 +147,6 @@ export class FOFaqViewAllComponent implements OnInit {
     }
 
     postNewQuestion() {
-        this.searched = true;
         let newQuestion = this.newQuestionForm.get('newQuestion').value;
         if (newQuestion !== '') {
             this.loading = true;
@@ -198,5 +203,21 @@ export class FOFaqViewAllComponent implements OnInit {
                 severity: 'error', summary: 'Error', detail: error
             });
         });
+    }
+
+    stopShowingLoadMore() {
+        this.LoadMoreClicks += 10
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
+    }
+
+    checkLoadMore() {
+        this.disableLoadMore = false;
+        this.LoadMoreClicks = 10;
+
+        if (this.faqs.length <= this.LoadMoreClicks) {
+            this.disableLoadMore = true;
+        }
     }
 }
