@@ -21,8 +21,8 @@ export class NavigationComponent implements AfterViewInit, OnInit, OnChanges {
     loading = false;
 
     // UI Components
-    newNotifications: any[];
-    allNotifications: any[];
+    newNotifications: any[] = [];
+    allNotifications: any[] = [];
     newCount: number;
 
     constructor(private modalService: NgbModal) { }
@@ -31,8 +31,8 @@ export class NavigationComponent implements AfterViewInit, OnInit, OnChanges {
         this.loading = true;
     }
 
-    async ngOnChanges() {
-        await this.retrieveNotifications().then(res => {
+    ngOnChanges() {
+        this.retrieveNotifications().then(res => {
             if (res) {
                 this.loading = false;
             }

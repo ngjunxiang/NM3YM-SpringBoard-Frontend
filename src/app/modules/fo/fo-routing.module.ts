@@ -11,6 +11,7 @@ import { FOEditOnboardComponent } from './pages/fo-edit-onboard/fo-edit-onboard.
 import { FOFaqAskComponent } from './pages/fo-faq-ask/fo-faq-ask.component';
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
 import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
+import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
 
 const routes: Routes = [
     { 
@@ -82,6 +83,15 @@ const routes: Routes = [
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'FAQ' }, { title: 'View All' }]
+                }, 
+                canActivate: [FOAuthGuard] 
+            },
+            {
+                path: 'viewpdf',
+                component: FOViewPDFComponent,
+                data: {
+                    title: 'Front Office',
+                    urls: [{ title: 'FAQ' }, { title: 'View PDF' }]
                 }, 
                 canActivate: [FOAuthGuard] 
             }

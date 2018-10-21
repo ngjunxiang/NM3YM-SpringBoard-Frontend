@@ -40,6 +40,7 @@ import { FOService } from '../../core/services/fo.service';
 import { FOFaqAskComponent } from './pages/fo-faq-ask/fo-faq-ask.component';
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
 import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
+import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -87,7 +88,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FOManageOnboardComponent,
         FOFaqAskComponent,
         FOFaqViewAllComponent,
-        FOFaqMyQuestionsComponent
+        FOFaqMyQuestionsComponent,
+        FOViewPDFComponent
     ],
     providers: [
         {
