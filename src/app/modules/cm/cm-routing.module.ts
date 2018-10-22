@@ -11,7 +11,9 @@ import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
+import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
 import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
+
 
 const routes: Routes = [
     {
@@ -83,6 +85,15 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'FAQ' }, { title: 'Create FAQ' }]
+                }, 
+                canActivate: [CMAuthGuard] 
+            },
+            {
+                path: 'faq/clean',
+                component: CMFaqCleaningComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'FAQ' }, { title: 'Clean Data' }]
                 }, 
                 canActivate: [CMAuthGuard] 
             },

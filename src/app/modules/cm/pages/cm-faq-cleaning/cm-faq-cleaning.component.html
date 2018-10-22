@@ -1,0 +1,55 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="!loading">
+    <div style="padding-bottom: 10px">
+        <p-card>
+            <h4>Cleaning of FAQ's Data</h4>
+            <div [formGroup]="faqTrainerForm">
+                <div formArrayName="questions">
+                    <ng-container *ngFor="let question of faqTrainerForm.get('questions').controls; let i=index">
+                        <div [formGroupName]="i">
+                            <div style="margin-bottom: 5px">
+                                <div class="ui-g">
+                                    <div class="ui-g-4" style="display: flex">
+                                        <button class="ui-button-secondary" style="align-content: center; margin-right: 14px" (click)="expandFAQ(i)" type="text"
+                                            icon="fas fa-plus" pButton></button>
+                                        <input type="text" class="form-control" formControlName="intent" placeholder="Intent" pInputText>
+                                    </div>
+                                    <div class="ui-g-8">
+                                        <input type="text" class="form-control" formControlName="question" (mouseup)="showHighlightedText(i)" pInputText>
+                                    </div>
+                                </div>
+                                <div *ngIf="expand[i]" style="margin-left: 46px">
+                                    <div formArrayName="entities">
+                                        <ng-container *ngFor="let entity of faqTrainerForm.get('questions').get(i+'').get('entities').controls; let j=index">
+                                            <div *ngIf="addEntity" class="ui-g" [formGroupName]="j">
+                                                <div class="ui-g-4">
+                                                    <input type="text" class="form-control" formControlName="entity" placeholder="Entity" pInputText>
+                                                </div>
+                                                <div class="ui-g-4">
+                                                    <input type="text" class="form-control" formControlName="value" placeholder="value" pInputText>
+                                                </div>
+                                                <div class="ui-g-4">
+                                                    <input type="text" class="form-control" formControlName="word" placeholder="Word" pInputText>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <div *ngIf="highlighted[i]" style="padding-left: 6px">
+                                        <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)"
+                                            type="text" icon="fas fa-plus" pButton></button>
+                                    </div>
+                                    <div *ngIf="!highlighted[i]" style="padding-left: 6px">
+                                        <button style="align-content: center;" label='Select a word from the FAQ to create an entity' type="text"
+                                            [disabled]="true" pButton></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>

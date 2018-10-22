@@ -70,6 +70,7 @@ export class CMService {
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
+    private retrieveUncleanedFAQURL = environment.host + '/app/faq/retrieve-unclean';
 
     // Notifications Endpoints
     private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
@@ -430,6 +431,24 @@ export class CMService {
                 catchError(this.handleError)
             );
     }
+
+
+    retrieveUncleanedFAQ() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveUncleanedFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

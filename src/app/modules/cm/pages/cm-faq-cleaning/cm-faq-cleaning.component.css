@@ -1,0 +1,15 @@
+:host >>> .ui-inputtext{
+    border:1px solid #d8d8d8;
+    width: 100%;
+}
+
+input{
+    width: 100%;
+}
+
+hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 0;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
