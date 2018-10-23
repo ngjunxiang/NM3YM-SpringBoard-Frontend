@@ -37,12 +37,12 @@
                                         </ng-container>
                                     </div>
                                     <div *ngIf="highlighted[i]" style="padding-left: 6px">
-                                        <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)"
-                                            type="text" icon="fas fa-plus" pButton></button>
+                                        <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)" type="text"
+                                            icon="fas fa-plus" pButton></button>
                                     </div>
                                     <div *ngIf="!highlighted[i]" style="padding-left: 6px">
-                                        <button style="align-content: center;" label='Select a word from the FAQ to create an entity' type="text"
-                                            [disabled]="true" pButton></button>
+                                        <button style="align-content: center;" label='Select a word from the FAQ to create an entity' type="text" [disabled]="true"
+                                            pButton></button>
                                     </div>
                                 </div>
                             </div>
@@ -51,5 +51,8 @@
                 </div>
             </div>
         </p-card>
+        <div>
+            <button pButton style="width:18%; margin: 10px 41%" class="ui-button-rounded" label="Continue Cleaning" type="button" icon="fab fa-digital-ocean"></button>
+        </div>
     </div>
 </div>
