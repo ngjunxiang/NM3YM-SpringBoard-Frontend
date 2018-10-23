@@ -1,19 +1,33 @@
 :host >>> .ui-inputtext{
-    border:1px solid #d8d8d8;
     width: 100%;
 }
 
+:host >>> .ui-widget-content .ui-inputtext{
+    font-weight: 550;
+}
 
-
-input{
+:host >>> .ui-float-label{
     width: 100%;
+    font-weight: 550;
+}
+
+input {
+    width: 100%;
+}
+
+.expandContainer {
+    margin-left: 8.5%; 
+    margin-right: 2%; 
+    padding: 10px;
+    border: 1px solid #C7C7C7; 
+    border-radius: 4px;
 }
 
 hr {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     border: 0;
-    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /****************************
