@@ -18,6 +18,13 @@ export class CMFaqCreateComponent implements OnInit {
     loading = false;
     msgs: Message[] = [];
 
+    //UI Controls for PDF Reference
+    pdfPages: any[] = [];
+    includePDF: boolean;
+    selectedPage: number;
+    link: string;
+    referenceAdded = false;
+
     // UI Components
     faqForm: FormGroup;
 
@@ -37,10 +44,43 @@ export class CMFaqCreateComponent implements OnInit {
             answer: new FormControl('', Validators.required)
         });
 
+        for (let i = 0; i < 72; i++) {
+            this.pdfPages.push({
+                label: i,
+                value: i
+            })
+        }
+
         this.loading = false;
     }
 
+    addPDFReference() {
+        if (this.referenceAdded) {
+            //replace link
+            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            let answer = this.faqForm.get('answer').value.replace(this.link, newLink);
+            if (answer == this.faqForm.get('answer').value) {
+                answer = this.faqForm.get('answer').value + newLink
+                this.faqForm.get('answer').setValue(answer);
+                this.link = newLink;
+            } else {
+                this.link = newLink;
+                this.faqForm.get('answer').setValue(answer);
+            }
+        }
+
+        if (this.includePDF && !this.referenceAdded) {
+            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            let answer = this.faqForm.get('answer').value + this.link
+            this.faqForm.get('answer').setValue(answer);
+            this.referenceAdded = true;
+        }
+    }
+
     postFAQ() {
+        this.includePDF = false;
+        this.referenceAdded = false;
+        this.link = "";
 
         this.faqForm.get('question').markAsDirty();
         this.faqForm.get('answer').markAsDirty();

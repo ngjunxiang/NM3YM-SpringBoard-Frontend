@@ -17,6 +17,15 @@
                 </div>
                 <ngx-wig [formControl]="faqForm.controls.answer" [placeholder]="'Enter answer here'"></ngx-wig>
             </div>
+            <div style="align-items: center; display: flex; margin-bottom: 10px">
+                <div style="padding-top: 5px; margin-right: 15px">
+                    <p-checkbox name="groupname" binary="true" label="Reference to Reg51?" [(ngModel)]="includePDF"></p-checkbox>
+                </div>
+                <div *ngIf="includePDF" style="padding-top: 10px;">
+                    Refer to page:
+                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="addPDFReference()" editable="false" placeholder="Select a page"></p-dropdown>
+                </div>
+            </div>
             <div class="ui-g">
                 <div class="ui-g-12" style="padding-bottom: 0px; padding-right: 0px">
                     <button pButton style="width:18%; float:right" class="ui-button-success" label="Create FAQ" type="button" icon="far fa-save"

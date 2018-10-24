@@ -16,7 +16,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [
             { path: '/fo/faq/viewall', title: 'View All', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/fo/faq/myquestions', title: 'My Questions', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
-            { path: '/fo/faq/ask', title: 'Ask', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+            // { path: '/fo/faq/ask', title: 'Ask', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
         ]
     }
 ];

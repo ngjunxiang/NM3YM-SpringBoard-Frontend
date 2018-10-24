@@ -73,7 +73,7 @@ const routes: Routes = [
                 component: FOFaqMyQuestionsComponent,
                 data: {
                     title: 'Front Office',
-                    urls: [{ title: 'FAQ' }, { title: 'Ask' }]
+                    urls: [{ title: 'FAQ' }, { title: 'My Questions' }]
                 }, 
                 canActivate: [FOAuthGuard] 
             },

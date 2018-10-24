@@ -38,6 +38,12 @@ interface DashboardResults {
     error: string;
 }
 
+interface UncleanFAQ {
+    results: any;
+    numUnclean: number;
+    error: string;
+}
+
 interface Response {
     results: any;
     error: string;
@@ -69,9 +75,10 @@ export class CMService {
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
-    private retrieveUncleanedFAQURL = environment.host + '/app/faq/retrieve-unclean';
+
 
     // Model Cleaning Endpoints 
+    private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
     private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
 
     // Notifications Endpoints
@@ -444,7 +451,7 @@ export class CMService {
 
         const postData = Object.assign(this.authService.authItems);
 
-        return this.http.post<Response>(this.retrieveUncleanedFAQURL, postData, httpOptions)
+        return this.http.post<UncleanFAQ>(this.retrieveUncleanedFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

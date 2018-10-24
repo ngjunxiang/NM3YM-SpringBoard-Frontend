@@ -162,6 +162,9 @@ export class CMFaqManageComponent implements OnInit {
     changeTab(event) {
         this.loading = true;
         this.faqs = [];
+        this.includePDF = false;
+        this.referenceAdded = false;
+        this.link = "";
 
         if (event.index === 0) {
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
@@ -313,6 +316,9 @@ export class CMFaqManageComponent implements OnInit {
         }
         this.showAnsEditArea = false;
         this.historyDialog = false;
+        this.includePDF = false;
+        this.referenceAdded = false;
+        this.link = "";
     }
 
     deleteAnsweredQuestion(index: number) {
@@ -484,7 +490,7 @@ export class CMFaqManageComponent implements OnInit {
     editPDFReference(){
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('editedAnswer').value.replace(this.link, newLink);
             if (answer == this.answerForm.get('editedAnswer').value) {
                 answer = this.answerForm.get('editedAnswer').value + newLink
@@ -497,7 +503,7 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('editedAnswer').value + this.link
             this.answerForm.get('editedAnswer').setValue(answer);
             this.referenceAdded = true;
@@ -507,7 +513,7 @@ export class CMFaqManageComponent implements OnInit {
     addPDFReference() {
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('addedAnswer').value.replace(this.link, newLink);
             if (answer == this.answerForm.get('addedAnswer').value) {
                 answer = this.answerForm.get('addedAnswer').value + newLink
@@ -520,7 +526,7 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('addedAnswer').value + this.link
             this.answerForm.get('addedAnswer').setValue(answer);
             this.referenceAdded = true;

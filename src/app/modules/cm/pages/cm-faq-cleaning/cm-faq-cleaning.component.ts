@@ -31,9 +31,11 @@ export class CMFaqCleaningComponent implements OnInit {
     addEntity = false;
 
     // UI Components
+
     faqs: any[];
-    intents: intent[];
     faqTrainerForm: FormGroup;
+    intents: intent[];
+    numUncleaned = 0;
 
     constructor(
         private cmService: CMService,
@@ -58,7 +60,8 @@ export class CMFaqCleaningComponent implements OnInit {
             }
 
             if (res.results) {
-                this.faqs = res.results
+                this.faqs = res.results;
+                this.numUncleaned = res.numUnclean;
             }
 
             this.createForm();

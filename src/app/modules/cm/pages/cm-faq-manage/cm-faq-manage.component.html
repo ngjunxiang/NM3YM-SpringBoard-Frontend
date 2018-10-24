@@ -95,7 +95,7 @@
                                                 </div>
                                                 <div *ngIf="includePDF" style="padding-top: 10px;">
                                                     Refer to page:
-                                                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="addPDFReference()" editable="true" placeholder="Select a page"></p-dropdown>
+                                                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="addPDFReference()" editable="false" placeholder="Select a page"></p-dropdown>
                                                 </div>
                                             </div>
                                             <div class="ui-g" style="padding-top: 1%">
@@ -179,7 +179,7 @@
                                                 </div>
                                                 <div *ngIf="includePDF" style="padding-top: 10px;">
                                                     Refer to page:
-                                                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="editPDFReference()" editable="true" placeholder="Select a page"></p-dropdown>
+                                                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="editPDFReference()" editable="false" placeholder="Select a page"></p-dropdown>
                                                 </div>
                                             </div>
                                         </ng-container>
