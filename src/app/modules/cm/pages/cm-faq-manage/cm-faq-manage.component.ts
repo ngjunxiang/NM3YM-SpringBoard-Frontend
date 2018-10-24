@@ -468,22 +468,6 @@ export class CMFaqManageComponent implements OnInit {
     showHistoryDialog() {
         this.historyDialog = true;
         console.log(this.faqs[this.currentIndex].prevAnswer)
-
-        /*
-         this.foService.increaseView().subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
- 
-        }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
-            });
-        });
-        */
     }
 
     showUnansweredDialog(index) {

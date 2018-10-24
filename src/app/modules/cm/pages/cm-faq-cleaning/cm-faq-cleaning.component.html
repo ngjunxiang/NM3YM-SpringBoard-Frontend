@@ -11,37 +11,61 @@
                         <div [formGroupName]="i">
                             <div style="margin-bottom: 5px">
                                 <div class="ui-g">
-                                    <div class="ui-g-4" style="display: flex">
-                                        <button class="ui-button-secondary" style="align-content: center; margin-right: 14px" (click)="expandFAQ(i)" type="text"
-                                            icon="fas fa-plus" pButton></button>
-                                        <input type="text" class="form-control" formControlName="intent" placeholder="Intent" pInputText>
-                                    </div>
-                                    <div class="ui-g-8">
-                                        <input type="text" class="form-control" formControlName="question" (mouseup)="showHighlightedText(i)" pInputText>
+                                    <div class="ui-g-12" style="display: flex; margin: 10px">
+                                        <ng-container *ngIf="!expand[i]">
+                                            <button class="ui-button-secondary" style="align-content: center; margin-right: 14px" (click)="expandFAQ(i)" type="text"
+                                                icon="fas fa-plus" pButton></button>
+                                        </ng-container>
+                                        <ng-container *ngIf="expand[i]">
+                                            <button class="ui-button-secondary" style="align-content: center; margin-right: 14px" (click)="expandFAQ(i)" type="text"
+                                                icon="fas fa-minus" pButton></button>
+                                        </ng-container>
+                                        <span class="ui-float-label">
+                                            <input type="text" id="float-input" class="form-control" formControlName="question" (mouseup)="showHighlightedText(i)" pInputText>
+                                            <label for="float-input">Question:</label>
+                                        </span>
                                     </div>
                                 </div>
-                                <div *ngIf="expand[i]" style="margin-left: 46px">
+                                <div *ngIf="expand[i]" class="expandContainer" style="margin-bottom: 15px">
+                                    <div style="margin-bottom: 20px">
+                                        <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                            Intent:
+                                        </div>
+                                        <p-dropdown [options]="intents" formControlName="intent" editable="true" placeholder="Select or create an intent"></p-dropdown>
+                                    </div>
+                                    <ng-container *ngIf="faqTrainerForm.get('questions').get(i+'').get('entities').length > 0">
+                                        <hr>
+                                    </ng-container>
                                     <div formArrayName="entities">
                                         <ng-container *ngFor="let entity of faqTrainerForm.get('questions').get(i+'').get('entities').controls; let j=index">
-                                            <div *ngIf="addEntity" class="ui-g" [formGroupName]="j">
-                                                <div class="ui-g-4">
-                                                    <input type="text" class="form-control" formControlName="entity" placeholder="Entity" pInputText>
+                                            <div *ngIf="addEntity" class="ui-g" [formGroupName]="j" style="margin-bottom: 10px;">
+                                                <div class="ui-g-4" style="padding-left: 0px">
+                                                    <span class="ui-float-label">
+                                                        <input type="text" id="float-input" class="form-control" formControlName="entity" pInputText>
+                                                        <label for="float-input">Entity:</label>
+                                                    </span>
                                                 </div>
                                                 <div class="ui-g-4">
-                                                    <input type="text" class="form-control" formControlName="value" placeholder="value" pInputText>
+                                                    <span class="ui-float-label">
+                                                        <input type="text" id="float-input" class="form-control" formControlName="value" pInputText>
+                                                        <label for="float-input">Synonym:</label>
+                                                    </span>
                                                 </div>
                                                 <div class="ui-g-4">
-                                                    <input type="text" class="form-control" formControlName="word" placeholder="Word" pInputText>
+                                                    <span class="ui-float-label">
+                                                        <input type="text" id="float-input" class="form-control" formControlName="word" pInputText>
+                                                        <label for="float-input">Selected Word:</label>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </ng-container>
                                     </div>
-                                    <div *ngIf="highlighted[i]" style="padding-left: 6px">
+                                    <div *ngIf="highlighted[i]" style="padding-left: 0px">
                                         <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)" type="text"
                                             icon="fas fa-plus" pButton></button>
                                     </div>
-                                    <div *ngIf="!highlighted[i]" style="padding-left: 6px">
-                                        <button style="align-content: center;" label='Select a word from the FAQ to create an entity' type="text" [disabled]="true"
+                                    <div *ngIf="!highlighted[i]" style="padding-left: 0px">
+                                        <button style="align-content: center;" label='Select a word from the question to create an entity' type="text" [disabled]="true"
                                             pButton></button>
                                     </div>
                                 </div>

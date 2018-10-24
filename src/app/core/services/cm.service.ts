@@ -32,8 +32,8 @@ interface ChecklistName {
 }
 
 interface DashboardResults {
-    results: any; 
-    updatedChecklists: any; 
+    results: any;
+    updatedChecklists: any;
     mostRecentQuestions: any;
     error: string;
 }
@@ -61,7 +61,6 @@ export class CMService {
     private updateChecklistURL = environment.host + '/app/cm/update-checklist';
     private retrieveDeleteChecklistURL = environment.host + '/app/cm/manage-checklist';
 
-
     // FAQ Endpoints
     private createFAQURL = environment.host + '/app/faq/add-CMQ';
     private retrieveUnansweredFAQURL = environment.host + '/app/faq/retrieve-UQ';
@@ -71,6 +70,9 @@ export class CMService {
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
     private retrieveUncleanedFAQURL = environment.host + '/app/faq/retrieve-unclean';
+
+    // Model Cleaning Endpoints 
+    private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
 
     // Notifications Endpoints
     private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
@@ -251,7 +253,7 @@ export class CMService {
             );
     }
 
-    createFAQ(question, answer){
+    createFAQ(question, answer) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -443,6 +445,22 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems);
 
         return this.http.post<Response>(this.retrieveUncleanedFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveIntents() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveIntentsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
