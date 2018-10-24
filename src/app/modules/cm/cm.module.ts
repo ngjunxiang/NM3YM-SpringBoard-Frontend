@@ -45,6 +45,7 @@ import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.compon
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
+import { CmFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -97,7 +98,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMUploadAgmtComponent,
         CMFaqManageComponent,
         CMFaqCreateComponent,
-        CMFaqCleaningComponent
+        CMFaqCleaningComponent,
+        CmFaqSynonymComponent
     ],
     providers: [
         {

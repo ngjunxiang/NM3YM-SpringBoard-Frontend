@@ -79,7 +79,9 @@ export class CMService {
 
     // Model Cleaning Endpoints 
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
-    private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
+    private retrieveIntentsURL = environment.host + '/app/train/update-synonyms';
+    private retrieveSynonymsURL = environment.host + '/app/train/retrieve-synonyms';
+    private updateSynonymsURL = environment.host + '/app/train/retrieve-intents';
 
     // Notifications Endpoints
     private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
@@ -468,6 +470,39 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems);
 
         return this.http.post<Response>(this.retrieveIntentsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retriveSynonyms() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveSynonymsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateSynonyms(Synonyms) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        //add here
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.updateSynonymsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

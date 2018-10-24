@@ -5,7 +5,6 @@ import { Message, MenuItem } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 
 @Component({
     selector: 'cm-faq-create',

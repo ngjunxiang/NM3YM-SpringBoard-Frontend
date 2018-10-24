@@ -5,8 +5,6 @@ import { Message, MenuItem } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
-import { AdminService } from '../../../../core/services/admin.service';
 
 interface intent {
     label: string,
@@ -19,7 +17,6 @@ interface intent {
     styleUrls: ['./cm-faq-cleaning.component.css']
 })
 
-
 export class CMFaqCleaningComponent implements OnInit {
 
     // UI Control
@@ -31,7 +28,6 @@ export class CMFaqCleaningComponent implements OnInit {
     addEntity = false;
 
     // UI Components
-
     faqs: any[];
     faqTrainerForm: FormGroup;
     intents: intent[];

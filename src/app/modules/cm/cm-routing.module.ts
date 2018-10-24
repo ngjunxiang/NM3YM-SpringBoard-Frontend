@@ -12,6 +12,7 @@ import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checkli
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
+import { CmFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
 import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
 
 
@@ -94,6 +95,15 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'FAQ' }, { title: 'Clean Data' }]
+                }, 
+                canActivate: [CMAuthGuard] 
+            },
+            {
+                path: 'faq/synonym',
+                component: CmFaqSynonymComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'FAQ' }, { title: 'Synonyms' }]
                 }, 
                 canActivate: [CMAuthGuard] 
             },

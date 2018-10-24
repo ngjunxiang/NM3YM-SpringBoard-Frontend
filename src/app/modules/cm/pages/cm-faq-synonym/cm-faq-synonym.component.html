@@ -1,0 +1,27 @@
+<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+
+<div *ngIf="!loading">
+  <p-card>
+    <h4>Manage Synonyms</h4>
+    <div [formGroup]="synonymForm">
+      <div formArrayName="form">
+        <ng-container *ngFor="let syn of synonymForm.get('form').controls; let i=index">
+          <div [formGroupName]="i">
+            <div class="ui-g" style="padding-bottom: 10px">
+              <div class="ui-g-3">
+                <span class="ui-float-label">
+                  <input type="text" id="float-input" class="form-control" formControlName="value" [disabled]="true" pInputText>
+                  <label for="float-input">Value:</label>
+                </span>
+              </div>
+              <div class="ui-g-9">
+                <p-chips formControlName="synonyms"></p-chips>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </p-card>
+</div>
