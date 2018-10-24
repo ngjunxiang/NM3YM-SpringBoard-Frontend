@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { FOService } from 'src/app/core/services/fo.service';
+
 @Component({
     selector: 'fo-view-pdf',
     templateUrl: './fo-view-pdf.component.html',
@@ -8,12 +10,18 @@ import { Component, OnInit } from '@angular/core';
 
 export class FOViewPDFComponent implements OnInit {
 
+    loading = false;
     page: number = 2;
-    pdfSrc: string = 'assets/pdf/reg51.pdf';
+    pdfSrc: string;
 
-    constructor() { }
+    constructor(
+        private foService: FOService
+    ) { }
 
     ngOnInit() {
+        this.loading = true;
+        this.pdfSrc = this.foService.pdfUrl;
+        this.loading = false;
     }
 
 }

@@ -11,7 +11,6 @@ interface Response {
     error: string;
 }
 
-
 interface Checklist {
     clID: string;
     name: string;
@@ -91,10 +90,17 @@ export class FOService {
     private createUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
     private increaseViewURL = environment.host + '/app/faq/increment-QNAViews';
 
+    // PDF URL
+    private pdfURL = environment.host + '/assets/pdf/reg51.pdf';
+
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
+
+    get pdfUrl() {
+        return this.pdfURL;
+    }
 
     retrieveDashboardStats() {
         const httpOptions = {

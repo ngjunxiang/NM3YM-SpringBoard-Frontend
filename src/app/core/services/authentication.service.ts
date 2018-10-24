@@ -33,8 +33,8 @@ export class AuthenticationService {
     private authURL = environment.host + '/app/authenticate';
     private retrieveNameURL = environment.host + '/app/retrieve-user-details';
 
-    userDetails;
-
+    userDetails; 
+    
     constructor(private http: HttpClient) { }
 
     authenticate(userType): Promise<any> {
