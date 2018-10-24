@@ -31,6 +31,13 @@ export class CMFaqManageComponent implements OnInit {
     disableLoadMore = false;
     LoadMoreClicks: number;
 
+    //UI Controls for PDF Reference
+    pdfPages: any[] = [];
+    includePDF: boolean;
+    selectedPage: number;
+    link: string;
+    referenceAdded = false;
+
     // UI Components
     faqs: any[];
     answerForm: FormGroup;
@@ -61,6 +68,14 @@ export class CMFaqManageComponent implements OnInit {
 
         if (this.faqs.length <= this.LoadMoreClicks) {
             this.disableLoadMore = true;
+        }
+
+        //initialize PDF pages
+        for (let i = 0; i < 72; i++) {
+            this.pdfPages.push({
+                label: i,
+                value: i
+            })
         }
     }
 
@@ -131,7 +146,6 @@ export class CMFaqManageComponent implements OnInit {
                             CMusername: faq.CMusername,
                             prevAnswer: faq.prevAnswer,
                             selected: selected,
-
                         });
                     }
                 }
@@ -382,6 +396,9 @@ export class CMFaqManageComponent implements OnInit {
 
     saveAnsweredQuestion(index: number) {
         this.answerForm.controls.editedAnswer.markAsDirty();
+        this.includePDF = false;
+        this.referenceAdded = false;
+        this.link = "";
 
         if (this.answerForm.controls.editedAnswer.invalid) {
             this.msgs.push({
@@ -421,7 +438,11 @@ export class CMFaqManageComponent implements OnInit {
     saveUnansweredQuestion(index: number) {
         this.answerForm.controls.addedAnswer.markAsDirty();
         this.unansweredDialog = false;
-
+        this.includePDF = false;
+        this.referenceAdded = false;
+        this.link = "";
+        
+        
         if (this.answerForm.controls.addedAnswer.invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
@@ -460,6 +481,52 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
+    editPDFReference(){
+        if (this.referenceAdded) {
+            //replace link
+            let newLink = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            let answer = this.answerForm.get('editedAnswer').value.replace(this.link, newLink);
+            if (answer == this.answerForm.get('editedAnswer').value) {
+                answer = this.answerForm.get('editedAnswer').value + newLink
+                this.answerForm.get('editedAnswer').setValue(answer);
+                this.link = newLink;
+            } else {
+                this.link = newLink;
+                this.answerForm.get('editedAnswer').setValue(answer);
+            }
+        }
+
+        if (this.includePDF && !this.referenceAdded) {
+            this.link = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            let answer = this.answerForm.get('editedAnswer').value + this.link
+            this.answerForm.get('editedAnswer').setValue(answer);
+            this.referenceAdded = true;
+        }
+    }
+
+    addPDFReference() {
+        if (this.referenceAdded) {
+            //replace link
+            let newLink = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            let answer = this.answerForm.get('addedAnswer').value.replace(this.link, newLink);
+            if (answer == this.answerForm.get('addedAnswer').value) {
+                answer = this.answerForm.get('addedAnswer').value + newLink
+                this.answerForm.get('addedAnswer').setValue(answer);
+                this.link = newLink;
+            } else {
+                this.link = newLink;
+                this.answerForm.get('addedAnswer').setValue(answer);
+            }
+        }
+
+        if (this.includePDF && !this.referenceAdded) {
+            this.link = "<div><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a><div>"
+            let answer = this.answerForm.get('addedAnswer').value + this.link
+            this.answerForm.get('addedAnswer').setValue(answer);
+            this.referenceAdded = true;
+        }
+    }
+
     showAnsweredDialog(index) {
         this.currentIndex = index;
         this.answeredDialog = true;
@@ -467,7 +534,6 @@ export class CMFaqManageComponent implements OnInit {
 
     showHistoryDialog() {
         this.historyDialog = true;
-        console.log(this.faqs[this.currentIndex].prevAnswer)
     }
 
     showUnansweredDialog(index) {
@@ -483,7 +549,7 @@ export class CMFaqManageComponent implements OnInit {
         }
     }
 
-    checkLoadMore(){
+    checkLoadMore() {
         this.disableLoadMore = false;
         this.LoadMoreClicks = 10;
 

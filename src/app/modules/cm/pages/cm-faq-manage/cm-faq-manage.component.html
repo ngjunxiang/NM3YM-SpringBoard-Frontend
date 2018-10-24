@@ -84,11 +84,20 @@
                                         </div>
                                     </ng-container>
                                     <ng-container *ngIf="showAnsEditArea">
-                                        <div class="ui-g-8">
+                                        <div class="ui-g-10">
                                             <div style="font-size: 12px; font-weight: 600;">
                                                 <i>Answer:</i>
                                             </div>
                                             <ngx-wig [formControl]="answerForm.controls.addedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                            <div style="align-items: center; display: flex; margin-bottom: 10px">
+                                                <div style="padding-top: 5px; margin-right: 15px">
+                                                    <p-checkbox name="groupname" binary="true" label="Reference to Reg51?" [(ngModel)]="includePDF"></p-checkbox>
+                                                </div>
+                                                <div *ngIf="includePDF" style="padding-top: 10px;">
+                                                    Refer to page:
+                                                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="addPDFReference()" editable="true" placeholder="Select a page"></p-dropdown>
+                                                </div>
+                                            </div>
                                             <div class="ui-g" style="padding-top: 1%">
                                                 <button pButton style="width:18%" class="ui-button-success" label="Save Answer" type="button" icon="far fa-save" (click)="saveUnansweredQuestion(currentIndex)"
                                                     [disabled]="processing"></button>
@@ -164,6 +173,15 @@
                                         </ng-container>
                                         <ng-container *ngIf="showAnsEditArea">
                                             <ngx-wig [formControl]="answerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
+                                            <div style="align-items: center; display: flex; margin-bottom: 10px">
+                                                <div style="padding-top: 5px; margin-right: 15px">
+                                                    <p-checkbox name="groupname" binary="true" label="Reference to Reg51?" [(ngModel)]="includePDF"></p-checkbox>
+                                                </div>
+                                                <div *ngIf="includePDF" style="padding-top: 10px;">
+                                                    Refer to page:
+                                                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="editPDFReference()" editable="true" placeholder="Select a page"></p-dropdown>
+                                                </div>
+                                            </div>
                                         </ng-container>
                                     </div>
 
@@ -190,7 +208,7 @@
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="showAnsEditArea">
-                                    <div class="ui-g" style="padding-top: 1%">
+                                    <div class="ui-g" style="padding-top: 0px">
                                         <button pButton style="width:18%" class="ui-button-success" label="Save Answer" type="button" icon="far fa-save" (click)="saveAnsweredQuestion(currentIndex)"
                                             [disabled]="processing"></button>
                                         <button pButton style="width:18%; margin-left: 1%" class="ui-button-danger" label="Cancel" type="button" icon="fa fa-times"

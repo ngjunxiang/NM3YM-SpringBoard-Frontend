@@ -67,7 +67,7 @@ export class CMFaqCreateComponent implements OnInit {
 
                 if (res.results) {
                     this.msgs.push({
-                        severity: 'success', summary: 'Success', detail: 'FAQ has been created'
+                        severity: 'success', summary: 'Success', detail: 'FAQ has been created. You will be redirected shortly.'
                     });
                     this.faqForm.get("question").setValue("")
                     this.faqForm.get("answer").setValue("")

@@ -37,7 +37,14 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
     ngOnInit() {
         this.loading = true;
-        this.activeTab = 0;
+        this.route.queryParams.subscribe(params => {
+            this.activeTab = params['activeTab'];
+        });
+
+        if (!this.activeTab) {
+            this.activeTab = 0;
+            
+        }
         this.questionForm = this.fb.group({
             question: new FormControl('', Validators.required)
         });

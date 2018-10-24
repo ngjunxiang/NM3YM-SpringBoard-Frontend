@@ -161,6 +161,13 @@ export class FOFaqViewAllComponent implements OnInit {
                 }
 
                 if (res.results) {
+                    setTimeout(() => {
+                        this.router.navigate(['fo/faq/myquestions'], {
+                            queryParams: {
+                                activeTab: 1
+                            }
+                        });
+                    }, 1500);
                     this.msgs.push({
                         severity: 'success', summary: 'Success', detail: 'Your question has been posted'
                     });
@@ -176,7 +183,6 @@ export class FOFaqViewAllComponent implements OnInit {
             this.hideAskDialog()
             return;
         }
-
         this.msgs.push({
             severity: 'error', summary: 'Error', detail: 'Please fill in the question field'
         });

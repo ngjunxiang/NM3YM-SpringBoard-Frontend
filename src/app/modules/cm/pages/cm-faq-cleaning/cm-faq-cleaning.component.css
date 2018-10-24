@@ -1,3 +1,18 @@
+:host >>> .stats.ui-card{
+    width: 18%;
+    height: auto;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    margin-left: 0px;
+}
+
+:host >>> .stats.ui-card .ui-card-body{
+    padding: 5px;
+}
+
+
 :host >>> .ui-inputtext{
     width: 100%;
 }
@@ -29,6 +44,14 @@ hr {
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+/***********************************
+  Style of invalid and dirty inputs 
+ **********************************/
+
+ :host >>> .ui-inputtext.ng-dirty.ng-invalid,
+ :host >>>  p-dropdown.ng-dirty.ng-invalid > .ui-dropdown > .ui-dropdown-label {
+     background-color: #f8bdc3;
+ } 
 
 /****************************
  * CONTINUE CLEANING BUTTON *

@@ -30,19 +30,20 @@
                                             {{faqs[i].question}}
                                         </div>
                                         <div style="font-size: 12px; font-weight: 600">
-                                            <p>Posted on: 19/10/2018</p>
+                                            <p>Posted on: {{faqs[i].dateAsked}}</p>
                                         </div>
                                     </div>
                                     <div class="ui-g-3">
                                         <div style="float: right; font-size: 12px; font-weight: 400">
-                                            100 views
+                                            {{faqs[i].views}} views
                                         </div>
                                     </div>
                                 </div>
                             </p-card>
                         </ng-template>
                         <p-footer>
-                            <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton label="Load More"></button>
+                            <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton
+                                label="Load More"></button>
                         </p-footer>
                     </p-dataScroller>
 
@@ -57,7 +58,8 @@
                                 </div>
                                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                                     <!-- <p>Posted by: Jarrett Goh</p> -->
-                                    <p>Posted on: 19/10/2018</p>
+                                    <p>Posted on:</p>
+                                    <p>{{faqs[currentIndex].dateAsked}}</p>
                                 </div>
                             </div>
                             <hr>
@@ -67,16 +69,17 @@
                             </div>
                             <div class="ui-g">
                                 <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
-                                    {{faqs[currentIndex].answer}}
+                                    <div [innerHTML]="faqs[currentIndex].answer"></div>
                                 </div>
 
                                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                                     <!-- <p>Answered by: Randy Lai</p> -->
-                                    <p>Answered on: 20/10/2018</p>
+                                    <p>Answered on:</p>
+                                    <p>{{faqs[currentIndex].dateAnswered}}</p>
                                 </div>
                             </div>
                             <div style="float: right">
-                                100 views
+                                {{faqs[currentIndex].views}} views
                             </div>
                         </p-dialog>
                     </ng-container>
@@ -99,19 +102,20 @@
                                             {{faqs[i].question}}
                                         </div>
                                         <div style="font-size: 12px; font-weight: 600">
-                                            <p>Posted on: 19/10/2018</p>
+                                            <p>Posted on: {{faqs[i].dateAsked}}</p>
                                         </div>
                                     </div>
                                     <div class="ui-g-3">
                                         <div style="float: right; font-size: 12px; font-weight: 400">
-                                            100 views
+                                            {{faqs[i].views}} views
                                         </div>
                                     </div>
                                 </div>
                             </p-card>
                         </ng-template>
                         <p-footer>
-                            <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton label="Load More"></button>
+                            <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton
+                                label="Load More"></button>
                         </p-footer>
                     </p-dataScroller>
                 </div>

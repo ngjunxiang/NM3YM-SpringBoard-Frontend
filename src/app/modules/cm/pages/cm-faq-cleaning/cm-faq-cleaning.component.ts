@@ -133,6 +133,12 @@ export class CMFaqCleaningComponent implements OnInit {
         }
     }
 
+    expandInvalidFAQ(invalidFAQs){
+        invalidFAQs.forEach(index => {
+            this.expand[index] = true;
+        })
+    }
+
     showHighlightedText(index) {
         let highlightedText = "";
 
@@ -151,11 +157,11 @@ export class CMFaqCleaningComponent implements OnInit {
         this.faqTrainerForm.get('questions').get(index + '').get('intent').markAsDirty;
         if (this.faqTrainerForm.get('questions').get(index + '').get('intent').invalid) {
             this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please select or create an intent'
+                severity: 'info', summary: 'Hold On!', detail: 'Please select or create an intent'
             });
             return;
         }
-        
+
         let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(index).get('entities') as FormArray
         let entityLength = entityControl.length;
         let prevEntityIndex = entityLength - 1
@@ -168,7 +174,7 @@ export class CMFaqCleaningComponent implements OnInit {
             if (this.faqTrainerForm.get('questions').get(index + '').get('entities').get(prevEntityIndex + '').get('value').invalid ||
                 this.faqTrainerForm.get('questions').get(index + '').get('entities').get(prevEntityIndex + '').get('entity').invalid) {
                 this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: 'Please fill all fields in the previous entity'
+                    severity: 'info', summary: 'Hold On!', detail: 'Please fill all fields in the previous entity'
                 });
                 return;
             }
@@ -189,7 +195,68 @@ export class CMFaqCleaningComponent implements OnInit {
         this.addEntity = true;
     }
 
-    returnCleanedFAQ() {
+    submitCleanedFAQ() {
+        let control = <FormArray>this.faqTrainerForm['controls'].questions;
 
+        //Invalid FormControlName Controls
+        let invalidCount = 0;
+        let emptyEntityCount = 0;
+        let unfilledFAQ = [];
+
+        //Check for dirty and invalid FormControlName
+        for (let i = 0; i < this.faqs.length; i++) {
+            this.faqTrainerForm.get('questions').get(i + '').get('intent').markAsDirty();
+            if (this.faqTrainerForm.get('questions').get(i + '').get('intent').invalid || this.faqTrainerForm.get('questions').get(i + '').get('question').invalid) {
+                invalidCount++;
+            }
+
+            let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(i).get('entities') as FormArray
+            let entityLength = entityControl.length;
+
+            if (entityLength == 0) {
+                emptyEntityCount++;
+            }
+
+            for (let j = 0; j < entityLength; j++) {
+                entityControl.get(j + '').get('entity').markAsDirty();
+                entityControl.get(j + '').get('value').markAsDirty();
+                entityControl.get(j + '').get('word').markAsDirty();
+                if (entityControl.get(j + '').get('entity').invalid || entityControl.get(j + '').get('value').invalid || entityControl.get(j + '').get('word').invalid) {
+                    invalidCount++;
+                }
+            }
+
+            if(emptyEntityCount > 0 || invalidCount > 0){
+                unfilledFAQ.push(i);
+            }
+        }
+
+        if (invalidCount > 0 || emptyEntityCount > 0) {
+            this.expandInvalidFAQ(unfilledFAQ);
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please create intents and entities for all FAQ!'
+            });
+            return;
+        }
+
+        //storing the values into faqs 
+        for (let i = 0; i < this.faqs.length; i++) {
+            this.faqs[i].question = this.faqTrainerForm.get('questions').get(i + '').get('question').value;
+            this.faqs[i].intent = this.faqTrainerForm.get('questions').get(i + '').get('intent').value;
+            this.faqs[i].entities = [];
+
+
+            let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(i).get('entities') as FormArray
+            let entityLength = entityControl.length;
+
+            for (let j = 0; j < entityLength; j++) {
+                this.faqs[i].entities.push({
+                    entity: entityControl.get(j + '').get('entity').value,
+                    value: entityControl.get(j + '').get('value').value,
+                    word: entityControl.get(j + '').get('word').value
+                })
+            }
+        };
     }
 }
+
