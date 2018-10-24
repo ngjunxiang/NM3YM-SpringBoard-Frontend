@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
     templateUrl: './cm-faq-create.component.html',
     styleUrls: ['./cm-faq-create.component.css']
 })
+
 export class CMFaqCreateComponent implements OnInit {
 
     // UI Control
@@ -47,7 +48,7 @@ export class CMFaqCreateComponent implements OnInit {
             this.pdfPages.push({
                 label: i,
                 value: i
-            })
+            });
         }
 
         this.loading = false;
@@ -56,10 +57,10 @@ export class CMFaqCreateComponent implements OnInit {
     addPDFReference() {
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
             let answer = this.faqForm.get('answer').value.replace(this.link, newLink);
             if (answer == this.faqForm.get('answer').value) {
-                answer = this.faqForm.get('answer').value + newLink
+                answer = this.faqForm.get('answer').value + newLink;
                 this.faqForm.get('answer').setValue(answer);
                 this.link = newLink;
             } else {
@@ -69,8 +70,8 @@ export class CMFaqCreateComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
-            let answer = this.faqForm.get('answer').value + this.link
+            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
+            let answer = this.faqForm.get('answer').value + this.link;
             this.faqForm.get('answer').setValue(answer);
             this.referenceAdded = true;
         }
@@ -91,8 +92,8 @@ export class CMFaqCreateComponent implements OnInit {
             return;
         }
 
-        let answer = this.faqForm.get("question").value
-        let question = this.faqForm.get("answer").value
+        let answer = this.faqForm.get("question").value;
+        let question = this.faqForm.get("answer").value;
         if (answer !== '' && question !== '') {
             this.loading = true;
             this.cmService.createFAQ(answer, question).subscribe(res => {
@@ -108,8 +109,8 @@ export class CMFaqCreateComponent implements OnInit {
                     this.msgs.push({
                         severity: 'success', summary: 'Success', detail: 'FAQ has been created. You will be redirected shortly.'
                     });
-                    this.faqForm.get("question").setValue("")
-                    this.faqForm.get("answer").setValue("")
+                    this.faqForm.get("question").setValue("");
+                    this.faqForm.get("answer").setValue("");
 
 
                     setTimeout(() => {
@@ -129,7 +130,6 @@ export class CMFaqCreateComponent implements OnInit {
 
                 this.loading = false;
             });
-            return;
         }
     }
 }

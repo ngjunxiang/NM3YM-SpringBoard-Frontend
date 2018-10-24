@@ -75,7 +75,7 @@ export class CMFaqManageComponent implements OnInit {
             this.pdfPages.push({
                 label: i,
                 value: i
-            })
+            });
         }
     }
 
@@ -187,7 +187,7 @@ export class CMFaqManageComponent implements OnInit {
                         });
                     });
 
-                    this.checkLoadMore()
+                    this.checkLoadMore();
                 }
 
                 this.loading = false;
@@ -210,7 +210,6 @@ export class CMFaqManageComponent implements OnInit {
                 }
 
                 if (res.results) {
-
                     for (let i = 0; i < res.results.length; i++) {
                         let faq = res.results[i];
                         let selected = false;
@@ -230,7 +229,8 @@ export class CMFaqManageComponent implements OnInit {
                             prevAnswer: faq.prevAnswer,
                         });
                     }
-                    this.checkLoadMore()
+
+                    this.checkLoadMore();
                 }
                 this.loading = false;
             }, error => {
@@ -280,7 +280,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.faqs[this.currentIndex].question = this.questionForm.get('refinedQns').value
+        this.faqs[this.currentIndex].question = this.questionForm.get('refinedQns').value;
 
         this.hideEditQuestionArea();
     }
@@ -314,6 +314,7 @@ export class CMFaqManageComponent implements OnInit {
             this.answerForm.get('addedAnswer').setValue('');
             this.answerForm.get('editedAnswer').setValue('');
         }
+
         this.showAnsEditArea = false;
         this.historyDialog = false;
         this.includePDF = false;
@@ -448,7 +449,6 @@ export class CMFaqManageComponent implements OnInit {
         this.referenceAdded = false;
         this.link = "";
         
-        
         if (this.answerForm.controls.addedAnswer.invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
@@ -475,7 +475,6 @@ export class CMFaqManageComponent implements OnInit {
 
             this.hideAnsEditArea();
             this.unansweredDialog = false;
-
             this.processing = false;
         }, error => {
             this.msgs.push({

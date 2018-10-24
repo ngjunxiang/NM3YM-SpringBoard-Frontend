@@ -132,10 +132,10 @@ export class CMFaqCleaningComponent implements OnInit {
         }
     }
 
-    expandInvalidFAQ(invalidFAQs){
+    expandInvalidFAQ(invalidFAQs) {
         invalidFAQs.forEach(index => {
             this.expand[index] = true;
-        })
+        });
     }
 
     showHighlightedText(index) {
@@ -161,9 +161,9 @@ export class CMFaqCleaningComponent implements OnInit {
             return;
         }
 
-        let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(index).get('entities') as FormArray
+        let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(index).get('entities') as FormArray;
         let entityLength = entityControl.length;
-        let prevEntityIndex = entityLength - 1
+        let prevEntityIndex = entityLength - 1;
 
         //Checking if the previous entity is valid with all forms filled. 
         if (entityLength > 0) {
@@ -185,7 +185,7 @@ export class CMFaqCleaningComponent implements OnInit {
                 value: new FormControl('', Validators.required),
                 word: new FormControl({ value: '', disabled: true }, Validators.required),
             })
-        )
+        );
 
         let entityIndex = entityControl.length - 1;
 
@@ -195,8 +195,6 @@ export class CMFaqCleaningComponent implements OnInit {
     }
 
     submitCleanedFAQ() {
-        let control = <FormArray>this.faqTrainerForm['controls'].questions;
-
         //Invalid FormControlName Controls
         let invalidCount = 0;
         let emptyEntityCount = 0;
@@ -225,7 +223,7 @@ export class CMFaqCleaningComponent implements OnInit {
                 }
             }
 
-            if(emptyEntityCount > 0 || invalidCount > 0){
+            if (emptyEntityCount > 0 || invalidCount > 0) {
                 unfilledFAQ.push(i);
             }
         }
@@ -245,7 +243,7 @@ export class CMFaqCleaningComponent implements OnInit {
             this.faqs[i].entities = [];
 
 
-            let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(i).get('entities') as FormArray
+            let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(i).get('entities') as FormArray;
             let entityLength = entityControl.length;
 
             for (let j = 0; j < entityLength; j++) {
@@ -253,7 +251,7 @@ export class CMFaqCleaningComponent implements OnInit {
                     entity: entityControl.get(j + '').get('entity').value,
                     value: entityControl.get(j + '').get('value').value,
                     word: entityControl.get(j + '').get('word').value
-                })
+                });
             }
         };
     }
