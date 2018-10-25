@@ -75,13 +75,16 @@ export class CMService {
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
+    private retrieveFAQBySortURL = environment.host + '/app/faq/retrieve-allAQBy';
+    private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
+    private retrieveFAQURL = environment.host + '/app/faq/retrieve';
 
 
     // Model Cleaning Endpoints 
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
-    private retrieveIntentsURL = environment.host + '/app/train/update-synonyms';
+    private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
     private retrieveSynonymsURL = environment.host + '/app/train/retrieve-synonyms';
-    private updateSynonymsURL = environment.host + '/app/train/retrieve-intents';
+    private updateSynonymsURL = environment.host + '/app/train/update-synonyms';
 
     // Notifications Endpoints
     private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
@@ -443,6 +446,66 @@ export class CMService {
             );
     }
 
+    retrieveFaq(question) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const questionData = {
+            'question': question
+        };
+
+        const postData = Object.assign(this.authService.authItems, questionData);
+
+        return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+
+    retrieveFAQBySort(value) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        const sortBy = {
+            'retrieveBy': value
+        };
+
+        const postData = Object.assign(this.authService.authItems, sortBy);
+
+        return this.http.post<Response>(this.retrieveFAQBySortURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveFAQByIntent(value) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const categoriseBy = {
+            'intent': value
+        };
+
+        const postData = Object.assign(this.authService.authItems, categoriseBy);
+
+        return this.http.post<Response>(this.retrieveFAQByCategoryURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
 
     retrieveUncleanedFAQ() {
         const httpOptions = {
@@ -476,7 +539,7 @@ export class CMService {
             );
     }
 
-    retriveSynonyms() {
+    retrieveSynonyms() {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'

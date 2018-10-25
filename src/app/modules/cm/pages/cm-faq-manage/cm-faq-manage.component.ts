@@ -30,6 +30,9 @@ export class CMFaqManageComponent implements OnInit {
     currentIndex: number;
     disableLoadMore = false;
     LoadMoreClicks: number;
+    searched = false;
+    disableSearch = true;
+
 
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
@@ -40,8 +43,13 @@ export class CMFaqManageComponent implements OnInit {
 
     // UI Components
     faqs: any[];
+    categoryOptions: any[];
+    sortByOptions: any[];
+    selectedCategory: string;
+    selectedSortBy: string;
     answerForm: FormGroup;
     questionForm: FormGroup;
+    searchForm: FormGroup;
 
     constructor(
         private cmService: CMService,
@@ -62,6 +70,19 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         this.loadPage();
+
+
+        //Inititalizing Search Form
+        this.searchForm = this.fb.group({
+            question: new FormControl('', Validators.required),
+        });
+
+        //Initializing Categories and Options 
+        this.retrieveIntents();
+        this.sortByOptions = [
+            { value: "date", label: "Date" },
+            { value: "views", label: "Views" },
+        ]
 
         //Showing First 10 results 
         this.LoadMoreClicks = 10;
@@ -89,6 +110,7 @@ export class CMFaqManageComponent implements OnInit {
         this.faqs = [];
 
         if (this.activeTab === 0) {
+            this.disableSearch = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -118,6 +140,7 @@ export class CMFaqManageComponent implements OnInit {
             });
 
         } else {
+            this.disableSearch = false;
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -167,6 +190,7 @@ export class CMFaqManageComponent implements OnInit {
         this.link = "";
 
         if (event.index === 0) {
+            this.disableSearch = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -200,6 +224,7 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         if (event.index === 1) {
+            this.disableSearch = false;
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -243,6 +268,178 @@ export class CMFaqManageComponent implements OnInit {
 
         this.activeTab = event.index;
     }
+
+    searchFAQ() {
+        this.searched = true;
+        this.searchForm.get('question').markAsDirty();
+        this.activeTab = 1;
+
+        if (this.searchForm.get('question').invalid) {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            });
+            return;
+        }
+
+        this.loading = true;
+
+        this.faqs = [];
+
+        this.cmService.retrieveFaq(this.searchForm.get('question').value).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                this.loading = false;
+                return;
+            }
+
+            if (res.results) {
+                for (let i = 0; i < res.results.length; i++) {
+                    let faq = res.results[i];
+                    let selected = false;
+                    if (faq.question === this.selectedFAQ) {
+                        selected = true;
+                    }
+
+                    this.faqs.push({
+                        qnID: faq.qnID,
+                        username: faq.username,
+                        question: faq.question,
+                        dateAsked: faq.dateAsked,
+                        views: faq.views,
+                        answer: faq.answer,
+                        dateAnswered: faq.dateAnswered,
+                        CMusername: faq.CMusername,
+                        prevAnswer: faq.prevAnswer,
+                        selected: selected,
+                    });
+                }
+            }
+
+            this.checkLoadMore();
+
+            this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
+            });
+
+            this.loading = false;
+        });
+    }
+
+    retrieveIntents() {
+        this.cmService.retrieveIntents().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.categoryOptions = [];
+                res.results.forEach(intent => {
+                    this.categoryOptions.push({
+                        label: intent, value: intent
+                    });
+                });
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
+
+    sortBy() {
+        this.loading = true;
+        this.faqs = [];
+
+        this.cmService.retrieveFAQBySort(this.selectedSortBy).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                for (let i = 0; i < res.results.length; i++) {
+                    let faq = res.results[i];
+                    let selected = false;
+                    if (faq.question === this.selectedFAQ) {
+                        selected = true;
+                    }
+
+                    this.faqs.push({
+                        qnID: faq.qnID,
+                        username: faq.username,
+                        question: faq.question,
+                        dateAsked: faq.dateAsked,
+                        views: faq.views,
+                        answer: faq.answer,
+                        dateAnswered: faq.dateAnswered,
+                        CMusername: faq.CMusername,
+                        prevAnswer: faq.prevAnswer,
+                        selected: selected,
+                    });
+                }
+                this.loading = false;
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
+
+    categoriseBy() {
+        this.loading = true;
+        this.faqs = [];
+
+        this.cmService.retrieveFAQByIntent(this.selectedCategory).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                for (let i = 0; i < res.results.length; i++) {
+                    let faq = res.results[i];
+                    let selected = false;
+                    if (faq.question === this.selectedFAQ) {
+                        selected = true;
+                    }
+
+                    this.faqs.push({
+                        qnID: faq.qnID,
+                        username: faq.username,
+                        question: faq.question,
+                        dateAsked: faq.dateAsked,
+                        views: faq.views,
+                        answer: faq.answer,
+                        dateAnswered: faq.dateAnswered,
+                        CMusername: faq.CMusername,
+                        prevAnswer: faq.prevAnswer,
+                        selected: selected,
+                    });
+                }
+                this.loading = false;
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
+
 
     showEditAnswerArea(index) {
         if (this.showAnsEditArea) {
@@ -448,7 +645,7 @@ export class CMFaqManageComponent implements OnInit {
         this.includePDF = false;
         this.referenceAdded = false;
         this.link = "";
-        
+
         if (this.answerForm.controls.addedAnswer.invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
@@ -486,7 +683,7 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
-    editPDFReference(){
+    editPDFReference() {
         if (this.referenceAdded) {
             //replace link
             let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"

@@ -26,6 +26,10 @@ export class FOFaqViewAllComponent implements OnInit {
     LoadMoreClicks: number;
 
     // UI Components
+    categoryOptions: any[];
+    sortByOptions: any[];
+    selectedCategory: string;
+    selectedSortBy: string;
     questionForm: FormGroup;
     newQuestionForm: FormGroup;
     faqs: any[];
@@ -48,6 +52,13 @@ export class FOFaqViewAllComponent implements OnInit {
         this.newQuestionForm = this.fb.group({
             newQuestion: new FormControl('', Validators.required),
         });
+
+        //Initializing Categories and Options 
+        this.retrieveIntents();
+        this.sortByOptions = [
+            { value: "date", label: "Date" },
+            { value: "views", label: "Views" },
+        ]
 
         this.retrieveFAQ();
     }
@@ -119,6 +130,107 @@ export class FOFaqViewAllComponent implements OnInit {
             this.loading = false;
         });
     }
+
+    retrieveIntents() {
+        this.foService.retrieveIntents().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.categoryOptions = [];
+                res.results.forEach(intent => {
+                    this.categoryOptions.push({
+                        label: intent, value: intent
+                    });
+                });
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
+
+    sortBy() {
+        this.loading = true;
+        this.faqs = [];
+
+        this.foService.retrieveFAQBySort(this.selectedSortBy).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                for (let i = 0; i < res.results.length; i++) {
+                    let faq = res.results[i];
+
+                    this.faqs.push({
+                        qnID: faq.qnID,
+                        username: faq.username,
+                        question: faq.question,
+                        dateAsked: faq.dateAsked,
+                        views: faq.views,
+                        answer: faq.answer,
+                        dateAnswered: faq.dateAnswered,
+                        CMusername: faq.CMusername,
+                        prevAnswer: faq.prevAnswer,
+                    });
+                }
+                this.loading = false;
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
+
+    categoriseBy() {
+        this.loading = true;
+        this.faqs = [];
+
+        this.foService.retrieveFAQByIntent(this.selectedCategory).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                for (let i = 0; i < res.results.length; i++) {
+                    let faq = res.results[i];
+                    this.faqs.push({
+                        qnID: faq.qnID,
+                        username: faq.username,
+                        question: faq.question,
+                        dateAsked: faq.dateAsked,
+                        views: faq.views,
+                        answer: faq.answer,
+                        dateAnswered: faq.dateAnswered,
+                        CMusername: faq.CMusername,
+                        prevAnswer: faq.prevAnswer,
+                    });
+                }
+                this.loading = false;
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
+    }
+
 
     showConfirmDialog() {
         this.confirmDialog = true;
