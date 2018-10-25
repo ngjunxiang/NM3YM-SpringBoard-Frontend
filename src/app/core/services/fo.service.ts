@@ -89,6 +89,9 @@ export class FOService {
     private retrieveAllFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private createUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
     private increaseViewURL = environment.host + '/app/faq/increment-QNAViews';
+    private retrieveFAQBySortURL = environment.host + '/app/faq/retrieve-allAQBy';
+    private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
+    private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
 
     // PDF URL
     private pdfURL = environment.host + '/assets/pdf/reg51.pdf';
@@ -299,6 +302,62 @@ export class FOService {
                 catchError(this.handleError)
             );
     }
+
+    retrieveFAQBySort(value) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        const sortBy = {
+            'retrieveBy': value
+        };
+
+        const postData = Object.assign(this.authService.authItems, sortBy);
+
+        return this.http.post<Response>(this.retrieveFAQBySortURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveFAQByIntent(value) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const categoriseBy = {
+            'intent': value
+        };
+
+        const postData = Object.assign(this.authService.authItems, categoriseBy);
+
+        return this.http.post<Response>(this.retrieveFAQByCategoryURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveIntents() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveIntentsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
 
     retrieveUserFAQ() {
         const httpOptions = {

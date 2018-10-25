@@ -11,12 +11,16 @@
     <br>
 
     <div class="ui-g" style="display: inline; ">
-        <div class="ui-g-6" style="padding-left: 0px">
-            Select Category:
-            <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onSortChange()"></p-dropdown>
+        <div class="ui-g-5" style="padding-left: 0px;">
+            <p style="margin-bottom: 2px;">Select Category:</p>
+            <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select a Category" (onChange)="categoriseBy()"></p-dropdown>
         </div>
-        <div class="ui-g-6">
-            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%; " type="submit"
+        <div class="ui-g-3" style="padding-left: 0px;">
+            <p style="margin-bottom: 2px;">Sort By:</p>
+            <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Sort by" (onChange)="sortBy()"></p-dropdown>
+        </div>
+        <div class="ui-g-4">
+            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 8%; " type="submit"
                 icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
         </div>
     </div>
@@ -109,7 +113,7 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-10 ansInDialog" style="font-size: 14px; font-weight: 600; color:black;">
-                    {{faqs[currentIndex].answer}}
+                    <div [innerHTML]="faqs[currentIndex].answer"></div>
                 </div>
 
                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
