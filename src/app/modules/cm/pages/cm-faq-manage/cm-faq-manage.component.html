@@ -1,15 +1,31 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-confirmDialog></p-confirmDialog>
-<form class="search-container">
-    <input type="text" id="search-bar" placeholder="What would you like to search for?">
-    <a href="" class="search-icon">
+
+<form [formGroup]="searchForm" class="search-container">
+    <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" [disabled]="true"
+        placeholder="What would you like to search for?" required pInputText>
+    <div class="search-icon" (click)="searchFAQ()">
         <i class="fa fa-search"></i>
-    </a>
+    </div>
 </form>
+
+<div class="ui-g" style="margin-top: 10px">
+    <div class="ui-g-5" style="padding-left: 0px;">
+        <p style="margin-bottom: 2px;">Select Category:</p>
+        <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select a Category" (onChange)="categoriseBy()"></p-dropdown>
+    </div>
+    <div class="ui-g-3" style="padding-left: 0px;">
+        <p style="margin-bottom: 2px;">Sort By:</p>
+        <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Sort by" (onChange)="sortBy()"></p-dropdown>
+    </div>
+    <div class="ui-g-2 clickable" style="padding-top: 5% ; padding-left: 0px; height: 50.67px" (click)="loadPage()">
+        <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">
+        <u>clear all</u>
+    </div>
+</div>
 
 <div *ngIf="!loading">
     <div style="padding-bottom: 10px">
-        <br>
         <p-card styleClass="ui-card-shadow">
             <h4>Frequently Asked Questions</h4>
             <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">

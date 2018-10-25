@@ -16,8 +16,8 @@
             <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOpt" (onChange)="onSortChange()"></p-dropdown>
         </div>
         <div class="ui-g-6">
-            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%; "
-                type="submit" icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
+            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; width: 35%; margin-top: 1%; " type="submit"
+                icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
         </div>
     </div>
 
@@ -81,7 +81,8 @@
                     </p-card>
                 </ng-template>
                 <p-footer>
-                    <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton label="Load More"></button>
+                    <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton
+                        label="Load More"></button>
                 </p-footer>
             </p-dataScroller>
         </div>

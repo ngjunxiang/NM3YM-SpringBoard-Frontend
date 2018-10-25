@@ -37,7 +37,7 @@ export class CmFaqSynonymComponent implements OnInit {
   }
 
   retrieveSynonyms() {
-    this.cmService.retriveSynonyms().subscribe(res => {
+    this.cmService.retrieveSynonyms().subscribe(res => {
       if (res.error) {
         this.msgs.push({
           severity: 'error', summary: 'Error', detail: res.error
