@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
-import { Message, SelectItem, MenuItem } from 'primeng/components/common/api';
+import { Message, SelectItem } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 
@@ -21,10 +21,6 @@ export class CMNewChecklistComponent implements OnInit {
     blocked = false;
     msgs: Message[] = [];
     activeTab: number;
-    dropdownData = {
-        conditions: [],
-        conditionOptions: []
-    };
     complianceCols: any[];
     legalCols: any[];
     currentAgmtCode: number;
@@ -37,6 +33,11 @@ export class CMNewChecklistComponent implements OnInit {
     oEditDisplay = false;
 
     // UI Component
+    dropdownData = {
+        conditions: [],
+        conditionOptions: []
+    };
+    documentTypeData: SelectItem[];
     newChecklistForm: FormGroup;
     complianceDocumentsForm: FormGroup;
     legalDocumentsForm: FormGroup;
@@ -63,6 +64,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.legalCols = [
             { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -73,6 +75,7 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.complianceCols = [
             { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -80,6 +83,13 @@ export class CMNewChecklistComponent implements OnInit {
             { field: 'signature', header: 'Signature Required' }
         ];
 
+        this.documentTypeData = [
+            { label: 'Not Applicable', value: 'Not Applicable' },
+            { label: 'Non-Compliant (NC)', value: 'Non-Compliant (NC)' },
+            { label: 'Non-Deferrable Mandatory (NDM)', value: 'Non-Deferrable Mandatory (NDM)' },
+            { label: 'Both', value: 'Both' }
+        ];
+        
         this.createForm();
     }
 
@@ -121,6 +131,7 @@ export class CMNewChecklistComponent implements OnInit {
             hasConditions: new FormControl({ value: false, disabled: true }),
             conditions: new FormArray([]),
             documentName: new FormControl('', Validators.required),
+            documentType: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(false),
             canWaiver: new FormControl(false),
@@ -425,33 +436,6 @@ export class CMNewChecklistComponent implements OnInit {
 
     toggleDocumentConditions(checked) {
         if (checked) {
-            // if (this.newChecklistForm.get('conditions')['length'] === 1
-            //     && (this.newChecklistForm.get('conditions').get('0').get('conditionName').value == ''
-            //         || this.newChecklistForm.get('conditions').get('0').get('conditionOptions').value == '')) {
-            //     this.newChecklistForm.get('conditions').get('0').get('conditionName').markAsDirty();
-            //     this.newChecklistForm.get('conditions').get('0').get('conditionOptions').markAsDirty();
-            //     document.getElementById('conditions').scrollIntoView();
-            //     this.msgs.push({
-            //         severity: 'error', summary: 'Error', detail: 'There are no existing conditions in this checklist'
-            //     });
-            //     return;
-            // }
-
-            // if (this.newChecklistForm.get('conditions')['length'] > 1) {
-            //     let invalidConditions = false;
-            //     <FormArray>this.newChecklistForm.get('conditions')['controls'].forEach(control => {
-            //         if (control.get('conditionName').invalid || control.get('conditionOptions').invalid) {
-            //             document.getElementById('conditions').scrollIntoView();
-            //             this.msgs.push({
-            //                 severity: 'error', summary: 'Error', detail: 'Please correct the conditions highlighted in red'
-            //             });
-            //             invalidConditions = true;
-            //         }
-            //     });
-
-            //     if (invalidConditions) return;
-            // }
-
             let array = <FormArray>this.dialogForm.get('conditions');
             array.push(
                 this.fb.group({
@@ -470,6 +454,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm.patchValue({
             hasConditions: false,
             documentName: '',
+            documentType: '',
             agmtCode: '',
             signature: false,
             canWaiver: false,
@@ -585,11 +570,13 @@ export class CMNewChecklistComponent implements OnInit {
         }
 
         this.dialogForm.get('documentName').markAsDirty();
+        this.dialogForm.get('documentType').markAsDirty();
         this.dialogForm.get('agmtCode').markAsDirty();
 
         if ((+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
             this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
             this.dialogForm.get('documentName').invalid ||
+            this.dialogForm.get('documentType').invalid ||
             this.dialogForm.get('agmtCode').invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
@@ -622,6 +609,7 @@ export class CMNewChecklistComponent implements OnInit {
 
             control.get(this.docIndex + '').get('hasConditions').setValue(rawForm.hasConditions);
             control.get(this.docIndex + '').get('documentName').setValue(rawForm.documentName);
+            control.get(this.docIndex + '').get('documentType').setValue(rawForm.documentType);
             control.get(this.docIndex + '').get('agmtCode').setValue(rawForm.agmtCode);
             control.get(this.docIndex + '').get('signature').setValue(rawForm.signature);
             control.get(this.docIndex + '').get('canWaiver').setValue(rawForm.canWaiver);
@@ -632,18 +620,18 @@ export class CMNewChecklistComponent implements OnInit {
             this.mEditDisplay = false;
             this.oEditDisplay = false;
 
-            console.log(this.complianceDocumentsForm)
             this.dialogForm.patchValue({
                 hasConditions: false,
                 documentName: '',
+                documentType: '',
                 agmtCode: '',
                 signature: false,
                 canWaiver: false,
                 remarks: ''
             });
+
             this.dialogForm.setControl('conditions', new FormArray([]));
             this.dialogForm.reset();
-            console.log(this.dialogForm)
             return;
         }
 
@@ -652,6 +640,7 @@ export class CMNewChecklistComponent implements OnInit {
                 hasConditions: new FormControl(rawForm.hasConditions),
                 conditions: new FormArray([]),
                 documentName: new FormControl(rawForm.documentName),
+                documentType: new FormControl(rawForm.documentType),
                 agmtCode: new FormControl(rawForm.agmtCode),
                 signature: new FormControl(rawForm.signature),
                 canWaiver: new FormControl(rawForm.canWaiver),
@@ -680,6 +669,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm.patchValue({
             hasConditions: false,
             documentName: '',
+            documentType: '',
             agmtCode: '',
             signature: false,
             canWaiver: false,
@@ -687,7 +677,6 @@ export class CMNewChecklistComponent implements OnInit {
         });
         this.dialogForm.setControl('conditions', new FormArray([]));
         this.dialogForm.reset();
-        console.log(this.dialogForm)
     }
 
     cancelAddNewDocument() {
@@ -702,11 +691,13 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm.patchValue({
             hasConditions: false,
             documentName: '',
+            documentType: '',
             agmtCode: '',
             signature: false,
             canWaiver: false,
             remarks: ''
         });
+
         this.dialogForm.setControl('conditions', new FormArray([]));
         this.dialogForm.reset();
     }
@@ -723,6 +714,7 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm.patchValue({
             hasConditions: rawForm[docType][index].hasConditions,
             documentName: rawForm[docType][index].documentName,
+            documentType: rawForm[docType][index].documentType,
             agmtCode: rawForm[docType][index].agmtCode,
             signature: rawForm[docType][index].signature,
             canWaiver: rawForm[docType][index].canWaiver,
@@ -847,102 +839,9 @@ export class CMNewChecklistComponent implements OnInit {
         }
 
 
-        // CM Documents
-        this.checklist['complianceDocuments'] = {};
-        this.checklist['complianceDocuments']['mandatory'] = [];
-
-        for (let i = 0; i < this.complianceDocumentsForm.get('mandatory')['length']; i++) {
-            let mandatoryDoc = this.complianceDocumentsForm.get('mandatory').get(i + '');
-            this.checklist['complianceDocuments']['mandatory'].push({
-                documentName: mandatoryDoc.get('documentName').value,
-                agmtCode: mandatoryDoc.get('agmtCode').value,
-                signature: mandatoryDoc.get('signature').value,
-                remarks: mandatoryDoc.get('remarks').value
-            });
-        }
-
-        this.checklist['complianceDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.complianceDocumentsForm.get('conditional')['length']; i++) {
-            let conditionalDoc = this.complianceDocumentsForm.get('conditional').get(i + '');
-            let conditions = [];
-            for (let j = 0; j < this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
-                let condition = this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
-                conditions.push({
-                    conditionName: condition.get('conditionName').value,
-                    conditionOption: condition.get('conditionOption').value
-                })
-            }
-            this.checklist['complianceDocuments']['conditional'].push({
-                conditions: conditions,
-                documentName: conditionalDoc.get('documentName').value,
-                agmtCode: conditionalDoc.get('agmtCode').value,
-                signature: conditionalDoc.get('signature').value,
-                remarks: conditionalDoc.get('remarks').value
-            });
-        }
-
-        this.checklist['complianceDocuments']['optional'] = [];
-
-        for (let i = 0; i < this.complianceDocumentsForm.get('optional')['length']; i++) {
-            let optionalDoc = this.complianceDocumentsForm.get('optional').get(i + '');
-            this.checklist['complianceDocuments']['optional'].push({
-                documentName: optionalDoc.get('documentName').value,
-                agmtCode: optionalDoc.get('agmtCode').value,
-                signature: optionalDoc.get('signature').value,
-                remarks: optionalDoc.get('remarks').value
-            });
-        }
-
-        // Legal Documents
-        this.checklist['legalDocuments'] = {};
-        this.checklist['legalDocuments']['mandatory'] = [];
-
-        for (let i = 0; i < this.legalDocumentsForm.get('mandatory')['length']; i++) {
-            let mandatoryDoc = this.legalDocumentsForm.get('mandatory').get(i + '');
-            this.checklist['legalDocuments']['mandatory'].push({
-                documentName: mandatoryDoc.get('documentName').value,
-                agmtCode: mandatoryDoc.get('agmtCode').value,
-                signature: mandatoryDoc.get('signature').value,
-                canWaiver: mandatoryDoc.get('canWaiver').value,
-                remarks: mandatoryDoc.get('remarks').value
-            });
-        }
-
-        this.checklist['legalDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.legalDocumentsForm.get('conditional')['length']; i++) {
-            let conditionalDoc = this.legalDocumentsForm.get('conditional').get(i + '');
-            let conditions = [];
-            for (let j = 0; j < this.legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
-                let condition = this.legalDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
-                conditions.push({
-                    conditionName: condition.get('conditionName').value,
-                    conditionOption: condition.get('conditionOption').value
-                })
-            }
-            this.checklist['legalDocuments']['conditional'].push({
-                conditions: conditions,
-                documentName: conditionalDoc.get('documentName').value,
-                agmtCode: conditionalDoc.get('agmtCode').value,
-                signature: conditionalDoc.get('signature').value,
-                canWaiver: conditionalDoc.get('canWaiver').value,
-                remarks: conditionalDoc.get('remarks').value
-            });
-        }
-
-        this.checklist['legalDocuments']['optional'] = [];
-
-        for (let i = 0; i < this.legalDocumentsForm.get('optional')['length']; i++) {
-            let optionalDoc = this.legalDocumentsForm.get('optional').get(i + '');
-            this.checklist['legalDocuments']['optional'].push({
-                documentName: optionalDoc.get('documentName').value,
-                agmtCode: optionalDoc.get('agmtCode').value,
-                signature: optionalDoc.get('signature').value,
-                canWaiver: optionalDoc.get('canWaiver').value,
-                remarks: optionalDoc.get('remarks').value
-            });
-        }
+        // Documents
+        this.checklist['complianceDocuments'] = this.complianceDocumentsForm.getRawValue();
+        this.checklist['legalDocuments'] = this.legalDocumentsForm.getRawValue();
 
         this.cmService.createCMChecklist(this.checklist).subscribe(res => {
             if (res.error) {

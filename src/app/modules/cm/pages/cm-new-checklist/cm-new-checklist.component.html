@@ -160,12 +160,13 @@
                         <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cCDocName' : 
-                                                                            col.field === 'conditionName' ? 'cCCondName' : 
-                                                                            col.field === 'conditionOptions' ? 'cCCondOption' : 
-                                                                            col.field === 'agmtCode' ? 'cCAgmtCode' :
-                                                                            col.field === 'remarks' ? 'cCRemark' :
-                                                                            col.field === 'signature' ? 'cCSignature' : null">
+                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                                                                            col.field === 'documentType' ? 'cDocType' :
+                                                                            col.field === 'conditionName' ? 'cCondName' : 
+                                                                            col.field === 'conditionOptions' ? 'cCondOption' : 
+                                                                            col.field === 'agmtCode' ? 'cAgmtCode' :
+                                                                            col.field === 'remarks' ? 'cRemark' :
+                                                                            col.field === 'signature' ? 'cSignature' : null">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -178,6 +179,8 @@
                                             <ng-container *ngIf="j === 0">
                                                 <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentName').value }}</td>
+                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                    doc.get('documentType').value }}</td>
                                             </ng-container>
                                             <td>{{ condition.get('conditionName').value }}</td>
                                             <td>{{ condition.get('conditionOption').value }}</td>
@@ -206,6 +209,8 @@
                                     <tr>
                                         <td>{{
                                             doc.get('documentName').value }}</td>
+                                        <td>{{
+                                            doc.get('documentType').value }}</td>
                                         <td> - </td>
                                         <td> - </td>
                                         <td>{{
@@ -288,6 +293,12 @@
                         <h5>Document Name</h5>
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
+
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
 
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
@@ -360,6 +371,12 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
                         <div class="ui-g" style="padding-right:4%">
@@ -382,12 +399,13 @@
                         <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cCDocName' : 
-                                                                            col.field === 'conditionName' ? 'cCCondName' : 
-                                                                            col.field === 'conditionOptions' ? 'cCCondOption' : 
-                                                                            col.field === 'agmtCode' ? 'cCAgmtCode' :
-                                                                            col.field === 'remarks' ? 'cCRemark' :
-                                                                            col.field === 'signature' ? 'cCSignature' : null">
+                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                                                                            col.field === 'documentType' ? 'cDocType' :
+                                                                            col.field === 'conditionName' ? 'cCondName' : 
+                                                                            col.field === 'conditionOptions' ? 'cCondOption' : 
+                                                                            col.field === 'agmtCode' ? 'cAgmtCode' :
+                                                                            col.field === 'remarks' ? 'cRemark' :
+                                                                            col.field === 'signature' ? 'cSignature' : null">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -400,6 +418,8 @@
                                             <ng-container *ngIf="j === 0">
                                                 <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentName').value }}</td>
+                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                    doc.get('documentType').value }}</td>
                                             </ng-container>
                                             <td>{{ condition.get('conditionName').value }}</td>
                                             <td>{{ condition.get('conditionOption').value }}</td>
@@ -428,6 +448,8 @@
                                     <tr>
                                         <td>{{
                                             doc.get('documentName').value }}</td>
+                                        <td>{{
+                                            doc.get('documentType').value }}</td>
                                         <td> - </td>
                                         <td> - </td>
                                         <td>{{
@@ -511,6 +533,12 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
                         <div class="ui-g" style="padding-right:4%">
@@ -582,6 +610,12 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
                         <div class="ui-g" style="padding-right:4%">
@@ -608,12 +642,13 @@
                         <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'cCDocName' : 
-                                                                                            col.field === 'conditionName' ? 'cCCondName' : 
-                                                                                            col.field === 'conditionOptions' ? 'cCCondOption' : 
-                                                                                            col.field === 'agmtCode' ? 'cCAgmtCode' :
-                                                                                            col.field === 'remarks' ? 'cCRemark' :
-                                                                                            col.field === 'signature' ? 'cCSignature' : null">
+                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
+                                                                                            col.field === 'documentType' ? 'lDocType' :
+                                                                                            col.field === 'conditionName' ? 'lCondName' : 
+                                                                                            col.field === 'conditionOptions' ? 'lCondOption' : 
+                                                                                            col.field === 'agmtCode' ? 'lAgmtCode' :
+                                                                                            col.field === 'remarks' ? 'lRemark' :
+                                                                                            col.field === 'signature' ? 'lSignature' : null">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -626,6 +661,8 @@
                                             <ng-container *ngIf="j === 0">
                                                 <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentName').value }}</td>
+                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                    doc.get('documentType').value }}</td>
                                             </ng-container>
                                             <td>{{ condition.get('conditionName').value }}</td>
                                             <td>{{ condition.get('conditionOption').value }}</td>
@@ -638,6 +675,12 @@
                                                     <i class="fa fa-check"></i>
                                                 </td>
                                                 <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
                                                     <i class="fa fa-times"></i>
                                                 </td>
                                                 <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
@@ -654,6 +697,8 @@
                                     <tr>
                                         <td>{{
                                             doc.get('documentName').value }}</td>
+                                        <td>{{
+                                            doc.get('documentType').value }}</td>
                                         <td> - </td>
                                         <td> - </td>
                                         <td>{{
@@ -663,6 +708,12 @@
                                             <i class="fa fa-check"></i>
                                         </td>
                                         <td *ngIf="!doc.get('signature').value">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td *ngIf="doc.get('canWaiver').value">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.get('canWaiver').value">
                                             <i class="fa fa-times"></i>
                                         </td>
                                         <td>
@@ -737,10 +788,20 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
-                        <div class="ui-g" style="padding-right:4%">
+
+                        <div class="ui-g" style="padding-right: 4%; padding-top: 2%; padding-bottom: 2%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
+                        </div>
+                        <div class="ui-g">
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
 
                         <div class="ui-g" style="padding-top:2%">
@@ -808,10 +869,20 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
-                        <div class="ui-g" style="padding-right:4%">
+
+                        <div class="ui-g" style="padding-right: 4%; padding-top: 2%; padding-bottom: 2%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
+                        </div>
+                        <div class="ui-g">
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
 
                         <div class="ui-g" style="padding-top:2%">
@@ -830,12 +901,13 @@
                         <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'cCDocName' : 
-                                                                                            col.field === 'conditionName' ? 'cCCondName' : 
-                                                                                            col.field === 'conditionOptions' ? 'cCCondOption' : 
-                                                                                            col.field === 'agmtCode' ? 'cCAgmtCode' :
-                                                                                            col.field === 'remarks' ? 'cCRemark' :
-                                                                                            col.field === 'signature' ? 'cCSignature' : null">
+                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
+                                                                                            col.field === 'documentType' ? 'lDocType' :
+                                                                                            col.field === 'conditionName' ? 'lCondName' : 
+                                                                                            col.field === 'conditionOptions' ? 'lCondOption' : 
+                                                                                            col.field === 'agmtCode' ? 'lAgmtCode' :
+                                                                                            col.field === 'remarks' ? 'lRemark' :
+                                                                                            col.field === 'signature' ? 'lSignature' : null">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -848,6 +920,8 @@
                                             <ng-container *ngIf="j === 0">
                                                 <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentName').value }}</td>
+                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                    doc.get('documentType').value }}</td>
                                             </ng-container>
                                             <td>{{ condition.get('conditionName').value }}</td>
                                             <td>{{ condition.get('conditionOption').value }}</td>
@@ -860,6 +934,12 @@
                                                     <i class="fa fa-check"></i>
                                                 </td>
                                                 <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
                                                     <i class="fa fa-times"></i>
                                                 </td>
                                                 <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
@@ -876,6 +956,8 @@
                                     <tr>
                                         <td>{{
                                             doc.get('documentName').value }}</td>
+                                        <td>{{
+                                            doc.get('documentType').value }}</td>
                                         <td> - </td>
                                         <td> - </td>
                                         <td>{{
@@ -885,6 +967,12 @@
                                             <i class="fa fa-check"></i>
                                         </td>
                                         <td *ngIf="!doc.get('signature').value">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td *ngIf="doc.get('canWaiver').value">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.get('canWaiver').value">
                                             <i class="fa fa-times"></i>
                                         </td>
                                         <td>
@@ -959,10 +1047,20 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
-                        <div class="ui-g" style="padding-right:4%">
+
+                        <div class="ui-g" style="padding-right: 4%; padding-top: 2%; padding-bottom: 2%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
+                        </div>
+                        <div class="ui-g">
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
 
                         <div class="ui-g" style="padding-top:2%">
@@ -1030,10 +1128,20 @@
                         <input type="text" id="input" class="form-control" placeholder="Document Name" formControlName="documentName"
                             required pInputText>
 
+                        <div style="padding-top: 3%; padding-bottom: 4%">
+                            <h5>Document Type</h5>
+                            <p-dropdown [options]="documentTypeData" placeholder="Select a document type"
+                                formControlName="documentType"></p-dropdown>
+                        </div>
+
                         <h5>Remarks</h5>
                         <ngx-wig [formControl]="dialogForm.controls.remarks" [placeholder]="'Enter remarks here'"></ngx-wig>
-                        <div class="ui-g" style="padding-right:4%">
+
+                        <div class="ui-g" style="padding-right: 4%; padding-top: 2%; padding-bottom: 2%">
                             <p-checkbox label="Signature required" binary="true" formControlName="signature"></p-checkbox>
+                        </div>
+                        <div class="ui-g">
+                            <p-checkbox label="Can be waived" binary="true" formControlName="canWaiver"></p-checkbox>
                         </div>
 
                         <div class="ui-g" style="padding-top:2%">
