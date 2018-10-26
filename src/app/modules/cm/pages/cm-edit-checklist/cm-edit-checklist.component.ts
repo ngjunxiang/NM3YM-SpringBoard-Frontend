@@ -21,37 +21,32 @@ export class CMEditChecklistComponent implements OnInit {
     blocked = false;
     msgs: Message[] = [];
     activeTab: number;
-    dropdownData = {
-        conditions: [],
-        conditionOptions: []
-    };
-    complianceMOCols: any[];
-    complianceCCols: any[];
-    legalMOCols: any[];
-    legalCCols: any[];
+    complianceCols: any[];
+    legalCols: any[];
     docIndex: number;
     currentAgmtCode: number;
     editMode = false;
     mDisplay = false;
     mEditDisplay = false;
-    cDisplay = false;
     cInfoDisplay = false;
-    cEditDisplay = false;
     oDisplay = false;
     oEditDisplay = false;
 
     // UI Component
     clName: string;
+    dropdownData = {
+        conditions: [],
+        conditionOptions: []
+    };
+    documentTypeData: SelectItem[];
     currentChecklistForm: FormGroup;
     complianceDocumentsForm: FormGroup;
     legalDocumentsForm: FormGroup;
     dialogForm: FormGroup;
-    cDialogForm: FormGroup;
     checklistNames: string[] = [];
     checklist: any;
     filteredAgmtCodes: string[];
     agmtDocMappings: any[];
-
 
     constructor(
         private cmService: CMService,
@@ -76,16 +71,9 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.activeTab = 0;
 
-        this.legalMOCols = [
+        this.legalCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' },
-            { field: 'canWaiver', header: 'Can be Waivered' }
-        ];
-
-        this.legalCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -94,20 +82,21 @@ export class CMEditChecklistComponent implements OnInit {
             { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
-        this.complianceMOCols = [
+        this.complianceCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' }
-        ];
-
-        this.complianceCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
             { field: 'remarks', header: 'Remarks' },
             { field: 'signature', header: 'Signature Required' }
+        ];
+
+        this.documentTypeData = [
+            { label: 'Not Applicable', value: 'Not Applicable' },
+            { label: 'Non-Compliant (NC)', value: 'Non-Compliant (NC)' },
+            { label: 'Non-Deferrable Mandatory (NDM)', value: 'Non-Deferrable Mandatory (NDM)' },
+            { label: 'Both', value: 'Both' }
         ];
 
         this.createForm();
@@ -128,34 +117,19 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.complianceDocumentsForm = this.fb.group({
             mandatory: this.fb.array([]),
-            conditional: this.fb.array([]),
             optional: this.fb.array([])
         });
 
         this.legalDocumentsForm = this.fb.group({
             mandatory: this.fb.array([]),
-            conditional: this.fb.array([]),
             optional: this.fb.array([])
         });
 
         this.dialogForm = this.fb.group({
+            hasConditions: new FormControl({ value: false, disabled: true }),
+            conditions: new FormArray([]),
             documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(false),
-            canWaiver: new FormControl(false),
-            remarks: new FormControl(''),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        });
-
-        this.cDialogForm = this.fb.group({
-            conditions: new FormArray([
-                this.fb.group({
-                    conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl({ value: '', disabled: '' }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
-                })
-            ]),
-            documentName: new FormControl('', Validators.required),
+            documentType: new FormControl('', Validators.required),
             agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
             signature: new FormControl(false),
             canWaiver: new FormControl(false),
@@ -167,149 +141,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.loading = false;
     }
 
-    checklistNameExists(control: FormControl): { [key: string]: boolean } | null {
-        if (this.checklistNames.includes(control.value) && control.value !== this.currentChecklistForm.get('checklistName').value) {
-            return {
-                checklistNameExists: true
-            };
-        }
-        return null;
-    }
-
-    checkDuplicateConditionName(control: FormControl): { [key: string]: boolean } | null {
-        let count = 0;
-        if (typeof this.currentChecklistForm !== 'undefined' && this.currentChecklistForm.getRawValue().conditions.length > 1) {
-            let rawConditions = this.currentChecklistForm.getRawValue().conditions;
-            for (let i = 0; i < rawConditions.length; i++) {
-                let condition = rawConditions[i];
-                if (condition.conditionName === control.value) {
-                    count++;
-                }
-            }
-        }
-
-        if (count > 1) {
-            return {
-                isDuplicate: true
-            };
-        }
-
-        return null;
-    }
-
-    checkConditionInUse() {
-        let currentConditions = this.currentChecklistForm.getRawValue().conditions;
-
-        for (let i = 0; i < currentConditions.length; i++) {
-            let condition = currentConditions[i];
-            let toDisable = false;
-            this.complianceDocumentsForm.getRawValue().conditional.forEach(cDoc => {
-                cDoc.conditions.forEach(docCondition => {
-                    if (docCondition.conditionName == condition.conditionName
-                        && condition.conditionOptions.includes(docCondition.conditionOption)) {
-                        toDisable = true;
-                    }
-                });
-            });
-            this.legalDocumentsForm.getRawValue().conditional.forEach(cDoc => {
-                cDoc.conditions.forEach(docCondition => {
-                    if (docCondition.conditionName == condition.conditionName
-                        && condition.conditionOptions.includes(docCondition.conditionOption)) {
-                        toDisable = true;
-                    }
-                });
-            });
-
-            if (toDisable) {
-                this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').disable();
-                this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').disable();
-            } else {
-                this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').enable();
-                this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
-            }
-        }
-    }
-
-    checkDuplicateRequiredField(control: FormControl): { [key: string]: boolean } | null {
-        let currentReqFields = this.currentChecklistForm.getRawValue().requiredFields;
-        for (let i = 0; i < currentReqFields.length - 1; i++) {
-            let requiredField = currentReqFields[i];
-            if (requiredField.fieldName === control.value) {
-                return {
-                    isDuplicate: true
-                };
-            }
-        }
-        return null;
-    }
-
-    checkDuplicateAgmtCode(control: FormControl): { [key: string]: boolean } | null {
-        if (control.value === '-') {
-            return null;
-        }
-
-        if (this.mEditDisplay || this.cEditDisplay || this.oEditDisplay) {
-            if (control.value === this.currentAgmtCode) {
-                return null;
-            }
-        }
-
-        if (this.mDisplay || this.mEditDisplay || this.cDisplay || this.cEditDisplay || this.oDisplay
-            || this.oEditDisplay) {
-            let agmtCodes = [];
-            let currentForm = this.complianceDocumentsForm.getRawValue();
-
-            currentForm.mandatory.filter((mDoc) => mDoc.changed !== '3')
-                .map(existingMDoc => agmtCodes.push(existingMDoc.agmtCode));
-
-            currentForm.conditional.filter((cDoc) => cDoc.changed !== '3')
-                .map(existingCDoc => agmtCodes.push(existingCDoc.agmtCode));
-
-            currentForm.optional.filter((oDoc) => oDoc.changed !== '3')
-                .map(existingODoc => agmtCodes.push(existingODoc.agmtCode));
-
-            currentForm = this.legalDocumentsForm.getRawValue();
-
-            currentForm.mandatory.filter((mDoc) => mDoc.changed !== '3')
-                .map(existingMDoc => agmtCodes.push(existingMDoc.agmtCode));
-
-            currentForm.conditional.filter((cDoc) => cDoc.changed !== '3')
-                .map(existingCDoc => agmtCodes.push(existingCDoc.agmtCode));
-
-            currentForm.optional.filter((oDoc) => oDoc.changed !== '3')
-                .map(existingODoc => agmtCodes.push(existingODoc.agmtCode));
-
-            if (agmtCodes.includes(control.value)) {
-                return {
-                    isDuplicate: true
-                }
-            }
-        }
-        return null;
-    }
-
-    checkDuplicateConditionalCondition(control: FormControl): { [key: string]: boolean } | null {
-        if (this.cDisplay || this.cEditDisplay) {
-            if (typeof this.cDialogForm !== 'undefined' && this.cDialogForm.get('conditions')['length'] > 1) {
-                let currPos = (this.cDialogForm.get('conditions')['length'] - 1) + '';
-                for (let i = 0; i < this.cDialogForm.get('conditions')['length'] - 1; i++) {
-                    let condition = (<FormArray>this.cDialogForm.controls.conditions).value[i];
-                    if (control.touched && condition.conditionName === this.cDialogForm.get('conditions').get(currPos).get('conditionName').value
-                        && condition.conditionOption === control.value) {
-                        return {
-                            isDuplicate: true
-                        };
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    showCInfoDialog() {
-        this.cInfoDisplay = true;
-    }
-
+    // Validator Functions
     retrieveAgmtCodes() {
         this.cmService.retrieveAgmtCodes().subscribe(res => {
             if (res.error) {
@@ -344,18 +176,16 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     updateAgmtDocValues(value) {
-        let form = this.dialogForm;
-        if (this.cDisplay || this.cEditDisplay) {
-            form = this.cDialogForm;
-        }
-        form.get('agmtCode').setValue(value);
-        form.get('documentName').setValue(this.agmtDocMappings[value]);
+        this.dialogForm.get('agmtCode').setValue(value);
+        this.dialogForm.get('documentName').setValue(this.agmtDocMappings[value]);
     }
 
     retrieveChecklistNames() {
         this.cmService.retrieveCMChecklistNames().subscribe(data => {
             data.clNames.forEach(cl => {
-                this.checklistNames.push(cl.name);
+                if (cl.name !== this.clName) {
+                    this.checklistNames.push(cl.name);
+                }
             });
         }, error => {
             this.msgs.push({
@@ -364,9 +194,175 @@ export class CMEditChecklistComponent implements OnInit {
         });
     }
 
-    retrieveChecklistDetails(checklistName) {
+    checklistNameExists(control: FormControl): { [key: string]: boolean } | null {
+        if (this.checklistNames.includes(control.value)) {
+            return {
+                checklistNameExists: true
+            };
+        }
+        return null;
+    }
+
+    checkDuplicateConditionName(control: FormControl): { [key: string]: boolean } | null {
+        let count = 0;
+        if (typeof this.currentChecklistForm !== 'undefined' && this.currentChecklistForm.getRawValue().conditions.length > 1) {
+            let rawConditions = this.currentChecklistForm.getRawValue().conditions;
+            for (let i = 0; i < rawConditions.length; i++) {
+                let condition = rawConditions[i];
+                if (condition.conditionName === control.value) {
+                    count++;
+                }
+            }
+        }
+
+        if (count > 1) {
+            return {
+                isDuplicate: true
+            };
+        }
+
+        return null;
+    }
+
+    checkConditionInUse() {
+        let currentConditions = this.currentChecklistForm.getRawValue().conditions;
+
+        for (let i = 0; i < currentConditions.length; i++) {
+            let condition = currentConditions[i];
+            let toDisable = false;
+
+            this.complianceDocumentsForm.getRawValue().mandatory.forEach(mDoc => {
+                if (mDoc.conditions.length > 0) {
+                    mDoc.conditions.forEach(docCondition => {
+                        if (docCondition.conditionName == condition.conditionName
+                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                            toDisable = true;
+                        }
+                    });
+                }
+            });
+
+            this.complianceDocumentsForm.getRawValue().optional.forEach(oDoc => {
+                if (oDoc.conditions.length > 0) {
+                    oDoc.conditions.forEach(docCondition => {
+                        if (docCondition.conditionName == condition.conditionName
+                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                            toDisable = true;
+                        }
+                    });
+                }
+            });
+
+            this.legalDocumentsForm.getRawValue().mandatory.forEach(mDoc => {
+                if (mDoc.conditions.length > 0) {
+                    mDoc.conditions.forEach(docCondition => {
+                        if (docCondition.conditionName == condition.conditionName
+                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                            toDisable = true;
+                        }
+                    });
+                }
+            });
+
+            this.legalDocumentsForm.getRawValue().optional.forEach(oDoc => {
+                if (oDoc.conditions.length > 0) {
+                    oDoc.conditions.forEach(docCondition => {
+                        if (docCondition.conditionName == condition.conditionName
+                            && condition.conditionOptions.includes(docCondition.conditionOption)) {
+                            toDisable = true;
+                        }
+                    });
+                }
+            });
+
+            if (toDisable) {
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').disable();
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').disable();
+            } else {
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').enable();
+                this.currentChecklistForm.get('conditions').get(i + '').get('conditionOptions').enable();
+            }
+        }
+    }
+
+    checkDuplicateRequiredField(control: FormControl): { [key: string]: boolean } | null {
+        let currentReqFields = this.currentChecklistForm.getRawValue().requiredFields;
+        for (let i = 0; i < currentReqFields.length - 1; i++) {
+            let requiredField = currentReqFields[i];
+            if (requiredField.fieldName === control.value) {
+                return {
+                    isDuplicate: true
+                };
+            }
+        }
+        return null;
+    }
+
+    checkDuplicateAgmtCode(control: FormControl): { [key: string]: boolean } | null {
+        if (control.value === '-') {
+            return null;
+        }
+
+        if (this.mEditDisplay || this.oEditDisplay) {
+            if (control.value === this.currentAgmtCode) {
+                return null;
+            }
+        }
+
+        if (this.mDisplay || this.mEditDisplay || this.oDisplay || this.oEditDisplay) {
+            let agmtCodes = [];
+            let currentForm = this.complianceDocumentsForm.getRawValue();
+
+            currentForm.mandatory.filter((mDoc) => mDoc.changed !== '3')
+                .map(existingMDoc => agmtCodes.push(existingMDoc.agmtCode));
+
+            currentForm.optional.filter((oDoc) => oDoc.changed !== '3')
+                .map(existingODoc => agmtCodes.push(existingODoc.agmtCode));
+
+            currentForm = this.legalDocumentsForm.getRawValue();
+
+            currentForm.mandatory.filter((mDoc) => mDoc.changed !== '3')
+                .map(existingMDoc => agmtCodes.push(existingMDoc.agmtCode));
+
+            currentForm.optional.filter((oDoc) => oDoc.changed !== '3')
+                .map(existingODoc => agmtCodes.push(existingODoc.agmtCode));
+
+            if (agmtCodes.includes(control.value)) {
+                return {
+                    isDuplicate: true
+                }
+            }
+        }
+        return null;
+    }
+
+    checkDuplicateDocumentCondition(control: FormControl): { [key: string]: boolean } | null {
+        if (this.mDisplay || this.mEditDisplay || this.oDisplay || this.oEditDisplay) {
+            if (typeof this.dialogForm !== 'undefined' && this.dialogForm.get('hasConditions').value) {
+                let currPos = (this.dialogForm.get('conditions')['length'] - 1) + '';
+                for (let i = 0; i < this.dialogForm.get('conditions')['length'] - 1; i++) {
+                    let condition = (<FormArray>this.dialogForm.controls.conditions).value[i];
+                    if (control.touched && condition.conditionName === this.dialogForm.get('conditions').get(currPos).get('conditionName').value
+                        && condition.conditionOption === control.value) {
+                        return {
+                            isDuplicate: true
+                        };
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    // Checklist Functions
+    showCInfoDialog() {
+        this.cInfoDisplay = true;
+    }
+
+    retrieveChecklistDetails(checklistId) {
         this.loading = true;
-        this.cmService.retrieveCMChecklistDetails(checklistName).subscribe(res => {
+        this.cmService.retrieveCMChecklistDetails(checklistId).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -408,17 +404,30 @@ export class CMEditChecklistComponent implements OnInit {
                 );
             });
 
-            this.retrieveConditionalConditions()
+            this.retrieveDocumentConditions()
 
             // Update Compliance Documents
             Object.keys(res.complianceDocuments['mandatory']).forEach(mandatoryDoc => {
+                let conditionsArr = [];
+                res.complianceDocuments['mandatory'][mandatoryDoc]['conditions'].forEach(condition => {
+                    conditionsArr.push(
+                        this.fb.group({
+                            conditionName: new FormControl(condition.conditionName),
+                            conditionOption: new FormControl(condition.conditionOption)
+                        })
+                    );
+                });
+
                 let complianceMandatoryArr = <FormArray>this.complianceDocumentsForm.controls.mandatory;
                 complianceMandatoryArr.push(
                     this.fb.group({
-                        documentName: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['documentName'], Validators.required),
-                        agmtCode: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
+                        hasConditions: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['hasConditions']),
+                        conditions: new FormArray(conditionsArr),
+                        documentName: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['documentName']),
+                        documentType: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['documentType']),
+                        agmtCode: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['agmtCode']),
                         signature: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['signature']),
-                        canWaiver: new FormControl(false),
+                        canWaiver: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['canWaiver']),
                         remarks: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['remarks']),
                         docID: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['docID']),
                         changed: new FormControl(res.complianceDocuments['mandatory'][mandatoryDoc]['changed'])
@@ -426,39 +435,27 @@ export class CMEditChecklistComponent implements OnInit {
                 );
             });
 
-            Object.keys(res.complianceDocuments['conditional']).forEach(conditionalDoc => {
+            Object.keys(res.complianceDocuments['optional']).forEach(optionalDoc => {
                 let conditionsArr = [];
-                res.complianceDocuments['conditional'][conditionalDoc]['conditions'].forEach(condition => {
+                res.complianceDocuments['optional'][optionalDoc]['conditions'].forEach(condition => {
                     conditionsArr.push(
                         this.fb.group({
-                            conditionName: new FormControl(condition.conditionName, Validators.required),
-                            conditionOption: new FormControl(condition.conditionOption, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
+                            conditionName: new FormControl(condition.conditionName),
+                            conditionOption: new FormControl(condition.conditionOption)
                         })
                     );
                 });
-                let complianceConditionalArr = <FormArray>this.complianceDocumentsForm.controls.conditional;
-                complianceConditionalArr.push(
-                    this.fb.group({
-                        conditions: new FormArray(conditionsArr),
-                        documentName: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['documentName'], Validators.required),
-                        agmtCode: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
-                        signature: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['signature']),
-                        canWaiver: new FormControl(false),
-                        remarks: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['remarks']),
-                        docID: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['docID']),
-                        changed: new FormControl(res.complianceDocuments['conditional'][conditionalDoc]['changed'])
-                    })
-                );
-            });
 
-            Object.keys(res.complianceDocuments['optional']).forEach(optionalDoc => {
                 let complianceOptionalArr = <FormArray>this.complianceDocumentsForm.controls.optional;
                 complianceOptionalArr.push(
                     this.fb.group({
-                        documentName: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentName'], Validators.required),
-                        agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
+                        hasConditions: new FormControl(res.complianceDocuments['optional'][optionalDoc]['hasConditions']),
+                        conditions: new FormArray(conditionsArr),
+                        documentName: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentName']),
+                        documentType: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentType']),
+                        agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode']),
                         signature: new FormControl(res.complianceDocuments['optional'][optionalDoc]['signature']),
-                        canWaiver: new FormControl(false),
+                        canWaiver: new FormControl(res.legalDocuments['mandatory'][optionalDoc]['canWaiver']),
                         remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks']),
                         docID: new FormControl(res.complianceDocuments['optional'][optionalDoc]['docID']),
                         changed: new FormControl(res.complianceDocuments['optional'][optionalDoc]['changed'])
@@ -469,11 +466,24 @@ export class CMEditChecklistComponent implements OnInit {
 
             // Update Legal Documents
             Object.keys(res.legalDocuments['mandatory']).forEach(mandatoryDoc => {
+                let conditionsArr = [];
+                res.legalDocuments['mandatory'][mandatoryDoc]['conditions'].forEach(condition => {
+                    conditionsArr.push(
+                        this.fb.group({
+                            conditionName: new FormControl(condition.conditionName),
+                            conditionOption: new FormControl(condition.conditionOption)
+                        })
+                    );
+                });
+
                 let legalMandatoryArr = <FormArray>this.legalDocumentsForm.controls.mandatory;
                 legalMandatoryArr.push(
                     this.fb.group({
-                        documentName: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['documentName'], Validators.required),
-                        agmtCode: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['agmtCode'], Validators.required),
+                        hasConditions: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['hasConditions']),
+                        conditions: new FormArray(conditionsArr),
+                        documentName: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['documentName']),
+                        documentType: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['documentType']),
+                        agmtCode: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['agmtCode']),
                         signature: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['signature']),
                         canWaiver: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['canWaiver']),
                         remarks: new FormControl(res.legalDocuments['mandatory'][mandatoryDoc]['remarks']),
@@ -483,37 +493,25 @@ export class CMEditChecklistComponent implements OnInit {
                 );
             });
 
-            Object.keys(res.legalDocuments['conditional']).forEach(conditionalDoc => {
+            Object.keys(res.legalDocuments['optional']).forEach(optionalDoc => {
                 let conditionsArr = [];
-                res.legalDocuments['conditional'][conditionalDoc]['conditions'].forEach(condition => {
+                res.legalDocuments['optional'][optionalDoc]['conditions'].forEach(condition => {
                     conditionsArr.push(
                         this.fb.group({
-                            conditionName: new FormControl(condition.conditionName, Validators.required),
-                            conditionOption: new FormControl(condition.conditionOption, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
+                            conditionName: new FormControl(condition.conditionName),
+                            conditionOption: new FormControl(condition.conditionOption)
                         })
                     );
                 });
-                let legalConditionalArr = <FormArray>this.legalDocumentsForm.controls.conditional;
-                legalConditionalArr.push(
-                    this.fb.group({
-                        conditions: new FormArray(conditionsArr),
-                        documentName: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['documentName'], Validators.required),
-                        agmtCode: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['agmtCode'], Validators.required),
-                        signature: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['signature']),
-                        canWaiver: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['canWaiver']),
-                        remarks: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['remarks']),
-                        docID: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['docID']),
-                        changed: new FormControl(res.legalDocuments['conditional'][conditionalDoc]['changed'])
-                    })
-                );
-            });
 
-            Object.keys(res.legalDocuments['optional']).forEach(optionalDoc => {
                 let legalOptionalArr = <FormArray>this.legalDocumentsForm.controls.optional;
                 legalOptionalArr.push(
                     this.fb.group({
-                        documentName: new FormControl(res.legalDocuments['optional'][optionalDoc]['documentName'], Validators.required),
-                        agmtCode: new FormControl(res.legalDocuments['optional'][optionalDoc]['agmtCode'], Validators.required),
+                        hasConditions: new FormControl(res.legalDocuments['optional'][optionalDoc]['hasConditions']),
+                        conditions: new FormArray(conditionsArr),
+                        documentName: new FormControl(res.legalDocuments['optional'][optionalDoc]['documentName']),
+                        documentType: new FormControl(res.legalDocuments['optional'][optionalDoc]['documentType']),
+                        agmtCode: new FormControl(res.legalDocuments['optional'][optionalDoc]['agmtCode']),
                         signature: new FormControl(res.legalDocuments['optional'][optionalDoc]['signature']),
                         canWaiver: new FormControl(res.legalDocuments['optional'][optionalDoc]['canWaiver']),
                         remarks: new FormControl(res.legalDocuments['optional'][optionalDoc]['remarks']),
@@ -608,187 +606,48 @@ export class CMEditChecklistComponent implements OnInit {
         });
     }
 
-    showMDialog() {
-        this.dialogForm = this.fb.group({
-            documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(false),
-            canWaiver: new FormControl(false),
-            remarks: new FormControl(''),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        });
-
-        this.blocked = true;
-        this.mDisplay = true;
-    }
-
-    addNewMandatory() {
-        this.dialogForm.get('documentName').markAsDirty();
-        this.dialogForm.get('agmtCode').markAsDirty();
-
-        if (this.dialogForm.get('documentName').invalid ||
-            this.dialogForm.get('agmtCode').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
-            });
-            return;
-        }
-
-        let control = <FormArray>this.complianceDocumentsForm.get('mandatory');
-
-        if (this.activeTab === 1) {
-            control = <FormArray>this.legalDocumentsForm.get('mandatory');
-        }
-
-        if (this.editMode) {
-            if (control.get(this.docIndex + '').get('documentName').value !== this.dialogForm.get('documentName').value) {
-                control.get(this.docIndex + '').get('documentName').setValue(this.dialogForm.get('documentName').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('agmtCode').value !== this.dialogForm.get('agmtCode').value) {
-                control.get(this.docIndex + '').get('agmtCode').setValue(this.dialogForm.get('agmtCode').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('signature').value !== this.dialogForm.get('signature').value) {
-                control.get(this.docIndex + '').get('signature').setValue(this.dialogForm.get('signature').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('canWaiver').value !== this.dialogForm.get('canWaiver').value) {
-                control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('remarks').value !== this.dialogForm.get('remarks').value) {
-                control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-
-
-            this.editMode = false;
-            this.blocked = false;
-            this.mEditDisplay = false;
-            return;
-        }
-
-        control.push(this.fb.group({
-            documentName: new FormControl(this.dialogForm.get('documentName').value, Validators.required),
-            agmtCode: new FormControl(this.dialogForm.get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(this.dialogForm.get('signature').value),
-            canWaiver: new FormControl(this.dialogForm.get('canWaiver').value),
-            remarks: new FormControl(this.dialogForm.get('remarks').value),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        })
-        );
-
-        this.blocked = false;
-        this.mDisplay = false;
-    }
-
-    cancelAddNewMandatory() {
-        this.editMode = false;
-        this.mDisplay = false;
-        this.blocked = false;
-        this.mEditDisplay = false;
-    }
-
-    editMandatoryDoc(index: number) {
-        let form = this.complianceDocumentsForm;
-
-        if (this.activeTab === 1) {
-            form = this.legalDocumentsForm;
-        }
-
-        this.dialogForm = this.fb.group({
-            documentName: new FormControl(form.get('mandatory').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('mandatory').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(form.get('mandatory').get(index + '').get('signature').value),
-            canWaiver: new FormControl(form.get('mandatory').get(index + '').get('canWaiver').value),
-            remarks: new FormControl(form.get('mandatory').get(index + '').get('remarks').value),
-            docID: new FormControl(form.get('mandatory').get(index + '').get('docID').value),
-            changed: new FormControl(form.get('mandatory').get(index + '').get('changed').value)
-        });
-
-
-        this.editMode = true;
-        this.docIndex = index;
-        this.currentAgmtCode = form.get('mandatory').get(index + '').get('agmtCode').value;
-        this.blocked = true;
-        this.mEditDisplay = true;
-    }
-
-    deleteMandatoryDoc(index: number) {
-        this.confirmationService.confirm({
-            message: 'Do you want to delete this mandatory document?',
-            header: 'Delete Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                let form = this.complianceDocumentsForm;
-
-                if (this.activeTab === 1) {
-                    form = this.legalDocumentsForm;
-                }
-
-                let control = <FormArray>form.get('mandatory');
-                control.get(index + '').get('changed').setValue('3');
-            },
-            reject: () => {
-                return;
-            }
-        });
-    }
-
-    showCDialog() {
-        if (this.currentChecklistForm.get('conditions')['length'] === 1
-            && (this.currentChecklistForm.get('conditions').get('0').get('conditionName').value == ''
-                || this.currentChecklistForm.get('conditions').get('0').get('conditionOptions').value == '')) {
-            this.currentChecklistForm.get('conditions').get('0').get('conditionName').markAsDirty();
-            this.currentChecklistForm.get('conditions').get('0').get('conditionOptions').markAsDirty();
-            document.getElementById('conditions').scrollIntoView();
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please add a condition and condition options before adding new conditional document'
-            });
-            return;
-        }
-
-        if (this.currentChecklistForm.get('conditions')['length'] > 1) {
-            let invalidConditions = false;
-            <FormArray>this.currentChecklistForm.get('conditions')['controls'].forEach(control => {
-                if (control.get('conditionName').invalid || control.get('conditionOptions').invalid) {
-                    document.getElementById('conditions').scrollIntoView();
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: 'Please correct the conditions highlighted in red'
-                    });
-                    invalidConditions = true;
-                }
-            });
-
-            if (invalidConditions) return;
-        }
-
-        this.cDialogForm = this.fb.group({
-            conditions: new FormArray([
+    toggleDocumentConditions(checked) {
+        if (checked) {
+            let array = <FormArray>this.dialogForm.get('conditions');
+            array.push(
                 this.fb.group({
                     conditionName: new FormControl('', Validators.required),
-                    conditionOption: new FormControl({ value: '', disabled: '' }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
+                    conditionOption: new FormControl({ value: '', disabled: true }, [Validators.required, this.checkDuplicateDocumentCondition.bind(this)])
                 })
-            ]),
-            documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(false),
-            canWaiver: new FormControl(false),
-            remarks: new FormControl(''),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        });
+            );
 
-        this.retrieveConditionalConditions();
+            return;
+        }
 
-        this.blocked = true;
-        this.cDisplay = true;
+        this.dialogForm.setControl('conditions', new FormArray([]));
     }
 
-    retrieveConditionalConditions() {
+    showDialog(docType: string) {
+        this.dialogForm.patchValue({
+            hasConditions: false,
+            documentName: '',
+            documentType: '',
+            agmtCode: '',
+            signature: false,
+            canWaiver: false,
+            remarks: '',
+            docID: '',
+            changed: '2'
+        });
+        this.dialogForm.setControl('conditions', new FormArray([]));
+
+        this.retrieveDocumentConditions();
+
+        if (this.dropdownData.conditions.length > 0) {
+            this.dialogForm.get('hasConditions').enable();
+        }
+
+        this.blocked = true;
+
+        docType === 'mandatory' ? this.mDisplay = true : this.oDisplay = true;
+    }
+
+    retrieveDocumentConditions() {
         let conditions: SelectItem[] = [];
         for (let i = 0; i < this.currentChecklistForm.get('conditions')['length']; i++) {
             if (this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value !== '') {
@@ -801,7 +660,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.dropdownData['conditions'] = conditions;
     }
 
-    onConditionNameSelect(conditionName: string, index: number) {
+    onDocumentConditionNameSelect(conditionName: string, index: number) {
         let conditionOptions: SelectItem[] = [];
         for (let i = 0; i < this.currentChecklistForm.get('conditions')['length']; i++) {
             if (conditionName === this.currentChecklistForm.get('conditions').get(i + '').get('conditionName').value) {
@@ -815,57 +674,58 @@ export class CMEditChecklistComponent implements OnInit {
             }
         }
 
-        let lastPos = this.cDialogForm.get('conditions')['length'] - 1;
-        this.cDialogForm.get('conditions').get(lastPos + '').get('conditionOption').enable();
+        let lastPos = this.dialogForm.get('conditions')['length'] - 1;
+        this.dialogForm.get('conditions').get(lastPos + '').get('conditionOption').enable();
         this.dropdownData['conditionOptions'][index] = conditionOptions;
     }
 
-    reloadConditionalConditionOptions(index: number) {
+    reloadDocumentConditionOptions(docType: string, index: number) {
         let form = this.complianceDocumentsForm;
 
         if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
-        for (let i = 0; i < form.get('conditional').get(index + '').get('conditions')['length']; i++) {
-            let control = form.get('conditional').get(index + '').get('conditions').get(i + '');
-            this.onConditionNameSelect(control.get('conditionName').value, i);
+        for (let i = 0; i < form.get(docType).get(index + '').get('conditions')['length']; i++) {
+            let control = form.get(docType).get(index + '').get('conditions').get(i + '');
+            this.onDocumentConditionNameSelect(control.get('conditionName').value, i);
         }
     }
 
-    addNewConditionalCondition() {
-        let i = (+this.cDialogForm.get('conditions')['length'] - 1) + '';
+    addNewDocumentCondition() {
+        let i = (+this.dialogForm.get('conditions')['length'] - 1) + '';
 
-        this.cDialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
-        this.cDialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
+        this.dialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
+        this.dialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
 
-        if (this.cDialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid) {
+        if (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
+            this.dialogForm.get('conditions').get(i).get('conditionOption').invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please fill in the condition name and options using the dropdown menu before adding another condition'
             });
             return;
         }
 
-        let control = <FormArray>this.cDialogForm.get('conditions');
+        let control = <FormArray>this.dialogForm.get('conditions');
         control.push(
             this.fb.group({
                 conditionName: new FormControl('', Validators.required),
-                conditionOption: new FormControl({ value: '', disabled: '' }, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
+                conditionOption: new FormControl({ value: '', disabled: true }, [Validators.required, this.checkDuplicateDocumentCondition.bind(this)])
             })
         );
-        this.cDialogForm.get('changed').setValue('1');
+
+        this.dialogForm.get('changed').setValue('1');
     }
 
-    deleteConditionalCondition(index) {
+    deleteDocumentCondition(index) {
         this.confirmationService.confirm({
             message: 'Do you want to delete this condition?',
             header: 'Delete Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                let control = <FormArray>this.cDialogForm.get('conditions');
+                let control = <FormArray>this.dialogForm.get('conditions');
                 control.removeAt(index);
-                this.cDialogForm.get('changed').setValue('1');
+                this.dialogForm.get('changed').setValue('3');
             },
             reject: () => {
                 return;
@@ -873,188 +733,27 @@ export class CMEditChecklistComponent implements OnInit {
         });
     }
 
-    addNewConditional() {
-        let i = (+this.cDialogForm.get('conditions')['length'] - 1) + '';
+    addNewDocument(docType: string) {
+        let i = (+this.dialogForm.get('conditions')['length'] - 1) + '';
 
-        if (+i > 0 && this.cDialogForm.get('conditions').get(i).get('conditionName').value === ''
-            && this.cDialogForm.get('conditions').get(i).get('conditionOption').value === '') {
-            let control = <FormArray>this.cDialogForm.get('conditions');
+        if (+i > 0 && this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
+            && this.dialogForm.get('conditions').get(i).get('conditionOption').value === '') {
+            let control = <FormArray>this.dialogForm.get('conditions');
             control.removeAt(+i);
             i = +i - 1 + '';
+
+            this.dialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
+            this.dialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
         }
 
-        this.cDialogForm.get('conditions').get(i).get('conditionName').markAsDirty();
-        this.cDialogForm.get('conditions').get(i).get('conditionOption').markAsDirty();
-        this.cDialogForm.get('documentName').markAsDirty();
-        this.cDialogForm.get('agmtCode').markAsDirty();
-
-        if (this.cDialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.cDialogForm.get('conditions').get(i).get('conditionOption').invalid ||
-            this.cDialogForm.get('documentName').invalid ||
-            this.cDialogForm.get('agmtCode').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
-            });
-            return;
-        }
-
-        let control = <FormArray>this.complianceDocumentsForm.get('conditional');
-
-        if (this.activeTab === 1) {
-            control = <FormArray>this.legalDocumentsForm.get('conditional');
-        }
-
-        if (this.editMode) {
-            if (control.get(this.docIndex + '').get('conditions').value !== this.cDialogForm.get('conditions').value) {
-                let conditions = <FormArray>control.get(this.docIndex + '').get('conditions');
-                while (conditions.length != 0) {
-                    conditions.removeAt(0);
-                }
-                this.cDialogForm.get('conditions').value.forEach(condition => {
-                    conditions.push(this.fb.group({
-                        conditionName: condition.conditionName,
-                        conditionOption: condition.conditionOption
-                    }));
-                });
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-
-            if (control.get(this.docIndex + '').get('documentName').value !== this.cDialogForm.get('documentName').value) {
-                control.get(this.docIndex + '').get('documentName').setValue(this.cDialogForm.get('documentName').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('agmtCode').value !== this.cDialogForm.get('agmtCode').value) {
-                control.get(this.docIndex + '').get('agmtCode').setValue(this.cDialogForm.get('agmtCode').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('signature').value !== this.cDialogForm.get('signature').value) {
-                control.get(this.docIndex + '').get('signature').setValue(this.cDialogForm.get('signature').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('canWaiver').value !== this.cDialogForm.get('canWaiver').value) {
-                control.get(this.docIndex + '').get('canWaiver').setValue(this.cDialogForm.get('canWaiver').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('remarks').value !== this.cDialogForm.get('remarks').value) {
-                control.get(this.docIndex + '').get('remarks').setValue(this.cDialogForm.get('remarks').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-
-            this.checkConditionInUse();
-            this.editMode = false;
-            this.blocked = false;
-            this.cEditDisplay = false;
-            return;
-        }
-
-        control.push(this.fb.group({
-            conditions: this.cDialogForm.get('conditions'),
-            documentName: new FormControl(this.cDialogForm.get('documentName').value, Validators.required),
-            agmtCode: new FormControl(this.cDialogForm.get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(this.cDialogForm.get('signature').value),
-            canWaiver: new FormControl(this.cDialogForm.get('canWaiver').value),
-            remarks: new FormControl(this.cDialogForm.get('remarks').value),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        })
-        );
-
-        this.checkConditionInUse();
-
-        this.dropdownData.conditionOptions = [];
-        this.blocked = false;
-        this.cDisplay = false;
-    }
-
-    cancelAddNewConditional() {
-        this.editMode = false;
-        this.dropdownData.conditionOptions = [];
-        this.cEditDisplay = false;
-        this.blocked = false;
-        this.cDisplay = false;
-    }
-
-    editConditionalDoc(index: number) {
-        let form = this.complianceDocumentsForm;
-
-        if (this.activeTab === 1) {
-            form = this.legalDocumentsForm;
-        }
-
-        this.cDialogForm = this.fb.group({
-            conditions: new FormArray([]),
-            documentName: new FormControl(form.get('conditional').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('conditional').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(form.get('conditional').get(index + '').get('signature').value),
-            canWaiver: new FormControl(form.get('conditional').get(index + '').get('canWaiver').value),
-            remarks: new FormControl(form.get('conditional').get(index + '').get('remarks').value),
-            docID: new FormControl(form.get('conditional').get(index + '').get('docID').value),
-            changed: new FormControl(form.get('conditional').get(index + '').get('changed').value)
-        });
-
-        form.get('conditional').get(index + '').get('conditions')['controls'].forEach(control => {
-            let arr = <FormArray>this.cDialogForm.get('conditions');
-            arr.push(
-                this.fb.group({
-                    conditionName: new FormControl(control.get('conditionName').value, Validators.required),
-                    conditionOption: new FormControl(control.get('conditionOption').value, [Validators.required, this.checkDuplicateConditionalCondition.bind(this)])
-                })
-            );
-        });
-
-        this.retrieveConditionalConditions();
-        this.reloadConditionalConditionOptions(index);
-
-        this.docIndex = index;
-        this.currentAgmtCode = form.get('conditional').get(index + '').get('agmtCode').value;
-        this.editMode = true;
-        this.blocked = true;
-        this.cEditDisplay = true;
-    }
-
-    deleteConditionalDoc(index: number) {
-        this.confirmationService.confirm({
-            message: 'Do you want to delete this conditional document?',
-            header: 'Delete Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                let form = this.complianceDocumentsForm;
-
-                if (this.activeTab === 1) {
-                    form = this.legalDocumentsForm;
-                }
-
-                let control = <FormArray>form.get('conditional');
-                control.get(index + '').get('changed').setValue('3');
-
-                this.checkConditionInUse();
-            },
-            reject: () => {
-                return;
-            }
-        });
-    }
-
-    showODialog() {
-        this.dialogForm = this.fb.group({
-            documentName: new FormControl('', Validators.required),
-            agmtCode: new FormControl('', [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(false),
-            canWaiver: new FormControl(false),
-            remarks: new FormControl(''),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        });
-
-        this.blocked = true;
-        this.oDisplay = true;
-    }
-
-    addNewOptional() {
         this.dialogForm.get('documentName').markAsDirty();
+        this.dialogForm.get('documentType').markAsDirty();
         this.dialogForm.get('agmtCode').markAsDirty();
 
-        if (this.dialogForm.get('documentName').invalid ||
+        if ((+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
+            this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
+            this.dialogForm.get('documentName').invalid ||
+            this.dialogForm.get('documentType').invalid ||
             this.dialogForm.get('agmtCode').invalid) {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
@@ -1062,89 +761,214 @@ export class CMEditChecklistComponent implements OnInit {
             return;
         }
 
-        let control = <FormArray>this.complianceDocumentsForm.get('optional');
+        let control = <FormArray>this.complianceDocumentsForm.get(docType);
 
         if (this.activeTab === 1) {
-            control = <FormArray>this.legalDocumentsForm.get('optional');
+            control = <FormArray>this.legalDocumentsForm.get(docType);
         }
 
+        let rawForm = this.dialogForm.getRawValue();
+
         if (this.editMode) {
-            if (control.get(this.docIndex + '').get('documentName').value !== this.dialogForm.get('documentName').value) {
-                control.get(this.docIndex + '').get('documentName').setValue(this.dialogForm.get('documentName').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('agmtCode').value !== this.dialogForm.get('agmtCode').value) {
-                control.get(this.docIndex + '').get('agmtCode').setValue(this.dialogForm.get('agmtCode').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('signature').value !== this.dialogForm.get('signature').value) {
-                control.get(this.docIndex + '').get('signature').setValue(this.dialogForm.get('signature').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('canWaiver').value !== this.dialogForm.get('canWaiver').value) {
-                control.get(this.docIndex + '').get('canWaiver').setValue(this.dialogForm.get('canWaiver').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
-            }
-            if (control.get(this.docIndex + '').get('remarks').value !== this.dialogForm.get('remarks').value) {
-                control.get(this.docIndex + '').get('remarks').setValue(this.dialogForm.get('remarks').value);
-                control.get(this.docIndex + '').get('changed').setValue('1');
+            (<FormGroup>control.get(this.docIndex + '')).setControl('conditions', new FormArray([]));
+            let conditions = <FormArray>control.get(this.docIndex + '').get('conditions');
+
+            rawForm.conditions.forEach(condition => {
+                conditions.push(
+                    this.fb.group({
+                        conditionName: new FormControl(condition.conditionName),
+                        conditionOption: new FormControl(condition.conditionOption)
+                    })
+                );
+            });
+
+            this.checkConditionInUse();
+
+            if (control.get(this.docIndex + '').get('changed').value !== '2') {
+                if (control.get(this.docIndex + '').get('hasConditions').value !== rawForm.hasConditions) {
+                    control.get(this.docIndex + '').get('hasConditions').setValue(rawForm.hasConditions);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
+
+                if (control.get(this.docIndex + '').get('documentName').value !== rawForm.documentName) {
+                    control.get(this.docIndex + '').get('documentName').setValue(rawForm.documentName);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
+
+                if (control.get(this.docIndex + '').get('documentType').value !== rawForm.documentType) {
+                    control.get(this.docIndex + '').get('documentType').setValue(rawForm.documentType);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
+
+                if (control.get(this.docIndex + '').get('agmtCode').value !== rawForm.agmtCode) {
+                    control.get(this.docIndex + '').get('agmtCode').setValue(rawForm.agmtCode);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
+
+                if (control.get(this.docIndex + '').get('signature').value !== rawForm.signature) {
+                    control.get(this.docIndex + '').get('signature').setValue(rawForm.signature);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
+
+                if (control.get(this.docIndex + '').get('canWaiver').value !== rawForm.canWaiver) {
+                    control.get(this.docIndex + '').get('canWaiver').setValue(rawForm.canWaiver);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
+
+                if (control.get(this.docIndex + '').get('remarks').value !== rawForm.remarks) {
+                    control.get(this.docIndex + '').get('remarks').setValue(rawForm.remarks);
+                    control.get(this.docIndex + '').get('changed').setValue('1');
+                }
             }
 
             this.editMode = false;
             this.blocked = false;
+            this.mEditDisplay = false;
             this.oEditDisplay = false;
+
+            this.dialogForm.patchValue({
+                hasConditions: false,
+                documentName: '',
+                documentType: '',
+                agmtCode: '',
+                signature: false,
+                canWaiver: false,
+                remarks: '',
+                docID: '',
+                changed: '2'
+            });
+
+            this.dialogForm.setControl('conditions', new FormArray([]));
+            this.dialogForm.reset();
             return;
         }
-        
-        control.push(this.fb.group({
-            documentName: new FormControl(this.dialogForm.get('documentName').value, Validators.required),
-            agmtCode: new FormControl(this.dialogForm.get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(this.dialogForm.get('signature').value),
-            canWaiver: new FormControl(this.dialogForm.get('canWaiver').value),
-            remarks: new FormControl(this.dialogForm.get('remarks').value),
-            docID: new FormControl(''),
-            changed: new FormControl('2')
-        })
+
+        control.push(
+            this.fb.group({
+                hasConditions: new FormControl(rawForm.hasConditions),
+                conditions: new FormArray([]),
+                documentName: new FormControl(rawForm.documentName),
+                documentType: new FormControl(rawForm.documentType),
+                agmtCode: new FormControl(rawForm.agmtCode),
+                signature: new FormControl(rawForm.signature),
+                canWaiver: new FormControl(rawForm.canWaiver),
+                remarks: new FormControl(rawForm.remarks),
+                docID: new FormControl(rawForm.docID),
+                changed: new FormControl(rawForm.changed)
+            })
         );
 
+        let array = <FormArray>control.get(control.controls['length'] - 1 + '').get('conditions');
+
+        rawForm.conditions.forEach(condition => {
+            array.push(
+                this.fb.group({
+                    conditionName: new FormControl(condition.conditionName),
+                    conditionOption: new FormControl(condition.conditionOption)
+                })
+            );
+        });
+
+        this.checkConditionInUse();
+
+        this.dropdownData.conditionOptions = [];
         this.blocked = false;
+        this.mDisplay = false;
         this.oDisplay = false;
+
+        this.dialogForm.patchValue({
+            hasConditions: false,
+            documentName: '',
+            documentType: '',
+            agmtCode: '',
+            signature: false,
+            canWaiver: false,
+            remarks: '',
+            docID: '',
+            changed: '2'
+        });
+        this.dialogForm.setControl('conditions', new FormArray([]));
+        this.dialogForm.reset();
     }
 
-    cancelAddNewOptional() {
+    cancelAddNewDocument() {
         this.editMode = false;
+        this.dropdownData.conditionOptions = [];
+        this.mDisplay = false;
         this.oDisplay = false;
-        this.blocked = false;
+        this.mEditDisplay = false;
         this.oEditDisplay = false;
+        this.blocked = false;
+
+        this.dialogForm.patchValue({
+            hasConditions: false,
+            documentName: '',
+            documentType: '',
+            agmtCode: '',
+            signature: false,
+            canWaiver: false,
+            remarks: '',
+            docID: '',
+            changed: '2'
+        });
+
+        this.dialogForm.setControl('conditions', new FormArray([]));
+        this.dialogForm.reset();
     }
 
-    editOptionalDoc(index: number) {
+    editDocument(docType: string, index: number) {
         let form = this.complianceDocumentsForm;
 
         if (this.activeTab === 1) {
             form = this.legalDocumentsForm;
         }
 
-        this.dialogForm = this.fb.group({
-            documentName: new FormControl(form.get('optional').get(index + '').get('documentName').value, Validators.required),
-            agmtCode: new FormControl(form.get('optional').get(index + '').get('agmtCode').value, [Validators.required, this.checkDuplicateAgmtCode.bind(this)]),
-            signature: new FormControl(form.get('optional').get(index + '').get('signature').value),
-            canWaiver: new FormControl(form.get('optional').get(index + '').get('canWaiver').value),
-            remarks: new FormControl(form.get('optional').get(index + '').get('remarks').value),
-            docID: new FormControl(form.get('optional').get(index + '').get('docID').value),
-            changed: new FormControl(form.get('optional').get(index + '').get('changed').value)
+        let rawForm = form.getRawValue();
+
+        this.dialogForm.patchValue({
+            hasConditions: rawForm[docType][index].hasConditions,
+            documentName: rawForm[docType][index].documentName,
+            documentType: rawForm[docType][index].documentType,
+            agmtCode: rawForm[docType][index].agmtCode,
+            signature: rawForm[docType][index].signature,
+            canWaiver: rawForm[docType][index].canWaiver,
+            remarks: rawForm[docType][index].remarks,
+            docID: rawForm[docType][index].docID,
+            changed: rawForm[docType][index].changed
         });
 
-        this.editMode = true;
+        this.dialogForm.setControl('conditions', new FormArray([]));
+
+        rawForm[docType][index].conditions.forEach(condition => {
+            let arr = <FormArray>this.dialogForm.get('conditions');
+            arr.push(
+                this.fb.group({
+                    conditionName: new FormControl(condition.conditionName, Validators.required),
+                    conditionOption: new FormControl(condition.conditionOption, [Validators.required, this.checkDuplicateDocumentCondition.bind(this)])
+                })
+            );
+        });
+
+        this.retrieveDocumentConditions();
+        this.reloadDocumentConditionOptions(docType, index);
+
+        if (this.dropdownData.conditions.length > 0) {
+            this.dialogForm.get('hasConditions').enable();
+        } else {
+            this.dialogForm.get('hasConditions').disable();
+        }
+
+        this.currentAgmtCode = form.get(docType).get(index + '').get('agmtCode').value;
         this.docIndex = index;
-        this.currentAgmtCode = form.get('optional').get(index + '').get('agmtCode').value;
+        this.editMode = true;
         this.blocked = true;
-        this.oEditDisplay = true;
+
+        docType === 'mandatory' ? this.mEditDisplay = true : this.oEditDisplay = true;
     }
 
-    deleteOptionalDoc(index: number) {
+    deleteDocument(docType: string, index: number) {
         this.confirmationService.confirm({
-            message: 'Do you want to delete this optional document?',
+            message: 'Do you want to delete this ' + docType + ' document?',
             header: 'Delete Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -1154,8 +978,10 @@ export class CMEditChecklistComponent implements OnInit {
                     form = this.legalDocumentsForm;
                 }
 
-                let control = <FormArray>form.get('optional');
+                let control = <FormArray>form.get(docType);
                 control.get(index + '').get('changed').setValue('3');
+
+                this.checkConditionInUse();
             },
             reject: () => {
                 return;
@@ -1229,115 +1055,10 @@ export class CMEditChecklistComponent implements OnInit {
             }
         }
 
+        // Documents
+        this.checklist['complianceDocuments'] = this.complianceDocumentsForm.getRawValue();
+        this.checklist['legalDocuments'] = this.legalDocumentsForm.getRawValue();
 
-        // Compliance Documents
-        this.checklist['complianceDocuments'] = {};
-        this.checklist['complianceDocuments']['mandatory'] = [];
-
-        for (let i = 0; i < this.complianceDocumentsForm.get('mandatory')['length']; i++) {
-            let mandatoryDoc = this.complianceDocumentsForm.get('mandatory').get(i + '');
-            this.checklist['complianceDocuments']['mandatory'].push({
-                documentName: mandatoryDoc.get('documentName').value,
-                agmtCode: mandatoryDoc.get('agmtCode').value,
-                signature: mandatoryDoc.get('signature').value,
-                remarks: mandatoryDoc.get('remarks').value,
-                docID: mandatoryDoc.get('docID').value,
-                changed: mandatoryDoc.get('changed').value
-            });
-        }
-
-        this.checklist['complianceDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.complianceDocumentsForm.get('conditional')['length']; i++) {
-            let conditionalDoc = this.complianceDocumentsForm.get('conditional').get(i + '');
-            let conditions = [];
-            for (let j = 0; j < this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
-                let condition = this.complianceDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
-                conditions.push({
-                    conditionName: condition.get('conditionName').value,
-                    conditionOption: condition.get('conditionOption').value
-                });
-            }
-            this.checklist['complianceDocuments']['conditional'].push({
-                conditions: conditions,
-                documentName: conditionalDoc.get('documentName').value,
-                agmtCode: conditionalDoc.get('agmtCode').value,
-                signature: conditionalDoc.get('signature').value,
-                remarks: conditionalDoc.get('remarks').value,
-                docID: conditionalDoc.get('docID').value,
-                changed: conditionalDoc.get('changed').value
-            });
-        }
-
-        this.checklist['complianceDocuments']['optional'] = [];
-
-        for (let i = 0; i < this.complianceDocumentsForm.get('optional')['length']; i++) {
-            let optionalDoc = this.complianceDocumentsForm.get('optional').get(i + '');
-            this.checklist['complianceDocuments']['optional'].push({
-                documentName: optionalDoc.get('documentName').value,
-                agmtCode: optionalDoc.get('agmtCode').value,
-                signature: optionalDoc.get('signature').value,
-                remarks: optionalDoc.get('remarks').value,
-                docID: optionalDoc.get('docID').value,
-                changed: optionalDoc.get('changed').value
-            });
-        }
-
-        // Legal Documents
-        this.checklist['legalDocuments'] = {};
-        this.checklist['legalDocuments']['mandatory'] = [];
-
-        for (let i = 0; i < this.legalDocumentsForm.get('mandatory')['length']; i++) {
-            let mandatoryDoc = this.legalDocumentsForm.get('mandatory').get(i + '');
-            this.checklist['legalDocuments']['mandatory'].push({
-                documentName: mandatoryDoc.get('documentName').value,
-                agmtCode: mandatoryDoc.get('agmtCode').value,
-                signature: mandatoryDoc.get('signature').value,
-                canWaiver: mandatoryDoc.get('canWaiver').value,
-                remarks: mandatoryDoc.get('remarks').value,
-                docID: mandatoryDoc.get('docID').value,
-                changed: mandatoryDoc.get('changed').value
-            });
-        }
-
-        this.checklist['legalDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.legalDocumentsForm.get('conditional')['length']; i++) {
-            let conditionalDoc = this.legalDocumentsForm.get('conditional').get(i + '');
-            let conditions = [];
-            for (let j = 0; j < this.legalDocumentsForm.get('conditional').get(i + '').get('conditions')['length']; j++) {
-                let condition = this.legalDocumentsForm.get('conditional').get(i + '').get('conditions').get(j + '');
-                conditions.push({
-                    conditionName: condition.get('conditionName').value,
-                    conditionOption: condition.get('conditionOption').value
-                });
-            }
-            this.checklist['legalDocuments']['conditional'].push({
-                conditions: conditions,
-                documentName: conditionalDoc.get('documentName').value,
-                agmtCode: conditionalDoc.get('agmtCode').value,
-                signature: conditionalDoc.get('signature').value,
-                canWaiver: conditionalDoc.get('canWaiver').value,
-                remarks: conditionalDoc.get('remarks').value,
-                docID: conditionalDoc.get('docID').value,
-                changed: conditionalDoc.get('changed').value
-            });
-        }
-
-        this.checklist['legalDocuments']['optional'] = [];
-
-        for (let i = 0; i < this.legalDocumentsForm.get('optional')['length']; i++) {
-            let optionalDoc = this.legalDocumentsForm.get('optional').get(i + '');
-            this.checklist['legalDocuments']['optional'].push({
-                documentName: optionalDoc.get('documentName').value,
-                agmtCode: optionalDoc.get('agmtCode').value,
-                signature: optionalDoc.get('signature').value,
-                canWaiver: optionalDoc.get('canWaiver').value,
-                remarks: optionalDoc.get('remarks').value,
-                docID: optionalDoc.get('docID').value,
-                changed: optionalDoc.get('changed').value
-            });
-        }
 
         this.cmService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
@@ -1364,32 +1085,5 @@ export class CMEditChecklistComponent implements OnInit {
             this.processing = false;
             return;
         });
-    }
-
-    get numMandatoryDocs(): number {
-        let formArray = <FormArray>this.complianceDocumentsForm.get('mandatory');
-
-        if (this.activeTab === 1) {
-            formArray = <FormArray>this.legalDocumentsForm.get('mandatory');
-        }
-        return formArray.value.filter(doc => doc.changed !== '3').length;
-    }
-
-    get numConditionalDocs(): number {
-        let formArray = <FormArray>this.complianceDocumentsForm.get('conditional');
-
-        if (this.activeTab === 1) {
-            formArray = <FormArray>this.legalDocumentsForm.get('conditional');
-        }
-        return formArray.value.filter(doc => doc.changed !== '3').length;
-    }
-
-    get numOptionalDocs(): number {
-        let formArray = <FormArray>this.complianceDocumentsForm.get('optional');
-
-        if (this.activeTab === 1) {
-            formArray = <FormArray>this.legalDocumentsForm.get('optional');
-        }
-        return formArray.value.filter(doc => doc.changed !== '3').length;
     }
 }

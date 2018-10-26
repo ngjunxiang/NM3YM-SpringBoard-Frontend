@@ -62,7 +62,7 @@
                     <font size="3">
                         <p>
                             <strong>Checklist conditions are tied to onboarding documents which are required under
-                                certain condition.</strong>
+                                certain conditions.</strong>
                             <br>
                             <i>E.G. Financial Intermediary Agreement is only required if Booking Center is Hong Kong.</i>
                         </p>
@@ -418,7 +418,7 @@
                                             <ng-container *ngIf="j === 0">
                                                 <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentName').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentType').value }}</td>
                                             </ng-container>
                                             <td>{{ condition.get('conditionName').value }}</td>
@@ -553,7 +553,7 @@
                         </div>
                     </p-dialog>
 
-                    <p-dialog [formGroup]="dialogForm" header="Edit Optional Document" [(visible)]="mEditDisplay"
+                    <p-dialog [formGroup]="dialogForm" header="Edit Optional Document" [(visible)]="oEditDisplay"
                         [closable]="false" [maximizable]="true" [width]="800">
                         <p-checkbox label="Does this document have conditions?" binary="true" formControlName="hasConditions"
                             (onChange)="toggleDocumentConditions($event)"></p-checkbox>
@@ -812,7 +812,7 @@
                         </div>
                     </p-dialog>
 
-                    <p-dialog [formGroup]="dialogForm" header="Edit Mandatory Document" [(visible)]="oEditDisplay"
+                    <p-dialog [formGroup]="dialogForm" header="Edit Mandatory Document" [(visible)]="mEditDisplay"
                         [closable]="false" [maximizable]="true" [width]="800">
                         <p-checkbox label="Does this document have conditions?" binary="true" formControlName="hasConditions"
                             (onChange)="toggleDocumentConditions($event)"></p-checkbox>
@@ -920,7 +920,7 @@
                                             <ng-container *ngIf="j === 0">
                                                 <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentName').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
                                                     doc.get('documentType').value }}</td>
                                             </ng-container>
                                             <td>{{ condition.get('conditionName').value }}</td>
@@ -936,10 +936,10 @@
                                                 <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
                                                     <i class="fa fa-times"></i>
                                                 </td>
-                                                <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
                                                     <i class="fa fa-check"></i>
                                                 </td>
-                                                <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
                                                     <i class="fa fa-times"></i>
                                                 </td>
                                                 <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
