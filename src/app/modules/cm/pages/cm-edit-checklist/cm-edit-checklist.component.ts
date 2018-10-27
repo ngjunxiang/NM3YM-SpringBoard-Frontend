@@ -142,7 +142,7 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     // Get Num Docs
-    get numMandatoryDocs(): number {)
+    get numMandatoryDocs(): number {
         let formArray = <FormArray>this.complianceDocumentsForm.get('mandatory');
 
         if (this.activeTab === 1) {
@@ -152,7 +152,7 @@ export class CMEditChecklistComponent implements OnInit {
         return formArray.value.filter(doc => doc.changed !== '3').length;
     }
 
-    get numOptionalDocs(): number {)
+    get numOptionalDocs(): number {
         let formArray = <FormArray>this.complianceDocumentsForm.get('optional');
 
         if (this.activeTab === 1) {

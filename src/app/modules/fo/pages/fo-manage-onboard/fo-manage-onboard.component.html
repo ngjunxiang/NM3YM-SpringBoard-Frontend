@@ -47,15 +47,6 @@
                     <button pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteOnboardProcess(i)"></button>
                 </div>
 
-                <div *ngIf="obProcess.progress === 100">
-                    <div *ngIf="obProcess.urgent">
-                        <button pButton class="ui-button-warning" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
-                    </div>
-                    <div *ngIf="!obProcess.urgent">
-                        <button pButton class="ui-button-secondary" (click)="toggleUrgent(i)" style="float: right;" label="Urgent" type="button"></button>
-                    </div>
-                </div>
-
                 <div class="ui-g">
                     <div style="display: inline-block" class="ui-g-4">
                         <p>

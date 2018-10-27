@@ -81,11 +81,6 @@ export class FOManageOnboardComponent implements OnInit {
         this.retrieveFilterOnboardProcesses();
     }
 
-    toggleUrgent(index: number) {
-        this.obProcesses[index].urgent = !this.obProcesses[index].urgent
-        // invoke service
-    }
-
     retrieveAllOnboardProcesses() {
         this.loading = true;
         this.obProcesses = [];
@@ -107,7 +102,6 @@ export class FOManageOnboardComponent implements OnInit {
                     let obID = obList.obID;
                     let conditions = [];
                     let progress = obList.progress;
-                    let urgent = obList.urgent;
                     Object.keys(obList.requiredFields).forEach(key => {
                         let fieldName;
                         for (fieldName in obList.requiredFields[key]);
@@ -129,8 +123,7 @@ export class FOManageOnboardComponent implements OnInit {
                         'type': type,
                         'requiredFields': requiredFields,
                         'conditions': conditions,
-                        'progress': progress,
-                        'urgent': urgent
+                        'progress': progress
                     });
                 });
             }
@@ -165,7 +158,6 @@ export class FOManageOnboardComponent implements OnInit {
                     let obID = obList.obID;
                     let conditions = [];
                     let progress = obList.progress;
-                    let urgent = obList.urgent;
                     Object.keys(obList.requiredFields).forEach(key => {
                         let fieldName;
                         for (fieldName in obList.requiredFields[key]);
@@ -187,8 +179,7 @@ export class FOManageOnboardComponent implements OnInit {
                         'type': type,
                         'requiredFields': requiredFields,
                         'conditions': conditions,
-                        'progress': progress,
-                        'urgent': urgent
+                        'progress': progress
                     });
 
                 });
@@ -221,7 +212,6 @@ export class FOManageOnboardComponent implements OnInit {
                     let obID = obList.obID;
                     let conditions = [];
                     let progress = obList.progress;
-                    let urgent = obList.urgent;
                     Object.keys(obList.requiredFields).forEach(key => {
                         let fieldName;
                         for (fieldName in obList.requiredFields[key]);
@@ -243,8 +233,7 @@ export class FOManageOnboardComponent implements OnInit {
                         'type': type,
                         'requiredFields': requiredFields,
                         'conditions': conditions,
-                        'progress': progress,
-                        'urgent': urgent
+                        'progress': progress
                     });
                 });
             }
@@ -323,7 +312,6 @@ export class FOManageOnboardComponent implements OnInit {
                 let obID = client.obID;
                 let conditions = [];
                 let progress = client.progress;
-                let urgent = client.urgent;
 
                 Object.keys(client.requiredFields).forEach(key => {
                     let fieldName;
@@ -346,8 +334,7 @@ export class FOManageOnboardComponent implements OnInit {
                     'type': type,
                     'requiredFields': requiredFields,
                     'conditions': conditions,
-                    'progress': progress,
-                    'urgent': urgent
+                    'progress': progress
                 });
             };
         });
