@@ -82,7 +82,7 @@
                                         <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)" type="text"
                                             icon="fas fa-plus" pButton></button>
                                     </div>
-                                    <div *ngIf="!highlighted[i]" style="padding-left: 0px">
+                                    <div *ngIf="!highlighted[i] && faqTrainerForm.get('questions').get(i+'').get('intent').value != '' " style="padding-left: 0px">
                                         <button style="align-content: center;" label='Select a word from the question to create an entity' type="text" [disabled]="true"
                                             pButton></button>
                                     </div>

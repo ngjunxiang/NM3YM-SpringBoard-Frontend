@@ -9,7 +9,7 @@
     </div>
 </form>
 
-<div class="ui-g" style="margin-top: 10px">
+<div class="ui-g" *ngIf="!searched" style="margin-top: 10px">
     <div class="ui-g-5" style="padding-left: 0px;">
         <p style="margin-bottom: 2px;">Select Category:</p>
         <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select a Category" (onChange)="categoriseBy()"></p-dropdown>
@@ -21,6 +21,13 @@
     <div class="ui-g-2 clickable" style="padding-top: 5% ; padding-left: 0px; height: 50.67px" (click)="loadPage()">
         <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">
         <u>clear all</u>
+    </div>
+</div>
+
+<div class="ui-g" *ngIf="searched" style="margin-top: 10px">
+    <div class="ui-g-5" style="padding-left: 0px;">
+        <p style="margin-bottom: 2px;">Select Category:</p>
+        <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select a Category" (onChange)="categoriseBy()"></p-dropdown>
     </div>
 </div>
 

@@ -269,7 +269,8 @@ export class CMFaqCleaningComponent implements OnInit {
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: successCount + ' FAQ have been cleaned.'
                 });
-
+                
+                this.loading = true;
                 this.retrieveUncleanedFAQ();
             }
         }, error => {
