@@ -1,5 +1,9 @@
-:host >>> ui.dropdown {
-  min-width: 200px;
+:host >>> .ui-dropdown .ui-dropdown-label.category {
+  min-width: 300px;
+}
+
+:host >>> .ui-dropdown .ui-dropdown-label.sortBy {
+  min-width: 300px;
 }
 
 

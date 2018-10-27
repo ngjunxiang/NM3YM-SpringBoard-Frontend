@@ -28,8 +28,8 @@ export class FOFaqViewAllComponent implements OnInit {
     // UI Components
     categoryOptions: any[];
     sortByOptions: any[];
-    selectedCategory: string;
-    selectedSortBy: string;
+    selectedCategory: string = '';
+    selectedSortBy: string = '';
     questionForm: FormGroup;
     newQuestionForm: FormGroup;
     faqs: any[];
@@ -65,6 +65,8 @@ export class FOFaqViewAllComponent implements OnInit {
 
     retrieveFAQ() {
         this.faqs = [];
+        this.selectedCategory = '';
+        this.selectedSortBy = '';
 
         this.foService.retrieveAllFaq().subscribe(res => {
             if (res.error) {
@@ -131,6 +133,11 @@ export class FOFaqViewAllComponent implements OnInit {
         });
     }
 
+    exitResult(){
+        this.searched = false;
+        this.retrieveFAQ();
+    }
+
     retrieveIntents() {
         this.foService.retrieveIntents().subscribe(res => {
             if (res.error) {
@@ -156,11 +163,11 @@ export class FOFaqViewAllComponent implements OnInit {
         });
     }
 
-    sortBy() {
+    filterAndSortBy() {
         this.loading = true;
         this.faqs = [];
 
-        this.foService.retrieveFAQBySort(this.selectedSortBy).subscribe(res => {
+        this.foService.retrieveFAQByCategoryAndSort(this.selectedCategory, this.selectedSortBy).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error

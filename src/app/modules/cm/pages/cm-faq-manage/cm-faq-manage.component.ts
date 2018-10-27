@@ -45,8 +45,8 @@ export class CMFaqManageComponent implements OnInit {
     faqs: any[];
     categoryOptions: any[];
     sortByOptions: any[];
-    selectedCategory: string;
-    selectedSortBy: string;
+    selectedCategory: string = '';
+    selectedSortBy: string = '';
     answerForm: FormGroup;
     questionForm: FormGroup;
     searchForm: FormGroup;
@@ -108,6 +108,8 @@ export class CMFaqManageComponent implements OnInit {
     loadPage() {
         this.loading = true;
         this.faqs = [];
+        this.selectedCategory = '';
+        this.selectedSortBy = '';
 
         if (this.activeTab === 0) {
             this.disableSearch = true;
@@ -354,11 +356,11 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
-    sortBy() {
+    filterAndSortBy() {
         this.loading = true;
         this.faqs = [];
 
-        this.cmService.retrieveFAQBySort(this.selectedSortBy).subscribe(res => {
+        this.cmService.retrieveFAQByCategoryAndSort(this.selectedCategory, this.selectedSortBy).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -440,6 +442,10 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
+    exitResult(){
+        this.searched = false;
+        this.loadPage();
+    }
 
     showEditAnswerArea(index) {
         if (this.showAnsEditArea) {

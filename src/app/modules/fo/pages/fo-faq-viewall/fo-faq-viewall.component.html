@@ -2,26 +2,43 @@
 
 <div *ngIf="!loading">
     <form [formGroup]="questionForm" class="search-container">
-        <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" placeholder="What would you like to search for?"
-            required pInputText>
+        <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" autocomplete="off"
+            placeholder="What would you like to search for?" required pInputText>
         <div class="search-icon" (click)="searchFAQ()">
             <i class="fa fa-search"></i>
         </div>
     </form>
     <br>
 
-    <div class="ui-g" style="display: inline; ">
-        <div class="ui-g-5" style="padding-left: 0px;">
-            <p style="margin-bottom: 2px;">Select Category:</p>
-            <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select a Category" (onChange)="categoriseBy()"></p-dropdown>
+    <div class="ui-g" style="display: inline;">
+        <div class="ui-g-8" style="display: flex; padding: 0px 0px;">
+            <ng-container *ngIf="!searched">
+                <div style="padding-left: 0px;">
+                    <p style="margin-bottom: 2px;">Select Category:</p>
+                    <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option" (onChange)="filterAndSortBy()"></p-dropdown>
+                </div>
+                <div style="margin-left: 30px;">
+                    <p style="margin-bottom: 2px;">Sort By:</p>
+                    <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option" (onChange)="filterAndSortBy()"></p-dropdown>
+                </div>
+                <div class="clickable" style="margin-left: 30px; margin-top: 26px" (click)="retrieveFAQ()">
+                    <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">
+                    <u>clear all</u>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="searched">
+                <div class="clickable" style="display: flex; align-items: center; padding: 0px 0px; margin-top: 5%;" (click)="exitResult()">
+                    <i class="fas fa-angle-double-left fa-2x"></i>
+                    <h5 style="margin-bottom: 0px; margin-left: 10px;">Return to view all FAQs</h5>
+                </div>
+            </ng-container>
         </div>
-        <div class="ui-g-3" style="padding-left: 0px;">
-            <p style="margin-bottom: 2px;">Sort By:</p>
-            <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Sort by" (onChange)="sortBy()"></p-dropdown>
-        </div>
+
         <div class="ui-g-4">
-            <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 8%; " type="submit"
-                icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
+            <div>
+                <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 7%;" type="submit" icon="fas fa-share-square"
+                    (click)="showConfirmDialog()"></button>
+            </div>
         </div>
     </div>
 

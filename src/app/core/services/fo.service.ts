@@ -89,7 +89,7 @@ export class FOService {
     private retrieveAllFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private createUnansweredQuestionURL = environment.host + '/app/faq/add-UQ';
     private increaseViewURL = environment.host + '/app/faq/increment-QNAViews';
-    private retrieveFAQBySortURL = environment.host + '/app/faq/retrieve-allAQBy';
+    private retrieveFAQByCategoryAndSortURL = environment.host + '/app/faq/retrieve-allAQBy';
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
 
@@ -303,19 +303,24 @@ export class FOService {
             );
     }
 
-    retrieveFAQBySort(value) {
+    retrieveFAQByCategoryAndSort(category, sort) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
+
+        const categoriseBy = {
+            'retrieveBy': category
+        }
+
         const sortBy = {
-            'retrieveBy': value
+            'sortBy': sort
         };
 
-        const postData = Object.assign(this.authService.authItems, sortBy);
+        const postData = Object.assign(this.authService.authItems, categoriseBy, sortBy);
 
-        return this.http.post<Response>(this.retrieveFAQBySortURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveFAQByCategoryAndSortURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

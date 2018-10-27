@@ -75,7 +75,7 @@ export class CMService {
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
-    private retrieveFAQBySortURL = environment.host + '/app/faq/retrieve-allAQBy';
+    private retrieveFAQByCategoryAndSortURL = environment.host + '/app/faq/retrieve-allAQBy';
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
@@ -467,19 +467,24 @@ export class CMService {
     }
 
 
-    retrieveFAQBySort(value) {
+    retrieveFAQByCategoryAndSort(category, sort) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
+
+        const categoriseBy = {
+            'retrieveBy': category
+        }
+
         const sortBy = {
-            'retrieveBy': value
+            'sortBy': sort
         };
 
-        const postData = Object.assign(this.authService.authItems, sortBy);
+        const postData = Object.assign(this.authService.authItems, sortBy, categoriseBy);
 
-        return this.http.post<Response>(this.retrieveFAQBySortURL, postData, httpOptions)
+        return this.http.post<Response>(this.retrieveFAQByCategoryAndSortURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -529,7 +534,7 @@ export class CMService {
                 'Content-Type': 'application/json'
             })
         };
-   
+
         const cleanedFAQ = {
             'cleanedFAQ': cleaned
         };
