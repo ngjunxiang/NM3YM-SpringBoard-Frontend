@@ -78,7 +78,7 @@ export class CMService {
     private retrieveFAQBySortURL = environment.host + '/app/faq/retrieve-allAQBy';
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
-
+    private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
 
     // Model Cleaning Endpoints 
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
@@ -523,6 +523,26 @@ export class CMService {
             );
     }
 
+    returnCleanedFAQ(cleaned) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+   
+        const cleanedFAQ = {
+            'cleanedFAQ': cleaned
+        };
+
+        const postData = Object.assign(this.authService.authItems, cleanedFAQ);
+
+        return this.http.post<UncleanFAQ>(this.returnCleanedFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     retrieveIntents() {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -571,7 +591,6 @@ export class CMService {
                 catchError(this.handleError)
             );
     }
-
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {

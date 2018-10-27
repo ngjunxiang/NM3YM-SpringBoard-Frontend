@@ -3,7 +3,7 @@
 
 <form [formGroup]="searchForm" class="search-container">
     <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" [disabled]="true"
-        placeholder="What would you like to search for?" required pInputText>
+        placeholder="What would you like to search for?" autocomplete="off" required pInputText>
     <div class="search-icon" (click)="searchFAQ()">
         <i class="fa fa-search"></i>
     </div>

@@ -254,6 +254,30 @@ export class CMFaqCleaningComponent implements OnInit {
                 });
             }
         };
+
+        this.cmService.returnCleanedFAQ(this.faqs).subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                let successCount = res.results.StoredCount
+                let failedCount= res.results.failedQnNums
+                this.msgs.push({
+                    severity: 'success', summary: 'Success', detail: successCount + ' FAQ have been cleaned.'
+                });
+
+                this.retrieveUncleanedFAQ();
+            }
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
     }
 }
 
