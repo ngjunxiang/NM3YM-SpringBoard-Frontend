@@ -13,7 +13,8 @@ import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.compon
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
-import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
+import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.component';
+import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
 
 
 const routes: Routes = [
@@ -113,6 +114,15 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Upload'}, { title: 'Agmt - Doc Mapping' }]
+                }, 
+                canActivate: [CMAuthGuard] 
+            },
+            {
+                path: 'upload/reg51',
+                component: CMUploadReg51Component,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'Upload'}, { title: 'Reg51' }]
                 }, 
                 canActivate: [CMAuthGuard] 
             }

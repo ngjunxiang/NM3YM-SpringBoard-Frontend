@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message, MenuItem } from 'primeng/components/common/api';
+import { Message } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 @Component({
-  selector: 'app-cm-faq-synonym',
+  selector: 'cm-faq-synonym',
   templateUrl: './cm-faq-synonym.component.html',
   styleUrls: ['./cm-faq-synonym.component.css']
 })
