@@ -31,8 +31,7 @@ export class CMFaqManageComponent implements OnInit {
     disableLoadMore = false;
     LoadMoreClicks: number;
     searched = false;
-    disableSearch = true;
-
+    disable: boolean;
 
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
@@ -112,7 +111,7 @@ export class CMFaqManageComponent implements OnInit {
         this.selectedSortBy = '';
 
         if (this.activeTab === 0) {
-            this.disableSearch = true;
+            this.disable = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -142,7 +141,7 @@ export class CMFaqManageComponent implements OnInit {
             });
 
         } else {
-            this.disableSearch = false;
+            this.disable = false;
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -192,7 +191,7 @@ export class CMFaqManageComponent implements OnInit {
         this.link = "";
 
         if (event.index === 0) {
-            this.disableSearch = true;
+            this.disable = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
@@ -226,7 +225,7 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         if (event.index === 1) {
-            this.disableSearch = false;
+            this.disable = false;
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
                 if (res.error) {
                     this.msgs.push({

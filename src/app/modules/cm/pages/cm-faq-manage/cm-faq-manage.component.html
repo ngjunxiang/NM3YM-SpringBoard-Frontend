@@ -1,8 +1,8 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
 <p-confirmDialog></p-confirmDialog>
 
-<form [formGroup]="searchForm" class="search-container">
-    <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" [disabled]="true"
+<form *ngIf="activeTab === 1" [formGroup]="searchForm" class="search-container">
+    <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" [disabled]="disable"
         placeholder="What would you like to search for?" autocomplete="off" required pInputText>
     <div class="search-icon" (click)="searchFAQ()">
         <i class="fa fa-search"></i>
@@ -12,11 +12,11 @@
 <div class="ui-g" *ngIf="!searched" style="display: flex; margin-top: 10px; margin-bottom: 10px; align-items: center;">
     <div style="padding-left: 0px;">
         <p style="margin-bottom: 2px;">Select Category:</p>
-        <p-dropdown class="category" [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option" [autoWidth]="false" (onChange)="filterAndSortBy()"></p-dropdown>
+        <p-dropdown class="category" [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option" [autoWidth]="false" [disabled]="disable" (onChange)="filterAndSortBy()"></p-dropdown>
     </div>
     <div style="margin-left: 30px;">
         <p style="margin-bottom: 2px;">Sort By:</p>
-        <p-dropdown class="sortBy" [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option" (onChange)="filterAndSortBy()"></p-dropdown>
+        <p-dropdown class="sortBy" [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option"  [disabled]="disable" (onChange)="filterAndSortBy()"></p-dropdown>
     </div>
     <div class="clickable" style="margin-left: 30px; margin-top: 26px" (click)="loadPage()">
         <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">

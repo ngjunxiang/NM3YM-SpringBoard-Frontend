@@ -35,6 +35,7 @@ export class CMDashboardComponent implements OnInit {
     // UI Component
     faqAnsweredCount: number;
     faqUnansweredCount: number;
+    uncleanedCount: number;
     updatedChecklists: any[];
     mostRecentQns: any[];
     tempDate : string; 
@@ -76,6 +77,26 @@ export class CMDashboardComponent implements OnInit {
                 checklist.dateUpdated = this.tempDate
             })
         })
+
+        this.cmService.retrieveUncleanedFAQ().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                this.loading = false;
+                return;
+            }
+
+            if (res.results) {
+                this.uncleanedCount = res.numUnclean;
+            }
+
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
 
         this.colsDoc = [
             { field: 'name', header: 'Checklist' },
