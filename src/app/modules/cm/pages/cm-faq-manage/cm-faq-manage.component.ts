@@ -272,9 +272,7 @@ export class CMFaqManageComponent implements OnInit {
     }
 
     searchFAQ() {
-        this.searched = true;
         this.searchForm.get('question').markAsDirty();
-        this.activeTab = 1;
 
         if (this.searchForm.get('question').invalid) {
             this.msgs.push({
@@ -297,13 +295,14 @@ export class CMFaqManageComponent implements OnInit {
             }
 
             if (res.results) {
+                this.searched = true;
                 for (let i = 0; i < res.results.length; i++) {
                     let faq = res.results[i];
                     let selected = false;
                     if (faq.question === this.selectedFAQ) {
                         selected = true;
                     }
-
+                    
                     this.faqs.push({
                         qnID: faq.qnID,
                         username: faq.username,
