@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CMFaqSynonymComponent } from './cm-faq-synonym.component';
+import { CMUploadReg51Component } from './cm-upload-reg51.component';
 
-describe('CMFaqSynonymComponent', () => {
-    let component: CMFaqSynonymComponent;
-    let fixture: ComponentFixture<CMFaqSynonymComponent>;
+describe('CMUploadReg51Component', () => {
+    let component: CMUploadReg51Component;
+    let fixture: ComponentFixture<CMUploadReg51Component>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CMFaqSynonymComponent]
+            declarations: [CMUploadReg51Component]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CMFaqSynonymComponent);
+        fixture = TestBed.createComponent(CMUploadReg51Component);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

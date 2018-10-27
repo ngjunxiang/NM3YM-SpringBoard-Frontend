@@ -41,11 +41,12 @@ import { CMEditChecklistComponent } from './pages/cm-edit-checklist/cm-edit-chec
 import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checklist.component';
 import { CMViewChecklistLogsComponent } from './pages/cm-view-checklist-logs/cm-view-checklist-logs.component';
 import { CMService } from '../../core/services/cm.service';
-import { CMUploadAgmtComponent } from './pages/upload-agmt/cm-upload-agmt.component';
+import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.component';
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
+import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -99,7 +100,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMFaqManageComponent,
         CMFaqCreateComponent,
         CMFaqCleaningComponent,
-        CMFaqSynonymComponent
+        CMFaqSynonymComponent,
+        CMUploadReg51Component
     ],
     providers: [
         {

@@ -25,10 +25,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
     checklistVersionData: string[];
     checklistLogData: any;
     checklistLogForm: FormGroup;
-    complianceMOCols: any[];
-    complianceCCols: any[];
-    legalMOCols: any[];
-    legalCCols: any[];
+    complianceCols: any[];
+    legalCols: any[];
 
     // For Colour Legend Table 
     docChanges: any[];
@@ -44,16 +42,9 @@ export class CMViewChecklistLogsComponent implements OnInit {
     ngOnInit() {
         this.loading = true;
 
-        this.legalMOCols = [
+        this.legalCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' },
-            { field: 'canWaiver', header: 'Can be Waivered' }
-        ];
-
-        this.legalCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -62,15 +53,9 @@ export class CMViewChecklistLogsComponent implements OnInit {
             { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
-        this.complianceMOCols = [
+        this.complianceCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' }
-        ];
-
-        this.complianceCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -183,6 +168,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
         let selectedVersion = this.checklistLogForm.get('version').value;
 
         this.cmService.retrieveCMChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
+            console.log(res)
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error
