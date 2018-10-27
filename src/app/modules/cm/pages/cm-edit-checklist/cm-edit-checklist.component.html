@@ -153,10 +153,10 @@
             <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
                 <p-tabPanel header="Compliance" leftIcon="fas fa-file-contract">
                     <h5>Mandatory</h5>
-                    <div *ngIf="complianceDocumentsForm.get('mandatory').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="complianceDocumentsForm.get('mandatory').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs > 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -173,62 +173,64 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] > 0">
-                                    <ng-container *ngFor="let condition of complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['controls']; let j=index">
+                                <ng-container *ngIf="doc.get('changed').value !== '3'">
+                                    <ng-container *ngIf="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] > 0">
+                                        <ng-container *ngFor="let condition of complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['controls']; let j=index">
+                                            <tr>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentName').value }}</td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentType').value }}</td>
+                                                </ng-container>
+                                                <td>{{ condition.get('conditionName').value }}</td>
+                                                <td>{{ condition.get('conditionOption').value }}</td>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('agmtCode').value }}</td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']"
+                                                        [innerHTML]="doc.get('remarks').value"></td>
+                                                    <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                    <td *ngIf="!doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-times"></i>
+                                                    </td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                            type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
+                                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                            type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] === 0">
                                         <tr>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentName').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentType').value }}</td>
-                                            </ng-container>
-                                            <td>{{ condition.get('conditionName').value }}</td>
-                                            <td>{{ condition.get('conditionOption').value }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('agmtCode').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']"
-                                                    [innerHTML]="doc.get('remarks').value"></td>
-                                                <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                        type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
-                                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                        type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
-                                                </td>
-                                            </ng-container>
+                                            <td>{{
+                                                doc.get('documentName').value }}</td>
+                                            <td>{{
+                                                doc.get('documentType').value }}</td>
+                                            <td> - </td>
+                                            <td> - </td>
+                                            <td>{{
+                                                doc.get('agmtCode').value }}</td>
+                                            <td [innerHTML]="doc.get('remarks').value"></td>
+                                            <td *ngIf="doc.get('signature').value">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('signature').value">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                    type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                    type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
+                                            </td>
                                         </tr>
                                     </ng-container>
-                                </ng-container>
-                                <ng-container *ngIf="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] === 0">
-                                    <tr>
-                                        <td>{{
-                                            doc.get('documentName').value }}</td>
-                                        <td>{{
-                                            doc.get('documentType').value }}</td>
-                                        <td> - </td>
-                                        <td> - </td>
-                                        <td>{{
-                                            doc.get('agmtCode').value }}</td>
-                                        <td [innerHTML]="doc.get('remarks').value"></td>
-                                        <td *ngIf="doc.get('signature').value">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.get('signature').value">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td>
-                                            <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
-                                            <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
-                                        </td>
-                                    </tr>
                                 </ng-container>
                             </ng-template>
                         </p-table>
@@ -392,10 +394,10 @@
                     </p-dialog>
 
                     <h5>Optional</h5>
-                    <div *ngIf="complianceDocumentsForm.get('optional').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="complianceDocumentsForm.get('optional').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs > 0" style="padding-bottom:1%">
                         <p-table [value]="complianceDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -412,62 +414,65 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length'] > 0">
-                                    <ng-container *ngFor="let condition of complianceDocumentsForm.get('optional').get(i + '').get('conditions')['controls']; let j=index">
+
+                                <ng-container *ngIf="doc.get('changed').value !== '3'">
+                                    <ng-container *ngIf="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length'] > 0">
+                                        <ng-container *ngFor="let condition of complianceDocumentsForm.get('optional').get(i + '').get('conditions')['controls']; let j=index">
+                                            <tr>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentName').value }}</td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentType').value }}</td>
+                                                </ng-container>
+                                                <td>{{ condition.get('conditionName').value }}</td>
+                                                <td>{{ condition.get('conditionOption').value }}</td>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('agmtCode').value }}</td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']"
+                                                        [innerHTML]="doc.get('remarks').value"></td>
+                                                    <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                    <td *ngIf="!doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-times"></i>
+                                                    </td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                            type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
+                                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                            type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length'] === 0">
                                         <tr>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentName').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentType').value }}</td>
-                                            </ng-container>
-                                            <td>{{ condition.get('conditionName').value }}</td>
-                                            <td>{{ condition.get('conditionOption').value }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('agmtCode').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']"
-                                                    [innerHTML]="doc.get('remarks').value"></td>
-                                                <td *ngIf="doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.get('signature').value" [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                        type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
-                                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                        type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
-                                                </td>
-                                            </ng-container>
+                                            <td>{{
+                                                doc.get('documentName').value }}</td>
+                                            <td>{{
+                                                doc.get('documentType').value }}</td>
+                                            <td> - </td>
+                                            <td> - </td>
+                                            <td>{{
+                                                doc.get('agmtCode').value }}</td>
+                                            <td [innerHTML]="doc.get('remarks').value"></td>
+                                            <td *ngIf="doc.get('signature').value">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('signature').value">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                    type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                    type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
+                                            </td>
                                         </tr>
                                     </ng-container>
-                                </ng-container>
-                                <ng-container *ngIf="complianceDocumentsForm.get('optional').get(i + '').get('conditions')['length'] === 0">
-                                    <tr>
-                                        <td>{{
-                                            doc.get('documentName').value }}</td>
-                                        <td>{{
-                                            doc.get('documentType').value }}</td>
-                                        <td> - </td>
-                                        <td> - </td>
-                                        <td>{{
-                                            doc.get('agmtCode').value }}</td>
-                                        <td [innerHTML]="doc.get('remarks').value"></td>
-                                        <td *ngIf="doc.get('signature').value">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.get('signature').value">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td>
-                                            <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
-                                            <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
-                                        </td>
-                                    </tr>
                                 </ng-container>
                             </ng-template>
                         </p-table>
@@ -635,10 +640,10 @@
                 <!-- Legal Documents -->
                 <p-tabPanel header="Legal" leftIcon="fa fa-balance-scale">
                     <h5>Mandatory</h5>
-                    <div *ngIf="legalDocumentsForm.get('mandatory').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="legalDocumentsForm.get('mandatory').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numMandatoryDocs > 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('mandatory').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -655,74 +660,76 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] > 0">
-                                    <ng-container *ngFor="let condition of legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['controls']; let j=index">
+                                <ng-container *ngIf="doc.get('changed').value !== '3'">
+                                    <ng-container *ngIf="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] > 0">
+                                        <ng-container *ngFor="let condition of legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['controls']; let j=index">
+                                            <tr>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentName').value }}</td>
+                                                    <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentType').value }}</td>
+                                                </ng-container>
+                                                <td>{{ condition.get('conditionName').value }}</td>
+                                                <td>{{ condition.get('conditionOption').value }}</td>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('agmtCode').value }}</td>
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']"
+                                                        [innerHTML]="doc.get('remarks').value"></td>
+                                                    <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                    <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-times"></i>
+                                                    </td>
+                                                    <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                    <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-times"></i>
+                                                    </td>
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
+                                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                            type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
+                                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                            type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] === 0">
                                         <tr>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentName').value }}</td>
-                                                <td [attr.rowspan]="complianceDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentType').value }}</td>
-                                            </ng-container>
-                                            <td>{{ condition.get('conditionName').value }}</td>
-                                            <td>{{ condition.get('conditionOption').value }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('agmtCode').value }}</td>
-                                                <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']"
-                                                    [innerHTML]="doc.get('remarks').value"></td>
-                                                <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length']">
-                                                    <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                        type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
-                                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                        type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
-                                                </td>
-                                            </ng-container>
+                                            <td>{{
+                                                doc.get('documentName').value }}</td>
+                                            <td>{{
+                                                doc.get('documentType').value }}</td>
+                                            <td> - </td>
+                                            <td> - </td>
+                                            <td>{{
+                                                doc.get('agmtCode').value }}</td>
+                                            <td [innerHTML]="doc.get('remarks').value"></td>
+                                            <td *ngIf="doc.get('signature').value">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('signature').value">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td *ngIf="doc.get('canWaiver').value">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('canWaiver').value">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                    type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                    type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
+                                            </td>
                                         </tr>
                                     </ng-container>
-                                </ng-container>
-                                <ng-container *ngIf="legalDocumentsForm.get('mandatory').get(i + '').get('conditions')['length'] === 0">
-                                    <tr>
-                                        <td>{{
-                                            doc.get('documentName').value }}</td>
-                                        <td>{{
-                                            doc.get('documentType').value }}</td>
-                                        <td> - </td>
-                                        <td> - </td>
-                                        <td>{{
-                                            doc.get('agmtCode').value }}</td>
-                                        <td [innerHTML]="doc.get('remarks').value"></td>
-                                        <td *ngIf="doc.get('signature').value">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.get('signature').value">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td *ngIf="doc.get('canWaiver').value">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.get('canWaiver').value">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td>
-                                            <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                type="button" icon="fa fa-pencil" (click)="editDocument('mandatory', i)"></button>
-                                            <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                type="button" icon="fa fa-times" (click)="deleteDocument('mandatory', i)"></button>
-                                        </td>
-                                    </tr>
                                 </ng-container>
                             </ng-template>
                         </p-table>
@@ -894,10 +901,10 @@
                     </p-dialog>
 
                     <h5>Optional</h5>
-                    <div *ngIf="legalDocumentsForm.get('optional').length === 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs === 0" style="padding-bottom:1%">
                         No documents yet
                     </div>
-                    <div *ngIf="legalDocumentsForm.get('optional').length !== 0" style="padding-bottom:1%">
+                    <div *ngIf="numOptionalDocs > 0" style="padding-bottom:1%">
                         <p-table [value]="legalDocumentsForm.get('optional').controls" selectionMode="single">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -914,74 +921,76 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length'] > 0">
-                                    <ng-container *ngFor="let condition of legalDocumentsForm.get('optional').get(i + '').get('conditions')['controls']; let j=index">
+                                <ng-container *ngIf="doc.get('changed').value !== '3'">
+                                    <ng-container *ngIf="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length'] > 0">
+                                        <ng-container *ngFor="let condition of legalDocumentsForm.get('optional').get(i + '').get('conditions')['controls']; let j=index">
+                                            <tr>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentName').value }}</td>
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('documentType').value }}</td>
+                                                </ng-container>
+                                                <td>{{ condition.get('conditionName').value }}</td>
+                                                <td>{{ condition.get('conditionOption').value }}</td>
+                                                <ng-container *ngIf="j === 0">
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
+                                                        doc.get('agmtCode').value }}</td>
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']"
+                                                        [innerHTML]="doc.get('remarks').value"></td>
+                                                    <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                    <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-times"></i>
+                                                    </td>
+                                                    <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                    <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <i class="fa fa-times"></i>
+                                                    </td>
+                                                    <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
+                                                        <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                            type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
+                                                        <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                            type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length'] === 0">
                                         <tr>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentName').value }}</td>
-                                                <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('documentType').value }}</td>
-                                            </ng-container>
-                                            <td>{{ condition.get('conditionName').value }}</td>
-                                            <td>{{ condition.get('conditionOption').value }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">{{
-                                                    doc.get('agmtCode').value }}</td>
-                                                <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']"
-                                                    [innerHTML]="doc.get('remarks').value"></td>
-                                                <td *ngIf="doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.get('signature').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td *ngIf="doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.get('canWaiver').value" [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length']">
-                                                    <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                        type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
-                                                    <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                        type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
-                                                </td>
-                                            </ng-container>
+                                            <td>{{
+                                                doc.get('documentName').value }}</td>
+                                            <td>{{
+                                                doc.get('documentType').value }}</td>
+                                            <td> - </td>
+                                            <td> - </td>
+                                            <td>{{
+                                                doc.get('agmtCode').value }}</td>
+                                            <td [innerHTML]="doc.get('remarks').value"></td>
+                                            <td *ngIf="doc.get('signature').value">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('signature').value">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td *ngIf="doc.get('canWaiver').value">
+                                                <i class="fa fa-check"></i>
+                                            </td>
+                                            <td *ngIf="!doc.get('canWaiver').value">
+                                                <i class="fa fa-times"></i>
+                                            </td>
+                                            <td>
+                                                <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
+                                                    type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
+                                                <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
+                                                    type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
+                                            </td>
                                         </tr>
                                     </ng-container>
-                                </ng-container>
-                                <ng-container *ngIf="legalDocumentsForm.get('optional').get(i + '').get('conditions')['length'] === 0">
-                                    <tr>
-                                        <td>{{
-                                            doc.get('documentName').value }}</td>
-                                        <td>{{
-                                            doc.get('documentType').value }}</td>
-                                        <td> - </td>
-                                        <td> - </td>
-                                        <td>{{
-                                            doc.get('agmtCode').value }}</td>
-                                        <td [innerHTML]="doc.get('remarks').value"></td>
-                                        <td *ngIf="doc.get('signature').value">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.get('signature').value">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td *ngIf="doc.get('canWaiver').value">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.get('canWaiver').value">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td>
-                                            <button pButton class="ui-button-warning" style="display: inline-block; width: 40%; margin-right:5%"
-                                                type="button" icon="fa fa-pencil" (click)="editDocument('optional', i)"></button>
-                                            <button pButton class="ui-button-danger" style="display: inline-block; width: 40%; margin-left:5%"
-                                                type="button" icon="fa fa-times" (click)="deleteDocument('optional', i)"></button>
-                                        </td>
-                                    </tr>
                                 </ng-container>
                             </ng-template>
                         </p-table>

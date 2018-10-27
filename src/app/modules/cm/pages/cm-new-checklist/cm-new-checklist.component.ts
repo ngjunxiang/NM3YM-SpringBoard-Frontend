@@ -593,8 +593,6 @@ export class CMNewChecklistComponent implements OnInit {
         let rawForm = this.dialogForm.getRawValue();
 
         if (this.editMode) {
-            console.log(control);
-            console.log(this.docIndex);
             (<FormGroup>control.get(this.docIndex + '')).setControl('conditions', new FormArray([]));
             let conditions = <FormArray>control.get(this.docIndex + '').get('conditions');
 

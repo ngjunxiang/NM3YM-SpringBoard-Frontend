@@ -141,6 +141,27 @@ export class CMEditChecklistComponent implements OnInit {
         this.loading = false;
     }
 
+    // Get Num Docs
+    get numMandatoryDocs(): number {)
+        let formArray = <FormArray>this.complianceDocumentsForm.get('mandatory');
+
+        if (this.activeTab === 1) {
+            formArray = <FormArray>this.legalDocumentsForm.get('mandatory');
+        }
+
+        return formArray.value.filter(doc => doc.changed !== '3').length;
+    }
+
+    get numOptionalDocs(): number {)
+        let formArray = <FormArray>this.complianceDocumentsForm.get('optional');
+
+        if (this.activeTab === 1) {
+            formArray = <FormArray>this.legalDocumentsForm.get('optional');
+        }
+
+        return formArray.value.filter(doc => doc.changed !== '3').length;
+    }
+
     // Validator Functions
     retrieveAgmtCodes() {
         this.cmService.retrieveAgmtCodes().subscribe(res => {
