@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
   styleUrls: ['./cm-faq-synonym.component.css']
 })
 
-export class CmFaqSynonymComponent implements OnInit {
+export class CMFaqSynonymComponent implements OnInit {
 
   // UI Control
   loading = false;
