@@ -21,10 +21,8 @@ export class FONewOnboardComponent implements OnInit {
     step = 1;
 
     // UI Component
-    complianceMOCols: any[];
-    complianceCCols: any[];
-    legalMOCols: any[];
-    legalCCols: any[];
+    complianceCols: any[];
+    legalCols: any[];
 
     checklistNameDropdownData: SelectItem[];
     checklistForm: FormGroup;
@@ -58,12 +56,10 @@ export class FONewOnboardComponent implements OnInit {
             conditions: new FormArray([]),
             complianceDocuments: this.fb.group({
                 mandatory: new FormArray([]),
-                conditional: new FormArray([]),
                 optional: new FormArray([])
             }),
             legalDocuments: this.fb.group({
                 mandatory: new FormArray([]),
-                conditional: new FormArray([]),
                 optional: new FormArray([])
             })
         });
@@ -77,12 +73,10 @@ export class FONewOnboardComponent implements OnInit {
             conditions: new FormArray([]),
             complianceDocuments: this.fb.group({
                 mandatory: new FormArray([]),
-                conditional: new FormArray([]),
                 optional: new FormArray([])
             }),
             legalDocuments: this.fb.group({
                 mandatory: new FormArray([]),
-                conditional: new FormArray([]),
                 optional: new FormArray([])
             })
         });
@@ -170,16 +164,9 @@ export class FONewOnboardComponent implements OnInit {
     }
 
     createDocumentsForm() {
-        this.legalMOCols = [
+        this.legalCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' },
-            { field: 'canWaiver', header: 'Can be Waivered' }
-        ];
-
-        this.legalCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -188,15 +175,9 @@ export class FONewOnboardComponent implements OnInit {
             { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
-        this.complianceMOCols = [
+        this.complianceCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' }
-        ];
-
-        this.complianceCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -205,58 +186,98 @@ export class FONewOnboardComponent implements OnInit {
         ];
 
         // Compliance Documents
+        let mandatoryDocs = [];
         let formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].mandatory;
         this.selectedChecklistData.complianceDocuments.mandatory.forEach(doc => {
-            formArray.push(new FormControl(false));
-        });
-
-        let conditionalDocs = [];
-        formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].conditional;
-        this.selectedChecklistData.complianceDocuments.conditional.forEach(doc => {
-            for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
-                let conditionName = this.selectedChecklistData.conditions[i].conditionName;
-                let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
-                for (let j = 0; j < doc.conditions.length; j++) {
-                    if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
-                        formArray.push(new FormControl(false));
-                        conditionalDocs.push(doc);
+            if (doc.conditions.length > 0) {
+                for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                    let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                    let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                    if (doc.conditions.length > 0) {
+                        for (let j = 0; j < doc.conditions.length; j++) {
+                            if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                                formArray.push(new FormControl(false));
+                                mandatoryDocs.push(doc);
+                            }
+                        }
                     }
                 }
+            } else {
+                formArray.push(new FormControl(false));
+                mandatoryDocs.push(doc);
             }
         });
-        this.selectedChecklistData.complianceDocuments.conditional = conditionalDocs;
+        this.selectedChecklistData.complianceDocuments.mandatory = mandatoryDocs;
 
+        let optionalDocs = [];
         formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].optional;
         this.selectedChecklistData.complianceDocuments.optional.forEach(doc => {
-            formArray.push(new FormControl(false));
-        });
-
-        // Legal Documents
-        formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].mandatory;
-        this.selectedChecklistData.legalDocuments.mandatory.forEach(doc => {
-            formArray.push(new FormControl(false));
-        });
-
-        conditionalDocs = [];
-        formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].conditional;
-        this.selectedChecklistData.legalDocuments.conditional.forEach(doc => {
-            for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
-                let conditionName = this.selectedChecklistData.conditions[i].conditionName;
-                let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
-                for (let j = 0; j < doc.conditions.length; j++) {
-                    if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
-                        formArray.push(new FormControl(false));
-                        conditionalDocs.push(doc);
+            if (doc.conditions.length > 0) {
+                for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                    let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                    let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                    if (doc.conditions.length > 0) {
+                        for (let j = 0; j < doc.conditions.length; j++) {
+                            if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                                formArray.push(new FormControl(false));
+                                optionalDocs.push(doc);
+                            }
+                        }
                     }
                 }
+            } else {
+                formArray.push(new FormControl(false));
+                optionalDocs.push(doc);
             }
         });
-        this.selectedChecklistData.legalDocuments.conditional = conditionalDocs;
+        this.selectedChecklistData.complianceDocuments.optional = optionalDocs;
 
+        // Legal Documents
+        mandatoryDocs = [];
+        formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].mandatory;
+        this.selectedChecklistData.legalDocuments.mandatory.forEach(doc => {
+            if (doc.conditions.length > 0) {
+                for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                    let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                    let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                    if (doc.conditions.length > 0) {
+                        for (let j = 0; j < doc.conditions.length; j++) {
+                            if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                                formArray.push(new FormControl(false));
+                                mandatoryDocs.push(doc);
+                            }
+                        }
+                    }
+                }
+            } else {
+                formArray.push(new FormControl(false));
+                mandatoryDocs.push(doc);
+            }
+        });
+        this.selectedChecklistData.legalDocuments.mandatory = mandatoryDocs;
+
+        optionalDocs = [];
         formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].optional;
         this.selectedChecklistData.legalDocuments.optional.forEach(doc => {
-            formArray.push(new FormControl(false));
+            if (doc.conditions.length > 0) {
+                for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                    let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                    let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                    if (doc.conditions.length > 0) {
+                        for (let j = 0; j < doc.conditions.length; j++) {
+                            if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                                formArray.push(new FormControl(false));
+                                optionalDocs.push(doc);
+                            }
+                        }
+                    }
+                }
+            } else {
+                formArray.push(new FormControl(false));
+                optionalDocs.push(doc);
+            }
         });
+        this.selectedChecklistData.legalDocuments.optional = optionalDocs;
 
         this.loading = false;
     }
@@ -384,7 +405,7 @@ export class FONewOnboardComponent implements OnInit {
         for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
             let conditionName = this.selectedChecklistData.conditions[i].conditionName;
             let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
-            
+
             this.processData['conditions'].push({
                 'conditionName': conditionName,
                 'conditionOption': conditionOption
@@ -393,12 +414,16 @@ export class FONewOnboardComponent implements OnInit {
 
         // Compliance Documents
         this.processData['complianceDocuments'] = {};
+
         this.processData['complianceDocuments']['mandatory'] = [];
 
         for (let i = 0; i < this.selectedChecklistData.complianceDocuments.mandatory.length; i++) {
             let mandatoryDoc = this.selectedChecklistData.complianceDocuments.mandatory[i];
             this.processData['complianceDocuments']['mandatory'].push({
+                hasConditions: mandatoryDoc.hasConditions,
                 documentName: mandatoryDoc.documentName,
+                documentType: mandatoryDoc.documentType,
+                conditions: mandatoryDoc.conditions,
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
@@ -407,28 +432,16 @@ export class FONewOnboardComponent implements OnInit {
                 docID: mandatoryDoc.docID
             });
         }
-        this.processData['complianceDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.selectedChecklistData.complianceDocuments.conditional.length; i++) {
-            let conditionalDoc = this.selectedChecklistData.complianceDocuments.conditional[i];
-            this.processData['complianceDocuments']['conditional'].push({
-                documentName: conditionalDoc.documentName,
-                conditions: conditionalDoc.conditions,
-                agmtCode: conditionalDoc.agmtCode,
-                signature: conditionalDoc.signature,
-                remarks: conditionalDoc.remarks,
-                checked: this.checklistForm.get('complianceDocuments').get('conditional').get(i + '').value,
-                changed: conditionalDoc.changed,
-                docID: conditionalDoc.docID
-            });
-        }
 
         this.processData['complianceDocuments']['optional'] = [];
 
         for (let i = 0; i < this.selectedChecklistData.complianceDocuments.optional.length; i++) {
             let optionalDoc = this.selectedChecklistData.complianceDocuments.optional[i];
             this.processData['complianceDocuments']['optional'].push({
+                hasConditions: optionalDoc.hasConditions,
                 documentName: optionalDoc.documentName,
+                documentType: optionalDoc.documentType,
+                conditions: optionalDoc.conditions,
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
@@ -440,35 +453,22 @@ export class FONewOnboardComponent implements OnInit {
 
         // Legal Documents
         this.processData['legalDocuments'] = {};
+
         this.processData['legalDocuments']['mandatory'] = [];
 
         for (let i = 0; i < this.selectedChecklistData.legalDocuments.mandatory.length; i++) {
             let mandatoryDoc = this.selectedChecklistData.legalDocuments.mandatory[i];
             this.processData['legalDocuments']['mandatory'].push({
+                hasConditions: mandatoryDoc.hasConditions,
                 documentName: mandatoryDoc.documentName,
+                documentType: mandatoryDoc.documentType,
+                conditions: mandatoryDoc.conditions,
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
-                canWaiver: mandatoryDoc.canWaiver,
                 checked: this.checklistForm.get('legalDocuments').get('mandatory').get(i + '').value,
                 changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
-            });
-        }
-        this.processData['legalDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.selectedChecklistData.legalDocuments.conditional.length; i++) {
-            let conditionalDoc = this.selectedChecklistData.legalDocuments.conditional[i];
-            this.processData['legalDocuments']['conditional'].push({
-                documentName: conditionalDoc.documentName,
-                conditions: conditionalDoc.conditions,
-                agmtCode: conditionalDoc.agmtCode,
-                signature: conditionalDoc.signature,
-                remarks: conditionalDoc.remarks,
-                canWaiver: conditionalDoc.canWaiver,
-                checked: this.checklistForm.get('legalDocuments').get('conditional').get(i + '').value,
-                changed: conditionalDoc.changed,
-                docID: conditionalDoc.docID
             });
         }
 
@@ -477,16 +477,19 @@ export class FONewOnboardComponent implements OnInit {
         for (let i = 0; i < this.selectedChecklistData.legalDocuments.optional.length; i++) {
             let optionalDoc = this.selectedChecklistData.legalDocuments.optional[i];
             this.processData['legalDocuments']['optional'].push({
+                hasConditions: optionalDoc.hasConditions,
                 documentName: optionalDoc.documentName,
+                documentType: optionalDoc.documentType,
+                conditions: optionalDoc.conditions,
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
-                canWaiver: optionalDoc.canWaiver,
                 checked: this.checklistForm.get('legalDocuments').get('optional').get(i + '').value,
                 changed: optionalDoc.changed,
                 docID: optionalDoc.docID
             });
         }
+
 
         this.foService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
