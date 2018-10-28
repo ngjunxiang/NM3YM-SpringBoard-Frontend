@@ -19,10 +19,8 @@ export class FOEditOnboardComponent implements OnInit {
     msgs: Message[] = [];
 
     // UI Component
-    complianceMOCols: any[];
-    complianceCCols: any[];
-    legalMOCols: any[];
-    legalCCols: any[];
+    complianceCols: any[];
+    legalCols: any[];
 
     obName: string;
     obDetails: any;
@@ -74,26 +72,17 @@ export class FOEditOnboardComponent implements OnInit {
         this.documentsForm = this.fb.group({
             complianceDocuments: this.fb.group({
                 mandatory: new FormArray([]),
-                conditional: new FormArray([]),
                 optional: new FormArray([])
             }),
             legalDocuments: this.fb.group({
                 mandatory: new FormArray([]),
-                conditional: new FormArray([]),
                 optional: new FormArray([])
             })
         });
 
-        this.legalMOCols = [
+        this.legalCols = [
             { field: 'documentName', header: 'Document Name' },
-            { field: 'agmtCode', header: 'Agmt Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' },
-            { field: 'canWaiver', header: 'Can be Waivered' }
-        ];
-
-        this.legalCCols = [
-            { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -102,15 +91,9 @@ export class FOEditOnboardComponent implements OnInit {
             { field: 'canWaiver', header: 'Can be Waivered' }
         ];
 
-        this.complianceMOCols = [
-            { field: 'documentName', header: 'Document Name'},
-            { field: 'agmtCode', header: 'Agmt Code'},
-            { field: 'remarks', header: 'Remarks'},
-            { field: 'signature', header: 'Signature Required' }
-        ];
-
-        this.complianceCCols = [
+        this.complianceCols = [
             { field: 'documentName', header: 'Document Name' },
+            { field: 'documentType', header: 'Document Type' },
             { field: 'conditionName', header: 'Condition Name' },
             { field: 'conditionOptions', header: 'Condition Options' },
             { field: 'agmtCode', header: 'Agmt Code' },
@@ -130,15 +113,6 @@ export class FOEditOnboardComponent implements OnInit {
             }
         });
 
-        this.obDetails.complianceDocuments.conditional.forEach(conditionalDoc => {
-            formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('conditional');
-            if (conditionalDoc.changed === '3') {
-                formArray.push(new FormControl({ value: false, disabled: true }));
-            } else {
-                formArray.push(new FormControl(conditionalDoc.checked));
-            }
-        });
-
         this.obDetails.complianceDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('optional');
             if (optionalDoc.changed === '3') {
@@ -154,15 +128,6 @@ export class FOEditOnboardComponent implements OnInit {
                 formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
                 formArray.push(new FormControl(mandatoryDoc.checked));
-            }
-        });
-
-        this.obDetails.legalDocuments.conditional.forEach(conditionalDoc => {
-            formArray = <FormArray>this.documentsForm.get('legalDocuments').get('conditional');
-            if (conditionalDoc.changed === '3') {
-                formArray.push(new FormControl({ value: false, disabled: true }));
-            } else {
-                formArray.push(new FormControl(conditionalDoc.checked));
             }
         });
 
@@ -238,7 +203,10 @@ export class FOEditOnboardComponent implements OnInit {
         for (let i = 0; i < this.obDetails.complianceDocuments.mandatory.length; i++) {
             let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[i];
             processData['complianceDocuments']['mandatory'].push({
+                hasConditions: mandatoryDoc.hasConditions,
                 documentName: mandatoryDoc.documentName,
+                documentType: mandatoryDoc.documentType,
+                conditions: mandatoryDoc.conditions,
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
@@ -248,28 +216,15 @@ export class FOEditOnboardComponent implements OnInit {
             });
         }
 
-        processData['complianceDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.obDetails.complianceDocuments.conditional.length; i++) {
-            let conditionalDoc = this.obDetails.complianceDocuments.conditional[i];
-            processData['complianceDocuments']['conditional'].push({
-                documentName: conditionalDoc.documentName,
-                conditions: conditionalDoc.conditions,
-                agmtCode: conditionalDoc.agmtCode,
-                signature: conditionalDoc.signature,
-                remarks: conditionalDoc.remarks,
-                checked: this.documentsForm.get('complianceDocuments').get('conditional').get(i + '').value,
-                changed: conditionalDoc.changed,
-                docID: conditionalDoc.docID
-            });
-        }
-
         processData['complianceDocuments']['optional'] = [];
 
         for (let i = 0; i < this.obDetails.complianceDocuments.optional.length; i++) {
             let optionalDoc = this.obDetails.complianceDocuments.optional[i];
             processData['complianceDocuments']['optional'].push({
+                hasConditions: optionalDoc.hasConditions,
                 documentName: optionalDoc.documentName,
+                documentType: optionalDoc.documentType,
+                conditions: optionalDoc.conditions,
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
@@ -286,30 +241,16 @@ export class FOEditOnboardComponent implements OnInit {
         for (let i = 0; i < this.obDetails.legalDocuments.mandatory.length; i++) {
             let mandatoryDoc = this.obDetails.legalDocuments.mandatory[i];
             processData['legalDocuments']['mandatory'].push({
+                hasConditions: mandatoryDoc.hasConditions,
                 documentName: mandatoryDoc.documentName,
+                documentType: mandatoryDoc.documentType,
+                conditions: mandatoryDoc.conditions,
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
-                canWaiver: mandatoryDoc.canWaiver,
                 checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').value,
                 changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
-            });
-        }
-        processData['legalDocuments']['conditional'] = [];
-
-        for (let i = 0; i < this.obDetails.legalDocuments.conditional.length; i++) {
-            let conditionalDoc = this.obDetails.legalDocuments.conditional[i];
-            processData['legalDocuments']['conditional'].push({
-                documentName: conditionalDoc.documentName,
-                conditions: conditionalDoc.conditions,
-                agmtCode: conditionalDoc.agmtCode,
-                signature: conditionalDoc.signature,
-                remarks: conditionalDoc.remarks,
-                canWaiver: conditionalDoc.canWaiver,
-                checked: this.documentsForm.get('legalDocuments').get('conditional').get(i + '').value,
-                changed: conditionalDoc.changed,
-                docID: conditionalDoc.docID
             });
         }
 
@@ -318,11 +259,13 @@ export class FOEditOnboardComponent implements OnInit {
         for (let i = 0; i < this.obDetails.legalDocuments.optional.length; i++) {
             let optionalDoc = this.obDetails.legalDocuments.optional[i];
             processData['legalDocuments']['optional'].push({
+                hasConditions: optionalDoc.hasConditions,
                 documentName: optionalDoc.documentName,
+                documentType: optionalDoc.documentType,
+                conditions: optionalDoc.conditions,
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
-                canWaiver: optionalDoc.canWaiver,
                 checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').value,
                 changed: optionalDoc.changed,
                 docID: optionalDoc.docID

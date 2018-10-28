@@ -168,7 +168,6 @@ export class CMViewChecklistLogsComponent implements OnInit {
         let selectedVersion = this.checklistLogForm.get('version').value;
 
         this.cmService.retrieveCMChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
-            console.log(res)
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Server Error', detail: res.error

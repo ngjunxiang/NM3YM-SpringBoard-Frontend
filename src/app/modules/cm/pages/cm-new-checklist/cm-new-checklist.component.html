@@ -473,7 +473,7 @@
                         </p-table>
                     </div>
 
-                    <button pButton label="Optional" class="ui-button-primary" style="display: inline-block; width: 20%"
+                    <button pButton label="Optional" class="cButton" style="display: inline-block; width: 20%"
                         type="button" icon="fa fa-plus" (click)="showDialog('optional')"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Optional Document" [(visible)]="oDisplay" [closable]="false"
@@ -648,7 +648,8 @@
                                                                                             col.field === 'conditionOptions' ? 'lCondOption' : 
                                                                                             col.field === 'agmtCode' ? 'lAgmtCode' :
                                                                                             col.field === 'remarks' ? 'lRemark' :
-                                                                                            col.field === 'signature' ? 'lSignature' : null">
+                                                                                            col.field === 'signature' ? 'lSignature' : 
+                                                                                            col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -907,7 +908,8 @@
                                                                                             col.field === 'conditionOptions' ? 'lCondOption' : 
                                                                                             col.field === 'agmtCode' ? 'lAgmtCode' :
                                                                                             col.field === 'remarks' ? 'lRemark' :
-                                                                                            col.field === 'signature' ? 'lSignature' : null">
+                                                                                            col.field === 'signature' ? 'lSignature' : 
+                                                                                            col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{col.header}}
                                     </th>
                                     <th style="width: 10%"></th>
@@ -987,7 +989,7 @@
                         </p-table>
                     </div>
 
-                    <button pButton label="Optional" class="ui-button-primary" style="display: inline-block; width: 20%"
+                    <button pButton label="Optional" class="cButton" style="display: inline-block; width: 20%"
                         type="button" icon="fa fa-plus" (click)="showDialog('optional')"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Optional Document" [(visible)]="oDisplay" [closable]="false"

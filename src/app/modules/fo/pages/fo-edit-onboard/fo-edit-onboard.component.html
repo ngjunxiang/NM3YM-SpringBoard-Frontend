@@ -42,187 +42,105 @@
                         </ng-template>
                     </p-table>
                 </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info" (mouseover)="legendTable.show($event)"
-                    (mouseout)="legendTable.hide()"></button>
+                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info"
+                    (mouseover)="legendTable.show($event)" (mouseout)="legendTable.hide()"></button>
                 <div formGroupName="complianceDocuments">
                     <h5>Mandatory</h5>
                     <div *ngIf="obDetails.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.complianceDocuments.mandatory.length !== 0" style="padding-bottom:1%" formArrayName="mandatory">
-                        <p-table [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="350px" [selectionMode]="single">
+                    <div *ngIf="obDetails.complianceDocuments.mandatory.length > 0" style="padding-bottom:1%"
+                        formArrayName="mandatory">
+                        <p-table [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
+                            [selectionMode]="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceMOCols" [ngClass]="col.field === 'documentName' ? 'cMDocName' : 
-                                                                            col.field === 'agmtCode' ? 'cMAgmtCode' : 
-                                                                            col.field === 'remarks' ? 'cMRemark' : 
-                                                                            col.field === 'signature' ? 'cMSignature' : null">
+                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                                                                                        col.field === 'documentType' ? 'cDocType' :
+                                                                                        col.field === 'conditionName' ? 'cCondName' : 
+                                                                                        col.field === 'conditionOptions' ? 'cCondOption' : 
+                                                                                        col.field === 'agmtCode' ? 'cAgmtCode' :
+                                                                                        col.field === 'remarks' ? 'cRemark' :
+                                                                                        col.field === 'signature' ? 'cSignature' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr *ngIf="doc.changed === '0'">
-                                    <td class="cMDocName">{{ doc.documentName }}</td>
-                                    <td class="cMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '1'" class="edited-field">
-                                    <td class="cMDocName">{{ doc.documentName }}</td>
-                                    <td class="cMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                </tr>
-                                <tr *ngIf="doc.changed === '2'" class="new-field">
-                                    <td class="cMDocName">{{ doc.documentName }}</td>
-                                    <td class="cMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '3'" class="deleted-field">
-                                    <td class="cMDocName">{{ doc.documentName }}</td>
-                                    <td class="cMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-
-                    <h5>Conditional</h5>
-                    <div *ngIf="obDetails.complianceDocuments.conditional.length === 0" style="padding-bottom:1%">
-                        No documents in this section
-                    </div>
-                    <div *ngIf="obDetails.complianceDocuments.conditional.length !== 0" style="padding-bottom:1%" formArrayName="conditional">
-                        <p-table [value]="obDetails.complianceDocuments.conditional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th *ngFor="let col of complianceCCols" [ngClass]="col.field === 'documentName' ? 'cCDocName' : 
-                                                                        col.field === 'conditionName' ? 'cCCondName' : 
-                                                                        col.field === 'conditionOptions' ? 'cCCondOption' : 
-                                                                        col.field === 'agmtCode' ? 'cCAgmtCode' :
-                                                                        col.field === 'remarks' ? 'cCRemark' :
-                                                                        col.field === 'signature' ? 'cCSignature' : null">
-                                        {{ col.header }}
-                                    </th>
-                                    <th style="width: 10%">Checked?</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngFor="let condition of obDetails.complianceDocuments.conditional[i].conditions; let j=index">
-                                    <tr *ngIf="doc.changed === '0'">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCDocName" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="cCCondName">{{ condition.conditionName }}</td>
-                                        <td class="cCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="cCRemark" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="cCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="cCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
+                                <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0">
+                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                    doc.changed === '2' ? 'new-field' :
+                                                    doc.changed === '1' ? 'edited-field' : null">
+                                        <td class="cDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="cDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="cCondName"> - </td>
+                                        <td class="cCondOption"> - </td>
+                                        <td class="cAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="cRemark" [innerHTML]="doc.remarks"></td>
+                                        <td class="cSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="cSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <!-- <td *ngIf="doc.canWaiver">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.canWaiver">
+                                            <i class="fa fa-times"></i>
+                                        </td> -->
+                                        <td style="text-align:center; vertical-align:middle; width: 10%">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
                                     </tr>
-                                    <tr *ngIf="doc.changed === '1'" class="edited-field">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCDocName" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="cCCondName">{{ condition.conditionName }}</td>
-                                        <td class="cCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="cCRemark" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="cCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="cCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
-                                    <tr *ngIf="doc.changed === '2'" class="new-field">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCDocName" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="cCCondName">{{ condition.conditionName }}</td>
-                                        <td class="cCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="cCRemark" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="cCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="cCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
-                                    <tr *ngIf="doc.changed === '3'" class="deleted-field">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCDocName" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="cCCondName">{{ condition.conditionName }}</td>
-                                        <td class="cCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cCAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="cCRemark" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="cCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="cCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.complianceDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%;">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length > 0">
+                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.mandatory[i].conditions; let j=index">
+                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                        doc.changed === '2' ? 'new-field' :
+                                                        doc.changed === '1' ? 'edited-field' : null">
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cDocName" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    {{ doc.documentName }}
+                                                </td>
+                                                <td class="cDocType" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    {{ doc.documentType }}
+                                                </td>
+                                            </ng-container>
+                                            <td class="cCondName">{{ condition.conditionName }}</td>
+                                            <td class="cCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    {{ doc.agmtCode }}
+                                                </td>
+                                                <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"
+                                                    [innerHTML]="doc.remarks"></td>
+                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <!-- <td *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td> -->
+                                                <td [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
                             </ng-template>
                         </p-table>
@@ -232,76 +150,99 @@
                     <div *ngIf="obDetails.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.complianceDocuments.optional.length !== 0" style="padding-bottom:1%" formArrayName="optional">
-                        <p-table [value]="obDetails.complianceDocuments.optional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
+                    <div *ngIf="obDetails.complianceDocuments.optional.length > 0" style="padding-bottom:1%"
+                        formArrayName="optional">
+                        <p-table [value]="obDetails.complianceDocuments.optional" [scrollable]="true" scrollHeight="350px"
+                            [selectionMode]="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of complianceMOCols" [ngClass]="col.field === 'documentName' ? 'cODocName' : 
-                                                                            col.field === 'agmtCode' ? 'cOAgmtCode' : 
-                                                                            col.field === 'remarks' ? 'cORemark' : 
-                                                                            col.field === 'signature' ? 'cOSignature' : null">
+                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                                                                                        col.field === 'documentType' ? 'cDocType' :
+                                                                                        col.field === 'conditionName' ? 'cCondName' : 
+                                                                                        col.field === 'conditionOptions' ? 'cCondOption' : 
+                                                                                        col.field === 'agmtCode' ? 'cAgmtCode' :
+                                                                                        col.field === 'remarks' ? 'cRemark' :
+                                                                                        col.field === 'signature' ? 'cSignature' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr *ngIf="doc.changed === '0'">
-                                    <td class="cODocName">{{ doc.documentName }}</td>
-                                    <td class="cOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cORemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '1'" class="edited-field">
-                                    <td class="cODocName">{{ doc.documentName }}</td>
-                                    <td class="cOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cORemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '2'" class="new-field">
-                                    <td class="cODocName">{{ doc.documentName }}</td>
-                                    <td class="cOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cORemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '3'" class="deleted-field">
-                                    <td class="cODocName">{{ doc.documentName }}</td>
-                                    <td class="cOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="cORemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
+                                <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length === 0">
+                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                    doc.changed === '2' ? 'new-field' :
+                                                    doc.changed === '1' ? 'edited-field' : null">
+                                        <td class="cDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="cDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="cCondName"> - </td>
+                                        <td class="cCondOption"> - </td>
+                                        <td class="cAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="cRemark" [innerHTML]="doc.remarks"></td>
+                                        <td class="cSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="cSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <!-- <td *ngIf="doc.canWaiver">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td *ngIf="!doc.canWaiver">
+                                            <i class="fa fa-times"></i>
+                                        </td> -->
+                                        <td style="text-align:center; vertical-align:middle; width: 10%">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length > 0">
+                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.optional[i].conditions; let j=index">
+                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                        doc.changed === '2' ? 'new-field' :
+                                                        doc.changed === '1' ? 'edited-field' : null">
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cDocName" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    {{ doc.documentName }}
+                                                </td>
+                                                <td class="cDocType" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    {{ doc.documentType }}
+                                                </td>
+                                            </ng-container>
+                                            <td class="cCondName">{{ condition.conditionName }}</td>
+                                            <td class="cCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    {{ doc.agmtCode }}
+                                                </td>
+                                                <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length"
+                                                    [innerHTML]="doc.remarks"></td>
+                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <!-- <td *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td> -->
+                                                <td [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
                             </ng-template>
                         </p-table>
                     </div>
@@ -332,238 +273,106 @@
                         </ng-template>
                     </p-table>
                 </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info" (mouseover)="legendTable2.show($event)"
-                    (mouseout)="legendTable2.hide()"></button>
+                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info"
+                    (mouseover)="legendTable2.show($event)" (mouseout)="legendTable2.hide()"></button>
                 <div formGroupName="legalDocuments">
                     <h5>Mandatory</h5>
                     <div *ngIf="obDetails.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.legalDocuments.mandatory.length !== 0" style="padding-bottom:1%" formArrayName="mandatory">
-                        <p-table [value]="obDetails.legalDocuments.mandatory" [scrollable]="true" scrollHeight="350px" selectionMode="single">
+                    <div *ngIf="obDetails.legalDocuments.mandatory.length > 0" style="padding-bottom:1%"
+                        formArrayName="mandatory">
+                        <p-table [value]="obDetails.legalDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
+                            [selectionMode]="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalMOCols" [ngClass]="col.field === 'documentName' ? 'lMDocName' : 
-                                                                    col.field === 'agmtCode' ? 'lMAgmtCode' : 
-                                                                    col.field === 'remarks' ? 'lMRemark' : 
-                                                                    col.field === 'signature' ? 'lMSignature' : 
-                                                                    col.field === 'canWaiver' ? 'lMWaiver' : null">
+                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
+                                                                                            col.field === 'documentType' ? 'lDocType' :
+                                                                                            col.field === 'conditionName' ? 'lCondName' : 
+                                                                                            col.field === 'conditionOptions' ? 'lCondOption' : 
+                                                                                            col.field === 'agmtCode' ? 'lAgmtCode' :
+                                                                                            col.field === 'remarks' ? 'lRemark' :
+                                                                                            col.field === 'signature' ? 'lSignature' : 
+                                                                                            col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr *ngIf="doc.changed === '0'">
-                                    <td class="lMDocName">{{ doc.documentName }}</td>
-                                    <td class="lMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '1'" class="edited-field">
-                                    <td class="lMDocName">{{ doc.documentName }}</td>
-                                    <td class="lMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '2'" class="new-field">
-                                    <td class="lMDocName">{{ doc.documentName }}</td>
-                                    <td class="lMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '3'" class="deleted-field">
-                                    <td class="lMDocName">{{ doc.documentName }}</td>
-                                    <td class="lMAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lMRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lMSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lMWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-
-                    <h5>Conditional</h5>
-                    <div *ngIf="obDetails.legalDocuments.conditional.length === 0" style="padding-bottom:1%">
-                        No documents in this section
-                    </div>
-                    <div *ngIf="obDetails.legalDocuments.conditional.length !== 0" style="padding-bottom:1%" formArrayName="conditional">
-                        <p-table [value]="obDetails.legalDocuments.conditional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th *ngFor="let col of legalCCols" [ngClass]="col.field === 'documentName' ? 'lCDocName' : 
-                                                                    col.field === 'conditionName' ? 'lCCondName' : 
-                                                                    col.field === 'conditionOptions' ? 'lCCondOption' : 
-                                                                    col.field === 'agmtCode' ? 'lCAgmtCode' :
-                                                                    col.field === 'remarks' ? 'lCRemark' :
-                                                                    col.field === 'signature' ? 'lCSignature' : 
-                                                                    col.field === 'canWaiver' ? 'lCWaiver' : null">
-                                        {{ col.header }}
-                                    </th>
-                                    <th style="width: 10%">Checked?</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngFor="let condition of obDetails.legalDocuments.conditional[i].conditions; let j=index">
-                                    <tr *ngIf="doc.changed === '0'">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCDocName" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="lCCondName">{{ condition.conditionName }}</td>
-                                        <td class="lCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCAgmtCode" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="lCRemark" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="lCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
+                                <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length === 0">
+                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                    doc.changed === '2' ? 'new-field' :
+                                                    doc.changed === '1' ? 'edited-field' : null">
+                                        <td class="lDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="lDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="lCondName"> - </td>
+                                        <td class="lCondOption"> - </td>
+                                        <td class="lAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="lRemark" [innerHTML]="doc.remarks"></td>
+                                        <td class="lSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="doc.canWaiver">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="!doc.canWaiver">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle; width: 10%">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
                                     </tr>
-                                    <tr *ngIf="doc.changed === '1'" class="edited-field">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCDocName" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="lCCondName">{{ condition.conditionName }}</td>
-                                        <td class="lCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCAgmtCode" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="lCRemark" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="lCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
-                                    <tr *ngIf="doc.changed === '2'" class="new-field">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCDocName" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="lCCondName">{{ condition.conditionName }}</td>
-                                        <td class="lCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCAgmtCode" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="lCRemark" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="lCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
-                                    <tr *ngIf="doc.changed === '3'" class="deleted-field">
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCDocName" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.documentName }}</td>
-                                        </ng-container>
-                                        <td class="lCCondName">{{ condition.conditionName }}</td>
-                                        <td class="lCCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lCAgmtCode" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">{{ doc.agmtCode }}</td>
-                                            <td class="lCRemark" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" [innerHTML]='doc.remarks'></td>
-                                            <td class="lCSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lCWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="obDetails.legalDocuments.conditional[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length > 0">
+                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.mandatory[i].conditions; let j=index">
+                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                        doc.changed === '2' ? 'new-field' :
+                                                        doc.changed === '1' ? 'edited-field' : null">
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lDocName" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    {{ doc.documentName }}
+                                                </td>
+                                                <td class="lDocType" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    {{ doc.documentType }}
+                                                </td>
+                                            </ng-container>
+                                            <td class="lCondName">{{ condition.conditionName }}</td>
+                                            <td class="lCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lAgmtCode" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    {{ doc.agmtCode }}
+                                                </td>
+                                                <td class="lRemark" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length"
+                                                    [innerHTML]="doc.remarks"></td>
+                                                <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
                             </ng-template>
                         </p-table>
@@ -573,101 +382,100 @@
                     <div *ngIf="obDetails.legalDocuments.optional.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.legalDocuments.optional.length !== 0" style="padding-bottom:1%" formArrayName="optional">
-                        <p-table [value]="obDetails.legalDocuments.optional" [scrollable]="true" scrollHeight="350px" selectionMode="single">
+                    <div *ngIf="obDetails.legalDocuments.optional.length > 0" style="padding-bottom:1%"
+                        formArrayName="optional">
+                        <p-table [value]="obDetails.legalDocuments.optional" [scrollable]="true" scrollHeight="350px"
+                            [selectionMode]="single">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th *ngFor="let col of legalMOCols" [ngClass]="col.field === 'documentName' ? 'lODocName' : 
-                                                                    col.field === 'agmtCode' ? 'lOAgmtCode' : 
-                                                                    col.field === 'remarks' ? 'lORRemark' : 
-                                                                    col.field === 'signature' ? 'lOSignature' : 
-                                                                    col.field === 'canWaiver' ? 'lOWaiver' : null">
+                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
+                                                                                            col.field === 'documentType' ? 'lDocType' :
+                                                                                            col.field === 'conditionName' ? 'lCondName' : 
+                                                                                            col.field === 'conditionOptions' ? 'lCondOption' : 
+                                                                                            col.field === 'agmtCode' ? 'lAgmtCode' :
+                                                                                            col.field === 'remarks' ? 'lRemark' :
+                                                                                            col.field === 'signature' ? 'lSignature' :
+                                                                                            col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <tr *ngIf="doc.changed === '0'">
-                                    <td class="lODocName">{{ doc.documentName }}</td>
-                                    <td class="lOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lORRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '1'" class="edited-field">
-                                    <td class="lODocName">{{ doc.documentName }}</td>
-                                    <td class="lOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lORRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '2'" class="new-field">
-                                    <td class="lODocName">{{ doc.documentName }}</td>
-                                    <td class="lOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lORRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="doc.changed === '3'" class="deleted-field">
-                                    <td class="lODocName">{{ doc.documentName }}</td>
-                                    <td class="lOAgmtCode">{{ doc.agmtCode }}</td>
-                                    <td class="lORRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lOSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lOWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
-                                </tr>
+                                <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length === 0">
+                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                    doc.changed === '2' ? 'new-field' :
+                                                    doc.changed === '1' ? 'edited-field' : null">
+                                        <td class="lDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="lDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="lCondName"> - </td>
+                                        <td class="lCondOption"> - </td>
+                                        <td class="lAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="lRemark" [innerHTML]="doc.remarks"></td>
+                                        <td class="lSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="doc.canWaiver">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="!doc.canWaiver">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle; width: 10%">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length > 0">
+                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.optional[i].conditions; let j=index">
+                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                                        doc.changed === '2' ? 'new-field' :
+                                                        doc.changed === '1' ? 'edited-field' : null">
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lDocName" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    {{ doc.documentName }}
+                                                </td>
+                                                <td class="lDocType" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    {{ doc.documentType }}
+                                                </td>
+                                            </ng-container>
+                                            <td class="lCondName">{{ condition.conditionName }}</td>
+                                            <td class="lCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lAgmtCode" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    {{ doc.agmtCode }}
+                                                </td>
+                                                <td class="lRemark" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length"
+                                                    [innerHTML]="doc.remarks"></td>
+                                                <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
                             </ng-template>
                         </p-table>
                     </div>
@@ -675,6 +483,7 @@
             </p-card>
         </div>
 
-        <button pButton label="Save Changes" class="ui-button-success" style="width: 100%" type="button" icon="far fa-save" (click)="updateOnboardProcess()" [disabled]="processing"></button>
+        <button pButton label="Save Changes" class="ui-button-success" style="width: 100%" type="button" icon="far fa-save"
+            (click)="updateOnboardProcess()" [disabled]="processing"></button>
     </div>
 </div>

@@ -40,137 +40,67 @@
  * All Table Column Widths 
  */
 
-/* Compliance Mandatory Checklist */
+/* Compliance Checklist Documents*/
 
-.cMDocName {
-    width: 15%
+.cDocName {
+    width: 12%
 }
 
-.cMAgmtCode {
+.cDocType {
+    width: 10%
+}
+
+.cCondName{
+    width: 13%
+}
+
+.cCondOption {
+    width: 10%
+}
+
+.cAgmtCode {
     width: 7%
 }
 
-.cMRemark {
-    width: 50%
+.cRemark {
+    width: 35%
 }
 
-.cMSignature { 
+.cSignature { 
     width: 10%
 }
 
-/* Compliance Conditional Checklist */
-.cCDocName {
-    width: 15%
-}
 
-.cCCondName{
-    width: 15%
-}
+/* Legal Checklist Documents*/
 
-.cCCondOption {
+.lDocName {
     width: 10%
 }
 
-.cCAgmtCode {
+.lDocType {
+    width: 10%
+}
+
+.lCondName{
+    width: 10%
+}
+
+.lCondOption {
+    width: 10%
+}
+
+.lAgmtCode {
     width: 7%
 }
 
-.cCRemark {
-    width: 40%
+.lRemark {
+    width: 25%
 }
 
-.cCSignature { 
+.lSignature { 
     width: 10%
 }
 
-/* Compliance Optional Checklist */
-.cODocName {
-    width: 15%
-}
-
-.cOAgmtCode {
-    width: 7%
-}
-
-.cORemark {
-    width: 50%
-}
-
-.cOSignature { 
+.lWaiver { 
     width: 10%
 }
-
-/* Legal Mandatory Checklist */
-
-.lMDocName {
-    width: 15%
-}
-
-.lMAgmtCode {
-    width: 7%
-}
-
-.lMRemark {
-    width: 50%
-}
-
-.lMSignature { 
-    width: 10%
-}
-
-.lMWaiver { 
-    width: 10%
-}
-
-/* Legal Conditional Checklist */
-
-.lCDocName {
-    width: 15%
-}
-
-.lCCondName{
-    width: 15%
-}
-
-.lCCondOption {
-    width: 10%
-}
-
-.lCAgmtCode {
-    width: 7%
-}
-
-.lCRemark {
-    width: 40%
-}
-
-.lCSignature { 
-    width: 10%
-}
-
-.lCWaiver { 
-    width: 10%
-}
-
-/* Legal Optional Checklist */
-
-.lODocName {
-    width: 15%
-}
-
-.lOAgmtCode {
-    width: 7%
-}
-
-.lORRemark {
-    width: 40%
-}
-
-.lOSignature { 
-    width: 10%
-}
-
-.lOWaiver { 
-    width: 10%
-}
-
