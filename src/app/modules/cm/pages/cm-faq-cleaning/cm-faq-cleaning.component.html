@@ -57,28 +57,44 @@
                                     <div formArrayName="entities">
                                         <ng-container *ngFor="let entity of faqTrainerForm.get('questions').get(i+'').get('entities').controls; let j=index">
                                             <div *ngIf="addEntity" class="ui-g" [formGroupName]="j" style="margin-bottom: 10px;">
-                                                <div class="ui-g-4" style="padding-left: 0px">
-                                                    <span class="ui-float-label">
+                                                <div class="ui-g-3" style="padding: 0px 10px 0px 0px">
+                                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                        Entity:
+                                                    </div>
+                                                    <p-dropdown [options]="entitiesOptions" formControlName="entity" editable="true" [autoWidth]="false" [style]="{'width':'100%'}"
+                                                        placeholder="Create entity"></p-dropdown>
+                                                    <!-- <span class="ui-float-label">
                                                         <input type="text" id="float-input" class="form-control" formControlName="entity" pInputText>
-                                                        <label for="float-input">Entity:</label>
-                                                    </span>
+                                                        <label for="float-input">Entity:</label>    
+                                                    </span> -->
                                                 </div>
-                                                <div class="ui-g-4">
-                                                    <span class="ui-float-label">
+                                                <div class="ui-g-4" style="padding: 0px 10px 0px 0px">
+                                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                        Synonym:
+                                                    </div>
+                                                    <p-dropdown [options]="synonymsOptions" formControlName="value" (onClick)="retrieveSynonymsOptions(i,j)" editable="true" [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Create synonym"></p-dropdown>
+                                                    <!-- <span class="ui-float-label">
                                                         <input type="text" id="float-input" class="form-control" formControlName="value" pInputText>
                                                         <label for="float-input">Synonym:</label>
-                                                    </span>
+                                                    </span> -->
                                                 </div>
-                                                <div class="ui-g-4">
-                                                    <span class="ui-float-label">
+                                                <div class="ui-g-4" style="padding: 0px">
+                                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                        Selected Word:
+                                                    </div>
+                                                    <input type="text" class="form-control" [style]="{'width':'100%'}" formControlName="word" pInputText>
+                                                    <!-- <span class="ui-float-label">
                                                         <input type="text" id="float-input" class="form-control" formControlName="word" pInputText>
                                                         <label for="float-input">Selected Word:</label>
-                                                    </span>
+                                                    </span> -->
+                                                </div>
+                                                <div class="ui-g-1">
+                                                    <i class="fas fa-trash-alt clickable" style="margin-top: 30%; margin-left: 10%; color: #e91224" (click)="deleteEntity(i,j)"></i>
                                                 </div>
                                             </div>
                                         </ng-container>
                                     </div>
-                                    <div *ngIf="highlighted[i]" style="padding-left: 0px">
+                                    <div *ngIf="highlighted[i] && faqTrainerForm.get('questions').get(i+'').get('intent').value != '' " style="padding-left: 0px">
                                         <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)" type="text"
                                             icon="fas fa-plus" pButton></button>
                                     </div>

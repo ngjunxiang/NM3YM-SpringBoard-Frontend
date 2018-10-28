@@ -19,6 +19,7 @@
 
 :host >>> .ui-widget-content .ui-inputtext{
     font-weight: 550;
+    height: 36px;
 }
 
 :host >>> .ui-float-label{
@@ -44,6 +45,11 @@ hr {
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+.clickable{
+    cursor: pointer;
+}
+
 /***********************************
   Style of invalid and dirty inputs 
  **********************************/

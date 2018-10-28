@@ -51,12 +51,9 @@ export class CMFaqSynonymComponent implements OnInit {
         this.keys.forEach(key => {
           let values = []
           let objValues = res.results[key];
-          objValues.forEach(value => {
-            values.push(value)
-          })
           this.synonyms.push({
             value: key,
-            synonyms: values,
+            synonyms: objValues,
           })
         })
 

@@ -84,6 +84,7 @@ export class CMService {
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
     private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
     private retrieveSynonymsURL = environment.host + '/app/train/retrieve-synonyms';
+    private retrieveEntitiesURL = environment.host + '/app/train/retrieve-entities';
     private updateSynonymsURL = environment.host + '/app/train/update-synonyms';
 
     // Notifications Endpoints
@@ -558,6 +559,22 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems);
 
         return this.http.post<Response>(this.retrieveIntentsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveEntities() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveEntitiesURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

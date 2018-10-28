@@ -6,7 +6,12 @@ import { Message, MenuItem } from 'primeng/components/common/api';
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
-interface intent {
+interface intent {                                                                                               
+    label: string,
+    value: string
+}
+
+interface entity {
     label: string,
     value: string
 }
@@ -31,6 +36,10 @@ export class CMFaqCleaningComponent implements OnInit {
     faqs: any[];
     faqTrainerForm: FormGroup;
     intents: intent[];
+    entitiesOptions: entity[];
+    entitiesIndex: string[];
+    synonyms: any[];
+    synonymsOptions: any[];
     numUncleaned = 0;
 
     constructor(
@@ -88,6 +97,7 @@ export class CMFaqCleaningComponent implements OnInit {
 
         this.UIControls();
         this.retrieveIntents();
+        this.retrieveEntities();
         this.loading = false;
     }
 
@@ -124,6 +134,50 @@ export class CMFaqCleaningComponent implements OnInit {
         });
     }
 
+    retrieveEntities() {
+        this.cmService.retrieveEntities().subscribe(res => {
+            if (res.error) {
+                this.msgs.push({
+                    severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.entitiesOptions = [];
+                this.entitiesIndex = [];
+                this.synonyms = []; 
+                let keys = Object.keys(res.results);
+                keys.forEach(key => {
+                    let objValues = res.results[key];
+                    this.entitiesOptions.push({
+                        label: key, value: key
+                    })
+                    this.entitiesIndex.push(key);
+
+                    let dropDownValues = [];
+
+                    objValues.forEach(value => {
+                        dropDownValues.push({
+                            label: value, value: value
+                        })
+                    })
+                    
+                    this.synonyms.push({
+                        entity: key, synonyms: dropDownValues
+                    })
+                })
+            }
+
+        }, error => {
+                this.msgs.push({
+                    severity: 'error', summary: 'Server Error', detail: error
+                });
+                this.loading = false;
+            });
+    }
+
+    
     expandFAQ(index) {
         if (this.expand[index]) {
             this.expand[index] = false;
@@ -194,6 +248,15 @@ export class CMFaqCleaningComponent implements OnInit {
         this.addEntity = true;
     }
 
+    retrieveSynonymsOptions(qnIndex, entityIndex){
+        this.synonymsOptions = this.synonyms[this.entitiesIndex.indexOf(this.faqTrainerForm.get('questions').get(qnIndex + '').get('entities').get(entityIndex + '').get('entity').value)]['synonyms']
+    }
+
+    deleteEntity(qnsIndex, entityIndex) {
+        let control = (<FormArray>this.faqTrainerForm.controls['questions']).at(qnsIndex).get('entities') as FormArray
+        control.removeAt(entityIndex);
+    }
+
     submitCleanedFAQ() {
         //Invalid FormControlName Controls
         let invalidCount = 0;
@@ -236,6 +299,8 @@ export class CMFaqCleaningComponent implements OnInit {
             return;
         }
 
+        console.log(this.synonyms[this.entitiesIndex.indexOf(this.faqTrainerForm.get('questions').get(0 + '').get('entities').get(0 + '').get('entity').value)]['synonyms'])
+
         //storing the values into faqs 
         for (let i = 0; i < this.faqs.length; i++) {
             this.faqs[i].question = this.faqTrainerForm.get('questions').get(i + '').get('question').value;
@@ -265,11 +330,11 @@ export class CMFaqCleaningComponent implements OnInit {
 
             if (res.results) {
                 let successCount = res.results.StoredCount
-                let failedCount= res.results.failedQnNums
+                let failedCount = res.results.failedQnNums
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: successCount + ' FAQ have been cleaned.'
                 });
-                
+
                 this.loading = true;
                 this.retrieveUncleanedFAQ();
             }
