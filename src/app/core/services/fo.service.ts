@@ -94,15 +94,24 @@ export class FOService {
     private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
 
     // PDF URL
-    private pdfURL = environment.host + '/assets/pdf/reg51.pdf';
+    private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
 
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
     ) { }
 
-    get pdfUrl() {
-        return this.pdfURL;
+    retrievePdf() {
+        let headers = new HttpHeaders();
+        headers = headers.set('Accept', 'application/pdf, */*');
+
+        const postData = this.authService.authItems;
+
+        return this.http.post(this.retrievePdfURL, postData, { headers: headers, responseType: 'blob' as 'json' })
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
 
     retrieveDashboardStats() {
@@ -244,7 +253,7 @@ export class FOService {
         return this.http.post<Response>(this.retrieveAllRMNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
-        );
+            );
     }
 
     retrieveOnboardProcessDetails(obID) {
