@@ -44,6 +44,7 @@ import { CMService } from '../../core/services/cm.service';
 import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.component';
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
+import { CMFaqMyAnswersComponent } from './pages/cm-faq-myanswers/cm-faq-myanswers.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
 import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
@@ -98,6 +99,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMViewChecklistLogsComponent,
         CMUploadAgmtComponent,
         CMFaqManageComponent,
+        CMFaqMyAnswersComponent,
+        CMFaqCleaningComponent,
         CMFaqCreateComponent,
         CMFaqCleaningComponent,
         CMFaqSynonymComponent,

@@ -221,9 +221,9 @@
                                     <ng-container *ngIf="!showAnsEditArea && !showQnsEditArea">
                                         <div [innerHTML]="faqs[currentIndex].answer"></div>
                                         <div class="ui-g-8" style="padding-top: 2%">
-                                            <button pButton style="width:30%; margin-right:1%" class="ui-button-warning" label="Refine Question" type="button" icon="fa fa-plus"
+                                            <button pButton style="margin-right:1%" class="ui-button-warning" label="Refine Question" type="button" icon="fa fa-plus"
                                                 (click)="showEditQuestionArea()"></button>
-                                            <button pButton style="width:25%; margin-right:1%" class="ui-button-success" label="Add Answer" type="button" icon="fa fa-plus"
+                                            <button pButton style="margin-right:1%" class="ui-button-success" label="Answer Question" type="button" icon="fa fa-plus"
                                                 (click)="showAddAnswerArea()" (click)="showDialogMaximized($event,dialogUnanswered)"></button>
                                         </div>
                                         <div class="ui-g-4" style="padding-top: 2%">

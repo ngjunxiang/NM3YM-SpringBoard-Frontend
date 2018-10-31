@@ -17,6 +17,12 @@ export const ROUTES: RouteInfo[] = [
         submenu: [
             { path: '/cm/faq/manage', title: 'Manage', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/cm/faq/createFAQ', title: 'Create', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+            { path: '/cm/faq/myAnswers', title: 'My Answers', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+        ]
+    },
+    {
+        path: '/cm/faq', title: 'NLU Trainer', icon: 'mdi mdi-memory', class: 'has-arrow', label: '', labelClass: '', extralink: false, 
+        submenu: [
             { path: '/cm/faq/clean', title: 'Clean Data', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/cm/faq/synonym', title: 'Synonyms', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
