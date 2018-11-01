@@ -298,9 +298,7 @@ export class CMFaqCleaningComponent implements OnInit {
             });
             return;
         }
-
-        console.log(this.synonyms[this.entitiesIndex.indexOf(this.faqTrainerForm.get('questions').get(0 + '').get('entities').get(0 + '').get('entity').value)]['synonyms'])
-
+        
         //storing the values into faqs 
         for (let i = 0; i < this.faqs.length; i++) {
             this.faqs[i].question = this.faqTrainerForm.get('questions').get(i + '').get('question').value;

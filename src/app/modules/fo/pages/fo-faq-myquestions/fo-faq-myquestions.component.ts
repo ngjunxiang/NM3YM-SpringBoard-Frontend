@@ -15,12 +15,21 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
-    answerDialog = false;
-    currentIndex: number;
+    processing = false;
+    loadingEditArea = false;
+    showAnsEditArea = false;
+    showQnsEditArea = false;
+    selectedFAQ: string;
     activeTab: number;
+    msgs: Message[] = [];
+    answeredDialog = false;
+    historyDialog = false;
+    unansweredDialog = false;
+    currentIndex: number;
     disableLoadMore = false;
     LoadMoreClicks: number;
+    searched = false;
+    disable: boolean;
 
     // UI Components
     questionForm: FormGroup;
@@ -43,8 +52,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
         if (!this.activeTab) {
             this.activeTab = 0;
-            
         }
+
         this.questionForm = this.fb.group({
             question: new FormControl('', Validators.required)
         });
@@ -55,54 +64,30 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     retrieveFAQ() {
         this.faqs = [];
 
-        if (this.activeTab === 0) {
-            //Retrieve answered question 
-            this.foService.retrieveUserFAQ().subscribe(res => {
-                if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
-                    });
-                    this.loading = false;
-                    return;
-                }
-
-                if (res.results) {
-                    this.faqs = res.results.answered;
-                }
-
-                this.checkLoadMore()
-                this.loading = false;
-            }, error => {
+        this.foService.retrieveUserFAQ().subscribe(res => {
+            if (res.error) {
                 this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: error
+                    severity: 'error', summary: 'Error', detail: res.error
                 });
-
                 this.loading = false;
+                return;
+            }
+
+            if (res.results && this.activeTab === 0) {
+                this.faqs = res.results.answered;
+            } else {
+                this.faqs = res.results.unanswered;
+            }
+
+            this.checkLoadMore()
+            this.loading = false;
+        }, error => {
+            this.msgs.push({
+                severity: 'error', summary: 'Error', detail: error
             });
-        } else {
-            //Retrieve unanswered question 
-            this.foService.retrieveUserFAQ().subscribe(res => {
-                if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
-                    });
-                    this.loading = false;
-                    return;
-                }
 
-                if (res.results) {
-                    this.faqs = res.results.unanswered;
-                }
-                this.checkLoadMore()
-                this.loading = false;
-            }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: error
-                });
-
-                this.loading = false;
-            });
-        }
+            this.loading = false;
+        });
     }
 
     changeTab(event) {

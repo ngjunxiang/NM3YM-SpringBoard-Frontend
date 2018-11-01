@@ -78,9 +78,11 @@ export class CMService {
     private retrieveFAQByCategoryAndSortURL = environment.host + '/app/faq/retrieve-allAQBy';
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
-    private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
+    private retrieveCMFAQURL = environment.host + '/app/faq/retrieve-cmUserQNA';
+    
 
     // NLU Model Endpoints 
+    private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
     private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
     private retrieveSynonymsURL = environment.host + '/app/train/retrieve-synonyms';
@@ -462,6 +464,22 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems, questionData);
 
         return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveCMFAQ() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveCMFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

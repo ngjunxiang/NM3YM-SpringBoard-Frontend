@@ -57,7 +57,7 @@ export class CMFaqCreateComponent implements OnInit {
     addPDFReference() {
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
+            let newLink = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
             let answer = this.faqForm.get('answer').value.replace(this.link, newLink);
             if (answer == this.faqForm.get('answer').value) {
                 answer = this.faqForm.get('answer').value + newLink;
@@ -70,7 +70,7 @@ export class CMFaqCreateComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
+            this.link = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
             let answer = this.faqForm.get('answer').value + this.link;
             this.faqForm.get('answer').setValue(answer);
             this.referenceAdded = true;
