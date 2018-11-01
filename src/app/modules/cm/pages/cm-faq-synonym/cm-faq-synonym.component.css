@@ -1,3 +1,22 @@
 :host >>> .ui-chips > ul.ui-inputtext .ui-chips-token {
     margin: 2px 2px;
 }
+
+:host >>> .ui-chips > ul.ui-inputtext{
+    width: 100%;
+}
+
+:host >>> .ui-paginator{
+    border: 1px solid #dcdee0;
+    border-radius: 3px;
+}
+
+
+/***********************************
+  Style of invalid and dirty inputs 
+ **********************************/
+
+ :host >>> .ui-inputtext.ng-dirty.ng-invalid,
+ :host >>> p-chips.ng-dirty.ng-invalid > .ui-chips > ul.ui-inputtext{
+     background-color: #f8bdc3;
+ } 

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CMFaqSynonymComponent } from './cm-faq-synonym.component';
+import { CMFAQTrainModelComponent } from './cm-faq-train-model.component';
 
-describe('CMFaqSynonymComponent', () => {
-  let component: CMFaqSynonymComponent;
-  let fixture: ComponentFixture<CMFaqSynonymComponent>;
+describe('CMFAQTrainModelComponent', () => {
+    let component: CMFAQTrainModelComponent;
+    let fixture: ComponentFixture<CMFAQTrainModelComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CMFaqSynonymComponent]
+            declarations: [CMFAQTrainModelComponent]
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CMFaqSynonymComponent);
+        fixture = TestBed.createComponent(CMFAQTrainModelComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

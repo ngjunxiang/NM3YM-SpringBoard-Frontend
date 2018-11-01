@@ -24,6 +24,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
@@ -44,9 +45,10 @@ import { CMService } from '../../core/services/cm.service';
 import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.component';
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
-import { CMFaqMyAnswersComponent } from './pages/cm-faq-myanswers/cm-faq-myanswers.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
+import { CMFaqMyAnswersComponent } from './pages/cm-faq-myanswers/cm-faq-myanswers.component';
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
+import { CMFAQTrainModelComponent } from './pages/cm-faq-train-model/cm-faq-train-model.component';
 import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -79,6 +81,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgbModule.forRoot(),
         NgxWigModule,
         OverlayPanelModule,
+        PaginatorModule,
         PanelModule,
         PerfectScrollbarModule,
         ProgressSpinnerModule,
@@ -103,6 +106,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CMFaqCleaningComponent,
         CMFaqCreateComponent,
         CMFaqCleaningComponent,
+        CMFAQTrainModelComponent,
         CMFaqSynonymComponent,
         CMUploadReg51Component
     ],

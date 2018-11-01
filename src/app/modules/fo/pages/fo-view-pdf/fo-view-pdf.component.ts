@@ -27,8 +27,8 @@ export class FOViewPDFComponent implements OnInit {
     openPDF() {
         this.foService.retrievePdf().subscribe((res: any) => {
             let blob = new Blob([res], { type: 'application/pdf' });
-            var url = window.URL.createObjectURL(blob);
-            var pwa = window.open(url + "#page=" + this.page);
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url + "#page=" + this.page);
             if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
                 alert('Please disable your pop-up blocker and try again.');
             }

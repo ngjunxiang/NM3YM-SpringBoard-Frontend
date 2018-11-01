@@ -21,8 +21,15 @@ export class CMFaqSynonymComponent implements OnInit {
 
   // UI Components
   synonyms = [];
+  numSynonyms: number;
   keys = [];
   synonymForm: FormGroup;
+
+  // Paginator Controls
+  numOfPage: any[];
+  firstIndex: number;
+  lastIndex: number;
+  pageNumber: number;
 
   constructor(
     private cmService: CMService,
@@ -33,6 +40,8 @@ export class CMFaqSynonymComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.firstIndex = 0;
+    this.lastIndex = 10;
     this.retrieveSynonyms();
   }
 
@@ -56,11 +65,9 @@ export class CMFaqSynonymComponent implements OnInit {
             synonyms: objValues,
           })
         })
-
-        console.log(this.synonyms)
         this.createForm();
       }
-
+      this.numSynonyms = this.synonyms.length;
       this.loading = false;
     }, error => {
       this.msgs.push({
@@ -81,12 +88,70 @@ export class CMFaqSynonymComponent implements OnInit {
       synControl.push(
         this.fb.group({
           value: new FormControl(this.synonyms[i].value, Validators.required),
-          synonyms: new FormControl(this.synonyms[i].synonyms, Validators.required )
+          synonyms: new FormControl(this.synonyms[i].synonyms, Validators.required)
         })
       );
     }
-    console.log(this.synonymForm)
     this.loading = false;
   };
+
+  updateSynonyms() {
+    let synonymsDict = {};
+    let synControl = <FormArray>this.synonymForm['controls'].form;
+
+
+    for (let i = 0; i < synControl.length; i++) {
+      synControl.get(i + '').get('value').markAsDirty();
+      synControl.get(i + '').get('synonyms').markAsDirty();
+      let value = synControl.get(i + '').get('value').value.trim();
+      console.log(value)
+      if (synControl.get(i + '').get('value').invalid || synControl.get(i + '').get('synonyms').invalid) {
+        if (value != "") {
+          this.msgs.push({
+            severity: 'error', summary: 'Missing fields', detail: "Please ensure that " + value + "'s fields are filled."
+          });
+          return;
+        } else {
+          this.msgs.push({
+            severity: 'error', summary: 'Missing fields', detail: "Please ensure that all fields are filled."
+          });
+          return;
+        }
+      }
+      synonymsDict[synControl.get(i + '').get('value').value] = synControl.get(i + '').get('synonyms').value;
+    };
+
+
+    this.cmService.updateSynonyms(synonymsDict).subscribe(res => {
+      if (res.error) {
+        this.msgs.push({
+          severity: 'error', summary: 'Error', detail: res.error
+        });
+        return;
+      }
+
+      if (res.results) {
+        this.msgs.push({
+          severity: 'success', summary: 'Success', detail: "All synonyms have been updated."
+        });
+      }
+
+    }, error => {
+      this.msgs.push({
+        severity: 'error', summary: 'Server Error', detail: error
+      });
+      this.loading = false;
+    });
+  }
+
+  paginate(event) {
+    //First index of the FormArray that will appear on the page  
+    this.firstIndex = event.first;
+
+    //Last index of the FormArray that will appears on the page  
+    this.lastIndex = this.firstIndex + 10;
+  }
 }
+
+
 

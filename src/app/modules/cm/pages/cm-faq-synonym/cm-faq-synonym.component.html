@@ -4,25 +4,32 @@
 <div *ngIf="!loading">
     <p-card>
         <h4>Manage Synonyms</h4>
-        <div [formGroup]="synonymForm">
+        <div [formGroup]="synonymForm" style="margin-top: 20px">
             <div formArrayName="form">
                 <ng-container *ngFor="let syn of synonymForm.get('form').controls; let i=index">
                     <div [formGroupName]="i">
-                        <div class="ui-g" style="padding-bottom: 10px">
-                            <div class="ui-g-3">
-                                <span class="ui-float-label">
-                                    <input type="text" id="float-input" class="form-control" formControlName="value"
-                                        [disabled]="true" pInputText>
-                                    <label for="float-input">Value:</label>
-                                </span>
+                        <ng-container *ngIf="i >= firstIndex && i < lastIndex">
+                            <div class="ui-g" style="padding-bottom: 10px">
+                                <div class="ui-g-3">
+                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                        Value:
+                                    </div>
+                                    <input type="text" class="form-control" formControlName="value" [disabled]="true" pInputText>
+                                </div>
+                                <div class="ui-g-9">
+                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                        Synonyms:
+                                    </div>
+                                    <p-chips formControlName="synonyms"></p-chips>
+                                </div>
                             </div>
-                            <div class="ui-g-9">
-                                <p-chips formControlName="synonyms"></p-chips>
-                            </div>
-                        </div>
+                        </ng-container>
                     </div>
                 </ng-container>
             </div>
         </div>
+        <button pButton type="button" style="left: 45.6%" label="Save All" class="ui-button-raised ui-button-success" [disabled]="loading"
+            (click)="updateSynonyms()"></button>
     </p-card>
+    <p-paginator [rows]="10" [totalRecords]="numSynonyms" (onPageChange)="paginate($event)"></p-paginator>
 </div>

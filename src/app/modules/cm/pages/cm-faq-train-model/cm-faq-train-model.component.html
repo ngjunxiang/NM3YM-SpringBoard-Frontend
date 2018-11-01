@@ -1,0 +1,19 @@
+<p-growl [(value)]="msgs" [life]="5000"></p-growl>
+
+<p-card [style]="{width: '60%'}" styleClass="ui-card-shadow">
+    <div>
+        <h3 style="margin: 10px 10px">Train NLU Model</h3>
+        <ng-container *ngIf="!loading">
+            <h6 style="margin: 20px 10px; line-height: 1.8">By training SpringBoard's NLU model, you will be improving the FAQ search accuracy with the cleaned data.</h6>
+        </ng-container>
+        <ng-container *ngIf="loading">
+            <h6 style="margin: 10px 10px">It will take a while for the model to be trained.</h6>
+            <p-progressSpinner></p-progressSpinner>
+        </ng-container>
+    </div>
+    <hr>
+    <div>
+        <button pButton type="button" style="margin:10px 10px;" label="Train Model" class="ui-button-raised ui-button-success" [disabled]="loading"
+            (click)="trainModel()"></button>
+    </div>
+</p-card>

@@ -12,6 +12,7 @@ import { CMNewChecklistComponent } from './pages/cm-new-checklist/cm-new-checkli
 import { CMFaqManageComponent } from './pages/cm-faq-manage/cm-faq-manage.component';
 import { CMFaqCreateComponent } from './pages/cm-faq-create/cm-faq-create.component';
 import { CMFaqMyAnswersComponent } from './pages/cm-faq-myanswers/cm-faq-myanswers.component';
+import { CMFAQTrainModelComponent } from './pages/cm-faq-train-model/cm-faq-train-model.component';
 import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.component';
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
 import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.component';
@@ -62,8 +63,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'New' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'checklist/logs',
@@ -75,13 +76,13 @@ const routes: Routes = [
                 canActivate: [CMAuthGuard]
             },
             {
-                path: 'faq/manage',
-                component: CMFaqManageComponent,
+                path: 'faq/clean',
+                component: CMFaqCleaningComponent,
                 data: {
                     title: 'Client Management',
-                    urls: [{ title: 'FAQ' }, { title: 'Manage' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                    urls: [{ title: 'FAQ' }, { title: 'Clean Data' }]
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'faq/createFAQ',
@@ -89,8 +90,17 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'FAQ' }, { title: 'Create FAQ' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
+            },
+            {
+                path: 'faq/manage',
+                component: CMFaqManageComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'FAQ' }, { title: 'Manage' }]
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'faq/myAnswers',
@@ -98,17 +108,8 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'FAQ' }, { title: 'My Answers' }]
-                }, 
-                canActivate: [CMAuthGuard] 
-            },
-            {
-                path: 'faq/clean',
-                component: CMFaqCleaningComponent,
-                data: {
-                    title: 'Client Management',
-                    urls: [{ title: 'FAQ' }, { title: 'Clean Data' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'faq/synonym',
@@ -116,26 +117,35 @@ const routes: Routes = [
                 data: {
                     title: 'Client Management',
                     urls: [{ title: 'FAQ' }, { title: 'Synonyms' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                },
+                canActivate: [CMAuthGuard]
+            },
+            {
+                path: 'faq/trainModel',
+                component: CMFAQTrainModelComponent,
+                data: {
+                    title: 'Client Management',
+                    urls: [{ title: 'FAQ' }, { title: 'Clean Data' }]
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'upload/agmtDoc',
                 component: CMUploadAgmtComponent,
                 data: {
                     title: 'Client Management',
-                    urls: [{ title: 'Upload'}, { title: 'Agmt - Doc Mapping' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                    urls: [{ title: 'Upload' }, { title: 'Agmt - Doc Mapping' }]
+                },
+                canActivate: [CMAuthGuard]
             },
             {
                 path: 'upload/reg51',
                 component: CMUploadReg51Component,
                 data: {
                     title: 'Client Management',
-                    urls: [{ title: 'Upload'}, { title: 'Reg51' }]
-                }, 
-                canActivate: [CMAuthGuard] 
+                    urls: [{ title: 'Upload' }, { title: 'Reg51' }]
+                },
+                canActivate: [CMAuthGuard]
             }
         ]
     },

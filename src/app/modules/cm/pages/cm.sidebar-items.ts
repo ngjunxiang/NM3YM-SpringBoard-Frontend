@@ -23,8 +23,9 @@ export const ROUTES: RouteInfo[] = [
     {
         path: '/cm/faq', title: 'NLU Trainer', icon: 'mdi mdi-memory', class: 'has-arrow', label: '', labelClass: '', extralink: false, 
         submenu: [
+            { path: '/cm/faq/trainModel', title: 'Train Model', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/cm/faq/clean', title: 'Clean Data', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
-            { path: '/cm/faq/synonym', title: 'Synonyms', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
+            { path: '/cm/faq/synonym', title: 'Manage Synonyms', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] }
         ]
     },
     {
