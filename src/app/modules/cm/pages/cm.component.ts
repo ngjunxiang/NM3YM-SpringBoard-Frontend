@@ -87,33 +87,38 @@ export class CMComponent implements OnInit {
                 this.appMsgs.push({
                     severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
+                return;
             }
             if (res.results) {
                 this.notifications = {};
                 let newNotifications = [];
                 let allNotifications = [];
 
-                // res.results.notifications.forEach(notification => {
-                //     let notif;
+                res.results.notifications.forEach(notification => {
+                    let notif;
 
-                //     if (notification.type.changed === '1') {
-                //         notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.';
-                //     }
+                    // if (notification.type.changed === '1') {
+                    //     notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">edited</font></strong>.';
+                    // }
 
-                //     if (notification.type.changed === '2') {
-                //         notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.';
-                //     }
+                    // if (notification.type.changed === '2') {
+                    //     notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">added</font></strong>.';
+                    // }
 
-                //     if (notification.type.changed === '3') {
-                //         notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.';
-                //     }
+                    // if (notification.type.changed === '3') {
+                    //     notif = notification.name + ': <br> \n <strong><font color="black">' + notification.type.documentName + '</font></strong> has been <strong><font color="black">deleted</font></strong>.';
+                    // }
 
-                //     if (!notification.checked) {
-                //         newNotifications.push(notif);
-                //     }
+                    if (notification.question) {
+                        notif = 'New FAQ has been posted <br>' + '<strong><font color="black">' + notification.question + '</font></strong>';
+                    }
+
+                    if (!notification.checked) {
+                        newNotifications.push(notif);
+                    }
                     
-                //     allNotifications.push(notif);
-                // });
+                    allNotifications.push(notif);
+                });
 
                 this.notifications['newNotifications'] = newNotifications;
                 this.notifications['allNotifications'] = allNotifications;
