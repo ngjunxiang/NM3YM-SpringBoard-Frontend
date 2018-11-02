@@ -26,6 +26,7 @@ export class FOFaqViewAllComponent implements OnInit {
     LoadMoreClicks: number;
 
     // UI Components
+    currentSearch: string;
     categoryOptions: any[];
     sortByOptions: any[];
     selectedCategory: string = '';
@@ -94,7 +95,6 @@ export class FOFaqViewAllComponent implements OnInit {
     }
 
     searchFAQ() {
-        this.searched = true;
         this.questionForm.get('question').markAsDirty();
 
         if (this.questionForm.get('question').invalid) {
@@ -108,7 +108,9 @@ export class FOFaqViewAllComponent implements OnInit {
 
         this.faqs = [];
 
-        this.foService.retrieveFaq(this.questionForm.get('question').value).subscribe(res => {
+        this.currentSearch = this.questionForm.get('question').value;
+
+        this.foService.retrieveFaq(this.currentSearch).subscribe(res => {
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -124,12 +126,14 @@ export class FOFaqViewAllComponent implements OnInit {
             this.checkLoadMore();
 
             this.loading = false;
+            this.searched = true;
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
             });
 
             this.loading = false;
+            this.searched = true;
         });
     }
 
