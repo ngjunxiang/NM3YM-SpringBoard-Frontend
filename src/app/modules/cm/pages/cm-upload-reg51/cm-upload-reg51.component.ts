@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
-import { Message } from 'primeng/components/common/api';
 import { environment } from '../../../../../environments/environment';
 import { AuthenticationService } from '../../../../core/services/authentication.service';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+
+import { MessageService } from 'primeng/components/common/api';
 import { CMService } from 'src/app/core/services/cm.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class CMUploadReg51Component implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
+    uploading = false;
 
     // UI Component
     uploadUrl: string = environment.host + '/app/cm/upload-reg51';
@@ -28,26 +29,29 @@ export class CMUploadReg51Component implements OnInit {
     constructor(
         private authService: AuthenticationService,
         private cmService: CMService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
+        this.loading = true;
         this.cmService.retrieveReg51Notification().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
                 this.form = this.fb.group({
-                    notify: new FormControl(res.results.notification)
+                    notify: new FormControl(res.results.toShow)
                 });
             }
+            this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -59,7 +63,7 @@ export class CMUploadReg51Component implements OnInit {
         event.formData.append('username', authItems.username);
         event.formData.append('userType', authItems.userType);
         event.formData.append('token', authItems.token);
-        this.loading = true;
+        this.uploading = true;
     }
 
     onUpload(event) {
@@ -71,19 +75,19 @@ export class CMUploadReg51Component implements OnInit {
                 }
 
                 if (res.error === 'file is not pdf') {
-                    this.msgs.push({
-                        severity: 'error', summary: 'File Format Error', detail: 'Please try again with a PDF file'
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'File Format Error', detail: 'Please try again with a PDF file'
                     });
                 } else if (res.error === 'file may be corrupted, check file format and try again.') {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Corrupted File Error', detail: 'File may be corrupted. Please check the file and try again'
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Corrupted File Error', detail: 'File may be corrupted. Please check the file and try again'
                     });
                 } else {
-                    this.msgs.push({
-                        severity: 'error', summary: 'File Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'File Error', detail: res.error
                     });
                 }
-                this.loading = false;
+                this.uploading = false;
                 return;
             }
             if (res.results) {
@@ -93,11 +97,11 @@ export class CMUploadReg51Component implements OnInit {
 
                 this.response = res.results;
 
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'File has been uploaded'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'File has been uploaded'
                 });
 
-                this.loading = false;
+                this.uploading = false;
             }
         }
     }
@@ -108,29 +112,30 @@ export class CMUploadReg51Component implements OnInit {
             this.errorFiles.push(file);
         }
 
-        this.msgs.push({
-            severity: 'error', summary: 'Server Error', detail: 'Please try again later'
+        this.messageService.add({ 
+            key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Please try again later'
         });
         this.loading = false;
     }
 
     updateReg51Notif() {
+        console.log(this.form.get('notify').value)
         this.cmService.updateReg51Notification(this.form.get('notify').value).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Reg51 notification updated'
+                this.messageService.add({
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Reg51 notification updated'
                 });
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }

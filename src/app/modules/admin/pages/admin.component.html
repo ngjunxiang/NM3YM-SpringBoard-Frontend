@@ -3,7 +3,7 @@
 <!-- ============================================================== -->
 <app-idletimeout></app-idletimeout>
 
-<p-growl [(value)]="appMsgs" [life]="5000"></p-growl>
+<p-toast key="msgs" [baseZIndex]=9999999></p-toast>
 
 <div id="main-wrapper" [ngClass]="
     {

@@ -95,8 +95,8 @@ export class CMService {
     private updateNotificationsURL = environment.host + '/app/cm/update-notifications';
 
     // Reg51 Notification Endpoint
-    private retrieveReg51NotificationsURL = environment.host + '/app/cm/update-notifications';
-    private updateReg51NotificationsURL = environment.host + '/app/cm/update-notifications';
+    private retrieveReg51NotificationsURL = environment.host + '/app/cm/retrieve-req51-notifications';
+    private updateReg51NotificationsURL = environment.host + '/app/cm/update-req51-notifications';
 
     constructor(
         private authService: AuthenticationService,

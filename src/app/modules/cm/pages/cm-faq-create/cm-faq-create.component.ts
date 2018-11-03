@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message, MenuItem } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -16,7 +16,6 @@ export class CMFaqCreateComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
@@ -32,6 +31,7 @@ export class CMFaqCreateComponent implements OnInit {
     constructor(
         private cmService: CMService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -86,8 +86,8 @@ export class CMFaqCreateComponent implements OnInit {
         this.faqForm.get('answer').markAsDirty();
 
         if (this.faqForm.get('question').invalid || this.faqForm.get('answer').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in all fields'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in all fields'
             });
             return;
         }
@@ -98,16 +98,16 @@ export class CMFaqCreateComponent implements OnInit {
             this.loading = true;
             this.cmService.createFAQ(answer, question).subscribe(res => {
                 if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                     });
                     this.loading = false;
                     return;
                 }
 
                 if (res.results) {
-                    this.msgs.push({
-                        severity: 'success', summary: 'Success', detail: 'FAQ has been created. <br>You will be redirected shortly.'
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'success', summary: 'Success', detail: 'FAQ has been created. <br>You will be redirected shortly.'
                     });
                     this.faqForm.get("question").setValue("");
                     this.faqForm.get("answer").setValue("");
@@ -124,8 +124,8 @@ export class CMFaqCreateComponent implements OnInit {
 
                 this.loading = false;
             }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
                 });
 
                 this.loading = false;

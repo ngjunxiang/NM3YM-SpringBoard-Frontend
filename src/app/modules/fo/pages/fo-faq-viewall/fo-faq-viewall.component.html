@@ -1,5 +1,3 @@
-<p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
-
 <div *ngIf="!loading">
     <form [formGroup]="questionForm" class="search-container">
         <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" autocomplete="off"

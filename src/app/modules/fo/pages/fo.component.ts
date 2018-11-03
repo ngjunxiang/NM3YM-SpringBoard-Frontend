@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/api';
 
 import { ROUTES } from './fo.sidebar-items';
 import { AuthenticationService } from '../../../core/services/authentication.service';
@@ -25,7 +25,6 @@ export class FOComponent implements OnInit {
 
     // UI Control
     sidebarRoutes = ROUTES;
-    appMsgs: Message[] = [];
 
     // Name & Email
     name: string;
@@ -37,6 +36,7 @@ export class FOComponent implements OnInit {
     constructor(
         private authService: AuthenticationService,
         private foService: FOService,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -48,8 +48,8 @@ export class FOComponent implements OnInit {
 
         this.route.queryParams.subscribe(params => {
             if (params['err'] === 'auth001') {
-                this.appMsgs.push({
-                    severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
                 });
             }
         });
@@ -61,8 +61,8 @@ export class FOComponent implements OnInit {
     async retrieveUserDetails() {
         await this.authService.retrieveUserDetails().then(res => {
             if (res.error) {
-                this.appMsgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Please contact the admin.'
                 });
             }
 
@@ -75,8 +75,8 @@ export class FOComponent implements OnInit {
                 };
             }
         }, error => {
-            this.appMsgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -84,8 +84,8 @@ export class FOComponent implements OnInit {
     retrieveNotifications() {
         this.foService.retrieveNotifications().subscribe(res => {
             if (res.error) {
-                this.appMsgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
             }
             if (res.results) {
@@ -133,8 +133,8 @@ export class FOComponent implements OnInit {
                 this.notifications['allNotifications'] = allNotifications;
             }
         }, error => {
-            this.appMsgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -142,13 +142,13 @@ export class FOComponent implements OnInit {
     updateNotifications(event) {
         this.foService.updateNotifications().subscribe(res => {
             if (res.error) {
-                this.appMsgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
             }
         }, error => {
-            this.appMsgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }

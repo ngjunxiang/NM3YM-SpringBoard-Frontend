@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 import { environment } from '../../../../../environments/environment';
 import { AuthenticationService } from '../../../../core/services/authentication.service';
 
@@ -13,7 +13,6 @@ export class CMUploadAgmtComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // UI Component
     uploadUrl: string = environment.host + '/app/cm/upload-AgmtCodes';
@@ -22,19 +21,12 @@ export class CMUploadAgmtComponent implements OnInit {
     response: any;
 
     constructor(
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
     }
-
-    // private checkDuplicateFiles(): boolean {
-    //     let filesArray = this.inputFiles.queue.map(item => item.file.name);
-    //     return filesArray.some((item, index, array) => {
-    //       return filesArray.indexOf(item) !== index;
-    //     });
-    // }
-
 
     onBeforeUpload(event) {
         this.inputFiles = [];
@@ -55,16 +47,16 @@ export class CMUploadAgmtComponent implements OnInit {
                 }
 
                 if (res.error === 'file is not csv') {
-                    this.msgs.push({
-                        severity: 'error', summary: 'File Format Error', detail: 'Please try again with a CSV file'
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'File Format Error', detail: 'Please try again with a CSV file'
                     });
                 } else if (res.error === 'file may be corrupted, check file format and try again.') {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Corrupted File Error', detail: 'File may be corrupted. Please check the file and try again'
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Corrupted File Error', detail: 'File may be corrupted. Please check the file and try again'
                     });
                 } else {
-                    this.msgs.push({
-                        severity: 'error', summary: 'File Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'File Error', detail: res.error
                     });
                 }
                 this.loading = false;
@@ -77,8 +69,8 @@ export class CMUploadAgmtComponent implements OnInit {
 
                 this.response = res.results;
 
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'File has been uploaded'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'File has been uploaded'
                 });
 
                 this.loading = false;
@@ -92,8 +84,8 @@ export class CMUploadAgmtComponent implements OnInit {
             this.errorFiles.push(file);
         }
 
-        this.msgs.push({
-            severity: 'error', summary: 'Server Error', detail: 'Please try again later'
+        this.messageService.add({ 
+            key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Please try again later'
         });
         this.loading = false;
     }

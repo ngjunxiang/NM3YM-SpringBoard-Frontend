@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
 
@@ -17,7 +17,6 @@ export class FOManageOnboardComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // UI Components
     obProcesses: any;
@@ -36,6 +35,7 @@ export class FOManageOnboardComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
         private foService: FOService,
+        private messageService: MessageService,
         private router: Router,
         private route: ActivatedRoute
     ) { }
@@ -87,8 +87,8 @@ export class FOManageOnboardComponent implements OnInit {
 
         this.foService.retrieveAllOnboardProcesses().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -133,8 +133,8 @@ export class FOManageOnboardComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
     }
@@ -144,8 +144,8 @@ export class FOManageOnboardComponent implements OnInit {
 
         this.foService.retrieveSortedOnboardProcesses(this.selectedSortOpt, this.filteredProcesses).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -186,8 +186,8 @@ export class FOManageOnboardComponent implements OnInit {
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
     }
@@ -198,8 +198,8 @@ export class FOManageOnboardComponent implements OnInit {
 
         this.foService.retrieveFilteredOnboardProcesses(this.selectedFilterOpt, this.allProcesses).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -244,8 +244,8 @@ export class FOManageOnboardComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
     }
@@ -268,21 +268,21 @@ export class FOManageOnboardComponent implements OnInit {
                 let selectedOnboardID = this.obProcesses[index].obID;
                 this.foService.deleteOnboardProcess(selectedOnboardID).subscribe(res => {
                     if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                         });
                         return;
                     }
 
                     if (res.results) {
                         this.retrieveAllOnboardProcesses();
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Onboard process deleted'
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process deleted'
                         });
                     }
                 }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                 });
             },
@@ -296,8 +296,8 @@ export class FOManageOnboardComponent implements OnInit {
         this.questionForm.get('question').markAsDirty();
 
         if (this.questionForm.get('question').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please ask a question'
             });
             return;
         }

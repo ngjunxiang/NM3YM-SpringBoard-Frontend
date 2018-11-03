@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
 
@@ -31,7 +31,6 @@ export class FODashboardComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // Dummy Variables for Dashboard
     data1: any;
@@ -52,6 +51,7 @@ export class FODashboardComponent implements OnInit {
 
     constructor(
         private foService: FOService,
+        private messageService: MessageService,
         private router: Router
     ) { }
 
@@ -60,8 +60,8 @@ export class FODashboardComponent implements OnInit {
         //Calling from endpoints
         this.foService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -95,8 +95,8 @@ export class FODashboardComponent implements OnInit {
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         })
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -17,7 +17,6 @@ export class AdminUpdateUserComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // UI Component
     updateUserForm: FormGroup;
@@ -26,7 +25,8 @@ export class AdminUpdateUserComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private adminService: AdminService
+        private adminService: AdminService,
+        private messageService: MessageService        
     ) {
 
     }
@@ -66,8 +66,8 @@ export class AdminUpdateUserComponent implements OnInit {
             });
             this.usernameList = usernames;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -101,8 +101,8 @@ export class AdminUpdateUserComponent implements OnInit {
             });
             return exists;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             return false;
         }));
@@ -159,8 +159,8 @@ export class AdminUpdateUserComponent implements OnInit {
             });
             return exists;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             return false;
         }));
@@ -177,8 +177,8 @@ export class AdminUpdateUserComponent implements OnInit {
             this.updateUserForm.controls.username.invalid ||
             this.updateUserForm.controls.password.invalid ||
             this.updateUserForm.controls.confirmPassword.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
             this.loading = false;
             return;
@@ -189,28 +189,28 @@ export class AdminUpdateUserComponent implements OnInit {
 
         this.adminService.updateUser(updateUsername, updatePassword).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: updateUsername + `'s password has been updated`
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: updateUsername + `'s password has been updated`
                 });
 
                 this.updateUserForm.controls.username.reset('');
                 this.updateUserForm.controls.password.reset('');
                 this.updateUserForm.controls.confirmPassword.reset('');
             } else {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: 'Username not found'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: 'Username not found'
                 });
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({ severity: 'error', summary: 'Server Error', detail: error + ' Please try again later.' });
+            this.messageService.add({  key: 'msgs', severity: 'error', summary: 'Server Error', detail: error + ' Please try again later.' });
             this.loading = false;
         });
     }
