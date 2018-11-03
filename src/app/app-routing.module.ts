@@ -35,10 +35,6 @@ export const routes: Routes = [
         loadChildren: './modules/cm/cm.module#CMModule'
     },
     {
-        path: 'compliance',
-        loadChildren: './modules/compliance/compliance.module#ComplianceModule'
-    },
-    {
         path: '**',
         loadChildren: './modules/login/login.module#LoginModule' 
     }
