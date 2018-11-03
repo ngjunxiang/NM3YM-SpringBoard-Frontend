@@ -386,7 +386,9 @@
                     </div>
                 </p-tabPanel>
             </p-tabView>
-            <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
+            <ng-container *ngIf="faqs.length > 0">
+                <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
+            </ng-container>
         </p-card>
     </div>
 </div>

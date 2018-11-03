@@ -1,7 +1,7 @@
 /*************************
  * ASK A QUESTION DIALOG *
  *************************/
- :host >>> .ui-dialog.askDialog {
+:host >>> .ui-dialog.askDialog {
   width: 500px;
 }
 
@@ -17,14 +17,6 @@
 .question{
   font-weight: bold;
   font-size: 16px;
-}
-
-:host >>> .ui-datascroller .ui-datascroller-content {
-  border: 0px
-}
-
-:host >>> .ui-datascroller .ui-datascroller-footer {
-  border: 0px
 }
 
 :host >>> .questionCard .ui-card {
@@ -89,4 +81,11 @@ input#search-bar{
     font-size: 25px;
     color: #3989e1;
     cursor: pointer;
+}
+
+/*************
+ * PAGINATOR *
+ *************/
+:host >>> .ui-paginator {
+  margin: 0px 0px;
 }

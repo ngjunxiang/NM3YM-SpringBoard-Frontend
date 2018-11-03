@@ -22,8 +22,6 @@ export class FOFaqViewAllComponent implements OnInit {
     askDialog = false;
     confirmDialog = false;
     currentIndex: number;
-    disableLoadMore = false;
-    LoadMoreClicks: number;
 
     // UI Components
     currentSearch: string;
@@ -35,6 +33,12 @@ export class FOFaqViewAllComponent implements OnInit {
     newQuestionForm: FormGroup;
     faqs: any[];
 
+    // Paginator Controls
+    numFAQs: number;
+    firstIndex: number;
+    lastIndex: number;
+    pageNumber: number;
+
     constructor(
         private foService: FOService,
         private fb: FormBuilder,
@@ -44,8 +48,6 @@ export class FOFaqViewAllComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loading = true;
-
         this.questionForm = this.fb.group({
             question: new FormControl('', Validators.required)
         });
@@ -61,13 +63,16 @@ export class FOFaqViewAllComponent implements OnInit {
             { value: "views", label: "Views" },
         ]
 
-        this.retrieveFAQ();
+        this.loadPage();
     }
 
-    retrieveFAQ() {
+    loadPage() {
+        this.loading = true;
         this.faqs = [];
         this.selectedCategory = '';
         this.selectedSortBy = '';
+        this.firstIndex = 0;
+        this.lastIndex = 10;
 
         this.foService.retrieveAllFaq().subscribe(res => {
             if (res.error) {
@@ -82,7 +87,7 @@ export class FOFaqViewAllComponent implements OnInit {
                 this.faqs = res.results;
             }
 
-            this.checkLoadMore()
+            this.numFAQs = this.faqs.length;
 
             this.loading = false;
         }, error => {
@@ -123,7 +128,7 @@ export class FOFaqViewAllComponent implements OnInit {
                 this.faqs = res.results;
             }
 
-            this.checkLoadMore();
+            this.numFAQs = this.faqs.length;
 
             this.loading = false;
             this.searched = true;
@@ -137,9 +142,9 @@ export class FOFaqViewAllComponent implements OnInit {
         });
     }
 
-    exitResult(){
+    exitResult() {
         this.searched = false;
-        this.retrieveFAQ();
+        this.loadPage();
     }
 
     retrieveIntents() {
@@ -195,6 +200,8 @@ export class FOFaqViewAllComponent implements OnInit {
                         prevAnswer: faq.prevAnswer,
                     });
                 }
+
+                this.numFAQs = this.faqs.length;
                 this.loading = false;
             }
         }, error => {
@@ -232,6 +239,7 @@ export class FOFaqViewAllComponent implements OnInit {
                         prevAnswer: faq.prevAnswer,
                     });
                 }
+                this.numFAQs = this.faqs.length;
                 this.loading = false;
             }
         }, error => {
@@ -292,7 +300,7 @@ export class FOFaqViewAllComponent implements OnInit {
                         });
                     }, 1500);
                     this.msgs.push({
-                        severity: 'success', summary: 'Success', detail: 'Your question has been posted'
+                        severity: 'success', summary: 'Success', detail: 'Your question has been posted. You will be redirected shortly.'
                     });
                 }
                 this.loading = false;
@@ -314,10 +322,7 @@ export class FOFaqViewAllComponent implements OnInit {
     showAnswerDialog(index) {
         this.currentIndex = index;
         this.answerDialog = true;
-
         let qnID = this.faqs[index].qnID
-
-        console.log(qnID)
 
         this.foService.increaseView(qnID).subscribe(res => {
             if (res.error) {
@@ -334,19 +339,14 @@ export class FOFaqViewAllComponent implements OnInit {
         });
     }
 
-    stopShowingLoadMore() {
-        this.LoadMoreClicks += 10
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
+    paginate(event) {
+        //First index of the FormArray that will appear on the page  
+        this.firstIndex = event.first;
+
+        //Last index of the FormArray that will appears on the page  
+        this.lastIndex = this.firstIndex + 10;
+        let el = document.getElementById("scrollHere")
+        el.scrollIntoView();
     }
 
-    checkLoadMore() {
-        this.disableLoadMore = false;
-        this.LoadMoreClicks = 10;
-
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
-    }
 }

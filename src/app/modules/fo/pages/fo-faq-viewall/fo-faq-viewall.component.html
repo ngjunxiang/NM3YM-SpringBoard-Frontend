@@ -68,7 +68,7 @@
 
     </p-dialog>
 
-    <p-card styleClass="ui-card-shadow">
+    <p-card id="scrollHere" styleClass="ui-card-shadow">
         <div *ngIf="!searched">
             <h4>Frequently Asked Questions</h4>
         </div>
@@ -81,8 +81,8 @@
             </h5>
         </div>
         <div *ngIf="faqs.length > 0">
-            <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                <ng-template let-faq let-i="index" pTemplate="items" ;>
+            <ng-container *ngFor="let faq of faqs; let i=index">
+                <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                     <p-card class="questionCard clickable" (click)="showAnswerDialog(i)">
                         <div class="ui-g">
                             <div class="ui-g-9">
@@ -100,13 +100,12 @@
                             </div>
                         </div>
                     </p-card>
-                </ng-template>
-                <p-footer>
-                    <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton
-                        label="Load More"></button>
-                </p-footer>
-            </p-dataScroller>
+                </ng-container>
+            </ng-container>
         </div>
+        <ng-container *ngIf="faqs.length > 0">
+            <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
+        </ng-container>
     </p-card>
 
     <ng-container *ngIf="answerDialog">
@@ -120,7 +119,8 @@
                 </div>
                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                     <!-- <p>Posted by: Jarrett Goh</p> -->
-                    <p>Posted on: {{faqs[currentIndex].dateAsked}}</p>
+                    <p>Posted on:</p>
+                    <p>{{faqs[currentIndex].dateAsked}}</p>
                 </div>
             </div>
             <hr>
@@ -135,7 +135,8 @@
 
                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                     <!-- <p>Answered by: Randy Lai</p> -->
-                    <p>Answered on: {{faqs[currentIndex].dateAnswered}}</p>
+                    <p>Answered on:</p> 
+                    <p>{{faqs[currentIndex].dateAnswered}}</p>
                 </div>
             </div>
 

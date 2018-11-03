@@ -20,13 +20,17 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     msgs: Message[] = [];
     answerDialog = false;
     currentIndex: number;
-    disableLoadMore = false;
-    LoadMoreClicks: number;
 
     // UI Components
     questionForm: FormGroup;
     faqs: any[];
     displayFAQs: any[];
+
+    // Paginator Controls
+    numFAQs: number;
+    firstIndex: number;
+    lastIndex: number;
+    pageNumber: number;
 
     constructor(
         private foService: FOService,
@@ -37,7 +41,6 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loading = true;
         this.route.queryParams.subscribe(params => {
             this.activeTab = params['activeTab'];
         });
@@ -50,11 +53,13 @@ export class FOFaqMyQuestionsComponent implements OnInit {
             question: new FormControl('', Validators.required)
         });
 
-        this.retrieveFAQ();
+        this.loadPage();
     }
 
-    retrieveFAQ() {
+    loadPage() {
         this.faqs = [];
+        this.firstIndex = 0;
+        this.lastIndex = 10;
 
         this.foService.retrieveUserFAQ().subscribe(res => {
             if (res.error) {
@@ -71,7 +76,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
                 this.faqs = res.results.unanswered;
             }
 
-            this.checkLoadMore()
+            this.numFAQs = this.faqs.length;
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -86,7 +91,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
         this.loading = true;
         this.faqs = [];
         this.activeTab = event.index
-        this.retrieveFAQ()
+        this.loadPage()
     }
 
     searchFAQ() {
@@ -116,7 +121,6 @@ export class FOFaqMyQuestionsComponent implements OnInit {
                 this.faqs = res.results;
             }
 
-            this.checkLoadMore()
             this.loading = false;
         }, error => {
             this.msgs.push({
@@ -126,44 +130,19 @@ export class FOFaqMyQuestionsComponent implements OnInit {
             this.loading = false;
         });
     }
-
-
 
     showAnswerDialog(index) {
         this.currentIndex = index
         this.answerDialog = true;
-
-
-        /*
-         this.foService.increaseView().subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
-
-        }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
-            });
-        });
-        */
     }
 
-    stopShowingLoadMore() {
-        this.LoadMoreClicks += 10
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
-    }
+    paginate(event) {
+        //First index of the FormArray that will appear on the page  
+        this.firstIndex = event.first;
 
-    checkLoadMore() {
-        this.disableLoadMore = false;
-        this.LoadMoreClicks = 10;
-
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
+        //Last index of the FormArray that will appears on the page  
+        this.lastIndex = this.firstIndex + 10;
+        let el = document.getElementById("scrollHere")
+        el.scrollIntoView();
     }
 }

@@ -2,21 +2,17 @@
  * RESULT PAGE (LIST OF QUESTIONS)*
  **********************************/
 
- .clickable{
-  cursor: pointer;
+:host >>> .ui-tabview {
+padding-bottom: 0px;
+}
+
+.clickable{
+cursor: pointer;
 }
 
 .question{
   font-weight: bold;
   font-size: 16px;
-}
-
-:host >>> .ui-datascroller .ui-datascroller-content {
-  border: 0px
-}
-
-:host >>> .ui-datascroller .ui-datascroller-footer {
-  border: 0px
 }
 
 :host >>> .questionCard .ui-card {
@@ -68,4 +64,11 @@ hr {
   margin-bottom: 20px;
   border: 0;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+/*************
+ * PAGINATOR *
+ *************/
+ :host >>> .ui-paginator {
+  margin: 0px 3.5px;
 }

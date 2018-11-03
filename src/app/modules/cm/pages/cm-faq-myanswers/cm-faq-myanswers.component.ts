@@ -30,9 +30,6 @@ export class CMFaqMyAnswersComponent implements OnInit {
     OHistoryDialog = false;
     OAnsweredDialog = false;
     currentIndex: number;
-    disableLoadMore = false;
-    LoadMoreClicks: number;
-    disable: boolean;
 
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
@@ -98,8 +95,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
             } else {
                 this.faqs = res.results.prevAnswered;
             }
+            
             this.numFAQs = this.faqs.length;
-
             this.loading = false;
 
         }, error => {
@@ -321,21 +318,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
         //Last index of the FormArray that will appears on the page  
         this.lastIndex = this.firstIndex + 10;
-    }
-
-    stopShowingLoadMore() {
-        this.LoadMoreClicks += 10
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
-    }
-
-    checkLoadMore() {
-        this.disableLoadMore = false;
-        this.LoadMoreClicks = 10;
-
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
+        let el = document.getElementById("scrollHere")
+        el.scrollIntoView();
     }
 }

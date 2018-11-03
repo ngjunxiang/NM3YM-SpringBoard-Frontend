@@ -4,7 +4,7 @@
 <div *ngIf="!loading">
     <p-card styleClass="ui-card-shadow">
         <h4>My Answers</h4>
-        <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
+        <p-tabView id="scrollHere" [activeIndex]="activeTab" (onChange)="changeTab($event)">
             <p-tabPanel header="Answered">
                 <div *ngIf="faqs.length === 0">
                     <h5>
@@ -12,8 +12,8 @@
                     </h5>
                 </div>
                 <div *ngIf="faqs.length > 0">
-                    <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                        <ng-template let-faq let-i="index" pTemplate="items">
+                    <ng-container *ngFor="let faq of faqs; let i=index">
+                        <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                             <p-card class="questionCard clickable" (click)="showAnsweredDialog(i)">
                                 <div class="ui-g">
                                     <div class="ui-g-9">
@@ -31,11 +31,8 @@
                                     </div>
                                 </div>
                             </p-card>
-                        </ng-template>
-                        <p-footer>
-                            <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
-                        </p-footer>
-                    </p-dataScroller>
+                        </ng-container>
+                    </ng-container>
 
                     <ng-container *ngIf="answeredDialog">
                         <p-dialog #dialogAnswered header="Answer View" [autoZIndex]="false" [(visible)]="answeredDialog" [closable]="true" [modal]="true"
@@ -133,17 +130,16 @@
                         </ng-container>
                     </ng-container>
                 </div>
-                <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
             </p-tabPanel>
-            <p-tabPanel header="Overwritten Answers">
+            <p-tabPanel header="Answers Overwritten">
                 <div *ngIf="faqs.length === 0">
                     <h5>
                         There are no answers yet!
                     </h5>
                 </div>
                 <div *ngIf="faqs.length > 0">
-                    <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                        <ng-template let-faq let-i="index" pTemplate="items">
+                    <ng-container *ngFor="let faq of faqs; let i=index">
+                        <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                             <p-card class="questionCard clickable" (click)="showAnsweredDialog(i)">
                                 <div class="ui-g">
                                     <div class="ui-g-9">
@@ -161,11 +157,8 @@
                                     </div>
                                 </div>
                             </p-card>
-                        </ng-template>
-                        <p-footer>
-                            <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
-                        </p-footer>
-                    </p-dataScroller>
+                        </ng-container>
+                    </ng-container>
 
                     <ng-container *ngIf="OAnsweredDialog">
                         <p-dialog #dialogAnswered header="Answer View" [autoZIndex]="false" [(visible)]="OAnsweredDialog" [closable]="true" [modal]="true"
@@ -265,5 +258,8 @@
                 </div>
             </p-tabPanel>
         </p-tabView>
+        <ng-container *ngIf="faqs.length > 0">
+            <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
+        </ng-container>
     </p-card>
 </div>

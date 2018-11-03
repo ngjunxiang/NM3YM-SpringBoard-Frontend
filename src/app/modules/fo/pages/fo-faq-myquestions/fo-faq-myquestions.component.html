@@ -12,7 +12,7 @@
 <div *ngIf="!loading">
     <p-card styleClass="ui-card-shadow">
         <h4>My Questions</h4>
-        <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
+        <p-tabView id="scrollHere" [activeIndex]="activeTab" (onChange)="changeTab($event)">
             <p-tabPanel header="Answered">
                 <div *ngIf="faqs.length === 0">
                     <h5>
@@ -21,8 +21,8 @@
                 </div>
 
                 <div *ngIf="faqs.length > 0">
-                    <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                        <ng-template let-faq let-i="index" pTemplate="items">
+                    <ng-container *ngFor="let faq of faqs; let i=index">
+                        <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                             <p-card class="questionCard clickable" (click)="showAnswerDialog(i)">
                                 <div class="ui-g">
                                     <div class="ui-g-9">
@@ -40,12 +40,8 @@
                                     </div>
                                 </div>
                             </p-card>
-                        </ng-template>
-                        <p-footer>
-                            <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton
-                                label="Load More"></button>
-                        </p-footer>
-                    </p-dataScroller>
+                        </ng-container>
+                    </ng-container>
 
                     <ng-container *ngIf="answerDialog">
                         <p-dialog header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
@@ -93,8 +89,8 @@
                 </div>
 
                 <div *ngIf="faqs.length > 0">
-                    <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                        <ng-template let-faq let-i="index" pTemplate="items">
+                    <ng-container *ngFor="let faq of faqs; let i=index">
+                        <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                             <p-card class="questionCard">
                                 <div class="ui-g">
                                     <div class="ui-g-9">
@@ -107,14 +103,13 @@
                                     </div>
                                 </div>
                             </p-card>
-                        </ng-template>
-                        <p-footer>
-                            <button #loadButton type="text" icon="pi pi-refresh" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()" pButton
-                                label="Load More"></button>
-                        </p-footer>
-                    </p-dataScroller>
+                        </ng-container>
+                    </ng-container>
                 </div>
             </p-tabPanel>
         </p-tabView>
+        <ng-container *ngIf="faqs.length > 0">
+            <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
+        </ng-container>
     </p-card>
 </div>

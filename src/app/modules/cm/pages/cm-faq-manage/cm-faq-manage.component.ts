@@ -366,44 +366,7 @@ export class CMFaqManageComponent implements OnInit {
                         prevAnswer: faq.prevAnswer,
                     });
                 }
-                this.loading = false;
-            }
-        }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
-            });
-            this.loading = false;
-        });
-    }
-
-    categoriseBy() {
-        this.loading = true;
-        this.faqs = [];
-
-        this.cmService.retrieveFAQByIntent(this.selectedCategory).subscribe(res => {
-            if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
-
-            if (res.results) {
-                for (let i = 0; i < res.results.length; i++) {
-                    let faq = res.results[i];
-
-                    this.faqs.push({
-                        qnID: faq.qnID,
-                        username: faq.username,
-                        question: faq.question,
-                        dateAsked: faq.dateAsked,
-                        views: faq.views,
-                        answer: faq.answer,
-                        dateAnswered: faq.dateAnswered,
-                        CMusername: faq.CMusername,
-                        prevAnswer: faq.prevAnswer,
-                    });
-                }
+                this.numFAQs = this.faqs.length;
                 this.loading = false;
             }
         }, error => {
