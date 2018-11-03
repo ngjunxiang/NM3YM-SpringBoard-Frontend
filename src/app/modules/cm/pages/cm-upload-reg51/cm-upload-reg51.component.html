@@ -1,11 +1,9 @@
-<p-growl [(value)]="msgs" [life]="5000"></p-growl>
-
-<p-card [style]="{width: '60%'}" styleClass="ui-card-shadow">
+<p-card *ngIf="!loading" [style]="{width: '60%'}" styleClass="ui-card-shadow">
     <div class="form-create">
         <h3>Upload Reg51 PDF</h3>
         <br>
         <h4>Select a file: </h4>
-        <p-fileUpload name="uploadedFile" accept=".pdf" maxFileSize="1000000" [disabled]="loading" url="{{ uploadUrl }}"
+        <p-fileUpload name="uploadedFile" accept=".pdf" [disabled]="loading" url="{{ uploadUrl }}"
             (onUpload)="onUpload($event)" (onError)="onError($event)" (onBeforeUpload)="onBeforeUpload($event)">
             <ng-template pTemplate="content">
                 <div *ngIf="inputFiles">
@@ -20,11 +18,28 @@
                 </div>
                 <br>
                 <div *ngIf="response">
-                    <p-message severity="success" text="{{ response.inserted }} records inserted"></p-message>
+                    <p-message severity="success" text="Reg51 updated"></p-message>
                     <p-message *ngIf="response.errors > 0" severity="error" text="{{ response.error }} errors"></p-message>
+                </div>
+                <div *ngIf="uploading">
+                    <p-progressSpinner></p-progressSpinner>
                 </div>
             </ng-template>
         </p-fileUpload>
         <br> *Only files with extension .pdf is accepted
+        <br>
+        <br>
+        <br>
+        <h4>Reg51 Notification</h4>
+        <div style="width: 100%; display: flex">
+            <div style="padding-top: 1.5%" [formGroup]="form">
+                <p-checkbox binary="true" formControlName="notify"></p-checkbox>
+            </div>
+            <div style="display: inline-block; width: 70%; padding-left: 2%;">
+                <label>Inform all users that Reg51 has been updated and Reg51 referencing in FAQs may not be accurate</label>
+            </div>
+        </div>
+        <button pButton label="Update" class="ui-button-primary" style="width: 20%" type="button"
+            icon="fa fa-plus" (click)="updateReg51Notif()"></button>
     </div>
 </p-card>

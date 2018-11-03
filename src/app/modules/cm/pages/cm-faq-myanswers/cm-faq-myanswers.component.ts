@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message, MenuItem, ConfirmationService } from 'primeng/components/common/api';
+import { ConfirmationService, MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { concat } from 'rxjs/operators';
 
 @Component({
     selector: 'cm-faq-myanswers',
@@ -24,7 +23,6 @@ export class CMFaqMyAnswersComponent implements OnInit {
     showQnsEditArea = false;
     selectedFAQ: string;
     activeTab: number;
-    msgs: Message[] = [];
     answeredDialog = false;
     historyDialog = false;
     OHistoryDialog = false;
@@ -58,6 +56,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
         private cmService: CMService,
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -83,8 +82,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
         //Retrieve answered question 
         this.cmService.retrieveCMFAQ().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -100,8 +99,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
             this.loading = false;
 
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.loading = false;
         });
@@ -188,8 +187,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
                 this.processing = true;
                 this.cmService.deleteAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question).subscribe(res => {
                     if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                         });
                         return;
                     }
@@ -199,8 +198,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
                         this.faqs.map(faq => {
                             faq.selected = false;
                         });
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Question deleted'
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Question deleted'
                         });
                     }
 
@@ -214,8 +213,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
 
                 }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
                     if (this.activeTab === 0) {
@@ -235,8 +234,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
         this.answerForm.controls.editedAnswer.markAsDirty();
 
         if (this.answerForm.controls.editedAnswer.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
@@ -245,16 +244,16 @@ export class CMFaqMyAnswersComponent implements OnInit {
             this.processing = true;
             this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
                 this.loadPage();
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Answer updated'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Answer updated'
                 });
             }
             this.includePDF = false;
@@ -263,8 +262,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
             this.hideAnsEditArea();
             this.processing = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
             this.hideAnsEditArea();

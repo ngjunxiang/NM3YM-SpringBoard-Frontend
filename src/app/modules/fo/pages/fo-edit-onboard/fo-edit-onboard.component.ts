@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
 
@@ -16,7 +16,6 @@ export class FOEditOnboardComponent implements OnInit {
     // UI Control
     loading = false;
     processing = false;
-    msgs: Message[] = [];
 
     // UI Component
     complianceCols: any[];
@@ -34,6 +33,7 @@ export class FOEditOnboardComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private foService: FOService,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -145,8 +145,8 @@ export class FOEditOnboardComponent implements OnInit {
         this.loading = true;
         this.foService.retrieveOnboardProcessDetails(obID).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -177,8 +177,8 @@ export class FOEditOnboardComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
     }
@@ -274,16 +274,16 @@ export class FOEditOnboardComponent implements OnInit {
 
         this.foService.updateOnboardProcess(processData).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.processing = false;
                 return;
             }
 
             if (res.results) {
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Onboard process updated <br> You will be redirected shortly'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process updated <br> You will be redirected shortly'
                 });
             }
 
@@ -291,8 +291,8 @@ export class FOEditOnboardComponent implements OnInit {
                 this.router.navigate(['/fo/onboard/manage']);
             }, 3000);
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
         });

@@ -7,7 +7,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ToastModule } from 'primeng/toast';
 
+import { MessageService } from 'primeng/api';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthenticationService } from '../../core/services/authentication.service';
@@ -23,14 +25,16 @@ import { LoginForgotPwComponent } from './pages/login-forgot-pw/login-forgot-pw.
         MessageModule,
         MessagesModule,
         PanelModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ToastModule
     ],
     declarations: [
         LoginComponent, 
         LoginForgotPwComponent
     ],
     providers: [
-        AuthenticationService
+        AuthenticationService,
+        MessageService
     ]
 })
 export class LoginModule { }

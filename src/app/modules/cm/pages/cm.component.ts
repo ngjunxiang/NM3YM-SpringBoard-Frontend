@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { Message } from 'primeng/components/common/api';
+import { Message, MessageService } from 'primeng/components/common/api';
 
 import { ROUTES } from './cm.sidebar-items';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CMService } from '../../../core/services/cm.service';
 
 @Component({
-  selector: 'app-cm',
-  templateUrl: './cm.component.html',
-  styleUrls: ['./cm.component.scss']
+    selector: 'app-cm',
+    templateUrl: './cm.component.html',
+    styleUrls: ['./cm.component.scss']
 })
 
 export class CMComponent implements OnInit {
@@ -19,13 +19,13 @@ export class CMComponent implements OnInit {
     // Theme
     color = 'defaultdark';
     showSettings = false;
-    showMinisidebar = false; 
+    showMinisidebar = false;
     showDarktheme = false;
 
-    
+
     // UI Control
     sidebarRoutes = ROUTES;
-    appMsgs: Message[] = [];
+    reg51Notification: Message[] = [];
 
     // Name & Email
     name: string;
@@ -37,6 +37,7 @@ export class CMComponent implements OnInit {
     constructor(
         private authService: AuthenticationService,
         private cmService: CMService,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -48,21 +49,22 @@ export class CMComponent implements OnInit {
 
         this.route.queryParams.subscribe(params => {
             if (params['err'] === 'auth001') {
-                this.appMsgs.push({
-                    severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'warn', summary: 'Access Denied', detail: 'You do not have permission to access that page. Please contact the admin.'
                 });
             }
         });
 
         this.retrieveUserDetails();
+        this.retrieveReg51Notification();
         this.retrieveNotifications();
     }
 
     async retrieveUserDetails() {
         await this.authService.retrieveUserDetails().then(res => {
             if (res.error) {
-                this.appMsgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Please contact the admin.'
                 });
             }
 
@@ -75,17 +77,30 @@ export class CMComponent implements OnInit {
                 };
             }
         }, error => {
-            this.appMsgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         })
+    }
+
+    retrieveReg51Notification() {
+        this.cmService.retrieveReg51Notification().subscribe(res => {
+            if (res.results.toShow) {
+                this.reg51Notification.push({
+                    key: 'msgs', severity: 'warn',
+                    summary: 'Update Reg51 References',
+                    detail: 'Reg51 has been updated on <b>' + res.results.lastUpdatedDate
+                        + '</b>. Please update all Reg51 references in FAQ.'
+                });
+            }
+        });
     }
 
     retrieveNotifications() {
         this.cmService.retrieveNotifications().subscribe(res => {
             if (res.error) {
-                this.appMsgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
                 return;
             }
@@ -116,7 +131,7 @@ export class CMComponent implements OnInit {
                     if (!notification.checked) {
                         newNotifications.push(notif);
                     }
-                    
+
                     allNotifications.push(notif);
                 });
 
@@ -124,8 +139,8 @@ export class CMComponent implements OnInit {
                 this.notifications['allNotifications'] = allNotifications;
             }
         }, error => {
-            this.appMsgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -133,13 +148,13 @@ export class CMComponent implements OnInit {
     updateNotifications(event) {
         this.cmService.updateNotifications().subscribe(res => {
             if (res.error) {
-                this.appMsgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Notifications cannot be retrieved. Please contact the admin.'
                 });
             }
         }, error => {
-            this.appMsgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }

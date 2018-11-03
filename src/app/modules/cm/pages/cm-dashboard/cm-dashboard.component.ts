@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 
@@ -30,7 +30,6 @@ export class CMDashboardComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // UI Component
     faqAnsweredCount: number;
@@ -53,6 +52,7 @@ export class CMDashboardComponent implements OnInit {
 
     constructor(
         private cmService: CMService,
+        private messageService: MessageService,
         private router: Router
     ) { }
 
@@ -61,8 +61,8 @@ export class CMDashboardComponent implements OnInit {
 
         this.cmService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -80,8 +80,8 @@ export class CMDashboardComponent implements OnInit {
 
         this.cmService.retrieveUncleanedFAQ().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -92,8 +92,8 @@ export class CMDashboardComponent implements OnInit {
             }
 
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });

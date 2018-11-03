@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 
-import { Message, SelectItem } from 'primeng/components/common/api';
+import { SelectItem, MessageService } from 'primeng/components/common/api';
 import { map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
@@ -17,7 +17,6 @@ export class AdminCreateUserComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // UI Component
     createUserForm: FormGroup;
@@ -28,7 +27,8 @@ export class AdminCreateUserComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private adminService: AdminService
+        private adminService: AdminService,
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
@@ -78,8 +78,8 @@ export class AdminCreateUserComponent implements OnInit {
                 this.usernames.push(user.username);
             });
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
 
@@ -95,8 +95,8 @@ export class AdminCreateUserComponent implements OnInit {
                 this.emails.push(user.email);
             });
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
 
@@ -174,8 +174,8 @@ export class AdminCreateUserComponent implements OnInit {
             this.createUserForm.controls.passwordForm.get('confirmPassword').invalid ||
             this.createUserForm.controls.passwordForm.errors ||
             this.createUserForm.controls.userType.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
             this.loading = false;
             return;
@@ -189,15 +189,15 @@ export class AdminCreateUserComponent implements OnInit {
 
         this.adminService.createUser(newName, newUsername, newEmail, newUserType, newPassword).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: newUsername + ' has been created'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: newUsername + ' has been created'
                 });
 
                 this.createUserForm.controls.name.reset('');
@@ -207,14 +207,14 @@ export class AdminCreateUserComponent implements OnInit {
                 this.createUserForm.controls.email.reset('');
                 this.createUserForm.controls.userType.reset('');
             } else {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: 'Something went wrong'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: 'Something went wrong'
                 });
             }
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });

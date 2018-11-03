@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 
@@ -17,7 +17,6 @@ export class CMViewChecklistLogsComponent implements OnInit {
     // UI Control
     loading = false;
     searched = false;
-    msgs: Message[] = [];
 
     // UI Components
     checklistNameVersionData: any[];
@@ -35,6 +34,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
     constructor(
         private cmService: CMService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -96,8 +96,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
     retrieveChecklistNamesAndVersions() {
         this.cmService.retrieveCMChecklistLogNames().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: res.error
                 });
             }
             if (res.results) {
@@ -148,8 +148,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
                 this.loading = false;
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -159,8 +159,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
         this.checklistLogForm.get('version').markAsDirty();
 
         if (this.checklistLogForm.get('clID').invalid || this.checklistLogForm.get('version').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please select a checklist name and version'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please select a checklist name and version'
             });
             return;
         }
@@ -169,8 +169,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
         this.cmService.retrieveCMChecklistLogDetails(selectedClID, selectedVersion).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: res.error
                 });
                 return;
             }
@@ -189,8 +189,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
                 this.searched = true;
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             return;
         });

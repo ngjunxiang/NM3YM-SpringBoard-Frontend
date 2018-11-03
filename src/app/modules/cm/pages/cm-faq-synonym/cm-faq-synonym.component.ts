@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
@@ -16,8 +16,6 @@ export class CMFaqSynonymComponent implements OnInit {
 
   // UI Control
   loading = false;
-  msgs: Message[] = [];
-
 
   // UI Components
   synonyms = [];
@@ -33,6 +31,7 @@ export class CMFaqSynonymComponent implements OnInit {
   constructor(
     private cmService: CMService,
     private fb: FormBuilder,
+    private messageService: MessageService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -47,8 +46,8 @@ export class CMFaqSynonymComponent implements OnInit {
   retrieveSynonyms() {
     this.cmService.retrieveSynonyms().subscribe(res => {
       if (res.error) {
-        this.msgs.push({
-          severity: 'error', summary: 'Error', detail: res.error
+        this.messageService.add({ 
+          key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
         });
         this.loading = false;
         return;
@@ -69,8 +68,8 @@ export class CMFaqSynonymComponent implements OnInit {
       this.numSynonyms = this.synonyms.length;
       this.loading = false;
     }, error => {
-      this.msgs.push({
-        severity: 'error', summary: 'Server Error', detail: error
+      this.messageService.add({ 
+        key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
       });
       this.loading = false;
     });
@@ -104,13 +103,13 @@ export class CMFaqSynonymComponent implements OnInit {
       let value = synControl.get(i + '').get('value').value.trim();
       if (synControl.get(i + '').get('value').invalid || synControl.get(i + '').get('synonyms').invalid) {
         if (value != "") {
-          this.msgs.push({
-            severity: 'error', summary: 'Missing fields', detail: "Please ensure that " + value + "'s fields are filled."
+          this.messageService.add({ 
+            key: 'msgs', severity: 'error', summary: 'Missing fields', detail: "Please ensure that " + value + "'s fields are filled."
           });
           return;
         } else {
-          this.msgs.push({
-            severity: 'error', summary: 'Missing fields', detail: "Please ensure that all fields are filled."
+          this.messageService.add({ 
+            key: 'msgs', severity: 'error', summary: 'Missing fields', detail: "Please ensure that all fields are filled."
           });
           return;
         }
@@ -120,20 +119,20 @@ export class CMFaqSynonymComponent implements OnInit {
 
     this.cmService.updateSynonyms(synonymsDict).subscribe(res => {
       if (res.error) {
-        this.msgs.push({
-          severity: 'error', summary: 'Error', detail: res.error
+        this.messageService.add({ 
+          key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
         });
         return;
       }
 
       if (res.results) {
-        this.msgs.push({
-          severity: 'success', summary: 'Success', detail: "All synonyms have been updated."
+        this.messageService.add({ 
+          key: 'msgs', severity: 'success', summary: 'Success', detail: "All synonyms have been updated."
         });
       }
     }, error => {
-      this.msgs.push({
-        severity: 'error', summary: 'Server Error', detail: error
+      this.messageService.add({ 
+        key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
       });
       this.loading = false;
     });

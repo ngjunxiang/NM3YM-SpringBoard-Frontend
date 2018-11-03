@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
 
@@ -17,7 +17,6 @@ export class FOFaqAskComponent implements OnInit {
     loading = false;
     searched = false;
     showNewQnForm = false;
-    msgs: Message[] = [];
     answerDialog = false;
     currentQuestion: string;
     currentAnswer: string;
@@ -30,6 +29,7 @@ export class FOFaqAskComponent implements OnInit {
     constructor(
         private foService: FOService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -48,8 +48,8 @@ export class FOFaqAskComponent implements OnInit {
         this.questionForm.get('question').markAsDirty();
 
         if (this.questionForm.get('question').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please ask a question'
             });
             return;
         }
@@ -60,8 +60,8 @@ export class FOFaqAskComponent implements OnInit {
 
         this.foService.retrieveFaq(this.questionForm.get('question').value).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -74,8 +74,8 @@ export class FOFaqAskComponent implements OnInit {
             this.searched = true;
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
 
             this.searched = true;
@@ -97,22 +97,22 @@ export class FOFaqAskComponent implements OnInit {
             this.loading = true;
             this.foService.createUnansweredQuestion(newQuestion).subscribe(res => {
                 if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                     });
                     this.loading = false;
                     return;
                 }
 
                 if (res.results) {
-                    this.msgs.push({
-                        severity: 'success', summary: 'Success', detail: 'Your question has been posted'
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'success', summary: 'Success', detail: 'Your question has been posted'
                     });
                 }
                 this.loading = false;
             }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
                 });
 
                 this.loading = false;
@@ -120,8 +120,8 @@ export class FOFaqAskComponent implements OnInit {
             return;
         }
 
-        this.msgs.push({
-            severity: 'info', summary: 'Please fill in the question field', detail: ''
+        this.messageService.add({ 
+            key: 'msgs', severity: 'info', summary: 'Please fill in the question field', detail: ''
         });
     }
     
@@ -134,15 +134,15 @@ export class FOFaqAskComponent implements OnInit {
        /*
         this.foService.increaseView().subscribe(res => {
            if (res.error) {
-               this.msgs.push({
-                   severity: 'error', summary: 'Error', detail: res.error
+               this.messageService.add({ 
+                   key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                });
                return;
            }
 
        }, error => {
-           this.msgs.push({
-               severity: 'error', summary: 'Error', detail: error
+           this.messageService.add({ 
+               key: 'msgs', severity: 'error', summary: 'Error', detail: error
            });
        });
        */

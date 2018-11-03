@@ -15,10 +15,12 @@ import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { SharedModule } from '../../shared/shared.module';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './pages/admin.component';
 import { AdminService } from '../../core/services/admin.service';
+import { MessageService } from 'primeng/api';
 import { AdminViewAllComponent } from './pages/admin-view-all/admin-view-all.component';
 import { AdminCreateUserComponent } from './pages/admin-create-user/admin-create-user.component';
 import { AdminUpdateUserComponent } from './pages/admin-update-user/admin-update-user.component';
@@ -46,7 +48,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         ReactiveFormsModule,
         SharedModule,
-        TableModule
+        TableModule,
+        ToastModule
     ],
     declarations: [
         AdminComponent,
@@ -60,7 +63,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
-        AdminService
+        AdminService,
+        MessageService
     ]
 })
 

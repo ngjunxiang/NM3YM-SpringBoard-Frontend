@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
-import { Message, MenuItem } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 interface intent {                                                                                               
     label: string,
@@ -26,7 +26,6 @@ export class CMFaqCleaningComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
     selectedText = [];
     expand = [];
     highlighted = [];
@@ -45,6 +44,7 @@ export class CMFaqCleaningComponent implements OnInit {
     constructor(
         private cmService: CMService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -57,8 +57,8 @@ export class CMFaqCleaningComponent implements OnInit {
     retrieveUncleanedFAQ() {
         this.cmService.retrieveUncleanedFAQ().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -71,8 +71,8 @@ export class CMFaqCleaningComponent implements OnInit {
 
             this.createForm();
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });
@@ -112,8 +112,8 @@ export class CMFaqCleaningComponent implements OnInit {
     retrieveIntents() {
         this.cmService.retrieveIntents().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -127,8 +127,8 @@ export class CMFaqCleaningComponent implements OnInit {
                 });
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });
@@ -137,8 +137,8 @@ export class CMFaqCleaningComponent implements OnInit {
     retrieveEntities() {
         this.cmService.retrieveEntities().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -170,8 +170,8 @@ export class CMFaqCleaningComponent implements OnInit {
             }
 
         }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
                 });
                 this.loading = false;
             });
@@ -209,8 +209,8 @@ export class CMFaqCleaningComponent implements OnInit {
         //Checking if intent has been filled. 
         this.faqTrainerForm.get('questions').get(index + '').get('intent').markAsDirty;
         if (this.faqTrainerForm.get('questions').get(index + '').get('intent').invalid) {
-            this.msgs.push({
-                severity: 'info', summary: 'Hold On!', detail: 'Please select or create an intent'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'info', summary: 'Hold On!', detail: 'Please select or create an intent'
             });
             return;
         }
@@ -226,8 +226,8 @@ export class CMFaqCleaningComponent implements OnInit {
 
             if (this.faqTrainerForm.get('questions').get(index + '').get('entities').get(prevEntityIndex + '').get('value').invalid ||
                 this.faqTrainerForm.get('questions').get(index + '').get('entities').get(prevEntityIndex + '').get('entity').invalid) {
-                this.msgs.push({
-                    severity: 'info', summary: 'Hold On!', detail: 'Please fill all fields in the previous entity'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'info', summary: 'Hold On!', detail: 'Please fill all fields in the previous entity'
                 });
                 return;
             }
@@ -293,8 +293,8 @@ export class CMFaqCleaningComponent implements OnInit {
 
         if (invalidCount > 0 || emptyEntityCount > 0) {
             this.expandInvalidFAQ(unfilledFAQ);
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please create intents and entities for all FAQ!'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please create intents and entities for all FAQ!'
             });
             return;
         }
@@ -320,8 +320,8 @@ export class CMFaqCleaningComponent implements OnInit {
 
         this.cmService.returnCleanedFAQ(this.faqs).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -329,16 +329,16 @@ export class CMFaqCleaningComponent implements OnInit {
             if (res.results) {
                 let successCount = res.results.StoredCount
                 let failedCount = res.results.failedQnNums
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: successCount + ' FAQ have been cleaned.'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: successCount + ' FAQ have been cleaned.'
                 });
 
                 this.loading = true;
                 this.retrieveUncleanedFAQ();
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });

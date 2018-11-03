@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
 
@@ -17,7 +17,6 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     loading = false;
     processing = false;
     activeTab: number;
-    msgs: Message[] = [];
     answerDialog = false;
     currentIndex: number;
 
@@ -35,6 +34,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     constructor(
         private foService: FOService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
 
@@ -63,8 +63,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
         this.foService.retrieveUserFAQ().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -79,8 +79,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
             this.numFAQs = this.faqs.length;
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
 
             this.loading = false;
@@ -98,8 +98,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
         this.questionForm.get('question').markAsDirty();
 
         if (this.questionForm.get('question').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please ask a question'
             });
             return;
         }
@@ -110,8 +110,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
         this.foService.retrieveFaq(this.questionForm.get('question').value).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -123,8 +123,8 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
 
             this.loading = false;

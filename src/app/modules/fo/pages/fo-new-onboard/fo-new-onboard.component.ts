@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message, SelectItem } from 'primeng/components/common/api';
+import { SelectItem, MessageService } from 'primeng/components/common/api';
 
 import { FOService } from '../../../../core/services/fo.service';
 
@@ -17,7 +17,6 @@ export class FONewOnboardComponent implements OnInit {
     // UI Control
     loading = false;
     processing = false;
-    msgs: Message[] = [];
     step = 1;
 
     // UI Component
@@ -38,6 +37,7 @@ export class FONewOnboardComponent implements OnInit {
     constructor(
         private foService: FOService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -89,8 +89,8 @@ export class FONewOnboardComponent implements OnInit {
 
         this.foService.retrieveAllRMNames().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -105,15 +105,15 @@ export class FONewOnboardComponent implements OnInit {
                 });
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
 
         this.foService.retrieveChecklistDetails(this.selectedChecklistId).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -157,8 +157,8 @@ export class FONewOnboardComponent implements OnInit {
             };
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
     }
@@ -286,8 +286,8 @@ export class FONewOnboardComponent implements OnInit {
         this.checklistNameDropdownData = [];
         this.foService.retrieveChecklistNames().subscribe(data => {
             if (data.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: data.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: data.error
                 });
             }
             this.checklistsData = data.clNames;
@@ -298,8 +298,8 @@ export class FONewOnboardComponent implements OnInit {
                 });
             });
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -307,8 +307,8 @@ export class FONewOnboardComponent implements OnInit {
     submitChecklistName() {
         this.checklistForm.controls.selectedChecklistId.markAsDirty();
         if (this.checklistForm.controls.selectedChecklistId.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please select a checklist'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please select a checklist'
             });
             return;
         }
@@ -354,14 +354,14 @@ export class FONewOnboardComponent implements OnInit {
         if (invalidFields || invalidConditions) {
             if (invalidFields) {
                 document.getElementById('requiredFields').scrollIntoView();
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: 'Please enter all required fields'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please enter all required fields'
                 });
             }
             if (invalidConditions) {
                 document.getElementById('conditions').scrollIntoView();
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: 'Please enter all condition options'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please enter all condition options'
                 });
             }
             return;
@@ -493,16 +493,16 @@ export class FONewOnboardComponent implements OnInit {
 
         this.foService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.processing = false;
                 return;
             }
 
             if (res.results) {
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
                 });
             }
 
@@ -510,8 +510,8 @@ export class FONewOnboardComponent implements OnInit {
                 this.router.navigate(['/fo/onboard/manage']);
             }, 3000);
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
         });

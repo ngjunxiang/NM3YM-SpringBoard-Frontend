@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message, MenuItem, ConfirmationService } from 'primeng/components/common/api';
+import { Message, MenuItem, ConfirmationService, MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { filterQueryId } from '@angular/core/src/view/util';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -23,7 +22,6 @@ export class CMFaqManageComponent implements OnInit {
     showAnsEditArea = false;
     showQnsEditArea = false;
     activeTab: number;
-    msgs: Message[] = [];
     answeredDialog = false;
     historyDialog = false;
     unansweredDialog = false;
@@ -40,6 +38,7 @@ export class CMFaqManageComponent implements OnInit {
 
     // UI Components
     faqs: any[];
+    currentSearch: string;
     categoryOptions: any[];
     sortByOptions: any[];
     selectedCategory: string = '';
@@ -59,6 +58,7 @@ export class CMFaqManageComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private sanitizer: DomSanitizer,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -115,8 +115,8 @@ export class CMFaqManageComponent implements OnInit {
             this.disable = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                     });
                     this.loading = false;
                     return;
@@ -136,8 +136,8 @@ export class CMFaqManageComponent implements OnInit {
                 this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
                 });
                 this.loading = false;
             });
@@ -145,9 +145,10 @@ export class CMFaqManageComponent implements OnInit {
         } else {
             this.disable = false;
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
+                console.log(res)
                 if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                     });
                     this.loading = false;
                     return;
@@ -167,14 +168,15 @@ export class CMFaqManageComponent implements OnInit {
                             dateAnswered: faq.dateAnswered,
                             CMusername: faq.CMusername,
                             prevAnswer: faq.prevAnswer,
+                            intent: faq.intent
                         });
                     }
                 }
                 this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
                 });
                 this.loading = false;
             });
@@ -194,8 +196,8 @@ export class CMFaqManageComponent implements OnInit {
             this.disable = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                     });
                     this.loading = false;
                     return;
@@ -214,8 +216,8 @@ export class CMFaqManageComponent implements OnInit {
                 this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
                 });
                 this.loading = false;
             });
@@ -225,8 +227,8 @@ export class CMFaqManageComponent implements OnInit {
             this.disable = false;
             this.cmService.retrieveAnsweredFAQ().subscribe(res => {
                 if (res.error) {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: res.error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                     });
                     this.loading = false;
                     return;
@@ -246,14 +248,15 @@ export class CMFaqManageComponent implements OnInit {
                             dateAnswered: faq.dateAnswered,
                             CMusername: faq.CMusername,
                             prevAnswer: faq.prevAnswer,
+                            intent: faq.intent
                         });
                     }
                     this.numFAQs = this.faqs.length
                 }
                 this.loading = false;
             }, error => {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
                 });
                 this.loading = false;
             });
@@ -266,20 +269,21 @@ export class CMFaqManageComponent implements OnInit {
         this.searchForm.get('question').markAsDirty();
 
         if (this.searchForm.get('question').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please ask a question'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please ask a question'
             });
             return;
         }
 
         this.loading = true;
 
+        this.currentSearch = this.searchForm.get('question').value;
         this.faqs = [];
 
-        this.cmService.retrieveFaq(this.searchForm.get('question').value).subscribe(res => {
+        this.cmService.retrieveFaq(this.currentSearch).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
                 return;
@@ -300,6 +304,7 @@ export class CMFaqManageComponent implements OnInit {
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
+                        intent: faq.intent
                     });
                 }
             }
@@ -307,8 +312,8 @@ export class CMFaqManageComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
 
             this.loading = false;
@@ -318,8 +323,8 @@ export class CMFaqManageComponent implements OnInit {
     retrieveIntents() {
         this.cmService.retrieveIntents().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -333,8 +338,8 @@ export class CMFaqManageComponent implements OnInit {
                 });
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });
@@ -346,8 +351,8 @@ export class CMFaqManageComponent implements OnInit {
 
         this.cmService.retrieveFAQByCategoryAndSort(this.selectedCategory, this.selectedSortBy).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
@@ -366,14 +371,15 @@ export class CMFaqManageComponent implements OnInit {
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
+                        intent: faq.intent
                     });
                 }
                 this.numFAQs = this.faqs.length;
                 this.loading = false;
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });
@@ -414,8 +420,8 @@ export class CMFaqManageComponent implements OnInit {
         this.questionForm.controls.refinedQns.markAsDirty();
 
         if (this.questionForm.controls.refinedQns.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the question field'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the question field'
             });
             return;
         }
@@ -471,8 +477,8 @@ export class CMFaqManageComponent implements OnInit {
                 this.processing = true;
                 this.cmService.deleteAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question).subscribe(res => {
                     if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                         });
                         return;
                     }
@@ -482,16 +488,16 @@ export class CMFaqManageComponent implements OnInit {
                         this.faqs.map(faq => {
                             faq.selected = false;
                         });
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Question deleted'
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Question deleted'
                         });
                     }
 
                     this.processing = false;
                     this.answeredDialog = false;
                 }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
                     this.answeredDialog = false;
@@ -512,24 +518,24 @@ export class CMFaqManageComponent implements OnInit {
                 this.processing = true;
                 this.cmService.deleteUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question).subscribe(res => {
                     if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                         });
                         return;
                     }
 
                     if (res.results) {
                         this.loadPage();
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Question deleted'
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Question deleted'
                         });
                     }
 
                     this.processing = false;
                     this.unansweredDialog = false;
                 }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
                     this.unansweredDialog = false;
@@ -545,8 +551,8 @@ export class CMFaqManageComponent implements OnInit {
         this.answerForm.controls.editedAnswer.markAsDirty();
 
         if (this.answerForm.controls.editedAnswer.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
@@ -554,16 +560,16 @@ export class CMFaqManageComponent implements OnInit {
         this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.includePDF, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
             this.processing = true;
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
                 this.loadPage();
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Answer updated'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Answer updated'
                 });
                 this.includePDF = false;
                 this.referenceAdded = false;
@@ -573,8 +579,8 @@ export class CMFaqManageComponent implements OnInit {
             this.hideAnsEditArea();
             this.processing = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
             this.hideAnsEditArea();
@@ -586,8 +592,8 @@ export class CMFaqManageComponent implements OnInit {
         this.unansweredDialog = false;
 
         if (this.answerForm.controls.addedAnswer.invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
@@ -596,16 +602,16 @@ export class CMFaqManageComponent implements OnInit {
             this.processing = true;
 
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
             }
 
             if (res.results) {
                 this.loadPage();
-                this.msgs.push({
-                    severity: 'success', summary: 'Success', detail: 'Question has been answered'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Question has been answered'
                 });
                 this.includePDF = false;
                 this.referenceAdded = false;
@@ -617,8 +623,8 @@ export class CMFaqManageComponent implements OnInit {
             this.processing = false;
 
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
             this.unansweredDialog = false;

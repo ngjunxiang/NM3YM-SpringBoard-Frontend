@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/api';
 
 import { AdminService } from '../../../../core/services/admin.service';
 
@@ -14,12 +14,12 @@ export class AdminViewAllComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
     users: any[];
     cols: any[];
 
     constructor(
-        private adminService: AdminService
+        private adminService: AdminService,
+        private messageService: MessageService        
     ) { }
 
     ngOnInit() {
@@ -38,16 +38,16 @@ export class AdminViewAllComponent implements OnInit {
     retrieveAllUsers() {
         this.adminService.retrieveUsersList().subscribe(res => {
             if (!res) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin'
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Server Error', detail: 'Please contact the system admin'
                 });
                 return;
             }
             this.users = res;
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }

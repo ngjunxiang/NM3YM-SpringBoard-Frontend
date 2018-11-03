@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
-import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 
@@ -16,7 +16,6 @@ export class CMChecklistComponent implements OnInit {
 
     // UI Control
     loading = false;
-    msgs: Message[] = [];
 
     // UI Component
     checklistNames: any[];
@@ -24,6 +23,7 @@ export class CMChecklistComponent implements OnInit {
     constructor(
         private cmService: CMService,
         private confirmationService: ConfirmationService,
+        private messageService: MessageService,
         private router: Router
     ) { }
 
@@ -48,8 +48,8 @@ export class CMChecklistComponent implements OnInit {
             });
             this.loading = false;
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
         });
@@ -73,21 +73,21 @@ export class CMChecklistComponent implements OnInit {
                 let selectedChecklist = this.checklistNames[index].clID;
                 this.cmService.deleteCMChecklist(selectedChecklist).subscribe(res => {
                     if (res.error) {
-                        this.msgs.push({
-                            severity: 'error', summary: 'Error', detail: res.error
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                         });
                         return;
                     }
 
                     if (res.results) {
                         this.loadPage();
-                        this.msgs.push({
-                            severity: 'success', summary: 'Success', detail: 'Checklist deleted'
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist deleted'
                         });
                     }
                 }, error => {
-                    this.msgs.push({
-                        severity: 'error', summary: 'Error', detail: error
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                 });
             },

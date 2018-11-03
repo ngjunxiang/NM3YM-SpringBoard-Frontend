@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
-import { Message, SelectItem } from 'primeng/components/common/api';
+import { SelectItem, MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
 
@@ -19,7 +19,6 @@ export class CMNewChecklistComponent implements OnInit {
     loading = false;
     processing = false;
     blocked = false;
-    msgs: Message[] = [];
     activeTab: number;
     complianceCols: any[];
     legalCols: any[];
@@ -51,6 +50,7 @@ export class CMNewChecklistComponent implements OnInit {
         private cmService: CMService,
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -146,8 +146,8 @@ export class CMNewChecklistComponent implements OnInit {
     retrieveAgmtCodes() {
         this.cmService.retrieveAgmtCodes().subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
             }
 
@@ -158,8 +158,8 @@ export class CMNewChecklistComponent implements OnInit {
                 });
             }
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -187,8 +187,8 @@ export class CMNewChecklistComponent implements OnInit {
                 this.checklistNames.push(cl.name);
             });
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Server Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
     }
@@ -367,8 +367,8 @@ export class CMNewChecklistComponent implements OnInit {
 
         if (this.newChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.newChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the condition name and options highlighted before adding another condition'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the condition name and options highlighted before adding another condition'
             });
             return;
         }
@@ -404,8 +404,8 @@ export class CMNewChecklistComponent implements OnInit {
         this.newChecklistForm.get('requiredFields').get(i).get('fieldName').markAsDirty();
 
         if (this.newChecklistForm.get('requiredFields').get(i).get('fieldName').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the field name before adding another field'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the field name before adding another field'
             });
             return;
         }
@@ -526,8 +526,8 @@ export class CMNewChecklistComponent implements OnInit {
 
         if (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
             this.dialogForm.get('conditions').get(i).get('conditionOption').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please fill in the condition name and options using the dropdown menu before adding another condition'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the condition name and options using the dropdown menu before adding another condition'
             });
             return;
         }
@@ -578,8 +578,8 @@ export class CMNewChecklistComponent implements OnInit {
             this.dialogForm.get('documentName').invalid ||
             this.dialogForm.get('documentType').invalid ||
             this.dialogForm.get('agmtCode').invalid) {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
             return;
         }
@@ -788,8 +788,8 @@ export class CMNewChecklistComponent implements OnInit {
 
         if (this.newChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please enter/correct the checklist name'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please enter/correct the checklist name'
             });
             this.processing = false;
             return;
@@ -800,8 +800,8 @@ export class CMNewChecklistComponent implements OnInit {
         if (this.newChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.newChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             document.getElementById('conditions').scrollIntoView();
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
             this.processing = false;
             return;
@@ -844,23 +844,23 @@ export class CMNewChecklistComponent implements OnInit {
 
         this.cmService.createCMChecklist(this.checklist).subscribe(res => {
             if (res.error) {
-                this.msgs.push({
-                    severity: 'error', summary: 'Error', detail: res.error
+                this.messageService.add({ 
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.processing = false;
                 return;
             }
 
-            this.msgs.push({
-                severity: 'success', summary: 'Success', detail: 'Checklist created <br> You will be redirected shortly'
+            this.messageService.add({ 
+                key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist created <br> You will be redirected shortly'
             });
 
             setTimeout(() => {
                 this.router.navigate(['/cm/checklist/manage']);
             }, 3000);
         }, error => {
-            this.msgs.push({
-                severity: 'error', summary: 'Error', detail: error
+            this.messageService.add({ 
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
             return;

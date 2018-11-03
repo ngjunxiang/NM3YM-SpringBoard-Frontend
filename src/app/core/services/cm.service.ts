@@ -79,8 +79,7 @@ export class CMService {
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private retrieveCMFAQURL = environment.host + '/app/faq/retrieve-cmUserQNA';
-
-
+    
     // NLU Model Endpoints 
     private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
@@ -96,6 +95,10 @@ export class CMService {
 
     // PDF URL
     private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
+
+    // Reg51 Notification Endpoint
+    private retrieveReg51NotificationsURL = environment.host + '/app/cm/retrieve-req51-notifications';
+    private updateReg51NotificationsURL = environment.host + '/app/cm/update-req51-notifications';
 
     constructor(
         private authService: AuthenticationService,
@@ -642,13 +645,9 @@ export class CMService {
             })
         };
 
-        console.log(Synonyms)
-
-
         const updatedSynonyms = {
             'synonyms': Synonyms
         };
-
 
         //add here
         const postData = Object.assign(this.authService.authItems, updatedSynonyms);
@@ -670,6 +669,42 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems);
 
         return this.http.post<Response>(this.trainModelURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveReg51Notification() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveReg51NotificationsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateReg51Notification(reg51NotificationValue) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const reg51Notification = {
+            'reg51Notification': reg51NotificationValue
+        };
+
+        const postData = Object.assign(this.authService.authItems, reg51Notification);
+
+        return this.http.post<Response>(this.updateReg51NotificationsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
