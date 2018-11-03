@@ -23,7 +23,7 @@
                 </div>
                 <div *ngIf="includePDF" style="padding-top: 10px;">
                     Refer to page:
-                    <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="addPDFReference()" editable="false" placeholder="Select a page"></p-dropdown>
+                    <p-multiSelect [options]="pdfPages" [(ngModel)]="selectedPage" placeholder="Select a page"></p-multiSelect>
                 </div>
             </div>
             <div class="ui-g">

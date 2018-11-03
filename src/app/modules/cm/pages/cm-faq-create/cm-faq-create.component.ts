@@ -21,13 +21,12 @@ export class CMFaqCreateComponent implements OnInit {
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
     includePDF: boolean;
-    selectedPage: number;
+    selectedPage: number[];
     link: string;
     referenceAdded = false;
 
     // UI Components
     faqForm: FormGroup;
-
 
     constructor(
         private cmService: CMService,
@@ -54,10 +53,22 @@ export class CMFaqCreateComponent implements OnInit {
         this.loading = false;
     }
 
+    openPDF(page) {
+        this.cmService.retrievePdf().subscribe((res: any) => {
+            let blob = new Blob([res], { type: 'application/pdf' });
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url + "#page=" + page);
+            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+                alert('Please disable your pop-up blocker and try again.');
+            }
+        });
+    }
+
     addPDFReference() {
+        //<a (click)="openPDF()" href="javascript:void(0)">View Reg 51</a>
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
+            let newLink = "<div><a (click)='openPDF("+ this.selectedPage + ")' href='javascript:void(0)'>" + this.selectedPage + " of Reg51</a></div>";
             let answer = this.faqForm.get('answer').value.replace(this.link, newLink);
             if (answer == this.faqForm.get('answer').value) {
                 answer = this.faqForm.get('answer').value + newLink;
@@ -70,7 +81,7 @@ export class CMFaqCreateComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>";
+            this.link = "<div (click)='openPDF(" + this.selectedPage + ")'><a href='javascript:void(0)'> Refer to " + this.selectedPage + " of Reg51</a></div>";
             let answer = this.faqForm.get('answer').value + this.link;
             this.faqForm.get('answer').setValue(answer);
             this.referenceAdded = true;
@@ -78,10 +89,6 @@ export class CMFaqCreateComponent implements OnInit {
     }
 
     postFAQ() {
-        this.includePDF = false;
-        this.referenceAdded = false;
-        this.link = "";
-
         this.faqForm.get('question').markAsDirty();
         this.faqForm.get('answer').markAsDirty();
 
@@ -96,7 +103,7 @@ export class CMFaqCreateComponent implements OnInit {
         let question = this.faqForm.get("answer").value;
         if (answer !== '' && question !== '') {
             this.loading = true;
-            this.cmService.createFAQ(answer, question).subscribe(res => {
+            this.cmService.createFAQ(answer, question, this.includePDF).subscribe(res => {
                 if (res.error) {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: res.error
@@ -112,6 +119,9 @@ export class CMFaqCreateComponent implements OnInit {
                     this.faqForm.get("question").setValue("");
                     this.faqForm.get("answer").setValue("");
 
+                    this.includePDF = false;
+                    this.referenceAdded = false;
+                    this.link = "";
 
                     setTimeout(() => {
                         this.router.navigate(['cm/faq/manage'], {

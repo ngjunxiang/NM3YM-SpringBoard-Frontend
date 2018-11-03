@@ -79,7 +79,7 @@ export class CMService {
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private retrieveCMFAQURL = environment.host + '/app/faq/retrieve-cmUserQNA';
-    
+
 
     // NLU Model Endpoints 
     private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
@@ -93,6 +93,9 @@ export class CMService {
     // Notifications Endpoints
     private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
     private updateNotificationsURL = environment.host + '/app/cm/update-notifications';
+
+    // PDF URL
+    private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
 
     constructor(
         private authService: AuthenticationService,
@@ -269,7 +272,7 @@ export class CMService {
             );
     }
 
-    createFAQ(question, answer) {
+    createFAQ(question, answer, PDFIncluded) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -279,7 +282,8 @@ export class CMService {
         const createdFAQ = {
             'qna': {
                 'question': question,
-                'answer': answer
+                'answer': answer,
+                'includesRef': PDFIncluded
             }
         };
 
@@ -343,7 +347,7 @@ export class CMService {
             );
     }
 
-    updateAnsweredFAQ(qnID, question, answer) {
+    updateAnsweredFAQ(qnID, question, PDFIncluded, answer) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -354,7 +358,8 @@ export class CMService {
             'qna': {
                 'qnID': qnID,
                 'question': question,
-                'answer': answer
+                'answer': answer,
+                'includesRef': PDFIncluded
             }
         };
 
@@ -404,7 +409,7 @@ export class CMService {
             );
     }
 
-    updateUnansweredFAQ(qnID, question, answer, username) {
+    updateUnansweredFAQ(qnID, question, answer, PDFIncluded, username) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -416,6 +421,7 @@ export class CMService {
                 'qnID': qnID,
                 'question': question,
                 'answer': answer,
+                'includesRef': PDFIncluded,
                 'username': username
             }
         };
@@ -525,6 +531,19 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems, categoriseBy);
 
         return this.http.post<Response>(this.retrieveFAQByCategoryURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrievePdf() {
+        let headers = new HttpHeaders();
+        headers = headers.set('Accept', 'application/pdf, */*');
+
+        const postData = this.authService.authItems;
+
+        return this.http.post(this.retrievePdfURL, postData, { headers: headers, responseType: 'blob' as 'json' })
             .pipe(
                 retry(3),
                 catchError(this.handleError)

@@ -7,6 +7,7 @@ import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { filterQueryId } from '@angular/core/src/view/util';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'cm-faq-manage',
@@ -56,6 +57,7 @@ export class CMFaqManageComponent implements OnInit {
     constructor(
         private cmService: CMService,
         private confirmationService: ConfirmationService,
+        private sanitizer: DomSanitizer,
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router
@@ -541,9 +543,6 @@ export class CMFaqManageComponent implements OnInit {
 
     saveAnsweredQuestion(index: number) {
         this.answerForm.controls.editedAnswer.markAsDirty();
-        this.includePDF = false;
-        this.referenceAdded = false;
-        this.link = "";
 
         if (this.answerForm.controls.editedAnswer.invalid) {
             this.msgs.push({
@@ -552,7 +551,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
+        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.includePDF, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
             this.processing = true;
             if (res.error) {
                 this.msgs.push({
@@ -566,6 +565,9 @@ export class CMFaqManageComponent implements OnInit {
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: 'Answer updated'
                 });
+                this.includePDF = false;
+                this.referenceAdded = false;
+                this.link = "";
             }
 
             this.hideAnsEditArea();
@@ -582,9 +584,6 @@ export class CMFaqManageComponent implements OnInit {
     saveUnansweredQuestion(index: number) {
         this.answerForm.controls.addedAnswer.markAsDirty();
         this.unansweredDialog = false;
-        this.includePDF = false;
-        this.referenceAdded = false;
-        this.link = "";
 
         if (this.answerForm.controls.addedAnswer.invalid) {
             this.msgs.push({
@@ -593,7 +592,7 @@ export class CMFaqManageComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.faqs[index].username).subscribe(res => {
+        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.includePDF, this.answerForm.get('addedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.faqs[index].username).subscribe(res => {
             this.processing = true;
 
             if (res.error) {
@@ -608,11 +607,15 @@ export class CMFaqManageComponent implements OnInit {
                 this.msgs.push({
                     severity: 'success', summary: 'Success', detail: 'Question has been answered'
                 });
+                this.includePDF = false;
+                this.referenceAdded = false;
+                this.link = "";
             }
 
             this.hideAnsEditArea();
             this.unansweredDialog = false;
             this.processing = false;
+
         }, error => {
             this.msgs.push({
                 severity: 'error', summary: 'Error', detail: error
@@ -623,10 +626,21 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
+    openPDF(page) {
+        this.cmService.retrievePdf().subscribe((res: any) => {
+            let blob = new Blob([res], { type: 'application/pdf' });
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url + "#page=" + page);
+            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+                alert('Please disable your pop-up blocker and try again.');
+            }
+        });
+    }
+
     editPDFReference() {
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('editedAnswer').value.replace(this.link, newLink);
             if (answer == this.answerForm.get('editedAnswer').value) {
                 answer = this.answerForm.get('editedAnswer').value + newLink
@@ -639,7 +653,7 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('editedAnswer').value + this.link
             this.answerForm.get('editedAnswer').setValue(answer);
             this.referenceAdded = true;
@@ -649,7 +663,7 @@ export class CMFaqManageComponent implements OnInit {
     addPDFReference() {
         if (this.referenceAdded) {
             //replace link
-            let newLink = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            let newLink = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('addedAnswer').value.replace(this.link, newLink);
             if (answer == this.answerForm.get('addedAnswer').value) {
                 answer = this.answerForm.get('addedAnswer').value + newLink
@@ -662,7 +676,7 @@ export class CMFaqManageComponent implements OnInit {
         }
 
         if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
+            this.link = "<div><u><a href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
             let answer = this.answerForm.get('addedAnswer').value + this.link
             this.answerForm.get('addedAnswer').setValue(answer);
             this.referenceAdded = true;
@@ -672,6 +686,7 @@ export class CMFaqManageComponent implements OnInit {
     showAnsweredDialog(index) {
         this.currentIndex = index;
         this.answeredDialog = true;
+        this.faqs[index].answer = this.sanitizer.bypassSecurityTrustHtml(this.faqs[index].answer);
     }
 
     showHistoryDialog() {

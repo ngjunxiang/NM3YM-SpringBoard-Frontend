@@ -233,9 +233,6 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
     saveAnsweredQuestion(index: number) {
         this.answerForm.controls.editedAnswer.markAsDirty();
-        this.includePDF = false;
-        this.referenceAdded = false;
-        this.link = "";
 
         if (this.answerForm.controls.editedAnswer.invalid) {
             this.msgs.push({
@@ -244,7 +241,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
+        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.includePDF, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
             this.processing = true;
             this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
@@ -260,7 +257,9 @@ export class CMFaqMyAnswersComponent implements OnInit {
                     severity: 'success', summary: 'Success', detail: 'Answer updated'
                 });
             }
-
+            this.includePDF = false;
+            this.referenceAdded = false;
+            this.link = "";
             this.hideAnsEditArea();
             this.processing = false;
         }, error => {
