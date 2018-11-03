@@ -8,7 +8,6 @@ import { FODashboardComponent } from './pages/fo-dashboard/fo-dashboard.componen
 import { FOManageOnboardComponent } from './pages/fo-manage-onboard/fo-manage-onboard.component';
 import { FONewOnboardComponent } from './pages/fo-new-onboard/fo-new-onboard.component';
 import { FOEditOnboardComponent } from './pages/fo-edit-onboard/fo-edit-onboard.component';
-import { FOFaqAskComponent } from './pages/fo-faq-ask/fo-faq-ask.component';
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
 import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
 import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
@@ -56,15 +55,6 @@ const routes: Routes = [
                 data: {
                     title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
-                }, 
-                canActivate: [FOAuthGuard] 
-            },
-            {
-                path: 'faq/ask',
-                component: FOFaqAskComponent,
-                data: {
-                    title: 'Front Office',
-                    urls: [{ title: 'FAQ' }, { title: 'Ask' }]
                 }, 
                 canActivate: [FOAuthGuard] 
             },
