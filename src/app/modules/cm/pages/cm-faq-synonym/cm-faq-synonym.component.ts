@@ -21,12 +21,11 @@ export class CMFaqSynonymComponent implements OnInit {
 
   // UI Components
   synonyms = [];
-  numSynonyms: number;
   keys = [];
   synonymForm: FormGroup;
 
   // Paginator Controls
-  numOfPage: any[];
+  numSynonyms: number;
   firstIndex: number;
   lastIndex: number;
   pageNumber: number;

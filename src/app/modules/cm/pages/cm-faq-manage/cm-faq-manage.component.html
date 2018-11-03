@@ -12,11 +12,13 @@
 <div class="ui-g" *ngIf="!searched" style="display: flex; margin-top: 10px; margin-bottom: 10px; align-items: center;">
     <div style="padding-left: 0px;">
         <p style="margin-bottom: 2px;">Select Category:</p>
-        <p-dropdown class="category" [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option" [autoWidth]="false" [disabled]="disable" (onChange)="filterAndSortBy()"></p-dropdown>
+        <p-dropdown class="category" [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option" [autoWidth]="false"
+            [disabled]="disable" (onChange)="filterAndSortBy()"></p-dropdown>
     </div>
     <div style="margin-left: 30px;">
         <p style="margin-bottom: 2px;">Sort By:</p>
-        <p-dropdown class="sortBy" [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option"  [disabled]="disable" (onChange)="filterAndSortBy()"></p-dropdown>
+        <p-dropdown class="sortBy" [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option" [disabled]="disable"
+            (onChange)="filterAndSortBy()"></p-dropdown>
     </div>
     <div class="clickable" style="margin-left: 30px; margin-top: 26px" (click)="loadPage()">
         <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">
@@ -41,30 +43,25 @@
                 </h5>
             </div>
             <div *ngIf="faqs.length > 0">
-                <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                    <ng-template let-faq let-i="index" pTemplate="items">
-                        <p-card class="questionCard clickable" (click)="showAnsweredDialog(i)">
-                            <div class="ui-g">
-                                <div class="ui-g-9">
-                                    <div class="question" style="color:#3989e1; margin-bottom:12px">
-                                        {{faqs[i].question}}
-                                    </div>
-                                    <div style="font-size: 12px; font-weight: 600">
-                                        <p>Posted by: {{faqs[i].username}}, {{faqs[i].dateAsked}}</p>
-                                    </div>
+                <ng-container *ngFor="let faq of faqs; let i=index">
+                    <p-card class="questionCard clickable" (click)="showAnsweredDialog(i)">
+                        <div class="ui-g">
+                            <div class="ui-g-9">
+                                <div class="question" style="color:#3989e1; margin-bottom:12px">
+                                    {{faqs[i].question}}
                                 </div>
-                                <div class="ui-g-3">
-                                    <div style="float: right; font-size: 12px; font-weight: 400">
-                                        {{faqs[i].views}} views
-                                    </div>
+                                <div style="font-size: 12px; font-weight: 600">
+                                    <p>Posted by: {{faqs[i].username}}, {{faqs[i].dateAsked}}</p>
                                 </div>
                             </div>
-                        </p-card>
-                    </ng-template>
-                    <p-footer>
-                        <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
-                    </p-footer>
-                </p-dataScroller>
+                            <div class="ui-g-3">
+                                <div style="float: right; font-size: 12px; font-weight: 400">
+                                    {{faqs[i].views}} views
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </ng-container>
 
                 <ng-container *ngIf="answeredDialog">
                     <p-dialog #dialogAnswered header="Answer View" [autoZIndex]="false" [(visible)]="answeredDialog" [closable]="true" [modal]="true"
@@ -163,9 +160,10 @@
                 </ng-container>
             </div>
         </p-card>
+
         <p-card *ngIf="!searched" styleClass="ui-card-shadow">
             <h4>Frequently Asked Questions</h4>
-            <p-tabView [activeIndex]="activeTab" (onChange)="changeTab($event)">
+            <p-tabView id="scrollHere" [activeIndex]="activeTab" (onChange)="changeTab($event)">
                 <p-tabPanel header="Unanswered">
                     <div *ngIf="faqs.length === 0">
                         <h5>
@@ -173,8 +171,8 @@
                         </h5>
                     </div>
                     <div *ngIf="faqs.length > 0">
-                        <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                            <ng-template let-faq let-i="index" pTemplate="items">
+                        <ng-container *ngFor="let faq of faqs; let i=index">
+                            <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                                 <p-card class="questionCard clickable" (click)="showUnansweredDialog(i)">
                                     <div class="ui-g">
                                         <div class="ui-g-9">
@@ -187,11 +185,8 @@
                                         </div>
                                     </div>
                                 </p-card>
-                            </ng-template>
-                            <p-footer>
-                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
-                            </p-footer>
-                        </p-dataScroller>
+                            </ng-container>
+                        </ng-container>
 
                         <ng-container *ngIf="unansweredDialog">
                             <p-dialog #dialogUnanswered header="Answer View" [autoZIndex]="false" [(visible)]="unansweredDialog" [closable]="true" [modal]="true"
@@ -271,8 +266,8 @@
                         </h5>
                     </div>
                     <div *ngIf="faqs.length > 0">
-                        <p-dataScroller [value]="faqs" [rows]="10" [loader]="loadButton">
-                            <ng-template let-faq let-i="index" pTemplate="items">
+                        <ng-container *ngFor="let faq of faqs; let i=index">
+                            <ng-container *ngIf="i >= firstIndex && i < lastIndex">
                                 <p-card class="questionCard clickable" (click)="showAnsweredDialog(i)">
                                     <div class="ui-g">
                                         <div class="ui-g-9">
@@ -290,11 +285,8 @@
                                         </div>
                                     </div>
                                 </p-card>
-                            </ng-template>
-                            <p-footer>
-                                <button #loadButton type="text" icon="pi pi-refresh" pButton label="Load More" [disabled]="disableLoadMore" (click)="stopShowingLoadMore()"></button>
-                            </p-footer>
-                        </p-dataScroller>
+                            </ng-container>
+                        </ng-container>
 
                         <ng-container *ngIf="answeredDialog">
                             <p-dialog #dialogAnswered header="Answer View" [autoZIndex]="false" [(visible)]="answeredDialog" [closable]="true" [modal]="true"
@@ -394,6 +386,7 @@
                     </div>
                 </p-tabPanel>
             </p-tabView>
+            <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
         </p-card>
     </div>
 </div>

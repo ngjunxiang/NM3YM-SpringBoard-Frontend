@@ -6,6 +6,7 @@ import { Message, MenuItem, ConfirmationService } from 'primeng/components/commo
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
+import { concat } from 'rxjs/operators';
 
 @Component({
     selector: 'cm-faq-myanswers',
@@ -50,10 +51,11 @@ export class CMFaqMyAnswersComponent implements OnInit {
     questionForm: FormGroup;
 
     // Paginator Controls
-    numOfPage: any[];
+    numFAQs: number;
     firstIndex: number;
     lastIndex: number;
     pageNumber: number;
+    
 
     constructor(
         private cmService: CMService,
@@ -64,7 +66,6 @@ export class CMFaqMyAnswersComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loading = true;
         this.route.queryParams.subscribe(params => {
             this.activeTab = params['activeTab'];
         });
@@ -77,7 +78,10 @@ export class CMFaqMyAnswersComponent implements OnInit {
     }
 
     loadPage() {
+        this.loading = true;
         this.faqs = [];
+        this.firstIndex = 0;
+        this.lastIndex = 10;
 
         //Retrieve answered question 
         this.cmService.retrieveCMFAQ().subscribe(res => {
@@ -89,13 +93,12 @@ export class CMFaqMyAnswersComponent implements OnInit {
                 return;
             }
 
-            console.log(res.results)
-
             if (res.results && this.activeTab === 0) {
                 this.faqs = res.results.answered;
             } else {
                 this.faqs = res.results.prevAnswered;
             }
+            this.numFAQs = this.faqs.length;
 
             this.loading = false;
 
@@ -118,7 +121,6 @@ export class CMFaqMyAnswersComponent implements OnInit {
         dialog.maximized = false;
         dialog.toggleMaximize(event);
     }
-
 
     showEditAnswerArea(index) {
         if (this.showAnsEditArea) {
@@ -153,6 +155,15 @@ export class CMFaqMyAnswersComponent implements OnInit {
         this.showAnsEditArea = true;
     }
 
+    hideAnswerDialog() {
+        if (this.activeTab === 0) {
+            this.answeredDialog = false;
+        } else {
+            this.OAnsweredDialog = false;
+        }
+        this.hideAnsEditArea();
+    }
+
     hideAnsEditArea() {
         if (this.answerForm) {
             this.answerForm.get('addedAnswer').setValue('');
@@ -161,16 +172,15 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
         if (this.activeTab === 0) {
             this.historyDialog = false;
-        }else{
-            this.OHistoryDialog = false; 
+        } else {
+            this.OHistoryDialog = false;
         }
-        
+
         this.showAnsEditArea = false;
         this.includePDF = false;
         this.referenceAdded = false;
         this.link = "";
     }
-
 
     deleteAnsweredQuestion(index: number) {
         this.confirmationService.confirm({
@@ -201,11 +211,11 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
                     if (this.activeTab === 0) {
                         this.answeredDialog = false;
-                    }else{
+                    } else {
                         this.OAnsweredDialog = false;
                     }
 
-                    
+
                 }, error => {
                     this.msgs.push({
                         severity: 'error', summary: 'Error', detail: error
@@ -213,7 +223,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
                     this.processing = false;
                     if (this.activeTab === 0) {
                         this.answeredDialog = false;
-                    }else{
+                    } else {
                         this.OAnsweredDialog = false;
                     }
                 });
@@ -292,7 +302,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
         this.currentIndex = index;
         if (this.activeTab === 0) {
             this.answeredDialog = true;
-        }else{
+        } else {
             this.OAnsweredDialog = true;
         }
     }
@@ -300,8 +310,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
     showHistoryDialog() {
         if (this.activeTab === 0) {
             this.historyDialog = true;
-        }else{
-            this.OHistoryDialog = true; 
+        } else {
+            this.OHistoryDialog = true;
         }
     }
 

@@ -21,15 +21,12 @@ export class CMFaqManageComponent implements OnInit {
     loadingEditArea = false;
     showAnsEditArea = false;
     showQnsEditArea = false;
-    selectedFAQ: string;
     activeTab: number;
     msgs: Message[] = [];
     answeredDialog = false;
     historyDialog = false;
     unansweredDialog = false;
     currentIndex: number;
-    disableLoadMore = false;
-    LoadMoreClicks: number;
     searched = false;
     disable: boolean;
 
@@ -49,6 +46,12 @@ export class CMFaqManageComponent implements OnInit {
     answerForm: FormGroup;
     questionForm: FormGroup;
     searchForm: FormGroup;
+
+    // Paginator Controls
+    numFAQs: number;
+    firstIndex: number;
+    lastIndex: number;
+    pageNumber: number;
 
     constructor(
         private cmService: CMService,
@@ -70,7 +73,6 @@ export class CMFaqManageComponent implements OnInit {
 
         this.loadPage();
 
-
         //Inititalizing Search Form
         this.searchForm = this.fb.group({
             question: new FormControl('', Validators.required),
@@ -83,12 +85,9 @@ export class CMFaqManageComponent implements OnInit {
             { value: "views", label: "Views" },
         ]
 
-        //Showing First 10 results 
-        this.LoadMoreClicks = 10;
-
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
+        //Showing First 10 in the page 
+        this.firstIndex = 0;
+        this.lastIndex = 10;
 
         //initialize PDF pages
         for (let i = 0; i < 72; i++) {
@@ -128,10 +127,11 @@ export class CMFaqManageComponent implements OnInit {
                             qnID: faq.qnID,
                             question: faq.question,
                             dateAsked: faq.dateAsked,
-                            selected: false
                         });
                     });
                 }
+
+                this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
                 this.msgs.push({
@@ -154,10 +154,6 @@ export class CMFaqManageComponent implements OnInit {
                 if (res.results) {
                     for (let i = 0; i < res.results.length; i++) {
                         let faq = res.results[i];
-                        let selected = false;
-                        if (faq.question === this.selectedFAQ) {
-                            selected = true;
-                        }
 
                         this.faqs.push({
                             qnID: faq.qnID,
@@ -169,10 +165,10 @@ export class CMFaqManageComponent implements OnInit {
                             dateAnswered: faq.dateAnswered,
                             CMusername: faq.CMusername,
                             prevAnswer: faq.prevAnswer,
-                            selected: selected,
                         });
                     }
                 }
+                this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
                 this.msgs.push({
@@ -189,6 +185,8 @@ export class CMFaqManageComponent implements OnInit {
         this.includePDF = false;
         this.referenceAdded = false;
         this.link = "";
+        this.firstIndex = 0;
+        this.lastIndex = 10;
 
         if (event.index === 0) {
             this.disable = true;
@@ -208,13 +206,10 @@ export class CMFaqManageComponent implements OnInit {
                             qnID: faq.qnID,
                             question: faq.question,
                             dateAsked: faq.dateAsked,
-                            selected: false
                         });
                     });
-
-                    this.checkLoadMore();
                 }
-
+                this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
                 this.msgs.push({
@@ -238,10 +233,6 @@ export class CMFaqManageComponent implements OnInit {
                 if (res.results) {
                     for (let i = 0; i < res.results.length; i++) {
                         let faq = res.results[i];
-                        let selected = false;
-                        if (faq.question === this.selectedFAQ) {
-                            selected = true;
-                        }
 
                         this.faqs.push({
                             qnID: faq.qnID,
@@ -255,8 +246,7 @@ export class CMFaqManageComponent implements OnInit {
                             prevAnswer: faq.prevAnswer,
                         });
                     }
-
-                    this.checkLoadMore();
+                    this.numFAQs = this.faqs.length
                 }
                 this.loading = false;
             }, error => {
@@ -297,11 +287,7 @@ export class CMFaqManageComponent implements OnInit {
                 this.searched = true;
                 for (let i = 0; i < res.results.length; i++) {
                     let faq = res.results[i];
-                    let selected = false;
-                    if (faq.question === this.selectedFAQ) {
-                        selected = true;
-                    }
-                    
+
                     this.faqs.push({
                         qnID: faq.qnID,
                         username: faq.username,
@@ -312,12 +298,10 @@ export class CMFaqManageComponent implements OnInit {
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
-                        selected: selected,
                     });
                 }
             }
 
-            this.checkLoadMore();
 
             this.loading = false;
         }, error => {
@@ -369,10 +353,6 @@ export class CMFaqManageComponent implements OnInit {
             if (res.results) {
                 for (let i = 0; i < res.results.length; i++) {
                     let faq = res.results[i];
-                    let selected = false;
-                    if (faq.question === this.selectedFAQ) {
-                        selected = true;
-                    }
 
                     this.faqs.push({
                         qnID: faq.qnID,
@@ -384,7 +364,6 @@ export class CMFaqManageComponent implements OnInit {
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
-                        selected: selected,
                     });
                 }
                 this.loading = false;
@@ -412,10 +391,6 @@ export class CMFaqManageComponent implements OnInit {
             if (res.results) {
                 for (let i = 0; i < res.results.length; i++) {
                     let faq = res.results[i];
-                    let selected = false;
-                    if (faq.question === this.selectedFAQ) {
-                        selected = true;
-                    }
 
                     this.faqs.push({
                         qnID: faq.qnID,
@@ -427,7 +402,6 @@ export class CMFaqManageComponent implements OnInit {
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
-                        selected: selected,
                     });
                 }
                 this.loading = false;
@@ -440,7 +414,7 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
-    exitResult(){
+    exitResult() {
         this.searched = false;
         this.loadPage();
     }
@@ -617,7 +591,6 @@ export class CMFaqManageComponent implements OnInit {
 
         this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
             this.processing = true;
-            this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
                 this.msgs.push({
                     severity: 'error', summary: 'Error', detail: res.error
@@ -747,20 +720,13 @@ export class CMFaqManageComponent implements OnInit {
         this.unansweredDialog = true;
     }
 
-    //This method determines if "Load More" button should be shown
-    stopShowingLoadMore() {
-        this.LoadMoreClicks += 10
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
-    }
+    paginate(event) {
+        //First index of the FormArray that will appear on the page  
+        this.firstIndex = event.first;
 
-    checkLoadMore() {
-        this.disableLoadMore = false;
-        this.LoadMoreClicks = 10;
-
-        if (this.faqs.length <= this.LoadMoreClicks) {
-            this.disableLoadMore = true;
-        }
+        //Last index of the FormArray that will appears on the page  
+        this.lastIndex = this.firstIndex + 10;
+        let el = document.getElementById("scrollHere")
+        el.scrollIntoView();
     }
 }

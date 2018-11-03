@@ -16,20 +16,12 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     // UI Control
     loading = false;
     processing = false;
-    loadingEditArea = false;
-    showAnsEditArea = false;
-    showQnsEditArea = false;
-    selectedFAQ: string;
     activeTab: number;
     msgs: Message[] = [];
-    answeredDialog = false;
-    historyDialog = false;
-    unansweredDialog = false;
+    answerDialog = false;
     currentIndex: number;
     disableLoadMore = false;
     LoadMoreClicks: number;
-    searched = false;
-    disable: boolean;
 
     // UI Components
     questionForm: FormGroup;

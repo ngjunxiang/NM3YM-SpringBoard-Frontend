@@ -1,4 +1,5 @@
 <p-growl [(value)]="msgs" [life]="5000" [style]="{zIndex:99999999}"></p-growl>
+<p-confirmDialog></p-confirmDialog>
 
 <div *ngIf="!loading">
     <p-card styleClass="ui-card-shadow">
@@ -38,7 +39,7 @@
 
                     <ng-container *ngIf="answeredDialog">
                         <p-dialog #dialogAnswered header="Answer View" [autoZIndex]="false" [(visible)]="answeredDialog" [closable]="true" [modal]="true"
-                            [maximizable]="true" (onHide)="hideAnsEditArea()">
+                            [maximizable]="true" (onHide)="hideAnswerDialog()">
                             <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
                                 <i>Question:</i>
                                 <div style="float: right; padding-right: 6px">
@@ -132,6 +133,7 @@
                         </ng-container>
                     </ng-container>
                 </div>
+                <p-paginator [rows]="10" [totalRecords]="numFAQs" (onPageChange)="paginate($event)"></p-paginator>
             </p-tabPanel>
             <p-tabPanel header="Overwritten Answers">
                 <div *ngIf="faqs.length === 0">
@@ -167,7 +169,7 @@
 
                     <ng-container *ngIf="OAnsweredDialog">
                         <p-dialog #dialogAnswered header="Answer View" [autoZIndex]="false" [(visible)]="OAnsweredDialog" [closable]="true" [modal]="true"
-                            [maximizable]="true" (onHide)="hideAnsEditArea()">
+                            [maximizable]="true" (onHide)="hideAnswerDialog()">
                             <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
                                 <i>Question:</i>
                                 <div style="float: right; padding-right: 6px">
@@ -212,7 +214,7 @@
                                     <p>{{faqs[currentIndex].dateAnswered}}</p>
                                 </div>
                             </div>
-
+                            <!--BUTTONS TO DISPLAY-->
                             <ng-container *ngIf="!showAnsEditArea">
                                 <div class="ui-g" style="padding-top: 2%">
                                     <div class="ui-g-8">
@@ -225,7 +227,7 @@
                                     </div>
                                     <div class="ui-g-4">
                                         <button pButton style="margin-left:1%; float: right" class="ui-button-danger" label="Delete Question" type="button" icon="fa fa-times"
-                                            (click)="deleteAnsweredQuestion(currentIndex)"></button>
+                                            (click)="deleteAnsweredQuestion()"></button>
                                     </div>
                                 </div>
                             </ng-container>
