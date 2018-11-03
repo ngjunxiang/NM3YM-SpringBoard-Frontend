@@ -1,7 +1,7 @@
 <p-growl [(value)]="msgs" [life]="5000"></p-growl>
 
 <p-card [style]="{width: '60%'}" styleClass="ui-card-shadow">
-    <div class="form-create">
+    <div class="form-create" [formGroup]="form">
         <h3>Upload Reg51 PDF</h3>
         <br>
         <h4>Select a file: </h4>
@@ -26,5 +26,19 @@
             </ng-template>
         </p-fileUpload>
         <br> *Only files with extension .pdf is accepted
+        <br>
+        <br>
+        <br>
+        <h4>Reg51 Notification</h4>
+        <div style="width: 100%; display: flex">
+            <div style="padding-top: 1.5%">
+                <p-checkbox binary="true" formControlName="notify"></p-checkbox>
+            </div>
+            <div style="display: inline-block; width: 70%; padding-left: 2%;">
+                <label>Inform all users that Reg51 has been updated and Reg51 referencing in FAQs may not be accurate</label>
+            </div>
+        </div>
+        <button pButton label="Update" class="ui-button-primary" style="width: 20%" type="button"
+            icon="fa fa-plus" (click)="updateReg51Notif()"></button>
     </div>
 </p-card>

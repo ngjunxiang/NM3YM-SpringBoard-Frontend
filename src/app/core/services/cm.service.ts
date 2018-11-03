@@ -94,6 +94,10 @@ export class CMService {
     private retrieveNotificationsURL = environment.host + '/app/cm/retrieve-notifications';
     private updateNotificationsURL = environment.host + '/app/cm/update-notifications';
 
+    // Reg51 Notification Endpoint
+    private retrieveReg51NotificationsURL = environment.host + '/app/cm/update-notifications';
+    private updateReg51NotificationsURL = environment.host + '/app/cm/update-notifications';
+
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
@@ -623,13 +627,9 @@ export class CMService {
             })
         };
 
-        console.log(Synonyms)
-
-
         const updatedSynonyms = {
             'synonyms': Synonyms
         };
-
 
         //add here
         const postData = Object.assign(this.authService.authItems, updatedSynonyms);
@@ -651,6 +651,42 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems);
 
         return this.http.post<Response>(this.trainModelURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveReg51Notification() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveReg51NotificationsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    updateReg51Notification(reg51NotificationValue) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const reg51Notification = {
+            'reg51Notification': reg51NotificationValue
+        };
+
+        const postData = Object.assign(this.authService.authItems, reg51Notification);
+
+        return this.http.post<Response>(this.updateReg51NotificationsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
