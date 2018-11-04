@@ -32,9 +32,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
     includePDF: boolean;
-    selectedPage: number;
-    link: string;
-    referenceAdded = false;
+    selectedPages: any[];
 
     // UI Components
     faqs: any[];
@@ -50,7 +48,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
     firstIndex: number;
     lastIndex: number;
     pageNumber: number;
-    
+
 
     constructor(
         private cmService: CMService,
@@ -71,6 +69,14 @@ export class CMFaqMyAnswersComponent implements OnInit {
         }
 
         this.loadPage();
+
+        //initialize PDF pages
+        for (let i = 1; i < 72; i++) {
+            this.pdfPages.push({
+                label: i,
+                value: i
+            });
+        }
     }
 
     loadPage() {
@@ -82,7 +88,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
         //Retrieve answered question 
         this.cmService.retrieveCMFAQ().subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
@@ -94,12 +100,12 @@ export class CMFaqMyAnswersComponent implements OnInit {
             } else {
                 this.faqs = res.results.prevAnswered;
             }
-            
+
             this.numFAQs = this.faqs.length;
             this.loading = false;
 
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.loading = false;
@@ -157,6 +163,8 @@ export class CMFaqMyAnswersComponent implements OnInit {
         } else {
             this.OAnsweredDialog = false;
         }
+        this.includePDF = false;
+        this.selectedPages = [];
         this.hideAnsEditArea();
     }
 
@@ -173,9 +181,6 @@ export class CMFaqMyAnswersComponent implements OnInit {
         }
 
         this.showAnsEditArea = false;
-        this.includePDF = false;
-        this.referenceAdded = false;
-        this.link = "";
     }
 
     deleteAnsweredQuestion(index: number) {
@@ -187,7 +192,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
                 this.processing = true;
                 this.cmService.deleteAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question).subscribe(res => {
                     if (res.error) {
-                        this.messageService.add({ 
+                        this.messageService.add({
                             key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                         });
                         return;
@@ -198,7 +203,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
                         this.faqs.map(faq => {
                             faq.selected = false;
                         });
-                        this.messageService.add({ 
+                        this.messageService.add({
                             key: 'msgs', severity: 'success', summary: 'Success', detail: 'Question deleted'
                         });
                     }
@@ -213,7 +218,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
 
                 }, error => {
-                    this.messageService.add({ 
+                    this.messageService.add({
                         key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
@@ -234,17 +239,17 @@ export class CMFaqMyAnswersComponent implements OnInit {
         this.answerForm.controls.editedAnswer.markAsDirty();
 
         if (this.answerForm.controls.editedAnswer.invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.includePDF, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim()).subscribe(res => {
+        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.selectedPages).subscribe(res => {
             this.processing = true;
             this.selectedFAQ = this.faqs[index].question;
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
@@ -252,17 +257,15 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
             if (res.results) {
                 this.loadPage();
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Answer updated'
                 });
             }
             this.includePDF = false;
-            this.referenceAdded = false;
-            this.link = "";
             this.hideAnsEditArea();
             this.processing = false;
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
@@ -270,31 +273,17 @@ export class CMFaqMyAnswersComponent implements OnInit {
         });
     }
 
-    editPDFReference() {
-        if (this.referenceAdded) {
-            //replace link
-            let newLink = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
-            let answer = this.answerForm.get('editedAnswer').value.replace(this.link, newLink);
-            if (answer == this.answerForm.get('editedAnswer').value) {
-                answer = this.answerForm.get('editedAnswer').value + newLink
-                this.answerForm.get('editedAnswer').setValue(answer);
-                this.link = newLink;
-            } else {
-                this.link = newLink;
-                this.answerForm.get('editedAnswer').setValue(answer);
-            }
-        }
-
-        if (this.includePDF && !this.referenceAdded) {
-            this.link = "<div><u><a #ref href='assets/pdf/reg51.pdf#page=" + this.selectedPage + "' target='_blank'>Refer to page " + this.selectedPage + " of Reg51</a></u><div>"
-            let answer = this.answerForm.get('editedAnswer').value + this.link
-            this.answerForm.get('editedAnswer').setValue(answer);
-            this.referenceAdded = true;
-        }
-    }
 
     showAnsweredDialog(index) {
         this.currentIndex = index;
+        if (this.faqs[index].refPages) {
+            this.includePDF = true;
+            this.selectedPages = this.faqs[index].refPages;
+        } else {
+            this.includePDF = false;
+            this.selectedPages = [];
+        }
+
         if (this.activeTab === 0) {
             this.answeredDialog = true;
         } else {
@@ -308,6 +297,17 @@ export class CMFaqMyAnswersComponent implements OnInit {
         } else {
             this.OHistoryDialog = true;
         }
+    }
+
+    openPDF(page) {
+        this.cmService.retrievePdf().subscribe((res: any) => {
+            let blob = new Blob([res], { type: 'application/pdf' });
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url + "#page=" + page);
+            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+                alert('Please disable your pop-up blocker and try again.');
+            }
+        });
     }
 
     paginate(event) {

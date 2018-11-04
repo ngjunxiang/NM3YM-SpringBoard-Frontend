@@ -60,18 +60,33 @@
                                 <div class="ui-g-10 ansInDialog" style="color:black;">
                                     <ng-container *ngIf="!showAnsEditArea">
                                         <div style="font-size: 14px; font-weight: 600; color:black;" [innerHTML]="faqs[currentIndex].answer"></div>
+                                        <ng-container *ngIf="faqs[currentIndex].refPages">
+                                            <p-card styleClass="pageReferences">
+                                                Refer to the following page(s) on REG51:
+                                                <ng-container *ngFor="let ref of faqs[currentIndex].refPages; let len=index">
+                                                    <ng-container *ngIf="len !== faqs[currentIndex].refPages.length-1">
+                                                        <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}, </a>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="len === faqs[currentIndex].refPages.length-1">
+                                                        <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </p-card>
+                                        </ng-container>
                                     </ng-container>
                                     <ng-container *ngIf="showAnsEditArea">
+                                        <p-card styleClass="reference">
+                                            <div style="align-items: center; display: flex;">
+                                                <div style="margin-right: 15px">
+                                                    <p-checkbox name="groupname" binary="true" label="Include Reference to Reg51?" [(ngModel)]="includePDF" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                                                </div>
+                                                <div *ngIf="includePDF" style="align-items: center">
+                                                    <p-multiSelect [options]="pdfPages" [(ngModel)]="selectedPages" [ngModelOptions]="{standalone: true}" [panelStyle]="{minWidth:'12em'}"
+                                                        defaultLabel="Select pages to refer to" filterPlaceHolder="Search Pages"></p-multiSelect>
+                                                </div>
+                                            </div>
+                                        </p-card>
                                         <ngx-wig [formControl]="answerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
-                                        <div style="align-items: center; display: flex; margin-bottom: 10px">
-                                            <div style="padding-top: 5px; margin-right: 15px">
-                                                <p-checkbox name="groupname" binary="true" label="Reference to Reg51?" [(ngModel)]="includePDF"></p-checkbox>
-                                            </div>
-                                            <div *ngIf="includePDF" style="padding-top: 10px;">
-                                                Refer to page:
-                                                <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="editPDFReference()" editable="false" placeholder="Select a page"></p-dropdown>
-                                            </div>
-                                        </div>
                                     </ng-container>
                                 </div>
 
@@ -186,18 +201,33 @@
                                 <div class="ui-g-10 ansInDialog" style="color:black;">
                                     <ng-container *ngIf="!showAnsEditArea">
                                         <div style="font-size: 14px; font-weight: 600; color:black;" [innerHTML]="faqs[currentIndex].answer"></div>
+                                        <ng-container *ngIf="faqs[currentIndex].refPages">
+                                            <p-card styleClass="pageReferences">
+                                                Refer to the following page(s) on REG51:
+                                                <ng-container *ngFor="let ref of faqs[currentIndex].refPages; let len=index">
+                                                    <ng-container *ngIf="len !== faqs[currentIndex].refPages.length-1">
+                                                        <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}, </a>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="len === faqs[currentIndex].refPages.length-1">
+                                                        <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </p-card>
+                                        </ng-container>
                                     </ng-container>
                                     <ng-container *ngIf="showAnsEditArea">
+                                        <p-card styleClass="reference">
+                                            <div style="align-items: center; display: flex;">
+                                                <div style="margin-right: 15px">
+                                                    <p-checkbox name="groupname" binary="true" label="Include Reference to Reg51?" [(ngModel)]="includePDF" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                                                </div>
+                                                <div *ngIf="includePDF" style="align-items: center">
+                                                    <p-multiSelect [options]="pdfPages" [(ngModel)]="selectedPages" [ngModelOptions]="{standalone: true}" maxSelectedLabel='5' [panelStyle]="{minWidth:'12em'}"
+                                                        defaultLabel="Select pages to refer to" filterPlaceHolder="Search Pages"></p-multiSelect>
+                                                </div>
+                                            </div>
+                                        </p-card>
                                         <ngx-wig [formControl]="answerForm.controls.editedAnswer" [placeholder]="'Enter answer here'"></ngx-wig>
-                                        <div style="align-items: center; display: flex; margin-bottom: 10px">
-                                            <div style="padding-top: 5px; margin-right: 15px">
-                                                <p-checkbox name="groupname" binary="true" label="Reference to Reg51?" [(ngModel)]="includePDF"></p-checkbox>
-                                            </div>
-                                            <div *ngIf="includePDF" style="padding-top: 10px;">
-                                                Refer to page:
-                                                <p-dropdown [options]="pdfPages" [(ngModel)]="selectedPage" (onChange)="editPDFReference()" editable="false" placeholder="Select a page"></p-dropdown>
-                                            </div>
-                                        </div>
                                     </ng-container>
                                 </div>
 

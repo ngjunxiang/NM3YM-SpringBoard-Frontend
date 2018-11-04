@@ -1,3 +1,33 @@
+/***********
+ * GENERAL *
+ ***********/
+ 
 :host >>> .ui-inputtext{
-    border:1px solid #d8d8d8
+    border: 1px solid #d8d8d8;
+}
+
+/**************************
+ * INCLUDE REFERENCE CARD *
+ *************************/
+
+:host >>> .ui-card.reference .ui-card-body { 
+    border: 0.3px solid #CED4DA;
+    margin-bottom: 5px;
+}
+
+:host >>> .ui-card.reference { 
+    box-shadow: none;
+}
+
+:host >>> .ui-multiselect .ui-multiselect-label {
+    min-width: 200px;
+}
+
+:host >>> .ui-multiselect .ui-multiselect-trigger {
+    border: 1px solid #CED4DA;
+}
+
+:host >>> label {
+    margin-bottom: 0;
+    font-weight: 550;
 }

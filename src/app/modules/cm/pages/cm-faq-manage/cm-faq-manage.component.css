@@ -33,6 +33,33 @@
   box-shadow: none;
 }
 
+/**********************************************
+ * UNANSWERED DIALOG - INCLUDE REFERENCE CARD *
+ **********************************************/
+
+ :host >>> .ui-card.reference .ui-card-body { 
+  border: 0.3px solid #CED4DA;
+  margin-bottom: 5px;
+}
+
+:host >>> .ui-card.reference { 
+  box-shadow: none;
+}
+
+:host >>> .ui-multiselect .ui-multiselect-label {
+  min-width: 200px;
+}
+
+:host >>> .ui-multiselect .ui-multiselect-trigger {
+  border: 1px solid #CED4DA;
+}
+
+:host >>> label {
+  margin-bottom: 0;
+  font-weight: 550;
+}
+
+
 /*********************
  * ANSWER DIALOG PAGE*
  *********************/
@@ -58,7 +85,6 @@
   z-index: 1001;
 }
 
-
 :host >>> .ui-widget-overlay.ui-dialog-mask {
   z-index: 900;
 }
@@ -68,12 +94,27 @@
   border: f1px solid #d8d8d8
 }
 
-
 hr {
   margin-top: 0px;
   margin-bottom: 20px;
   border: 0;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+/****************************************
+ * ANSWER DIALOG - PAGE REFERENCES CARD *
+ ***************************************/
+
+ :host >>> .ui-card.pageReferences .ui-card-body { 
+  border: 0.3px solid #CED4DA;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  width: 70%;
+  font-size: 13px;
+}
+
+:host >>> .ui-card.pageReferences { 
+  box-shadow: none;
 }
 
 /**************

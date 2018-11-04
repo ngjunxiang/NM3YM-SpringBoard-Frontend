@@ -129,11 +129,24 @@
             <div class="ui-g">
                 <div class="ui-g-10 ansInDialog" style="font-size: 14px; font-weight: 600; color:black;">
                     <div [innerHTML]="faqs[currentIndex].answer"></div>
+                    <ng-container *ngIf="faqs[currentIndex].refPages">
+                        <p-card styleClass="pageReferences">
+                            Refer to the following page(s) on REG51:
+                            <ng-container *ngFor="let ref of faqs[currentIndex].refPages; let len=index">
+                                <ng-container *ngIf="len !== faqs[currentIndex].refPages.length-1">
+                                    <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}, </a>
+                                </ng-container>
+                                <ng-container *ngIf="len === faqs[currentIndex].refPages.length-1">
+                                    <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                </ng-container>
+                            </ng-container>
+                        </p-card>
+                    </ng-container>
                 </div>
 
                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
                     <!-- <p>Answered by: Randy Lai</p> -->
-                    <p>Answered on:</p> 
+                    <p>Answered on:</p>
                     <p>{{faqs[currentIndex].dateAnswered}}</p>
                 </div>
             </div>

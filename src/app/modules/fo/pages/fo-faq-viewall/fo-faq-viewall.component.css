@@ -51,6 +51,24 @@ hr {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+
+/****************************************
+ * ANSWER DIALOG - PAGE REFERENCES CARD *
+ ***************************************/
+
+ :host >>> .ui-card.pageReferences .ui-card-body { 
+  border: 0.3px solid #CED4DA;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  width: 70%;
+  font-size: 13px;
+}
+
+:host >>> .ui-card.pageReferences { 
+  box-shadow: none;
+}
+
+
 /**************
  * SEARCH BAR *
  *************/

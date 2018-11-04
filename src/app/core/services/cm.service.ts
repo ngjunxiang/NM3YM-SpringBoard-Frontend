@@ -275,7 +275,7 @@ export class CMService {
             );
     }
 
-    createFAQ(question, answer, PDFIncluded) {
+    createFAQ(question, answer, PDFPages) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -286,7 +286,7 @@ export class CMService {
             'qna': {
                 'question': question,
                 'answer': answer,
-                'includesRef': PDFIncluded
+                'refPages': PDFPages
             }
         };
 
@@ -350,7 +350,7 @@ export class CMService {
             );
     }
 
-    updateAnsweredFAQ(qnID, question, PDFIncluded, answer) {
+    updateAnsweredFAQ(qnID, question, answer, PDFPages) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -362,7 +362,7 @@ export class CMService {
                 'qnID': qnID,
                 'question': question,
                 'answer': answer,
-                'includesRef': PDFIncluded
+                'refPages': PDFPages
             }
         };
 
@@ -412,7 +412,7 @@ export class CMService {
             );
     }
 
-    updateUnansweredFAQ(qnID, question, answer, PDFIncluded, username) {
+    updateUnansweredFAQ(qnID, question, answer, PDFPages, username) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -424,7 +424,7 @@ export class CMService {
                 'qnID': qnID,
                 'question': question,
                 'answer': answer,
-                'includesRef': PDFIncluded,
+                'refPages': PDFPages,
                 'username': username
             }
         };

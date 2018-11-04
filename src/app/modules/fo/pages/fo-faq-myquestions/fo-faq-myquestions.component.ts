@@ -63,7 +63,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
         this.foService.retrieveUserFAQ().subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
@@ -79,7 +79,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
             this.numFAQs = this.faqs.length;
             this.loading = false;
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
 
@@ -98,7 +98,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
         this.questionForm.get('question').markAsDirty();
 
         if (this.questionForm.get('question').invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please ask a question'
             });
             return;
@@ -110,7 +110,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
         this.foService.retrieveFaq(this.questionForm.get('question').value).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
@@ -123,7 +123,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
 
@@ -134,6 +134,17 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     showAnswerDialog(index) {
         this.currentIndex = index
         this.answerDialog = true;
+    }
+
+    openPDF(page) {
+        this.foService.retrievePdf().subscribe((res: any) => {
+            let blob = new Blob([res], { type: 'application/pdf' });
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url + "#page=" + page);
+            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+                alert('Please disable your pop-up blocker and try again.');
+            }
+        });
     }
 
     paginate(event) {
