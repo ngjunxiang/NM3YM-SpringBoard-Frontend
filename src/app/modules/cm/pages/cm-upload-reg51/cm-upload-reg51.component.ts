@@ -67,8 +67,10 @@ export class CMUploadReg51Component implements OnInit {
     }
 
     onUpload(event) {
+        console.log("entered");
         if (event.xhr.response) {
             let res = JSON.parse(event.xhr.response);
+            console.log(res);
             if (res.error) {
                 for (let file of event.files) {
                     this.errorFiles.push(file);

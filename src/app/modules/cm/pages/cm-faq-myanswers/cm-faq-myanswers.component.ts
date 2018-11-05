@@ -276,7 +276,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
     showAnsweredDialog(index) {
         this.currentIndex = index;
-        if (this.faqs[index].refPages) {
+        if (this.faqs[index].refPages.length > 0) {
             this.includePDF = true;
             this.selectedPages = this.faqs[index].refPages;
         } else {
