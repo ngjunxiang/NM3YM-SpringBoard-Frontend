@@ -17,6 +17,7 @@ import { CMFaqCleaningComponent } from './pages/cm-faq-cleaning/cm-faq-cleaning.
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
 import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.component';
 import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
+import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.guard';
 
 
 
@@ -64,7 +65,8 @@ const routes: Routes = [
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'New' }]
                 },
-                canActivate: [CMAuthGuard]
+                canActivate: [CMAuthGuard],
+                canDeactivate: [CanDeactivateGuard]
             },
             {
                 path: 'checklist/logs',

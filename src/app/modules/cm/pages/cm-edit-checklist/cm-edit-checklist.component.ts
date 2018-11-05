@@ -30,6 +30,7 @@ export class CMEditChecklistComponent implements OnInit {
     cInfoDisplay = false;
     oDisplay = false;
     oEditDisplay = false;
+    isSubmitted = false;
 
     // UI Component
     clName: string;
@@ -139,6 +140,12 @@ export class CMEditChecklistComponent implements OnInit {
         });
 
         this.loading = false;
+    }
+
+    canDeactivate(): Promise<boolean> | boolean {
+        if (this.isSubmitted) return true;
+        if (!this.currentChecklistForm.dirty && !this.complianceDocumentsForm.dirty && !this.legalDocumentsForm.dirty) return true;
+        return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
     }
 
     // Get Num Docs
@@ -1091,6 +1098,8 @@ export class CMEditChecklistComponent implements OnInit {
             }
 
             if (res.results) {
+                this.isSubmitted = true;
+                
                 this.messageService.add({ 
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist updated <br> You will be redirected shortly'
                 });

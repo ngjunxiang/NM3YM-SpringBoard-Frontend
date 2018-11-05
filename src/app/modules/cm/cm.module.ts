@@ -52,6 +52,7 @@ import { CMFaqMyAnswersComponent } from './pages/cm-faq-myanswers/cm-faq-myanswe
 import { CMFaqSynonymComponent } from './pages/cm-faq-synonym/cm-faq-synonym.component';
 import { CMFAQTrainModelComponent } from './pages/cm-faq-train-model/cm-faq-train-model.component';
 import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
+import { CanDeactivateGuard } from 'src/app/core/can-deactivate/can-deactivate.guard';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -119,6 +120,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
+        CanDeactivateGuard,
         ConfirmationService,
         CMService,
         MessageService
