@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -16,6 +16,7 @@ export class FOEditOnboardComponent implements OnInit {
     // UI Control
     loading = false;
     processing = false;
+    isSubmitted = false;
 
     // UI Component
     complianceCols: any[];
@@ -66,6 +67,15 @@ export class FOEditOnboardComponent implements OnInit {
             { typeOfChange: "Document Added", cellColour: "Green" },
             { typeOfChange: "Document Removed", cellColour: "Red" }
         ];
+    }
+
+    @HostListener('window:beforeunload')
+    canDeactivate(): Promise<boolean> | boolean {
+        if (this.isSubmitted) return true;
+        if (!this.documentsForm.dirty) {
+            return true;
+        }
+        return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
     }
 
     createForm() {
@@ -286,6 +296,8 @@ export class FOEditOnboardComponent implements OnInit {
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process updated <br> You will be redirected shortly'
                 });
             }
+
+            this.isSubmitted = true;
 
             setTimeout(() => {
                 this.router.navigate(['/fo/onboard/manage']);

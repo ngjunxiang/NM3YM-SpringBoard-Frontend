@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -18,6 +18,7 @@ export class FONewOnboardComponent implements OnInit {
     loading = false;
     processing = false;
     step = 1;
+    isSubmitted = false;
 
     // UI Component
     complianceCols: any[];
@@ -48,6 +49,15 @@ export class FONewOnboardComponent implements OnInit {
         this.createForm();
     }
 
+    @HostListener('window:beforeunload')
+    canDeactivate(): Promise<boolean> | boolean {
+        if (this.isSubmitted) return true;
+        if (!this.checklistForm.dirty ) {
+            return true;
+        }
+        return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
+    }
+    
     createForm() {
         this.retrieveChecklistNames();
         this.checklistForm = this.fb.group({
@@ -505,6 +515,8 @@ export class FONewOnboardComponent implements OnInit {
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
                 });
             }
+
+            this.isSubmitted = true;
 
             setTimeout(() => {
                 this.router.navigate(['/fo/onboard/manage']);

@@ -47,7 +47,8 @@ const routes: Routes = [
                     title: 'Client Management',
                     urls: [{ title: 'Checklists' }, { title: 'Edit' }]
                 },
-                canActivate: [CMAuthGuard]
+                canActivate: [CMAuthGuard],
+                canDeactivate: [CanDeactivateGuard]
             },
             {
                 path: 'checklist/manage',

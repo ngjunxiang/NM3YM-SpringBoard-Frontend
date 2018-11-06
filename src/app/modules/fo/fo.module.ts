@@ -42,6 +42,7 @@ import { FOService } from '../../core/services/fo.service';
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
 import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
 import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
+import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.guard';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -98,6 +99,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
+        CanDeactivateGuard,
         ConfirmationService,
         FOService,
         MessageService

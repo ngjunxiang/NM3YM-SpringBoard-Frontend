@@ -11,6 +11,7 @@ import { FOEditOnboardComponent } from './pages/fo-edit-onboard/fo-edit-onboard.
 import { FOFaqViewAllComponent } from './pages/fo-faq-viewall/fo-faq-viewall.component';
 import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myquestions.component';
 import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
+import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.guard';
 
 const routes: Routes = [
     { 
@@ -47,7 +48,8 @@ const routes: Routes = [
                     title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'New' }]
                 }, 
-                canActivate: [FOAuthGuard] 
+                canActivate: [FOAuthGuard],
+                canDeactivate: [CanDeactivateGuard]
             },
             {
                 path: 'onboard/edit/:id',
@@ -56,7 +58,8 @@ const routes: Routes = [
                     title: 'Front Office',
                     urls: [{ title: 'Onboard' }, { title: 'Edit' }]
                 }, 
-                canActivate: [FOAuthGuard] 
+                canActivate: [FOAuthGuard],
+                canDeactivate: [CanDeactivateGuard]
             },
             {
                 path: 'faq/myquestions',

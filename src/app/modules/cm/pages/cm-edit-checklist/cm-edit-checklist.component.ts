@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -6,6 +6,8 @@ import { ConfirmationService } from 'primeng/components/common/confirmationservi
 import { SelectItem, MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
+import { fakeAsync } from '@angular/core/testing';
+import { Observable, Observer } from 'rxjs';
 
 @Component({
     selector: 'cm-edit-checklist',
@@ -31,6 +33,7 @@ export class CMEditChecklistComponent implements OnInit {
     oDisplay = false;
     oEditDisplay = false;
     isSubmitted = false;
+    isDirty = false;
 
     // UI Component
     clName: string;
@@ -142,9 +145,12 @@ export class CMEditChecklistComponent implements OnInit {
         this.loading = false;
     }
 
+    @HostListener('window:beforeunload')
     canDeactivate(): Promise<boolean> | boolean {
         if (this.isSubmitted) return true;
-        if (!this.currentChecklistForm.dirty && !this.complianceDocumentsForm.dirty && !this.legalDocumentsForm.dirty) return true;
+        if (!this.currentChecklistForm.dirty && !this.isDirty ) {
+            return true;
+        }
         return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
     }
 
@@ -868,6 +874,7 @@ export class CMEditChecklistComponent implements OnInit {
 
             this.dialogForm.setControl('conditions', new FormArray([]));
             this.dialogForm.reset();
+            this.isDirty = true;
             return;
         }
 
@@ -917,6 +924,7 @@ export class CMEditChecklistComponent implements OnInit {
         });
         this.dialogForm.setControl('conditions', new FormArray([]));
         this.dialogForm.reset();
+        this.isDirty = true;
     }
 
     cancelAddNewDocument() {
@@ -1010,6 +1018,7 @@ export class CMEditChecklistComponent implements OnInit {
                 control.get(index + '').get('changed').setValue('3');
 
                 this.checkConditionInUse();
+                this.isDirty = true;
             },
             reject: () => {
                 return;

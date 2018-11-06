@@ -96,6 +96,9 @@ export class FOService {
     // PDF URL
     private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
 
+    // Reg51 Notification Endpoint
+    private retrieveReg51NotificationsURL = environment.host + '/app/fo/retrieve-req51-notifications';
+
     constructor(
         private authService: AuthenticationService,
         private http: HttpClient
@@ -124,6 +127,22 @@ export class FOService {
         const postData = this.authService.authItems;
 
         return this.http.post<DashboardResults>(this.retrieveDashboardStatsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveReg51Notification() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrieveReg51NotificationsURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -253,7 +272,7 @@ export class FOService {
         return this.http.post<Response>(this.retrieveAllRMNamesURL, postData, httpOptions)
             .pipe(
                 retry(3),
-            );
+        );
     }
 
     retrieveOnboardProcessDetails(obID) {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { MessageService } from 'primeng/api';
+import { MessageService, Message } from 'primeng/api';
 
 import { ROUTES } from './fo.sidebar-items';
 import { AuthenticationService } from '../../../core/services/authentication.service';
@@ -25,6 +25,7 @@ export class FOComponent implements OnInit {
 
     // UI Control
     sidebarRoutes = ROUTES;
+    reg51Notification: Message[] = [];
 
     // Name & Email
     name: string;
@@ -55,6 +56,7 @@ export class FOComponent implements OnInit {
         });
 
         this.retrieveUserDetails();
+        this.retrieveReg51Notification();
         this.retrieveNotifications();
     }
 
@@ -78,6 +80,19 @@ export class FOComponent implements OnInit {
             this.messageService.add({ 
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
+        });
+    }
+
+    retrieveReg51Notification() {
+        this.foService.retrieveReg51Notification().subscribe(res => {
+            if (res.results.toShow) {
+                this.reg51Notification.push({
+                    key: 'msgs', severity: 'warn',
+                    summary: 'Update Reg51 References',
+                    detail: 'Reg51 has been updated on <b>' + res.results.lastUpdatedDate
+                        + '</b>. Reg51 references in FAQ might be inaccurate.'
+                });
+            }
         });
     }
 
