@@ -1,21 +1,24 @@
 <div>
     <div class="row">
         <div class="col-lg-4 col-sm-6">
-            <p-card title="UNANSWERED QUESTIONS" class="style1">
+            <p-card title="UNANSWERED QUESTIONS" class="style1 clickable" (click)="redirectUnanswered()"  pTooltip="View all unanswered questions"
+            tooltipPosition="right">
                 <hr>
                 <p class="cardP">{{faqUnansweredCount}}</p>
             </p-card>
         </div>
 
         <div class="col-lg-4 col-sm-6">
-            <p-card title="ANSWERED QUESTIONS" class="style1">
+            <p-card title="ANSWERED QUESTIONS" class="style1 clickable" (click)="redirectAnswered()"  pTooltip="View all answered questions"
+            tooltipPosition="right">
                 <hr>
                 <p class="cardP">{{faqAnsweredCount}}</p>
             </p-card>
         </div>
 
         <div class="col-lg-4 col-sm-6">
-            <p-card title="UNCLEANED DATA" class="style1">
+            <p-card title="UNCLEANED DATA" class="style1 clickable" (click)="redirectCleanData()" pTooltip="Proceed to clean data"
+            tooltipPosition="right">
                 <hr>
                 <p class="cardP">{{uncleanedCount}}</p>
             </p-card>

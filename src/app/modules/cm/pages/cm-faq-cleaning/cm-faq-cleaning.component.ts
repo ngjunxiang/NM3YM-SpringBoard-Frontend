@@ -467,6 +467,7 @@ export class CMFaqCleaningComponent implements OnInit {
                 });
 
                 this.trainingModel = false;
+                this.retrieveUncleanedFAQ();
             }
 
             this.loading = false;
@@ -478,8 +479,6 @@ export class CMFaqCleaningComponent implements OnInit {
             this.loading = false;
             this.trainingModel = false;
         });
-
-
     }
 }
 
