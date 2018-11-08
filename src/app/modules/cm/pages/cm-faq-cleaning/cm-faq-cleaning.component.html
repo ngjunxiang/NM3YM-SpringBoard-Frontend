@@ -22,84 +22,107 @@
                     There are no uncleaned data yet!
                 </h5>
             </div>
-            <div [formGroup]="faqTrainerForm">
-                <div formArrayName="questions">
-                    <ng-container *ngFor="let question of faqTrainerForm.get('questions').controls; let i=index">
-                        <div [formGroupName]="i">
-                            <div style="margin-bottom: 5px">
-                                <div class="ui-g">
-                                    <div class="ui-g-12" style="display: flex; margin: 10px">
-                                        <ng-container *ngIf="!expand[i]">
-                                            <button class="ui-button-secondary" style="align-content: center; margin-right: 14px" (click)="expandFAQ(i)" type="text"
-                                                icon="fas fa-plus" pButton></button>
-                                        </ng-container>
-                                        <ng-container *ngIf="expand[i]">
-                                            <button class="ui-button-secondary" style="align-content: center; margin-right: 14px" (click)="expandFAQ(i)" type="text"
-                                                icon="fas fa-minus" pButton></button>
-                                        </ng-container>
-                                        <span class="ui-float-label">
-                                            <input type="text" id="float-input" class="form-control" formControlName="question" (mouseup)="showHighlightedText(i)" pInputText>
-                                            <label for="float-input">Question:</label>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div *ngIf="expand[i]" class="expandContainer" style="margin-bottom: 15px">
-                                    <div style="margin-bottom: 20px">
-                                        <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
-                                            Intent:
+            <ng-container *ngIf="!trainingModel">
+                <div [formGroup]="faqTrainerForm">
+                    <div formArrayName="questions">
+                        <ng-container *ngFor="let question of faqTrainerForm.get('questions').controls; let i=index">
+                            <div [formGroupName]="i">
+                                <div style="margin-bottom: 5px">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12" style="display: flex; margin: 10px">
+                                            <ng-container *ngIf="!expand[i]">
+                                                <button class="ui-button-secondary" style="align-content: center; margin-right: 14px"
+                                                    (click)="expandFAQ(i)" type="text" icon="fas fa-plus" pButton></button>
+                                            </ng-container>
+                                            <ng-container *ngIf="expand[i]">
+                                                <button class="ui-button-secondary" style="align-content: center; margin-right: 14px"
+                                                    (click)="expandFAQ(i)" type="text" icon="fas fa-minus" pButton></button>
+                                            </ng-container>
+                                            <span class="ui-float-label">
+                                                <input type="text" id="float-input" class="form-control"
+                                                    formControlName="question" (mouseup)="showHighlightedText(i)"
+                                                    pInputText>
+                                                <label *ngIf="i == 0" for="float-input">Original Question:</label>
+                                                <label *ngIf="i > 0" for="float-input">Rephrased Question:</label>
+                                            </span>
+                                            <i *ngIf="i > 0" class="fas fa-trash-alt clickable" style="margin-top: 11px; margin-left: 1%; color: #e91224"
+                                                (click)="deleteRephrasedFAQ(i)"></i>
                                         </div>
-                                        <p-dropdown [options]="intents" formControlName="intent" editable="true" placeholder="Select or create an intent"></p-dropdown>
                                     </div>
-                                    <ng-container *ngIf="faqTrainerForm.get('questions').get(i+'').get('entities').length > 0">
-                                        <hr>
-                                    </ng-container>
-                                    <div formArrayName="entities">
-                                        <ng-container *ngFor="let entity of faqTrainerForm.get('questions').get(i+'').get('entities').controls; let j=index">
-                                            <div *ngIf="addEntity" class="ui-g" [formGroupName]="j" style="margin-bottom: 10px;">
-                                                <div class="ui-g-4" style="padding: 0px 10px 0px 0px">
-                                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
-                                                        Selected Word:
-                                                    </div>
-                                                    <input type="text" class="form-control" [style]="{'width':'100%'}" formControlName="word" pInputText>
-                                                </div>
-                                                <div class="ui-g-3" style="padding: 0px 10px 0px 0px">
-                                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
-                                                        Entity:
-                                                    </div>
-                                                    <p-dropdown [options]="entitiesOptions" formControlName="entity" editable="true" [autoWidth]="false" [style]="{'width':'100%'}"
-                                                        placeholder="Create entity"></p-dropdown>
-                                                </div>
-                                                <div class="ui-g-4" style="padding: 0px">
-                                                    <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
-                                                        Synonym:
-                                                    </div>
-                                                    <p-dropdown [options]="synonymsOptions" formControlName="value" (onClick)="retrieveSynonymsOptions(i,j)" editable="true"
-                                                        [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Create synonym"></p-dropdown>
-                                                </div>
-                                                <div class="ui-g-1">
-                                                    <i class="fas fa-trash-alt clickable" style="margin-top: 45%; margin-left: 10%; color: #e91224" (click)="deleteEntity(i,j)"></i>
-                                                </div>
+                                    <div *ngIf="expand[i]" class="expandContainer" style="margin-bottom: 15px">
+                                        <div style="margin-bottom: 20px">
+                                            <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                Intent:
                                             </div>
+                                            <p-dropdown [options]="intents" formControlName="intent" editable="true"
+                                                placeholder="Select or create an intent"></p-dropdown>
+                                        </div>
+                                        <ng-container *ngIf="faqTrainerForm.get('questions').get(i+'').get('entities').length > 0">
+                                            <hr>
                                         </ng-container>
-                                    </div>
-                                    <div *ngIf="highlighted[i] && faqTrainerForm.get('questions').get(i+'').get('intent').value != '' " style="padding-left: 0px">
-                                        <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'" (click)="createEntity(i)" type="text"
-                                            icon="fas fa-plus" pButton></button>
-                                    </div>
-                                    <div *ngIf="!highlighted[i] && faqTrainerForm.get('questions').get(i+'').get('intent').value != '' " style="padding-left: 0px">
-                                        <button style="align-content: center;" label='Select a word from the question to create an entity' type="text" [disabled]="true"
-                                            pButton></button>
+                                        <div formArrayName="entities">
+                                            <ng-container *ngFor="let entity of faqTrainerForm.get('questions').get(i+'').get('entities').controls; let j=index">
+                                                <div *ngIf="addEntity" class="ui-g" [formGroupName]="j" style="margin-bottom: 10px;">
+                                                    <div class="ui-g-4" style="padding: 0px 10px 0px 0px">
+                                                        <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                            Selected Word:
+                                                        </div>
+                                                        <input type="text" class="form-control" [style]="{'width':'100%'}"
+                                                            formControlName="word" pInputText>
+                                                    </div>
+                                                    <div class="ui-g-3" style="padding: 0px 10px 0px 0px">
+                                                        <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                            Entity:
+                                                        </div>
+                                                        <p-dropdown [options]="entitiesOptions" formControlName="entity"
+                                                            editable="true" [autoWidth]="false" [style]="{'width':'100%'}"
+                                                            placeholder="Create entity"></p-dropdown>
+                                                    </div>
+                                                    <div class="ui-g-4" style="padding: 0px">
+                                                        <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
+                                                            Synonym:
+                                                        </div>
+                                                        <p-dropdown [options]="synonymsOptions" formControlName="value"
+                                                            (onClick)="retrieveSynonymsOptions(i,j)" editable="true"
+                                                            [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Create synonym"></p-dropdown>
+                                                    </div>
+                                                    <div class="ui-g-1">
+                                                        <i class="fas fa-trash-alt clickable" style="margin-top: 45%; margin-left: 10%; color: #e91224"
+                                                            (click)="deleteEntity(i,j)"></i>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="highlighted[i] && faqTrainerForm.get('questions').get(i+'').get('intent').value != '' "
+                                            style="padding-left: 0px">
+                                            <button style="align-content: center" label="Add an entity for '{{selectedText[i]}}'"
+                                                (click)="createEntity(i)" type="text" icon="fas fa-plus" pButton></button>
+                                        </div>
+                                        <div *ngIf="!highlighted[i] && faqTrainerForm.get('questions').get(i+'').get('intent').value != '' "
+                                            style="padding-left: 0px">
+                                            <button style="align-content: center;" label='Select a word from the question to create an entity'
+                                                type="text" [disabled]="true" pButton></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
-            </div>
+                <hr style="margin: 10px 2%">
+                <button pButton style="margin-left: 17px" class="ui-button-warning" (click)="createRephrasedFAQ()"
+                    label="Create a rephrased question" type="button" icon="fas fa-plus"></button>
+            </ng-container>
+            <ng-container *ngIf="trainingModel">
+                <h6 style="margin: 10px 10px">Please be patient. It will take a while for the model to be trained.</h6>
+                <p-progressSpinner></p-progressSpinner>
+            </ng-container>
         </p-card>
-        <div *ngIf="faqs.length !== 0">
-            <button pButton style="width:18%; margin: 10px 40%" class="ui-button-rounded" (click)="submitCleanedFAQ()" label="Continue Cleaning"
-                type="button" icon="fab fa-digital-ocean"></button>
+        <div *ngIf="faqs.length !== 0" style="display: flex;">
+            <button pButton style="width:18%; margin: 10px; margin-left: 32%" class="ui-button-rounded ui-button-success"
+                (click)="trainModel()" label="Train Model" type="button" icon="fas fa-check-circle"></button>
+            <button pButton style="width:18%; margin: 10px" class="ui-button-rounded" (click)="submitCleanedFAQ()"
+                label="Continue Cleaning" type="button" icon="fab fa-digital-ocean"></button>
         </div>
     </div>
 </div>
