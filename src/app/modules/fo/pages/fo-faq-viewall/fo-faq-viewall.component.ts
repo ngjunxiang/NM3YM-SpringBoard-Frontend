@@ -310,25 +310,26 @@ export class FOFaqViewAllComponent implements OnInit {
 
     showAnswerDialog(index) {
         this.currentIndex = index;
+        this.similarQn = null;
 
-        this.foService.retrieveSelectedAnsweredFAQ(this.faqs[index].qnIDRef).subscribe(res => {
-            if (res.error) {
+        if (this.faqs[index].qnIDRef) {
+            this.foService.retrieveSelectedAnsweredFAQ(this.faqs[index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.similarQn = res.results;
+                }
+            }, error => {
                 this.messageService.add({
-                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
                 });
-                return;
-            }
-
-            if (res.results) {
-                this.similarQn = res.results;
-            }
-
-            this.answerDialog = true;
-        }, error => {
-            this.messageService.add({
-                key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
-        });
+        }
 
         this.foService.increaseView(this.faqs[index].qnID).subscribe(res => {
             if (res.error) {
@@ -343,6 +344,8 @@ export class FOFaqViewAllComponent implements OnInit {
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
+
+        this.answerDialog = true;
     }
 
     paginate(event) {
