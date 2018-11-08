@@ -13,13 +13,15 @@
                                     <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
                                         Value:
                                     </div>
-                                    <input type="text" class="form-control" formControlName="value" [disabled]="true" pInputText>
+                                    <input type="text" class="form-control" formControlName="value" [disabled]="true"
+                                        pInputText>
                                 </div>
                                 <div class="ui-g-9">
                                     <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
                                         Synonyms:
                                     </div>
                                     <p-chips formControlName="synonyms"></p-chips>
+                                    <p style="font-size: 12px"> *Input synonyms by pressing 'enter'</p>
                                 </div>
                             </div>
                         </ng-container>
@@ -27,8 +29,8 @@
                 </ng-container>
             </div>
         </div>
-        <button pButton type="button" style="left: 45.6%" label="Save All" class="ui-button-raised ui-button-success" [disabled]="loading"
-            (click)="updateSynonyms()"></button>
+        <button pButton type="button" style="left: 45.6%" label="Save All" class="ui-button-raised ui-button-success"
+            [disabled]="loading" (click)="updateSynonyms()"></button>
     </p-card>
     <p-paginator [rows]="10" [totalRecords]="numSynonyms" (onPageChange)="paginate($event)"></p-paginator>
 </div>
