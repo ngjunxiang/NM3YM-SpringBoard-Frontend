@@ -31,6 +31,7 @@ export class FOFaqViewAllComponent implements OnInit {
     questionForm: FormGroup;
     newQuestionForm: FormGroup;
     faqs: any[];
+    similarQn: any;
 
     // Paginator Controls
     numFAQs: number;
@@ -185,21 +186,9 @@ export class FOFaqViewAllComponent implements OnInit {
             }
 
             if (res.results) {
-                for (let i = 0; i < res.results.length; i++) {
-                    let faq = res.results[i];
-
-                    this.faqs.push({
-                        qnID: faq.qnID,
-                        username: faq.username,
-                        question: faq.question,
-                        dateAsked: faq.dateAsked,
-                        views: faq.views,
-                        answer: faq.answer,
-                        dateAnswered: faq.dateAnswered,
-                        CMusername: faq.CMusername,
-                        prevAnswer: faq.prevAnswer,
-                    });
-                }
+                res.results.forEach(faq => {
+                    this.faqs.push(faq);
+                });
 
                 this.numFAQs = this.faqs.length;
                 this.loading = false;
@@ -225,20 +214,9 @@ export class FOFaqViewAllComponent implements OnInit {
             }
 
             if (res.results) {
-                for (let i = 0; i < res.results.length; i++) {
-                    let faq = res.results[i];
-                    this.faqs.push({
-                        qnID: faq.qnID,
-                        username: faq.username,
-                        question: faq.question,
-                        dateAsked: faq.dateAsked,
-                        views: faq.views,
-                        answer: faq.answer,
-                        dateAnswered: faq.dateAnswered,
-                        CMusername: faq.CMusername,
-                        prevAnswer: faq.prevAnswer,
-                    });
-                }
+                res.results.forEach(faq => {
+                    this.faqs.push(faq);
+                });
                 this.numFAQs = this.faqs.length;
                 this.loading = false;
             }
@@ -332,10 +310,28 @@ export class FOFaqViewAllComponent implements OnInit {
 
     showAnswerDialog(index) {
         this.currentIndex = index;
-        this.answerDialog = true;
-        let qnID = this.faqs[index].qnID
+        this.similarQn = null;
 
-        this.foService.increaseView(qnID).subscribe(res => {
+        if (this.faqs[index].qnIDRef) {
+            this.foService.retrieveSelectedAnsweredFAQ(this.faqs[index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.similarQn = res.results;
+                }
+            }, error => {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                });
+            });
+        }
+
+        this.foService.increaseView(this.faqs[index].qnID).subscribe(res => {
             if (res.error) {
                 this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
@@ -348,6 +344,8 @@ export class FOFaqViewAllComponent implements OnInit {
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
+
+        this.answerDialog = true;
     }
 
     paginate(event) {

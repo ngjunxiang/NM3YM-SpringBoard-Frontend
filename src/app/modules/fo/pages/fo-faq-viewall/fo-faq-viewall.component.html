@@ -1,7 +1,7 @@
 <div *ngIf="!loading">
     <form [formGroup]="questionForm" class="search-container">
-        <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar" autocomplete="off"
-            placeholder="What would you like to search for?" required pInputText>
+        <input type="text" formControlName="question" class="form-control" (keyup.enter)="searchFAQ()" id="search-bar"
+            autocomplete="off" placeholder="What would you like to search for?" required pInputText>
         <div class="search-icon" (click)="searchFAQ()">
             <i class="fa fa-search"></i>
         </div>
@@ -13,11 +13,13 @@
             <ng-container *ngIf="!searched">
                 <div style="padding-left: 0px;">
                     <p style="margin-bottom: 2px;">Select Category:</p>
-                    <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option" (onChange)="filterAndSortBy()"></p-dropdown>
+                    <p-dropdown [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option"
+                        (onChange)="filterAndSortBy()"></p-dropdown>
                 </div>
                 <div style="margin-left: 30px;">
                     <p style="margin-bottom: 2px;">Sort By:</p>
-                    <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option" (onChange)="filterAndSortBy()"></p-dropdown>
+                    <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option"
+                        (onChange)="filterAndSortBy()"></p-dropdown>
                 </div>
                 <div class="clickable" style="margin-left: 30px; margin-top: 26px;" (click)="retrieveFAQ()">
                     <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px;">
@@ -25,7 +27,8 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="searched">
-                <div class="clickable" style="display: flex; align-items: center; padding: 0px 0px; margin-top: 5%;" (click)="exitResult()">
+                <div class="clickable" style="display: flex; align-items: center; padding: 0px 0px; margin-top: 5%;"
+                    (click)="exitResult()">
                     <i class="fas fa-angle-double-left fa-2x"></i>
                     <h5 style="margin-bottom: 0px; margin-left: 10px;">Return to view all FAQs</h5>
                 </div>
@@ -34,8 +37,8 @@
 
         <div class="ui-g-4">
             <div>
-                <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 7%;" type="submit" icon="fas fa-share-square"
-                    (click)="showConfirmDialog()"></button>
+                <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 7%;"
+                    type="submit" icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
             </div>
         </div>
     </div>
@@ -50,13 +53,14 @@
         </p-footer>
     </p-dialog>
 
-    <p-dialog styleClass="askDialog" header="Ask a Question" [(visible)]="askDialog" [closable]="true" [modal]="true" [maximizable]="true">
+    <p-dialog styleClass="askDialog" header="Ask a Question" [(visible)]="askDialog" [closable]="true" [modal]="true"
+        [maximizable]="true">
         <div style="margin-top: 10px; font-size: 15px; font-weight: 600">
             You are asking:
         </div>
         <form [formGroup]="newQuestionForm">
-            <textarea class="form-control" formControlName="newQuestion" style="width: 100%; height: 100px;" size="30" #msgInput (keydown.enter)="confirmText(msgInput.value);false"
-                pInputText></textarea>
+            <textarea class="form-control" formControlName="newQuestion" style="width: 100%; height: 100px;" size="30"
+                #msgInput (keydown.enter)="confirmText(msgInput.value);false" pInputText></textarea>
         </form>
 
         <p-footer>
@@ -107,7 +111,8 @@
     </p-card>
 
     <ng-container *ngIf="answerDialog">
-        <p-dialog styleClass="ansDialog" header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
+        <p-dialog styleClass="ansDialog" header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true"
+            [maximizable]="true">
             <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
                 <i>Question:</i>
             </div>
@@ -129,7 +134,7 @@
             <div class="ui-g">
                 <div class="ui-g-10 ansInDialog" style="font-size: 14px; font-weight: 600; color:black;">
                     <div [innerHTML]="faqs[currentIndex].answer"></div>
-                    <ng-container *ngIf="faqs[currentIndex].refPages.length > 0">
+                    <ng-container *ngIf="faqs[currentIndex].refPages && faqs[currentIndex].refPages.length > 0">
                         <p-card styleClass="pageReferences">
                             Refer to the following page(s) on REG51:
                             <ng-container *ngFor="let ref of faqs[currentIndex].refPages; let len=index">
@@ -142,10 +147,19 @@
                             </ng-container>
                         </p-card>
                     </ng-container>
+
+                    <ng-container *ngIf="faqs[currentIndex].qnIDRef">
+                        <p-card styleClass="pageReferences">
+                            Refer to the following similar question: <br>
+                            <ng-container *ngIf="similarQn">
+                                <b>Question: </b>{{similarQn.question}} <br>
+                                <b>Answer: </b>{{similarQn.answer}}
+                            </ng-container>
+                        </p-card>
+                    </ng-container>
                 </div>
 
                 <div class="ui-g-2" style="text-align: right; font-size: 12px; font-weight: 400">
-                    <!-- <p>Answered by: Randy Lai</p> -->
                     <p>Answered on:</p>
                     <p>{{faqs[currentIndex].dateAnswered}}</p>
                 </div>

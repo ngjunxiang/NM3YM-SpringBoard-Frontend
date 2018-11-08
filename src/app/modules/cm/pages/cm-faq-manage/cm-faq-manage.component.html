@@ -149,10 +149,10 @@
                                     </ng-container>
 
                                     <!-- Display similar questions -->
-                                    <ng-container *ngIf="selectedSimilarFaq !== -1 || showAnsEditArea">
+                                    <ng-container *ngIf="(selectedSimilarFaq !== -1 || showAnsEditArea) && similarFaqs">
                                         <div class="ui-g-10">
                                             <div style="font-size: 12px; font-weight: 600;">
-                                                <i>Top 3 similar FAQs:</i>
+                                                <i>Top {{similarFaqs.length}} similar FAQs:</i>
                                             </div>
                                             <p-accordion>
                                                 <ng-container *ngFor="let similarFaq of similarFaqs; let i=index">
@@ -306,17 +306,17 @@
                             <p-card styleClass="pageReferences">
                                 Refer to the following similar question: <br>
                                 <ng-container *ngIf="similarQn">
-                                    Question: {{similarQn.question}} <br>
-                                    Answer: {{similarQn.answer}}
+                                    <b>Question: </b>{{similarQn.question}} <br>
+                                    <b>Answer: </b>{{similarQn.answer}}
                                 </ng-container>
                             </p-card>
                         </ng-container>
                     </ng-container>
 
                     <!-- Display similar questions -->
-                    <ng-container *ngIf="selectedSimilarFaq !== -1 || showAnsEditArea">
+                    <ng-container *ngIf="(selectedSimilarFaq !== -1 || showAnsEditArea) && similarFaqs">
                         <div style="font-size: 12px; font-weight: 600;">
-                            <i>Top 3 similar FAQs:</i>
+                            <i>Top {{similarFaqs.length}} similar FAQs:</i>
                         </div>
                         <p-accordion>
                             <ng-container *ngFor="let similarFaq of similarFaqs; let i=index">

@@ -384,10 +384,11 @@ export class CMService {
                 'qnID': updatedFaq.qnID,
                 'question': updatedFaq.question,
                 'answer': updatedFaq.answer,
-                'refPages': updatedFaq.PDFPages
+                'refPages': updatedFaq.PDFPages,
+                'qnIDRef': updatedFaq.qnIDRef
             }
         };
-
+        
         const postData = Object.assign(this.authService.authItems, updateQuestionData);
 
         return this.http.post<Response>(this.updateAnsweredFAQURL, postData, httpOptions)
