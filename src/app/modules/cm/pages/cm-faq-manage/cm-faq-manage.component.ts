@@ -335,7 +335,7 @@ export class CMFaqManageComponent implements OnInit {
 
         this.answerForm.get('editedAnswer').setValue(this.faqs[index].answer);
 
-        this.cmService.retrieveSimilarFaq(this.faqs[this.currentIndex].question, 3).subscribe(res => {
+        this.cmService.retrieveSimilarFaq(this.faqs[this.currentIndex].question, 4).subscribe(res => {
             if (res.error) {
                 this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
@@ -348,15 +348,21 @@ export class CMFaqManageComponent implements OnInit {
 
                 let i = 0;
                 res.results.forEach(similarFaq => {
-                    if (!similarFaq.qnIDRef) {
+                    if (similarFaq.qnID !== this.faqs[this.currentIndex].qnID && !similarFaq.qnIDRef) {
                         this.similarFaqs.push(similarFaq);
+                    } else {
+                        i--;
                     }
                     if (this.similarQn && similarFaq.qnID === this.similarQn.qnID) {
                         this.selectedSimilarFaq = i;
-                        i++;
                     }
+                    i++;
                 });
-                console.log(this.selectedSimilarFaq)
+
+                if (this.similarFaqs.length === 0) {
+                    this.similarFaqs = null;
+                }
+
                 this.loadingEditArea = false;
                 this.showAnsEditArea = true;
             }
@@ -421,8 +427,9 @@ export class CMFaqManageComponent implements OnInit {
 
             if (res.results) {
                 this.similarFaqs = [];
+                console.log(res.results)
                 res.results.forEach(similarFaq => {
-                    if (!similarFaq.qnIDRef) {
+                    if (similarFaq.qnID !== this.faqs[this.currentIndex].qnID && !similarFaq.qnIDRef) {
                         this.similarFaqs.push(similarFaq);
                     }
                 });
@@ -447,7 +454,6 @@ export class CMFaqManageComponent implements OnInit {
     hideAnsEditArea() {
         this.selectedSimilarFaq = -1;
         this.similarFaqs = null;
-        this.similarQn = null;
         if (this.answerForm) {
             this.answerForm.get('addedAnswer').setValue('');
             this.answerForm.get('editedAnswer').setValue('');
@@ -562,6 +568,7 @@ export class CMFaqManageComponent implements OnInit {
 
         if (this.selectedSimilarFaq !== -1) {
             updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID
+            updatedFaq['answer'] = '';
         }
 
         this.cmService.updateAnsweredFAQ(updatedFaq).subscribe(res => {
@@ -581,6 +588,12 @@ export class CMFaqManageComponent implements OnInit {
             }
 
             this.hideAnsEditArea();
+            this.loadPage();
+
+            if (updatedFaq.qnIDRef) {
+                this.loadSimilarFaq(updatedFaq.qnIDRef);
+            }
+
             this.processing = false;
         }, error => {
             this.messageService.add({

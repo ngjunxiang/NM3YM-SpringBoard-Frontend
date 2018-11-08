@@ -92,6 +92,7 @@ export class FOService {
     private retrieveFAQByCategoryAndSortURL = environment.host + '/app/faq/retrieve-allAQBy';
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveIntentsURL = environment.host + '/app/train/retrieve-intents';
+    private retrieveSelectedAnsweredFAQURL = environment.host + '/app/faq/retrieve-AQ';
 
     // PDF URL
     private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
@@ -289,6 +290,26 @@ export class FOService {
         const postData = Object.assign(this.authService.authItems, obIDData);
 
         return this.http.post<ObList>(this.retrieveOnboardProcessDetailsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveSelectedAnsweredFAQ(qnID) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const selectedAQ = {
+            'qnID': qnID
+        };
+
+        const postData = Object.assign(this.authService.authItems, selectedAQ);
+
+        return this.http.post<Response>(this.retrieveSelectedAnsweredFAQURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
