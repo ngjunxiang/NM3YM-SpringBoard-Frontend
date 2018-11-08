@@ -280,7 +280,7 @@
             <div class="ui-g">
                 <div class="ui-g-10 ansInDialog" style="color:black;">
                     <ng-container *ngIf="!showAnsEditArea && selectedSimilarFaq === -1">
-                        <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
+                        <div style="font-size: 12px; font-weight: 600; padding-left: 0px">
                             <i>Answer:</i>
                         </div>
                         <div style="font-size: 14px; font-weight: 600; color:black;" [innerHTML]="faqs[currentIndex].answer"></div>
@@ -336,7 +336,7 @@
 
                     <!--EDITING ANSWER MODE-->
                     <ng-container *ngIf="showAnsEditArea && selectedSimilarFaq === -1">
-                        <div style="font-size: 12px; font-weight: 600; padding-left: 7px; padding-top: 1.5%">
+                        <div style="font-size: 12px; font-weight: 600; padding-left: 0px; padding-top: 1.5%">
                             <i>Answer:</i>
                         </div>
                         <!--MULTISELECT COMPONENT TO SELECT THE REFERENCE PAGES-->

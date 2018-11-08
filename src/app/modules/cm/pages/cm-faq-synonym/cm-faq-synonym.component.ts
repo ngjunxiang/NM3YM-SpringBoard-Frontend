@@ -97,6 +97,7 @@ export class CMFaqSynonymComponent implements OnInit {
     let synonymsDict = {};
     let synControl = <FormArray>this.synonymForm['controls'].form;
 
+
     for (let i = 0; i < synControl.length; i++) {
       synControl.get(i + '').get('value').markAsDirty();
       synControl.get(i + '').get('synonyms').markAsDirty();
@@ -129,6 +130,7 @@ export class CMFaqSynonymComponent implements OnInit {
         this.messageService.add({ 
           key: 'msgs', severity: 'success', summary: 'Success', detail: "All synonyms have been updated."
         });
+
       }
     }, error => {
       this.messageService.add({ 

@@ -37,7 +37,7 @@ export class CMDashboardComponent implements OnInit {
     uncleanedCount: number;
     updatedChecklists: any[];
     mostRecentQns: any[];
-    tempDate : string; 
+    tempDate: string;
 
     //Fake Data 
     data1: any;
@@ -61,7 +61,7 @@ export class CMDashboardComponent implements OnInit {
 
         this.cmService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
@@ -71,16 +71,16 @@ export class CMDashboardComponent implements OnInit {
             this.faqUnansweredCount = res.results.unansweredCount;
             this.updatedChecklists = res.updatedChecklists;
             this.mostRecentQns = res.mostRecentQuestions;
-            
+
             this.updatedChecklists.forEach(checklist => {
-                this.tempDate = checklist.dateUpdated.slice(0,10)
+                this.tempDate = checklist.dateUpdated.slice(0, 10)
                 checklist.dateUpdated = this.tempDate
             })
         })
 
         this.cmService.retrieveUncleanedFAQ().subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.loading = false;
@@ -92,7 +92,7 @@ export class CMDashboardComponent implements OnInit {
             }
 
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             this.loading = false;
@@ -128,19 +128,28 @@ export class CMDashboardComponent implements OnInit {
             { label: "2016", value: 2016 },
         ];
 
-        this.checklists = [
-            { name: "Individual Onboard Checklist", modifiedDate: "15/9/2018" },
-            { name: "Corporate Onboard Checklist", modifiedDate: "10/9/2018" },
-            { name: "Individual Review Checklist", modifiedDate: "30/8/2018" },
-            { name: "Corporate Review Checklist", modifiedDate: "21/8/2018" },
-            { name: "Individual Onboard Checklist", modifiedDate: "15/9/2018" },
-            { name: "Corporate Onboard Checklist", modifiedDate: "10/9/2018" },
-            { name: "Individual Review Checklist", modifiedDate: "30/8/2018" },
-            { name: "Corporate Review Checklist", modifiedDate: "21/8/2018" },
-        ];
 
-        
         this.loading = false;
+    }
+
+    redirectAnswered() {
+        this.router.navigate(['cm/faq/manage'], {
+            queryParams: {
+                activeTab: 1
+            }
+        });
+    }
+
+    redirectUnanswered() {
+        this.router.navigate(['cm/faq/manage'], {
+            queryParams: {
+                activeTab: 0
+            }
+        });
+    }
+
+    redirectCleanData() {
+        this.router.navigate(['cm/faq/clean']);
     }
 
 }

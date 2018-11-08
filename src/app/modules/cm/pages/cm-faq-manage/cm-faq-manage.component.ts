@@ -600,7 +600,6 @@ export class CMFaqManageComponent implements OnInit {
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
-            this.hideAnsEditArea();
         });
     }
 
@@ -659,7 +658,6 @@ export class CMFaqManageComponent implements OnInit {
             this.processing = false;
             this.selectedSimilarFaq = -1;
             this.unansweredDialog = false;
-            this.hideAnsEditArea();
         });
     }
 

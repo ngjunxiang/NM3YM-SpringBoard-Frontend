@@ -49,6 +49,10 @@ p-card {
     background-color: black;
 }
 
+.clickable{
+    cursor: pointer;
+}
+
 .style1  {
     height: 100%;
     width: 100%;
