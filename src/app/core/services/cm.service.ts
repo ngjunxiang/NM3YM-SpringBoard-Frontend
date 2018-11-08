@@ -55,7 +55,6 @@ interface Response {
 
 export class CMService {
     // Dashboard Endpoints
-
     private retrieveDashboardStatsURL = environment.host + '/app/cm/retrieve-dashboard';
 
     // Checklist Endpoints
