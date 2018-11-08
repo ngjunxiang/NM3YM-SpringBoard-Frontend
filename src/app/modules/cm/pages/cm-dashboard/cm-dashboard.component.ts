@@ -71,7 +71,7 @@ export class CMDashboardComponent implements OnInit {
             this.faqUnansweredCount = res.results.unansweredCount;
             this.updatedChecklists = res.updatedChecklists;
             this.mostRecentQns = res.mostRecentQuestions;
-
+            
             this.updatedChecklists.forEach(checklist => {
                 this.tempDate = checklist.dateUpdated.slice(0, 10)
                 checklist.dateUpdated = this.tempDate

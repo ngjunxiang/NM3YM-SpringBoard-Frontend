@@ -51,7 +51,7 @@ export class CMFaqCleaningComponent implements OnInit {
         private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
-    ) { }
+    ) {}
 
     ngOnInit() {
         this.loading = true;
@@ -74,6 +74,7 @@ export class CMFaqCleaningComponent implements OnInit {
                 this.numUncleaned = res.numUnclean;
             }
 
+            console.log(this.faqs)
             this.createForm();
         }, error => {
             this.messageService.add({
@@ -184,6 +185,9 @@ export class CMFaqCleaningComponent implements OnInit {
 
     createRephrasedFAQ() {
         this.numFAQs++;
+        this.faqs.push({
+            qnID: ""
+        })
         let control = <FormArray>this.faqTrainerForm['controls'].questions;
 
         control.push(

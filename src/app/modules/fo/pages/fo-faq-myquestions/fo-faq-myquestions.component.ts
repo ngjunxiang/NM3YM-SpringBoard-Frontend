@@ -70,7 +70,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
                 return;
             }
 
-            if (res.results && this.activeTab === 0) {
+            if (res.results && this.activeTab == 0) {
                 this.faqs = res.results.answered;
             } else {
                 this.faqs = res.results.unanswered;

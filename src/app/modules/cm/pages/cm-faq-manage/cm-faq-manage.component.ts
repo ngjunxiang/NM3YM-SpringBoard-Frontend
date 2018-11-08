@@ -68,6 +68,7 @@ export class CMFaqManageComponent implements OnInit {
             this.activeTab = params['activeTab'];
         });
 
+
         if (!this.activeTab) {
             this.activeTab = 0;
         }
@@ -112,7 +113,7 @@ export class CMFaqManageComponent implements OnInit {
         this.selectedCategory = '';
         this.selectedSortBy = '';
 
-        if (this.activeTab === 0) {
+        if (this.activeTab == 0) {
             this.disable = true;
             this.cmService.retrieveUnansweredFAQ().subscribe(res => {
                 if (res.error) {
@@ -592,7 +593,6 @@ export class CMFaqManageComponent implements OnInit {
 
     saveUnansweredQuestion(index: number) {
         this.answerForm.controls.addedAnswer.markAsDirty();
-        this.unansweredDialog = false;
 
         if (this.selectedSimilarFaq === -1 && this.answerForm.controls.addedAnswer.invalid) {
             this.messageService.add({

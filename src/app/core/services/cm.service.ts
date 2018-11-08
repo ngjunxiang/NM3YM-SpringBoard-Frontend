@@ -79,6 +79,7 @@ export class CMService {
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private retrieveCMFAQURL = environment.host + '/app/faq/retrieve-cmUserQNA';
+    
 
     // NLU Model Endpoints 
     private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
@@ -95,6 +96,7 @@ export class CMService {
 
     // PDF URL
     private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
+    private retrievePdfLengthURL = environment.host + '/app/faq/retrieve-reg51-num-pages';
 
     // Reg51 Notification Endpoint
     private retrieveReg51NotificationsURL = environment.host + '/app/cm/retrieve-req51-notifications';
@@ -595,6 +597,21 @@ export class CMService {
             );
     }
 
+    retrievePdfLength() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const postData = Object.assign(this.authService.authItems);
+
+        return this.http.post<Response>(this.retrievePdfLengthURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 
     retrieveUncleanedFAQ() {
         const httpOptions = {
