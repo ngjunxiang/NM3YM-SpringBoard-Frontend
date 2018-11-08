@@ -156,3 +156,13 @@ input#search-bar{
 :host >>> .ui-paginator {
   margin: 0px 3.5px;
 }
+
+
+.cButton {
+    margin: 0;
+    color: #ffffff;
+    background-color: #499ad8 !important;
+    border: 1px solid #499ad8 !important;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}

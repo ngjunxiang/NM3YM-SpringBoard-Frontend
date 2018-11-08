@@ -245,7 +245,15 @@ export class CMFaqMyAnswersComponent implements OnInit {
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.selectedPages).subscribe(res => {
+        let updatedFaq = {
+            'qnID': this.faqs[index].qnID,
+            'question': this.faqs[index].question,
+            'answer': this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim(),
+            'PDFPages': this.selectedPages,
+            'qnIDRef': null
+        };
+
+        this.cmService.updateAnsweredFAQ(updatedFaq).subscribe(res => {
             this.processing = true;
             this.selectedFAQ = this.faqs[index].question;
             if (res.error) {

@@ -25,6 +25,7 @@ export class CMFaqManageComponent implements OnInit {
     historyDialog = false;
     unansweredDialog = false;
     currentIndex: number;
+    selectedSimilarFaq: number = -1;
     searched = false;
     disable: boolean;
 
@@ -43,6 +44,8 @@ export class CMFaqManageComponent implements OnInit {
     answerForm: FormGroup;
     questionForm: FormGroup;
     searchForm: FormGroup;
+    similarFaqs: any[];
+    similarQn: any;
 
     // Paginator Controls
     numFAQs: number;
@@ -86,6 +89,8 @@ export class CMFaqManageComponent implements OnInit {
         //Showing First 10 in the page 
         this.firstIndex = 0;
         this.lastIndex = 10;
+
+        this.selectedPages = [];
 
         //initialize PDF pages
         for (let i = 1; i < 72; i++) {
@@ -165,11 +170,12 @@ export class CMFaqManageComponent implements OnInit {
                             CMusername: faq.CMusername,
                             prevAnswer: faq.prevAnswer,
                             intent: faq.intent,
-                            refPages: faq.refPages
+                            refPages: faq.refPages,
+                            qnIDRef: faq.qnIDRef
                         });
                     }
                 }
-                console.log(this.faqs)
+
                 this.numFAQs = this.faqs.length
                 this.loading = false;
             }, error => {
@@ -229,7 +235,8 @@ export class CMFaqManageComponent implements OnInit {
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
                         intent: faq.intent,
-                        refPages: faq.refPages
+                        refPages: faq.refPages,
+                        qnIDRef: faq.qnIDRef
                     });
                 }
             }
@@ -295,7 +302,8 @@ export class CMFaqManageComponent implements OnInit {
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
-                        intent: faq.intent
+                        intent: faq.intent,
+                        qnIDRef: faq.qnIDRef
                     });
                 }
                 this.numFAQs = this.faqs.length;
@@ -327,8 +335,36 @@ export class CMFaqManageComponent implements OnInit {
 
         this.answerForm.get('editedAnswer').setValue(this.faqs[index].answer);
 
-        this.loadingEditArea = false;
-        this.showAnsEditArea = true;
+        this.cmService.retrieveSimilarFaq(this.faqs[this.currentIndex].question, 3).subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.similarFaqs = [];
+
+                let i = 0;
+                res.results.forEach(similarFaq => {
+                    if (!similarFaq.qnIDRef) {
+                        this.similarFaqs.push(similarFaq);
+                    }
+                    if (this.similarQn && similarFaq.qnID === this.similarQn.qnID) {
+                        this.selectedSimilarFaq = i;
+                        i++;
+                    }
+                });
+                console.log(this.selectedSimilarFaq)
+                this.loadingEditArea = false;
+                this.showAnsEditArea = true;
+            }
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+        });
     }
 
     showEditQuestionArea() {
@@ -375,8 +411,30 @@ export class CMFaqManageComponent implements OnInit {
             editedAnswer: new FormControl('', Validators.required)
         });
 
-        this.loadingEditArea = false;
-        this.showAnsEditArea = true;
+        this.cmService.retrieveSimilarFaq(this.faqs[this.currentIndex].question, 3).subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.similarFaqs = [];
+                res.results.forEach(similarFaq => {
+                    if (!similarFaq.qnIDRef) {
+                        this.similarFaqs.push(similarFaq);
+                    }
+                });
+
+                this.loadingEditArea = false;
+                this.showAnsEditArea = true;
+            }
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+        });
     }
 
     hideAnswerDialog() {
@@ -387,11 +445,15 @@ export class CMFaqManageComponent implements OnInit {
 
 
     hideAnsEditArea() {
+        this.selectedSimilarFaq = -1;
+        this.similarFaqs = null;
+        this.similarQn = null;
         if (this.answerForm) {
             this.answerForm.get('addedAnswer').setValue('');
             this.answerForm.get('editedAnswer').setValue('');
         }
         this.showAnsEditArea = false;
+        this.hideEditQuestionArea();
         this.historyDialog = false;
     }
 
@@ -422,12 +484,18 @@ export class CMFaqManageComponent implements OnInit {
 
                     this.processing = false;
                     this.answeredDialog = false;
+                    this.selectedSimilarFaq = -1;
+                    this.similarFaqs = null;
+                    this.similarQn = null;
                 }, error => {
                     this.messageService.add({
                         key: 'msgs', severity: 'error', summary: 'Error', detail: error
                     });
                     this.processing = false;
                     this.answeredDialog = false;
+                    this.selectedSimilarFaq = -1;
+                    this.similarFaqs = null;
+                    this.similarQn = null;
                 });
             },
             reject: () => {
@@ -477,14 +545,26 @@ export class CMFaqManageComponent implements OnInit {
     saveAnsweredQuestion(index: number) {
         this.answerForm.controls.editedAnswer.markAsDirty();
 
-        if (this.answerForm.controls.editedAnswer.invalid) {
+        if (this.selectedSimilarFaq === -1 && this.answerForm.controls.editedAnswer.invalid) {
             this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
 
-        this.cmService.updateAnsweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.selectedPages).subscribe(res => {
+        let updatedFaq = {
+            'qnID': this.faqs[index].qnID,
+            'question': this.faqs[index].question,
+            'answer': this.answerForm.get('editedAnswer').value.replace(/&nbsp;/g, ' ').trim(),
+            'PDFPages': this.selectedPages,
+            'qnIDRef': null
+        };
+
+        if (this.selectedSimilarFaq !== -1) {
+            updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID
+        }
+
+        this.cmService.updateAnsweredFAQ(updatedFaq).subscribe(res => {
             this.processing = true;
             if (res.error) {
                 this.messageService.add({
@@ -515,14 +595,27 @@ export class CMFaqManageComponent implements OnInit {
         this.answerForm.controls.addedAnswer.markAsDirty();
         this.unansweredDialog = false;
 
-        if (this.answerForm.controls.addedAnswer.invalid) {
+        if (this.selectedSimilarFaq === -1 && this.answerForm.controls.addedAnswer.invalid) {
             this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the answer field'
             });
             return;
         }
 
-        this.cmService.updateUnansweredFAQ(this.faqs[index].qnID, this.faqs[index].question, this.answerForm.get('addedAnswer').value.replace(/&nbsp;/g, ' ').trim(), this.selectedPages, this.faqs[index].username).subscribe(res => {
+        let updatedFaq = {
+            'qnID': this.faqs[index].qnID,
+            'question': this.faqs[index].question,
+            'answer': this.answerForm.get('addedAnswer').value.replace(/&nbsp;/g, ' ').trim(),
+            'PDFPages': this.selectedPages,
+            'username': this.faqs[index].username,
+            'qnIDRef': null
+        };
+
+        if (this.selectedSimilarFaq !== -1) {
+            updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID
+        }
+
+        this.cmService.updateUnansweredFAQ(updatedFaq).subscribe(res => {
             this.processing = true;
 
             if (res.error) {
@@ -542,6 +635,7 @@ export class CMFaqManageComponent implements OnInit {
             }
 
             this.hideAnsEditArea();
+            this.selectedSimilarFaq = -1;
             this.unansweredDialog = false;
             this.processing = false;
 
@@ -550,6 +644,7 @@ export class CMFaqManageComponent implements OnInit {
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
+            this.selectedSimilarFaq = -1;
             this.unansweredDialog = false;
             this.hideAnsEditArea();
         });
@@ -567,7 +662,7 @@ export class CMFaqManageComponent implements OnInit {
     }
 
     showAnsweredDialog(index) {
-        if (this.faqs[index].refPages.length > 0) {
+        if (this.faqs[index].refPages && this.faqs[index].refPages.length > 0) {
             this.includePDF = true;
             this.selectedPages = this.faqs[index].refPages;
         } else {
@@ -575,6 +670,11 @@ export class CMFaqManageComponent implements OnInit {
             this.selectedPages = [];
         }
         this.currentIndex = index;
+        console.log(this.faqs[this.currentIndex])
+        if (this.faqs[this.currentIndex].qnIDRef) {
+            this.loadSimilarFaq(this.faqs[this.currentIndex].qnIDRef);
+        }
+
         this.answeredDialog = true;
     }
 
@@ -595,5 +695,34 @@ export class CMFaqManageComponent implements OnInit {
         this.lastIndex = this.firstIndex + 10;
         let el = document.getElementById("scrollHere")
         el.scrollIntoView();
+    }
+
+    selectSimilarFaq(index: number) {
+        this.selectedSimilarFaq = index;
+        this.showAnsEditArea = false;
+    }
+
+    deselectSimilarFaq() {
+        this.showAnsEditArea = true;
+        this.selectedSimilarFaq = -1;
+    }
+
+    loadSimilarFaq(qnID) {
+        this.cmService.retrieveSelectedAnsweredFAQ(qnID).subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                this.similarQn = res.results;
+            }
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+        });
     }
 }
