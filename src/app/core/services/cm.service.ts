@@ -72,13 +72,14 @@ export class CMService {
     private updateUnansweredFAQURL = environment.host + '/app/faq/add-AQ';
     private deleteUnansweredFAQURL = environment.host + '/app/faq/delete-UQ';
     private retrieveAnsweredFAQURL = environment.host + '/app/faq/retrieve-allAQ';
+    private retrieveSelectedAnsweredFAQURL = environment.host + '/app/faq/retrieve-AQ';
     private updateAnsweredFAQURL = environment.host + '/app/faq/edit-AQ';
     private deleteAnsweredFAQURL = environment.host + '/app/faq/delete-AQ';
     private retrieveFAQByCategoryAndSortURL = environment.host + '/app/faq/retrieve-allAQBy';
     private retrieveFAQByCategoryURL = environment.host + '/app/train/retrieve-byIntent';
     private retrieveFAQURL = environment.host + '/app/faq/retrieve';
     private retrieveCMFAQURL = environment.host + '/app/faq/retrieve-cmUserQNA';
-    
+
     // NLU Model Endpoints 
     private returnCleanedFAQURL = environment.host + '/app/train/store-cleaned'
     private retrieveUncleanedFAQURL = environment.host + '/app/train/retrieve-unclean';
@@ -333,6 +334,26 @@ export class CMService {
     }
 
 
+    retrieveSelectedAnsweredFAQ(qnID) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const selectedAQ = {
+            'qnID': qnID
+        };
+
+        const postData = Object.assign(this.authService.authItems, selectedAQ);
+
+        return this.http.post<Response>(this.retrieveSelectedAnsweredFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     retrieveAnsweredFAQ() {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -349,7 +370,7 @@ export class CMService {
             );
     }
 
-    updateAnsweredFAQ(qnID, question, answer, PDFPages) {
+    updateAnsweredFAQ(updatedFaq) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -358,10 +379,10 @@ export class CMService {
 
         const updateQuestionData = {
             'qna': {
-                'qnID': qnID,
-                'question': question,
-                'answer': answer,
-                'refPages': PDFPages
+                'qnID': updatedFaq.qnID,
+                'question': updatedFaq.question,
+                'answer': updatedFaq.answer,
+                'refPages': updatedFaq.PDFPages
             }
         };
 
@@ -411,7 +432,7 @@ export class CMService {
             );
     }
 
-    updateUnansweredFAQ(qnID, question, answer, PDFPages, username) {
+    updateUnansweredFAQ(updatedFaq) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -420,11 +441,12 @@ export class CMService {
 
         const updateQuestionData = {
             'qna': {
-                'qnID': qnID,
-                'question': question,
-                'answer': answer,
-                'refPages': PDFPages,
-                'username': username
+                'qnID': updatedFaq.qnID,
+                'question': updatedFaq.question,
+                'answer': updatedFaq.answer,
+                'refPages': updatedFaq.PDFPages,
+                'username': updatedFaq.username,
+                'qnIDRef': updatedFaq.qnIDRef
             }
         };
 
@@ -467,6 +489,27 @@ export class CMService {
 
         const questionData = {
             'question': question
+        };
+
+        const postData = Object.assign(this.authService.authItems, questionData);
+
+        return this.http.post<Response>(this.retrieveFAQURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    retrieveSimilarFaq(question, num) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const questionData = {
+            'question': question,
+            'num': num
         };
 
         const postData = Object.assign(this.authService.authItems, questionData);
