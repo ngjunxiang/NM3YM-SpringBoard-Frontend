@@ -71,12 +71,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
         this.loadPage();
 
         //initialize PDF pages
-        for (let i = 1; i < 72; i++) {
-            this.pdfPages.push({
-                label: i,
-                value: i
-            });
-        }
+        this.retrievePDFLength();
     }
 
     loadPage() {
@@ -315,6 +310,32 @@ export class CMFaqMyAnswersComponent implements OnInit {
             if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
                 alert('Please disable your pop-up blocker and try again.');
             }
+        });
+    }
+
+    retrievePDFLength() {
+        this.cmService.retrievePdfLength().subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                let numPages = res.results.pageCount;
+                for (let i = 1; i <= numPages; i++) {
+                    this.pdfPages.push({
+                        label: "" + i,
+                        value: i
+                    });
+                }
+            }
+
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
         });
     }
 
