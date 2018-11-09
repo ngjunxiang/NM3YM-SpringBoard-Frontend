@@ -52,10 +52,10 @@
                                     <div *ngIf="expand[i]" class="expandContainer" style="margin-bottom: 15px">
                                         <div style="margin-bottom: 20px">
                                             <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
-                                                Intent:
+                                                Category:
                                             </div>
                                             <p-dropdown [options]="intents" formControlName="intent" editable="true"
-                                                placeholder="Select or create an intent"></p-dropdown>
+                                                placeholder="Select or create a category"></p-dropdown>
                                         </div>
                                         <ng-container *ngIf="faqTrainerForm.get('questions').get(i+'').get('entities').length > 0">
                                             <hr>
@@ -72,11 +72,11 @@
                                                     </div>
                                                     <div class="ui-g-3" style="padding: 0px 10px 0px 0px">
                                                         <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
-                                                            Entity:
+                                                            Type:
                                                         </div>
                                                         <p-dropdown [options]="entitiesOptions" formControlName="entity"
                                                             editable="true" [autoWidth]="false" [style]="{'width':'100%'}"
-                                                            placeholder="Create entity"></p-dropdown>
+                                                            placeholder="Create type"></p-dropdown>
                                                     </div>
                                                     <div class="ui-g-4" style="padding: 0px">
                                                         <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">

@@ -603,7 +603,8 @@ export class CMNewChecklistComponent implements OnInit {
     addNewDocument(docType: string) {
         let i = (+this.dialogForm.get('conditions')['length'] - 1) + '';
 
-        if (+i > 0 && this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
+        if (this.dialogForm.get('hasConditions').value &&
+            this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
             && this.dialogForm.get('conditions').get(i).get('conditionOption').value === '') {
             let control = <FormArray>this.dialogForm.get('conditions');
             control.removeAt(+i);
@@ -617,8 +618,11 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm.get('documentType').markAsDirty();
         this.dialogForm.get('agmtCode').markAsDirty();
 
-        if ((+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
+        if ((this.dialogForm.get('hasConditions').value
+            && this.dialogForm.get('conditions').get('0').get('conditionName').value !== ''
+            && this.dialogForm.get('conditions').get('0').get('conditionOption').value === '') ||
+            (+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
+                this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
             this.dialogForm.get('documentName').invalid ||
             this.dialogForm.get('documentType').invalid ||
             this.dialogForm.get('agmtCode').invalid) {

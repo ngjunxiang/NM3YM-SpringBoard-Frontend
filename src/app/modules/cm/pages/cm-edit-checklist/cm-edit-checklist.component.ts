@@ -148,7 +148,7 @@ export class CMEditChecklistComponent implements OnInit {
     @HostListener('window:beforeunload')
     canDeactivate(): Promise<boolean> | boolean {
         if (this.isSubmitted) return true;
-        if (!this.currentChecklistForm.dirty && !this.isDirty ) {
+        if (!this.currentChecklistForm.dirty && !this.isDirty) {
             return true;
         }
         return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
@@ -179,7 +179,7 @@ export class CMEditChecklistComponent implements OnInit {
     retrieveAgmtCodes() {
         this.cmService.retrieveAgmtCodes().subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
             }
@@ -191,7 +191,7 @@ export class CMEditChecklistComponent implements OnInit {
                 });
             }
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
@@ -222,7 +222,7 @@ export class CMEditChecklistComponent implements OnInit {
                 }
             });
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
@@ -398,7 +398,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.loading = true;
         this.cmService.retrieveCMChecklistDetails(checklistId).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
@@ -489,7 +489,7 @@ export class CMEditChecklistComponent implements OnInit {
                         documentType: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentType']),
                         agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode']),
                         signature: new FormControl(res.complianceDocuments['optional'][optionalDoc]['signature']),
-                        canWaiver: new FormControl(res.legalDocuments['mandatory'][optionalDoc]['canWaiver']),
+                        canWaiver: new FormControl(res.legalDocuments['optional'][optionalDoc]['canWaiver']),
                         remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks']),
                         docID: new FormControl(res.complianceDocuments['optional'][optionalDoc]['docID']),
                         changed: new FormControl(res.complianceDocuments['optional'][optionalDoc]['changed'])
@@ -559,7 +559,7 @@ export class CMEditChecklistComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
@@ -573,7 +573,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         if (this.currentChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.currentChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the condition name and options highlighted before adding another condition'
             });
             return;
@@ -610,7 +610,7 @@ export class CMEditChecklistComponent implements OnInit {
         this.currentChecklistForm.get('requiredFields').get(i).get('fieldName').markAsDirty();
 
         if (this.currentChecklistForm.get('requiredFields').get(i).get('fieldName').invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the field name before adding another field'
             });
             return;
@@ -734,7 +734,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         if (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
             this.dialogForm.get('conditions').get(i).get('conditionOption').invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please fill in the condition name and options using the dropdown menu before adding another condition'
             });
             return;
@@ -770,7 +770,8 @@ export class CMEditChecklistComponent implements OnInit {
     addNewDocument(docType: string) {
         let i = (+this.dialogForm.get('conditions')['length'] - 1) + '';
 
-        if (+i > 0 && this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
+        if (this.dialogForm.get('hasConditions').value &&
+            this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
             && this.dialogForm.get('conditions').get(i).get('conditionOption').value === '') {
             let control = <FormArray>this.dialogForm.get('conditions');
             control.removeAt(+i);
@@ -784,12 +785,15 @@ export class CMEditChecklistComponent implements OnInit {
         this.dialogForm.get('documentType').markAsDirty();
         this.dialogForm.get('agmtCode').markAsDirty();
 
-        if ((+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
+        if ((this.dialogForm.get('hasConditions').value
+            && this.dialogForm.get('conditions').get('0').get('conditionName').value !== ''
+            && this.dialogForm.get('conditions').get('0').get('conditionOption').value === '') ||
+            (+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
+                this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
             this.dialogForm.get('documentName').invalid ||
             this.dialogForm.get('documentType').invalid ||
             this.dialogForm.get('agmtCode').invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
             return;
@@ -1042,7 +1046,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         if (this.currentChecklistForm.controls.checklistName.invalid) {
             document.getElementById('checklistName').scrollIntoView();
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please enter/correct the checklist name'
             });
             this.processing = false;
@@ -1054,7 +1058,7 @@ export class CMEditChecklistComponent implements OnInit {
         if (this.currentChecklistForm.get('conditions').get(i).get('conditionName').invalid ||
             this.currentChecklistForm.get('conditions').get(i).get('conditionOptions').invalid) {
             document.getElementById('conditions').scrollIntoView();
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please correct the invalid fields highlighted'
             });
             this.processing = false;
@@ -1099,7 +1103,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         this.cmService.updateCMChecklist(this.route.snapshot.paramMap.get('id'), this.checklist).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.processing = false;
@@ -1108,8 +1112,8 @@ export class CMEditChecklistComponent implements OnInit {
 
             if (res.results) {
                 this.isSubmitted = true;
-                
-                this.messageService.add({ 
+
+                this.messageService.add({
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist updated. You will be redirected shortly'
                 });
 
@@ -1118,7 +1122,7 @@ export class CMEditChecklistComponent implements OnInit {
                 }, 3000);
             }
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
