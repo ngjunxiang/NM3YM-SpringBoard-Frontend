@@ -617,8 +617,11 @@ export class CMNewChecklistComponent implements OnInit {
         this.dialogForm.get('documentType').markAsDirty();
         this.dialogForm.get('agmtCode').markAsDirty();
 
-        if ((+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
-            this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
+        if ((this.dialogForm.get('hasConditions').value
+            && this.dialogForm.get('conditions').get('0').get('conditionName').value !== ''
+            && this.dialogForm.get('conditions').get('0').get('conditionOption').value === '') ||
+            (+i > 0 && (this.dialogForm.get('conditions').get(i).get('conditionName').invalid ||
+                this.dialogForm.get('conditions').get(i).get('conditionOption').invalid)) ||
             this.dialogForm.get('documentName').invalid ||
             this.dialogForm.get('documentType').invalid ||
             this.dialogForm.get('agmtCode').invalid) {
