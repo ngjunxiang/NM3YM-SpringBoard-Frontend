@@ -1,6 +1,6 @@
 <div *ngIf="!loading">
     <div class="row">
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
             <p-card title="PENDING CLIENTS" class="style1 clickable" (click)="redirectPending()" pTooltip="View all pending clients"
                 tooltipPosition="right">
                 <hr>
@@ -8,7 +8,7 @@
             </p-card>
         </div>
 
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
             <p-card title="COMPLETED CLIENTS" class="style1 clickable" (click)="redirectCompleted()" pTooltip="View all completed clients"
                 tooltipPosition="right">
                 <hr>
@@ -16,17 +16,10 @@
             </p-card>
         </div>
 
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
             <p-card title="TOTAL ONBOARDS" class="style1">
                 <hr>
                 <p class="cardP">{{totalChecklist}}</p>
-            </p-card>
-        </div>
-
-        <div class="col-lg-3 col-sm-6">
-            <p-card title="SUBMISSIONS REJECTED" class="style1">
-                <hr>
-                <p class="cardP">0</p>
             </p-card>
         </div>
     </div>
