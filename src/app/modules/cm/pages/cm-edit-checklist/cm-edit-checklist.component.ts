@@ -770,7 +770,8 @@ export class CMEditChecklistComponent implements OnInit {
     addNewDocument(docType: string) {
         let i = (+this.dialogForm.get('conditions')['length'] - 1) + '';
 
-        if (+i > 0 && this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
+        if (this.dialogForm.get('hasConditions').value &&
+            this.dialogForm.get('conditions').get(i).get('conditionName').value === ''
             && this.dialogForm.get('conditions').get(i).get('conditionOption').value === '') {
             let control = <FormArray>this.dialogForm.get('conditions');
             control.removeAt(+i);
