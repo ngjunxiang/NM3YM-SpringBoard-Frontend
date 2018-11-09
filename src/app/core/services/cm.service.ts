@@ -35,6 +35,7 @@ interface DashboardResults {
     results: any;
     updatedChecklists: any;
     mostRecentQuestions: any;
+    mostPopularQuestions: any;
     error: string;
 }
 

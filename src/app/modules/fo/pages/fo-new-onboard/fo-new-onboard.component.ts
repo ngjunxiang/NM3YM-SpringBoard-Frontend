@@ -512,7 +512,7 @@ export class FONewOnboardComponent implements OnInit {
 
             if (res.results) {
                 this.messageService.add({ 
-                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process created <br> You will be redirected shortly'
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process created. You will be redirected shortly'
                 });
             }
 

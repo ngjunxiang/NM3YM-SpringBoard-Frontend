@@ -73,8 +73,6 @@ export class CMFaqCleaningComponent implements OnInit {
                 this.numFAQs = this.faqs.length;
                 this.numUncleaned = res.numUnclean;
             }
-
-            console.log(this.faqs)
             this.createForm();
         }, error => {
             this.messageService.add({

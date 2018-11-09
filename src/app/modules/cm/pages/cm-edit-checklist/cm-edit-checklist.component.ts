@@ -1110,7 +1110,7 @@ export class CMEditChecklistComponent implements OnInit {
                 this.isSubmitted = true;
                 
                 this.messageService.add({ 
-                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist updated <br> You will be redirected shortly'
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist updated. You will be redirected shortly'
                 });
 
                 setTimeout(() => {

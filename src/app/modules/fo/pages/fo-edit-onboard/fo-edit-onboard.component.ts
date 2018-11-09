@@ -293,7 +293,7 @@ export class FOEditOnboardComponent implements OnInit {
 
             if (res.results) {
                 this.messageService.add({ 
-                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process updated <br> You will be redirected shortly'
+                    key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process updated. You will be redirected shortly'
                 });
             }
 

@@ -41,14 +41,35 @@ export class CMFaqCreateComponent implements OnInit {
             answer: new FormControl('', Validators.required)
         });
 
-        for (let i = 0; i < 72; i++) {
-            this.pdfPages.push({
-                label: "" + i,
-                value: i
-            });
-        }
+        this.retrievePDFLength();
 
         this.loading = false;
+    }
+
+    retrievePDFLength() {
+        this.cmService.retrievePdfLength().subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                let numPages = res.results.pageCount;
+                for(let i = 1; i <= numPages; i++){
+                    this.pdfPages.push({
+                        label: "" + i,
+                        value: i
+                    });
+                }
+            }
+
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+        });
     }
 
     postFAQ() {

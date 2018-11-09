@@ -27,7 +27,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6" style="height: 100%">
+    <div class="col-md-12" style="height: 100%">
         <p-card title="CHECKLIST'S LAST MODIFIED DATE" class="table">
             <hr>
             <!-- scrollable height has been rigged for now -->
@@ -49,13 +49,6 @@
             </p-table>
         </p-card>
     </div>
-
-    <div class="col-md-6">
-        <p-card class="lineChart" title="NUMBERS OF ANSWERED QUESTIONS">
-            <hr>
-            <p-chart type="line" [data]="data1"></p-chart>
-        </p-card>
-    </div>
 </div>
 
 
@@ -75,3 +68,21 @@
         </p-card>
     </div>
 </div>
+
+<!-- 
+<div class="row">
+    <div class="col-md-12">
+        <p-card title="MOST VIEWED QUESTIONS" class="table">
+            <hr>
+            <p-accordion>
+                <div *ngFor="let qns of mostViewedQns; let i=index">
+                    <div *ngIf="i < 5">
+                        <p-accordionTab header = {{qns.question}}>
+                            <div style="font-weight: 500" [innerHTML]="qns.answer"></div>
+                        </p-accordionTab>
+                    </div>
+                </div>
+            </p-accordion>
+        </p-card>
+    </div>
+</div> -->

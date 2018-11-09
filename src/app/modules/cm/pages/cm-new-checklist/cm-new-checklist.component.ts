@@ -896,7 +896,7 @@ export class CMNewChecklistComponent implements OnInit {
             }
 
             this.messageService.add({
-                key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist created <br> You will be redirected shortly'
+                key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist created. You will be redirected shortly'
             });
 
             this.isSubmitted = true;

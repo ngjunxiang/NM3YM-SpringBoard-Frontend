@@ -37,6 +37,7 @@ export class CMDashboardComponent implements OnInit {
     uncleanedCount: number;
     updatedChecklists: any[];
     mostRecentQns: any[];
+    mostViewedQns: any[];
     tempDate: string;
 
     //Fake Data 
@@ -66,11 +67,11 @@ export class CMDashboardComponent implements OnInit {
                 });
                 return;
             }
-
             this.faqAnsweredCount = res.results.answeredCount;
             this.faqUnansweredCount = res.results.unansweredCount;
             this.updatedChecklists = res.updatedChecklists;
             this.mostRecentQns = res.mostRecentQuestions;
+            this.mostViewedQns = res.mostPopularQuestions;
             
             this.updatedChecklists.forEach(checklist => {
                 this.tempDate = checklist.dateUpdated.slice(0, 10)

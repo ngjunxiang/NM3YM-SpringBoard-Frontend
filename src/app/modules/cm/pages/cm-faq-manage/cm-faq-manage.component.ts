@@ -94,12 +94,7 @@ export class CMFaqManageComponent implements OnInit {
         this.selectedPages = [];
 
         //initialize PDF pages
-        for (let i = 1; i < 72; i++) {
-            this.pdfPages.push({
-                label: i,
-                value: i
-            });
-        }
+        this.retrievePDFLength();
     }
 
     showDialogMaximized(event, dialog: Dialog) {
@@ -428,7 +423,6 @@ export class CMFaqManageComponent implements OnInit {
 
             if (res.results) {
                 this.similarFaqs = [];
-                console.log(res.results)
                 res.results.forEach(similarFaq => {
                     if (similarFaq.qnID !== this.faqs[this.currentIndex].qnID && !similarFaq.qnIDRef) {
                         this.similarFaqs.push(similarFaq);
@@ -672,6 +666,32 @@ export class CMFaqManageComponent implements OnInit {
         });
     }
 
+    retrievePDFLength() {
+        this.cmService.retrievePdfLength().subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                return;
+            }
+
+            if (res.results) {
+                let numPages = res.results.pageCount;
+                for(let i = 1; i <= numPages; i++){
+                    this.pdfPages.push({
+                        label: "" + i,
+                        value: i
+                    });
+                }
+            }
+
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+        });
+    }
+
     showAnsweredDialog(index) {
         if (this.faqs[index].refPages && this.faqs[index].refPages.length > 0) {
             this.includePDF = true;
@@ -681,7 +701,6 @@ export class CMFaqManageComponent implements OnInit {
             this.selectedPages = [];
         }
         this.currentIndex = index;
-        console.log(this.faqs[this.currentIndex])
         if (this.faqs[this.currentIndex].qnIDRef) {
             this.loadSimilarFaq(this.faqs[this.currentIndex].qnIDRef);
         }
