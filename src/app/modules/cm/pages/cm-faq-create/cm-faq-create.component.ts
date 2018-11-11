@@ -35,6 +35,7 @@ export class CMFaqCreateComponent implements OnInit {
 
     ngOnInit() {
         this.loading = true;
+        this.selectedPages = [];
 
         this.faqForm = this.fb.group({
             question: new FormControl('', Validators.required),
