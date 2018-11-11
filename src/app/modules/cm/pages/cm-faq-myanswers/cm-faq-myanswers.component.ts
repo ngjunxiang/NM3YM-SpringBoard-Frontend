@@ -279,7 +279,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
     showAnsweredDialog(index) {
         this.currentIndex = index;
-        if (this.faqs[index].refPages.length > 0) {
+        if (this.faqs[index].refPages && this.faqs[index].refPages.length > 0) {
             this.includePDF = true;
             this.selectedPages = this.faqs[index].refPages;
         } else {
@@ -338,7 +338,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
             });
         });
     }
-
+x
     paginate(event) {
         //First index of the FormArray that will appear on the page  
         this.firstIndex = event.first;

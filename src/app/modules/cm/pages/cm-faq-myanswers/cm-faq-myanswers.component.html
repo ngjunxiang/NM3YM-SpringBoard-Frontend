@@ -60,7 +60,7 @@
                                 <div class="ui-g-10 ansInDialog" style="color:black;">
                                     <ng-container *ngIf="!showAnsEditArea">
                                         <div style="font-size: 14px; font-weight: 600; color:black;" [innerHTML]="faqs[currentIndex].answer"></div>
-                                        <ng-container *ngIf="faqs[currentIndex].refPages.length > 0">
+                                        <ng-container *ngIf="faqs[currentIndex].refPages && faqs[currentIndex].refPages.length > 0">
                                             <p-card styleClass="pageReferences">
                                                 Refer to the following page(s) on REG51:
                                                 <ng-container *ngFor="let ref of faqs[currentIndex].refPages; let len=index">
