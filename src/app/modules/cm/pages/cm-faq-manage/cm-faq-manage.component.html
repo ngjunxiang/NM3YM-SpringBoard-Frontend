@@ -8,7 +8,7 @@
     </div>
 </form>
 
-<div class="ui-g" *ngIf="!searched" style="display: flex; margin-top: 10px; margin-bottom: 10px; align-items: center;">
+<div class="ui-g" *ngIf="!searched && activeTab != 0" style="display: flex; margin-top: 10px; margin-bottom: 10px; align-items: center;">
     <div style="padding-left: 0px;">
         <p style="margin-bottom: 2px;">Select Category:</p>
         <p-dropdown class="category" [options]="categoryOptions" [(ngModel)]="selectedCategory" placeholder="Select an option"

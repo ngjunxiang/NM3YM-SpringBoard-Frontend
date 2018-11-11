@@ -16,6 +16,7 @@ export class FOFaqViewAllComponent implements OnInit {
     // UI Control
     loading = false;
     searched = false; //show "Result", hide buttons 
+    showAskQns = false;
     showNewQnForm = false;
     answerDialog = false;
     askDialog = false;
@@ -111,9 +112,7 @@ export class FOFaqViewAllComponent implements OnInit {
         }
 
         this.loading = true;
-
         this.faqs = [];
-
         this.currentSearch = this.questionForm.get('question').value;
 
         this.foService.retrieveFaq(this.currentSearch).subscribe(res => {
@@ -127,12 +126,12 @@ export class FOFaqViewAllComponent implements OnInit {
 
             if (res.results) {
                 this.faqs = res.results;
+                this.numFAQs = this.faqs.length;
+                this.loading = false;
+                this.searched = true;
+                this.showAskQns = true;
             }
 
-            this.numFAQs = this.faqs.length;
-
-            this.loading = false;
-            this.searched = true;
         }, error => {
             this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
@@ -140,6 +139,7 @@ export class FOFaqViewAllComponent implements OnInit {
 
             this.loading = false;
             this.searched = true;
+            this.showAskQns = true;
         });
     }
 

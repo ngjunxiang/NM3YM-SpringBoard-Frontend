@@ -28,6 +28,7 @@ export class CMFaqCleaningComponent implements OnInit {
     loading = false;
     selectedText = [];
     expand = [];
+
     highlighted = [];
     addEntity = false;
 
@@ -51,7 +52,7 @@ export class CMFaqCleaningComponent implements OnInit {
         private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.loading = true;
@@ -70,7 +71,6 @@ export class CMFaqCleaningComponent implements OnInit {
 
             if (res.results) {
                 this.faqs = res.results;
-                this.numFAQs = this.faqs.length;
                 this.numUncleaned = res.numUnclean;
             }
             this.createForm();
@@ -182,24 +182,59 @@ export class CMFaqCleaningComponent implements OnInit {
     }
 
     createRephrasedFAQ() {
-        this.numFAQs++;
+        //Checking if new intents or entities have been created
+        if (this.faqs.length < 2) {
+            //checking for intent
+            let orginalIntent = this.faqTrainerForm.get('questions').get(0 + '').get('intent').value;
+
+            if (!this.intents.includes(orginalIntent)) {
+                this.intents.push({
+                    label: orginalIntent, value: orginalIntent
+                });
+            }
+
+            //checking for entities
+            let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(0).get('entities') as FormArray;
+            let entityLength = entityControl.length;
+
+            for (let i = 0; i < entityLength; i++) {
+                let originalEntity = this.faqTrainerForm.get('questions').get(0 + '').get('entities').get(i + '').get('entity').value;
+                let originalValue = this.faqTrainerForm.get('questions').get(0 + '').get('entities').get(i + '').get('value').value;
+                if (!this.entitiesIndex.includes(originalEntity)) {
+                    this.entitiesIndex.push(originalEntity);
+                    this.entitiesOptions.push({
+                        label: originalEntity, value: originalEntity
+                    })
+                    let dropDownValues = []
+                    dropDownValues.push({
+                        label: originalValue, value: originalValue
+                    });
+                    this.synonyms.push({
+                        entity: originalEntity, synonyms: dropDownValues
+                    })
+                } else if (!this.synonyms[(this.entitiesIndex.indexOf(originalEntity))]["synonyms"].includes(originalValue)) {
+                    this.synonyms[(this.entitiesIndex.indexOf(originalEntity))]["synonyms"].push({
+                        label: originalValue, value: orginalIntent
+                    });
+                }
+            }
+        }
+        
+        //create new element to store rephrased question 
         this.faqs.push({
             qnID: ""
         })
-        let control = <FormArray>this.faqTrainerForm['controls'].questions;
 
-        control.push(
-            this.fb.group({
-                question: new FormControl(this.faqs[0].question, Validators.required),
-                intent: new FormControl('', Validators.required),
-                entities: this.fb.array([])
-            })
-        );
+        let control = <FormArray>this.faqTrainerForm['controls'].questions;
+        let orginal = this.faqTrainerForm.get('questions').get(0 + '')
+
+        control.push(orginal);
     }
 
     deleteRephrasedFAQ(qnsIndex) {
         let control = <FormArray>this.faqTrainerForm['controls'].questions;
         control.removeAt(qnsIndex);
+        this.faqs.pop();
     }
 
     expandFAQ(index) {
@@ -288,7 +323,10 @@ export class CMFaqCleaningComponent implements OnInit {
         let unfilledFAQ = [];
 
         //Check for dirty and invalid FormControlName
-        for (let i = 0; i < this.numFAQs; i++) {
+        for (let i = 0; i < this.faqs.length; i++) {
+            this.faqTrainerForm.get('questions');
+            this.faqTrainerForm.get('questions').get(i + '')
+            this.faqTrainerForm.get('questions').get(i + '').get('intent')
             this.faqTrainerForm.get('questions').get(i + '').get('intent').markAsDirty();
             if (this.faqTrainerForm.get('questions').get(i + '').get('intent').invalid || this.faqTrainerForm.get('questions').get(i + '').get('question').invalid) {
                 invalidCount++;
@@ -324,7 +362,7 @@ export class CMFaqCleaningComponent implements OnInit {
         }
 
         //storing the values into faqs 
-        for (let i = 0; i < this.numFAQs; i++) {
+        for (let i = 0; i < this.faqs.length; i++) {
             this.faqs[i].question = this.faqTrainerForm.get('questions').get(i + '').get('question').value;
             this.faqs[i].intent = this.faqTrainerForm.get('questions').get(i + '').get('intent').value;
             this.faqs[i].entities = [];
@@ -359,7 +397,7 @@ export class CMFaqCleaningComponent implements OnInit {
 
                 this.loading = true;
                 this.retrieveUncleanedFAQ();
-                
+
             }
         }, error => {
             this.messageService.add({
@@ -376,7 +414,7 @@ export class CMFaqCleaningComponent implements OnInit {
         let unfilledFAQ = [];
 
         //Check for dirty and invalid FormControlName
-        for (let i = 0; i < this.numFAQs; i++) {
+        for (let i = 0; i < this.faqs.length; i++) {
             this.faqTrainerForm.get('questions').get(i + '').get('intent').markAsDirty();
             if (this.faqTrainerForm.get('questions').get(i + '').get('intent').invalid || this.faqTrainerForm.get('questions').get(i + '').get('question').invalid) {
                 invalidCount++;
@@ -412,7 +450,7 @@ export class CMFaqCleaningComponent implements OnInit {
         }
 
         //storing the values into faqs 
-        for (let i = 0; i < this.numFAQs; i++) {
+        for (let i = 0; i < this.faqs.length; i++) {
             this.faqs[i].question = this.faqTrainerForm.get('questions').get(i + '').get('question').value;
             this.faqs[i].intent = this.faqTrainerForm.get('questions').get(i + '').get('intent').value;
             this.faqs[i].entities = [];
