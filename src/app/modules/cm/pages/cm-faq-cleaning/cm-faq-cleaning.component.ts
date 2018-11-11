@@ -219,16 +219,21 @@ export class CMFaqCleaningComponent implements OnInit {
                 }
             }
         }
-        
+
         //create new element to store rephrased question 
         this.faqs.push({
             qnID: ""
         })
 
         let control = <FormArray>this.faqTrainerForm['controls'].questions;
-        let orginal = this.faqTrainerForm.get('questions').get(0 + '')
 
-        control.push(orginal);
+        control.push(
+            this.fb.group({
+                question: new FormControl(this.faqs[0].question, Validators.required),
+                intent: new FormControl('', Validators.required),
+                entities: this.fb.array([])
+            })
+        );
     }
 
     deleteRephrasedFAQ(qnsIndex) {
