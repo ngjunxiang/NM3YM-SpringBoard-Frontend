@@ -54,7 +54,7 @@
                                             <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
                                                 Category:
                                             </div>
-                                            <p-dropdown [options]="intents" formControlName="intent" editable="true"
+                                            <p-dropdown [options]="intentsOptions" formControlName="intent" editable="true"
                                                 placeholder="Select or create a category"></p-dropdown>
                                         </div>
                                         <ng-container *ngIf="faqTrainerForm.get('questions').get(i+'').get('entities').length > 0">
