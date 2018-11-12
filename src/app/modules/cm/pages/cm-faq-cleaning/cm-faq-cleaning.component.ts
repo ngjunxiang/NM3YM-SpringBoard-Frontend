@@ -201,8 +201,6 @@ export class CMFaqCleaningComponent implements OnInit {
                     label: orginalIntent, value: orginalIntent
                 });
             }
-            console.log(this.synonyms)
-            console.log(this.synonymsOptions)
 
             //checking for entities
             let entityControl = (<FormArray>this.faqTrainerForm.controls['questions']).at(0).get('entities') as FormArray;
