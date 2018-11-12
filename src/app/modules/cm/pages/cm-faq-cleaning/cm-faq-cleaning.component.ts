@@ -42,8 +42,7 @@ export class CMFaqCleaningComponent implements OnInit {
     synonyms: any[];
     synonymsOptions: any[]; //Populated when user uses entity 
     numUncleaned = 0;
-
-    // 
+    createdNewFAQ = false;
 
     //Model Trainer
     trainingModel = false;
@@ -188,6 +187,8 @@ export class CMFaqCleaningComponent implements OnInit {
             qnID: ""
         })
 
+        this.createdNewFAQ = true; 
+
         let control = <FormArray>this.faqTrainerForm['controls'].questions;
 
         control.push(
@@ -201,8 +202,12 @@ export class CMFaqCleaningComponent implements OnInit {
     }
 
     createRephrasedFAQ() {
-        //Checking if new intentsOptions or entities have been created
+        if(this.createdNewFAQ){
+            this.faqs[0].question = this.faqTrainerForm.get('questions').get(0 + '').get('question').value;
+            this.createdNewFAQ = false;
+        }
 
+        //Checking if new intentsOptions or entities have been created
         if (this.faqs.length < 2) {
             //checking for intent
             let orginalIntent = this.faqTrainerForm.get('questions').get(0 + '').get('intent').value;
