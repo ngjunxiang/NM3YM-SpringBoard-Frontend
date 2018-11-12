@@ -183,8 +183,26 @@ export class CMFaqCleaningComponent implements OnInit {
         });
     }
 
+    createNewFAQ() {
+        this.faqs.push({
+            qnID: ""
+        })
+
+        let control = <FormArray>this.faqTrainerForm['controls'].questions;
+
+        control.push(
+            this.fb.group({
+                question: new FormControl('', Validators.required),
+                intent: new FormControl('', Validators.required),
+                entities: this.fb.array([])
+            })
+        );
+
+    }
+
     createRephrasedFAQ() {
         //Checking if new intentsOptions or entities have been created
+
         if (this.faqs.length < 2) {
             //checking for intent
             let orginalIntent = this.faqTrainerForm.get('questions').get(0 + '').get('intent').value;

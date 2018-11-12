@@ -21,6 +21,9 @@
                 <h5>
                     There are no uncleaned data yet!
                 </h5>
+                <hr style="margin: 10px 2%">
+                <button pButton class="ui-button-warning" (click)="createNewFAQ()"
+                    label="Create a FAQ" type="button" icon="fas fa-plus"></button>
             </div>
             <ng-container *ngIf="!trainingModel && faqs.length > 0">
                 <div [formGroup]="faqTrainerForm">
