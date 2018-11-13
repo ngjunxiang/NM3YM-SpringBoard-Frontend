@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
 import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
+import { AuthenticationService } from '../../../../core/services/authentication.service';
 
 interface intent {
     label: string,
@@ -47,6 +48,7 @@ export class CMFaqCleaningComponent implements OnInit {
     trainingModel = false;
 
     constructor(
+        private authService: AuthenticationService,
         private cmService: CMService,
         private fb: FormBuilder,
         private messageService: MessageService,
@@ -322,6 +324,31 @@ export class CMFaqCleaningComponent implements OnInit {
     }
 
     submitCleanedFAQ() {
+        // Refresh token
+        this.authService.authenticate('CM').then(res => {
+            if (res.newToken && localStorage.getItem('USERTYPE') === 'CM') {
+                this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
+            }
+
+            if (res.error === 'Invalid Token' || res.error === 'Token has expired') {
+                this.router.navigate(['/login'], {
+                    queryParams: {
+                        err: 'auth001'
+                    }
+                });
+                return;
+            }
+
+            if (res.error === 'Invalid userType') {
+                this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase() + '/dashboard'], {
+                    queryParams: {
+                        err: 'auth001'
+                    }
+                });
+                return;
+            }
+        });
+
         //Invalid FormControlName Controls
         let invalidCount = 0;
         let emptyEntityCount = 0;
