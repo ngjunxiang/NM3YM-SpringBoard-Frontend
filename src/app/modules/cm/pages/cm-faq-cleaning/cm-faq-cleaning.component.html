@@ -21,6 +21,9 @@
                 <h5>
                     There are no uncleaned data yet!
                 </h5>
+                <hr style="margin: 10px 0px">
+                <button pButton class="ui-button-warning" (click)="createNewFAQ()"
+                    label="Create a FAQ" type="button" icon="fas fa-plus"></button>
             </div>
             <ng-container *ngIf="!trainingModel && faqs.length > 0">
                 <div [formGroup]="faqTrainerForm">
@@ -54,7 +57,7 @@
                                             <div style="font-size: 12px; font-weight: 550; color: #b8b8b8; padding-left: 0.5%">
                                                 Category:
                                             </div>
-                                            <p-dropdown [options]="intents" formControlName="intent" editable="true"
+                                            <p-dropdown [options]="intentsOptions" formControlName="intent" editable="true"
                                                 placeholder="Select or create a category"></p-dropdown>
                                         </div>
                                         <ng-container *ngIf="faqTrainerForm.get('questions').get(i+'').get('entities').length > 0">

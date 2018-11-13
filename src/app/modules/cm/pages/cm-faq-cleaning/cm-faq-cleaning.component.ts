@@ -33,16 +33,17 @@ export class CMFaqCleaningComponent implements OnInit {
     highlighted = [];
     addEntity = false;
 
-    // UI Components
+    // UI Components 
     faqs: any[];
     numFAQs: number;
     faqTrainerForm: FormGroup;
-    intents: intent[];
-    entitiesOptions: entity[];
+    intentsOptions: intent[]; //UI Dropdown must be in {label: x, value: x}
+    entitiesOptions: entity[]; //UI Dropdown must be in {label: x, value: x}
     entitiesIndex: string[];
     synonyms: any[];
-    synonymsOptions: any[];
+    synonymsOptions: any[]; //Populated when user uses entity 
     numUncleaned = 0;
+    createdNewFAQ = false;
 
     //Model Trainer
     trainingModel = false;
@@ -125,9 +126,9 @@ export class CMFaqCleaningComponent implements OnInit {
             }
 
             if (res.results) {
-                this.intents = [];
+                this.intentsOptions = [];
                 res.results.forEach(intent => {
-                    this.intents.push({
+                    this.intentsOptions.push({
                         label: intent, value: intent
                     });
                 });
@@ -183,14 +184,45 @@ export class CMFaqCleaningComponent implements OnInit {
         });
     }
 
+    createNewFAQ() {
+        this.faqs.push({
+            qnID: ""
+        })
+
+        this.createdNewFAQ = true; 
+
+        let control = <FormArray>this.faqTrainerForm['controls'].questions;
+
+        control.push(
+            this.fb.group({
+                question: new FormControl('', Validators.required),
+                intent: new FormControl('', Validators.required),
+                entities: this.fb.array([])
+            })
+        );
+
+    }
+
     createRephrasedFAQ() {
-        //Checking if new intents or entities have been created
+        if(this.createdNewFAQ){
+            this.faqs[0].question = this.faqTrainerForm.get('questions').get(0 + '').get('question').value;
+            this.createdNewFAQ = false;
+        }
+
+        //Checking if new intentsOptions or entities have been created
         if (this.faqs.length < 2) {
             //checking for intent
             let orginalIntent = this.faqTrainerForm.get('questions').get(0 + '').get('intent').value;
+            let intentIsUnique = true;
 
-            if (!this.intents.includes(orginalIntent)) {
-                this.intents.push({
+            this.intentsOptions.forEach(intent => {
+                if (intent.label == orginalIntent) {
+                    intentIsUnique = false;
+                }
+            });
+
+            if (intentIsUnique) {
+                this.intentsOptions.push({
                     label: orginalIntent, value: orginalIntent
                 });
             }
@@ -211,13 +243,26 @@ export class CMFaqCleaningComponent implements OnInit {
                     dropDownValues.push({
                         label: originalValue, value: originalValue
                     });
+
                     this.synonyms.push({
                         entity: originalEntity, synonyms: dropDownValues
                     })
-                } else if (!this.synonyms[(this.entitiesIndex.indexOf(originalEntity))]["synonyms"].includes(originalValue)) {
-                    this.synonyms[(this.entitiesIndex.indexOf(originalEntity))]["synonyms"].push({
-                        label: originalValue, value: orginalIntent
+                } else {
+                    let synonymsOptions = this.synonyms[(this.entitiesIndex.indexOf(originalEntity))]["synonyms"];
+                    let synIsUnique = true;
+
+                    synonymsOptions.forEach(synonym => {
+                        if (synonym.label == originalValue) {
+                            synIsUnique = false;
+                        }
                     });
+
+                    if (synIsUnique) {
+                        this.synonyms[(this.entitiesIndex.indexOf(originalEntity))]["synonyms"].push({
+                            label: originalValue, value: originalValue
+                        });
+                    }
+
                 }
             }
         }
@@ -236,6 +281,8 @@ export class CMFaqCleaningComponent implements OnInit {
                 entities: this.fb.array([])
             })
         );
+
+        this.synonymsOptions = [];
     }
 
     deleteRephrasedFAQ(qnsIndex) {
@@ -388,7 +435,7 @@ export class CMFaqCleaningComponent implements OnInit {
         if (invalidCount > 0 || emptyEntityCount > 0) {
             this.expandInvalidFAQ(unfilledFAQ);
             this.messageService.add({
-                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please create intents and entities for all FAQ!'
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please create intentsOptions and entities for all FAQ!'
             });
             return;
         }
@@ -476,7 +523,7 @@ export class CMFaqCleaningComponent implements OnInit {
         if (invalidCount > 0 || emptyEntityCount > 0) {
             this.expandInvalidFAQ(unfilledFAQ);
             this.messageService.add({
-                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please create intents and entities for all FAQ!'
+                key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please create intentsOptions and entities for all FAQ!'
             });
             return;
         }
