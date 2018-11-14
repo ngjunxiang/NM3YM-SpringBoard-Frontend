@@ -470,7 +470,7 @@ export class CMNewChecklistComponent implements OnInit {
             accept: () => {
                 let control = <FormArray>this.newChecklistForm.controls.requiredFields;
                 control.removeAt(index);
-                control.patchValue(control.value);
+                control.patchValue(control.getRawValue());
             },
             reject: () => {
                 return;

@@ -52,12 +52,12 @@ export class FONewOnboardComponent implements OnInit {
     @HostListener('window:beforeunload')
     canDeactivate(): Promise<boolean> | boolean {
         if (this.isSubmitted) return true;
-        if (!this.checklistForm.dirty ) {
+        if (!this.checklistForm.dirty) {
             return true;
         }
         return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
     }
-    
+
     createForm() {
         this.retrieveChecklistNames();
         this.checklistForm = this.fb.group({
@@ -99,7 +99,7 @@ export class FONewOnboardComponent implements OnInit {
 
         this.foService.retrieveAllRMNames().subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
@@ -115,14 +115,14 @@ export class FONewOnboardComponent implements OnInit {
                 });
             }
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
 
         this.foService.retrieveChecklistDetails(this.selectedChecklistId).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
@@ -167,7 +167,7 @@ export class FONewOnboardComponent implements OnInit {
             };
             this.loading = false;
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
@@ -198,19 +198,27 @@ export class FONewOnboardComponent implements OnInit {
         // Compliance Documents
         let mandatoryDocs = [];
         let formArray = <FormArray>this.checklistForm.get('complianceDocuments')['controls'].mandatory;
+
         this.selectedChecklistData.complianceDocuments.mandatory.forEach(doc => {
             if (doc.conditions.length > 0) {
-                for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
-                    let conditionName = this.selectedChecklistData.conditions[i].conditionName;
-                    let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
-                    if (doc.conditions.length > 0) {
-                        for (let j = 0; j < doc.conditions.length; j++) {
-                            if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
-                                formArray.push(new FormControl(false));
-                                mandatoryDocs.push(doc);
-                            }
+                let toAdd = true;
+                for (let j = 0; j < doc.conditions.length; j++) {
+                    let conditionMet = false;
+                    for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                        let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                        let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                        if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                            conditionMet = true;
                         }
                     }
+
+                    if (!conditionMet) {
+                        toAdd = false;
+                    }
+                }
+                if (toAdd) {
+                    formArray.push(new FormControl(false));
+                    mandatoryDocs.push(doc);
                 }
             } else {
                 formArray.push(new FormControl(false));
@@ -247,17 +255,24 @@ export class FONewOnboardComponent implements OnInit {
         formArray = <FormArray>this.checklistForm.get('legalDocuments')['controls'].mandatory;
         this.selectedChecklistData.legalDocuments.mandatory.forEach(doc => {
             if (doc.conditions.length > 0) {
-                for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
-                    let conditionName = this.selectedChecklistData.conditions[i].conditionName;
-                    let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
-                    if (doc.conditions.length > 0) {
-                        for (let j = 0; j < doc.conditions.length; j++) {
-                            if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
-                                formArray.push(new FormControl(false));
-                                mandatoryDocs.push(doc);
-                            }
+                let toAdd = true;
+                for (let j = 0; j < doc.conditions.length; j++) {
+                    let conditionMet = false;
+                    for (let i = 0; i < this.checklistForm.get('conditions')['length']; i++) {
+                        let conditionName = this.selectedChecklistData.conditions[i].conditionName;
+                        let conditionOption = this.checklistForm.get('conditions').get(i + '').get('conditionOption').value;
+                        if (doc.conditions[j].conditionName === conditionName && doc.conditions[j].conditionOption === conditionOption) {
+                            conditionMet = true;
                         }
                     }
+
+                    if (!conditionMet) {
+                        toAdd = false;
+                    }
+                }
+                if (toAdd) {
+                    formArray.push(new FormControl(false));
+                    mandatoryDocs.push(doc);
                 }
             } else {
                 formArray.push(new FormControl(false));
@@ -296,7 +311,7 @@ export class FONewOnboardComponent implements OnInit {
         this.checklistNameDropdownData = [];
         this.foService.retrieveChecklistNames().subscribe(data => {
             if (data.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Server Error', detail: data.error
                 });
             }
@@ -308,7 +323,7 @@ export class FONewOnboardComponent implements OnInit {
                 });
             });
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
         });
@@ -317,7 +332,7 @@ export class FONewOnboardComponent implements OnInit {
     submitChecklistName() {
         this.checklistForm.controls.selectedChecklistId.markAsDirty();
         if (this.checklistForm.controls.selectedChecklistId.invalid) {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please select a checklist'
             });
             return;
@@ -364,13 +379,13 @@ export class FONewOnboardComponent implements OnInit {
         if (invalidFields || invalidConditions) {
             if (invalidFields) {
                 document.getElementById('requiredFields').scrollIntoView();
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please enter all required fields'
                 });
             }
             if (invalidConditions) {
                 document.getElementById('conditions').scrollIntoView();
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: 'Please enter all condition options'
                 });
             }
@@ -503,7 +518,7 @@ export class FONewOnboardComponent implements OnInit {
 
         this.foService.createOnboardProcess(this.processData).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.processing = false;
@@ -511,7 +526,7 @@ export class FONewOnboardComponent implements OnInit {
             }
 
             if (res.results) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process created. You will be redirected shortly'
                 });
             }
@@ -522,7 +537,7 @@ export class FONewOnboardComponent implements OnInit {
                 this.router.navigate(['/fo/onboard/manage']);
             }, 3000);
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;

@@ -632,7 +632,7 @@ export class CMEditChecklistComponent implements OnInit {
             accept: () => {
                 let control = <FormArray>this.currentChecklistForm.controls.requiredFields;
                 control.removeAt(index);
-                control.patchValue(control.value);
+                control.patchValue(control.getRawValue());
             },
             reject: () => {
                 return;
@@ -1072,14 +1072,14 @@ export class CMEditChecklistComponent implements OnInit {
 
         // Checklist Required Fields
         this.checklist['requiredFields'] = [];
-
+        console.log(this.currentChecklistForm.get('requiredFields')['controls'])
         for (let i = 0; i < this.currentChecklistForm.get('requiredFields')['length']; i++) {
             if (!(this.currentChecklistForm.get('requiredFields')['length'] - 1 === i
                 && this.currentChecklistForm.get('requiredFields').get(i + '').get('fieldName').value === '')) {
                 this.checklist['requiredFields'].push(this.currentChecklistForm.get('requiredFields').get(i + '').get('fieldName').value);
             }
         }
-
+        
         // Checklist Conditions
         this.checklist['conditions'] = {};
 
