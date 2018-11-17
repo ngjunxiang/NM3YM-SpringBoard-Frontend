@@ -28,6 +28,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
     OHistoryDialog = false;
     OAnsweredDialog = false;
     currentIndex: number;
+    similarQn: any;
 
     //UI Controls for PDF Reference
     pdfPages: any[] = [];
@@ -278,13 +279,34 @@ export class CMFaqMyAnswersComponent implements OnInit {
 
 
     showAnsweredDialog(index) {
+        this.similarQn = null;
         this.currentIndex = index;
+        
         if (this.faqs[index].refPages && this.faqs[index].refPages.length > 0) {
             this.includePDF = true;
             this.selectedPages = this.faqs[index].refPages;
         } else {
             this.includePDF = false;
             this.selectedPages = [];
+        }
+
+        if (this.faqs[index].qnIDRef) {
+            this.cmService.retrieveSelectedAnsweredFAQ(this.faqs[index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.similarQn = res.results;
+                }
+            }, error => {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                });
+            });
         }
 
         if (this.activeTab === 0) {

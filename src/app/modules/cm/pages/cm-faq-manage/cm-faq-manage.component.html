@@ -313,7 +313,17 @@
                                 Refer to the following similar question: <br>
                                 <ng-container *ngIf="similarQn">
                                     <b>Question: </b>{{similarQn.question}} <br>
-                                    <b>Answer: </b>{{similarQn.answer}}
+                                    <b>Answer: </b>{{similarQn.answer}} <br>
+                                    <br>
+                                    Refer to the following page(s) on REG51:
+                                    <ng-container *ngFor="let ref of similarQn.refPages; let len=index">
+                                        <ng-container *ngIf="len !== similarQn.refPages.length-1">
+                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}, </a>
+                                        </ng-container>
+                                        <ng-container *ngIf="len === similarQn.refPages.length-1">
+                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                        </ng-container>
+                                    </ng-container>
                                 </ng-container>
                             </p-card>
                         </ng-container>
