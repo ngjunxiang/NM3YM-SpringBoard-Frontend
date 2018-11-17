@@ -144,6 +144,20 @@ export class FOComponent implements OnInit {
                     allNotifications.push(notif);
                 });
 
+                res.results.qnaNotifications.forEach(notification => {
+                    let notif;
+
+                    if (notification.question && notification.answer) {
+                        notif = 'Your question <strong><font color="black">' + notification.question + '</font></strong> has been updated';
+                    }
+
+                    if (!notification.checked) {
+                        newNotifications.push(notif);
+                    }
+                    
+                    allNotifications.push(notif);
+                });
+
                 this.notifications['newNotifications'] = newNotifications;
                 this.notifications['allNotifications'] = allNotifications;
             }
