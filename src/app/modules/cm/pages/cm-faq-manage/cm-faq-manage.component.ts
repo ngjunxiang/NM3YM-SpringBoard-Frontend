@@ -41,6 +41,7 @@ export class CMFaqManageComponent implements OnInit {
     sortByOptions: any[];
     selectedCategory: string = '';
     selectedSortBy: string = '';
+    filterFAQWithRef: false;
     answerForm: FormGroup;
     questionForm: FormGroup;
     searchForm: FormGroup;
@@ -276,7 +277,7 @@ export class CMFaqManageComponent implements OnInit {
         this.loading = true;
         this.faqs = [];
 
-        this.cmService.retrieveFAQByCategoryAndSort(this.selectedCategory, this.selectedSortBy).subscribe(res => {
+        this.cmService.retrieveFAQByCategoryAndSort(this.selectedCategory, this.selectedSortBy, this.filterFAQWithRef).subscribe(res => {
             if (res.error) {
                 this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error

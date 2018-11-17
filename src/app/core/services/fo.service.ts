@@ -367,7 +367,11 @@ export class FOService {
             'sortBy': sort
         };
 
-        const postData = Object.assign(this.authService.authItems, categoriseBy, sortBy);
+        const filterRef = { 
+            'filterRef': false
+        }
+
+        const postData = Object.assign(this.authService.authItems, categoriseBy, sortBy, filterRef);
 
         return this.http.post<Response>(this.retrieveFAQByCategoryAndSortURL, postData, httpOptions)
             .pipe(

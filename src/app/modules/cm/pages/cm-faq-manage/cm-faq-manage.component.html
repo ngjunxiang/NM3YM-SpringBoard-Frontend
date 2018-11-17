@@ -19,6 +19,12 @@
         <p-dropdown class="sortBy" [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option"
             [disabled]="disable" (onChange)="filterAndSortBy()"></p-dropdown>
     </div>
+    <div style="display: flex; margin-left: 30px; margin-top: 26px">
+        <p-checkbox [(ngModel)]="filterFAQWithRef" binary="true" (onChange)="filterAndSortBy()"></p-checkbox>
+        <div style="margin-left: 5px; margin-top: 2px; font-size: 15px; font-weight: 400; color: #8e838e">
+            Show FAQ with PDF Reference
+        </div>
+    </div>
     <div class="clickable" style="margin-left: 30px; margin-top: 26px" (click)="loadPage()">
         <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">
         <u>Remove filters</u>

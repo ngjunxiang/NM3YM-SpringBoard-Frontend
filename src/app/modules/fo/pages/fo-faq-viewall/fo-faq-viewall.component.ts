@@ -16,6 +16,7 @@ export class FOFaqViewAllComponent implements OnInit {
     // UI Control
     loading = false;
     searched = false; //show "Result", hide buttons 
+    showAskQuestion = false;
     showNewQnForm = false;
     answerDialog = false;
     askDialog = false;
@@ -128,6 +129,7 @@ export class FOFaqViewAllComponent implements OnInit {
                 this.numFAQs = this.faqs.length;
                 this.loading = false;
                 this.searched = true;
+                this.showAskQuestion = true;
             }
 
         }, error => {

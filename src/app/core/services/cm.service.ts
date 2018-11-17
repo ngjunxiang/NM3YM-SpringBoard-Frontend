@@ -542,7 +542,7 @@ export class CMService {
     }
 
 
-    retrieveFAQByCategoryAndSort(category, sort) {
+    retrieveFAQByCategoryAndSort(category, sort, showRefOnly) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -557,7 +557,11 @@ export class CMService {
             'sortBy': sort
         };
 
-        const postData = Object.assign(this.authService.authItems, sortBy, categoriseBy);
+        const filterRef = {
+            'filterRef': showRefOnly
+        }
+
+        const postData = Object.assign(this.authService.authItems, sortBy, categoriseBy, filterRef);
 
         return this.http.post<Response>(this.retrieveFAQByCategoryAndSortURL, postData, httpOptions)
             .pipe(

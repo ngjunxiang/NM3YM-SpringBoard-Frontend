@@ -36,7 +36,7 @@
         </div>
 
         <div class="ui-g-4">
-            <div>
+            <div *ngIf="showAskQuestion">
                 <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 7%;"
                     type="submit" icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
             </div>
