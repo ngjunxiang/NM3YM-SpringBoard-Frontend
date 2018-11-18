@@ -43,6 +43,7 @@ export class CMFaqMyAnswersComponent implements OnInit {
     selectedSortBy: string = '';
     answerForm: FormGroup;
     questionForm: FormGroup;
+    historySimilarFaqs: any[];
 
     // Paginator Controls
     numFAQs: number;
@@ -317,6 +318,32 @@ export class CMFaqMyAnswersComponent implements OnInit {
     }
 
     showHistoryDialog() {
+        this.historySimilarFaqs = [];
+        this.faqs[this.currentIndex].prevAnswer.forEach(prev => {
+            if (prev.qnIDRef) {
+                this.cmService.retrieveSelectedAnsweredFAQ(prev.qnIDRef).subscribe(res => {
+                    if (res.error) {
+                        this.messageService.add({
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                        });
+                        return;
+                    }
+
+                    if (res.results) {
+                        console.log(res.results)
+                        this.historySimilarFaqs.push(res.results);
+                    }
+
+                    this.historyDialog = true;
+                }, error => {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                    });
+                });
+            } else {
+                this.historySimilarFaqs.push({});
+            }
+        });
         if (this.activeTab === 0) {
             this.historyDialog = true;
         } else {
