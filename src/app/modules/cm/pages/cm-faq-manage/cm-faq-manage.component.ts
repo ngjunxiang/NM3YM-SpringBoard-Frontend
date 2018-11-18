@@ -47,6 +47,7 @@ export class CMFaqManageComponent implements OnInit {
     searchForm: FormGroup;
     similarFaqs: any[];
     similarQn: any;
+    historySimilarFaqs: any[];
 
     // Paginator Controls
     numFAQs: number;
@@ -564,8 +565,9 @@ export class CMFaqManageComponent implements OnInit {
         };
 
         if (this.selectedSimilarFaq !== -1) {
-            updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID
+            updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID;
             updatedFaq['answer'] = '';
+            updatedFaq['PDFPages'] = [];
         }
 
         this.cmService.updateAnsweredFAQ(updatedFaq).subscribe(res => {
@@ -620,7 +622,9 @@ export class CMFaqManageComponent implements OnInit {
         };
 
         if (this.selectedSimilarFaq !== -1) {
-            updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID
+            updatedFaq['answer'] = '';
+            updatedFaq['qnIDRef'] = this.similarFaqs[this.selectedSimilarFaq].qnID;
+            updatedFaq['PDFPages'] = [];
         }
 
         this.cmService.updateUnansweredFAQ(updatedFaq).subscribe(res => {
@@ -679,7 +683,7 @@ export class CMFaqManageComponent implements OnInit {
 
             if (res.results) {
                 let numPages = res.results.pageCount;
-                for(let i = 1; i <= numPages; i++){
+                for (let i = 1; i <= numPages; i++) {
                     this.pdfPages.push({
                         label: "" + i,
                         value: i
@@ -711,7 +715,32 @@ export class CMFaqManageComponent implements OnInit {
     }
 
     showHistoryDialog() {
-        this.historyDialog = true;
+        this.historySimilarFaqs = [];
+        this.faqs[this.currentIndex].prevAnswer.forEach(prev => {
+            if (prev.qnIDRef) {
+                this.cmService.retrieveSelectedAnsweredFAQ(prev.qnIDRef).subscribe(res => {
+                    if (res.error) {
+                        this.messageService.add({
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                        });
+                        return;
+                    }
+
+                    if (res.results) {
+                        console.log(res.results)
+                        this.historySimilarFaqs.push(res.results);
+                    }
+
+                    this.historyDialog = true;
+                }, error => {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                    });
+                });
+            } else {
+                this.historySimilarFaqs.push({});
+            }
+        });
     }
 
     showUnansweredDialog(index) {
