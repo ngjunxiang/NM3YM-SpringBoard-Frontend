@@ -108,6 +108,7 @@ export class CMFaqManageComponent implements OnInit {
         this.faqs = [];
         this.selectedCategory = '';
         this.selectedSortBy = '';
+        this.filterFAQWithRef = false;
 
         if (this.activeTab == 0) {
             this.disable = true;

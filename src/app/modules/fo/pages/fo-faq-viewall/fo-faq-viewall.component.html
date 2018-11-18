@@ -9,7 +9,7 @@
     <br>
 
     <div class="ui-g" style="display: inline;">
-        <div class="ui-g-8" style="display: flex; padding: 0px 0px;">
+        <div class="ui-g-8" style="display: flex; padding: 0px 0px; margin-bottom: 10px;">
             <ng-container *ngIf="!searched">
                 <div style="padding-left: 0px;">
                     <p style="margin-bottom: 2px;">Select Category:</p>
@@ -21,7 +21,7 @@
                     <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option"
                         (onChange)="filterAndSortBy()"></p-dropdown>
                 </div>
-                <div class="clickable" style="margin-left: 30px; margin-top: 26px;" (click)="retrieveFAQ()">
+                <div class="clickable" style="margin-left: 30px; margin-top: 26px; margin-bottom: 10px;" (click)="retrieveFAQ()">
                     <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px;">
                     <span>Remove filters</span>
                 </div>
@@ -67,10 +67,9 @@
             <button pButton label="Done" class="ui-button-success" type="button" (click)="postNewQuestion()"></button>
             <button pButton label="Cancel" class="ui-button-danger" type="button" (click)="hideAskDialog()"></button>
         </p-footer>
-
     </p-dialog>
 
-    <p-card id="scrollHere" styleClass="ui-card-shadow">
+    <p-card id="scrollHere" style="margin-top: 5px;" styleClass="ui-card-shadow">
         <div *ngIf="!searched">
             <h4>Frequently Asked Questions</h4>
         </div>
