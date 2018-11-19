@@ -21,9 +21,9 @@
                     <p-dropdown [options]="sortByOptions" [(ngModel)]="selectedSortBy" placeholder="Select an option"
                         (onChange)="filterAndSortBy()"></p-dropdown>
                 </div>
-                <div class="clickable" style="margin-left: 30px; margin-top: 26px; margin-bottom: 10px;" (click)="retrieveFAQ()">
+                <div class="clickable" style="margin-left: 30px; margin-top: 26px; margin-bottom: 10px;" (click)="loadPage()">
                     <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px;">
-                    <span>Remove filters</span>
+                    <span><u>Remove filters</u></span>
                 </div>
             </ng-container>
             <ng-container *ngIf="searched">
@@ -36,7 +36,7 @@
         </div>
 
         <div class="ui-g-4">
-            <div *ngIf="showAskQuestion">
+            <div>
                 <button pButton label="Ask a Question" class="ui-button-success" style="float: right; margin-top: 7%;"
                     type="submit" icon="fas fa-share-square" (click)="showConfirmDialog()"></button>
             </div>
@@ -69,7 +69,7 @@
         </p-footer>
     </p-dialog>
 
-    <p-card id="scrollHere" style="margin-top: 5px;" styleClass="ui-card-shadow">
+    <p-card id="scrollHere" styleClass="ui-card-shadow">
         <div *ngIf="!searched">
             <h4>Frequently Asked Questions</h4>
         </div>
@@ -151,7 +151,8 @@
                         <p-card styleClass="pageReferences">
                             Refer to the following similar question: <br>
                             <ng-container *ngIf="similarQn">
-                                <b>Question: </b>{{similarQn.question}} <br>
+                                <b>Question: </b> <br>
+                                 {{similarQn.question}} <br>
                                 <b>Answer: </b>{{similarQn.answer}} <br>
                                 <br>
                                 Refer to the following page(s) on REG51:
