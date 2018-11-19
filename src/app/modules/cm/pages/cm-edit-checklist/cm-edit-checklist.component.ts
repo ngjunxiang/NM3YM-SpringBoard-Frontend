@@ -857,6 +857,14 @@ export class CMEditChecklistComponent implements OnInit {
                     control.get(this.docIndex + '').get('remarks').setValue(rawForm.remarks);
                     control.get(this.docIndex + '').get('changed').setValue('1');
                 }
+            } else {
+                control.get(this.docIndex + '').get('hasConditions').setValue(rawForm.hasConditions);
+                control.get(this.docIndex + '').get('documentName').setValue(rawForm.documentName);
+                control.get(this.docIndex + '').get('documentType').setValue(rawForm.documentType);
+                control.get(this.docIndex + '').get('agmtCode').setValue(rawForm.agmtCode);
+                control.get(this.docIndex + '').get('signature').setValue(rawForm.signature);
+                control.get(this.docIndex + '').get('canWaiver').setValue(rawForm.canWaiver);
+                control.get(this.docIndex + '').get('remarks').setValue(rawForm.remarks);
             }
 
             this.editMode = false;
@@ -1079,7 +1087,7 @@ export class CMEditChecklistComponent implements OnInit {
                 this.checklist['requiredFields'].push(this.currentChecklistForm.get('requiredFields').get(i + '').get('fieldName').value);
             }
         }
-        
+
         // Checklist Conditions
         this.checklist['conditions'] = {};
 
