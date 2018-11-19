@@ -133,7 +133,7 @@ export class FOComponent implements OnInit {
                 res.results.answerNotifications.forEach(notification => {
                     let notif;
 
-                    if (notification.question && notification.answer) {
+                    if (notification.question) {
                         notif = 'Your question <strong><font color="black">' + notification.question + '</font></strong> has been answered';
                     }
 
@@ -147,7 +147,7 @@ export class FOComponent implements OnInit {
                 res.results.qnaNotifications.forEach(notification => {
                     let notif;
 
-                    if (notification.question && notification.answer) {
+                    if (notification.question) {
                         notif = 'Your question <strong><font color="black">' + notification.question + '</font></strong> has been updated';
                     }
 
