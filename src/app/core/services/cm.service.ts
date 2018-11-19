@@ -66,6 +66,7 @@ export class CMService {
     private createChecklistURL = environment.host + '/app/cm/create-checklist';
     private updateChecklistURL = environment.host + '/app/cm/update-checklist';
     private retrieveDeleteChecklistURL = environment.host + '/app/cm/manage-checklist';
+    private revertChecklistURL = environment.host + '/app/cm/revert-checklist';
 
     // FAQ Endpoints
     private createFAQURL = environment.host + '/app/faq/add-CMQ';
@@ -770,6 +771,27 @@ export class CMService {
         const postData = Object.assign(this.authService.authItems, reg51Notification);
 
         return this.http.post<Response>(this.updateReg51NotificationsURL, postData, httpOptions)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    revertChecklist(clID, version) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const checklistData = {
+            'clID': clID,
+            'version': version
+        };
+
+        const postData = Object.assign(this.authService.authItems, checklistData);
+
+        return this.http.post<Response>(this.revertChecklistURL, postData, httpOptions)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

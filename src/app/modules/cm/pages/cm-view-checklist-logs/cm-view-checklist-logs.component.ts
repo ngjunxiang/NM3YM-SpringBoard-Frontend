@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/api';
 
 import { CMService } from '../../../../core/services/cm.service';
@@ -17,6 +18,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
     // UI Control
     loading = false;
     searched = false;
+    totalVersions: number;
 
     // UI Components
     checklistNameVersionData: any[];
@@ -33,6 +35,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
     constructor(
         private cmService: CMService,
+        private confirmationService: ConfirmationService,
         private fb: FormBuilder,
         private messageService: MessageService,
         private route: ActivatedRoute,
@@ -187,12 +190,45 @@ export class CMViewChecklistLogsComponent implements OnInit {
                 });
                 this.checklistLogData['conditions'] = conditions;
                 this.searched = true;
+                this.totalVersions = this.checklistVersionData.length;
             }
         }, error => {
             this.messageService.add({ 
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
             return;
+        });
+    }
+
+    revertChecklist() {
+        this.confirmationService.confirm({
+            message: 'Are you sure you want to revert ' + this.checklistLogData.name + ' to version ' + this.checklistLogData.version + '?',
+            header: 'Revert Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.cmService.revertChecklist(this.checklistLogData.clID, this.checklistLogData.version).subscribe(res => {
+                    if (res.error) {
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Server Error', detail: res.error
+                        });
+                        return;
+                    }
+        
+                    if (res.results) {
+                        this.messageService.add({
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist reverted'
+                        });
+                    }
+                }, error => {
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
+                    });
+                    return;
+                });
+            },
+            reject: () => {
+                return;
+            }
         });
     }
 }
