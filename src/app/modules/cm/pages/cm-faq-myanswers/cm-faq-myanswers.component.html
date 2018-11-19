@@ -78,19 +78,24 @@
                                         <!-- Display referenced similar question -->
                                         <ng-container *ngIf="faqs[currentIndex].qnIDRef">
                                             <p-card styleClass="pageReferences">
-                                                Refer to the following similar question: <br>
+                                                <div>Refer to the following similar question:</div>
+                                                <br>
                                                 <ng-container *ngIf="similarQn">
-                                                    <b>Question: </b>{{similarQn.question}} <br>
-                                                    <b>Answer: </b>{{similarQn.answer}} <br>
-                                                    <br>
-                                                    Refer to the following page(s) on REG51:
-                                                    <ng-container *ngFor="let ref of similarQn.refPages; let len=index">
-                                                        <ng-container *ngIf="len !== similarQn.refPages.length-1">
-                                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}},
-                                                            </a>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="len === similarQn.refPages.length-1">
-                                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                    <b>Question: </b> <br>
+                                                    {{similarQn.question}} <br>
+                                                    <b>Answer: </b> <br>
+                                                    <div [innerHTML]="similarQn.answer"></div>
+                                                    <ng-container *ngIf="similarQn.refPages.length > 0">
+                                                        <br>
+                                                        Refer to the following page(s) on REG51:
+                                                        <ng-container *ngFor="let ref of similarQn.refPages; let len=index">
+                                                            <ng-container *ngIf="len !== similarQn.refPages.length-1">
+                                                                <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}},
+                                                                </a>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="len === similarQn.refPages.length-1">
+                                                                <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                            </ng-container>
                                                         </ng-container>
                                                     </ng-container>
                                                 </ng-container>
@@ -258,19 +263,24 @@
                                         <!-- Display referenced similar question -->
                                         <ng-container *ngIf="faqs[currentIndex].qnIDRef">
                                             <p-card styleClass="pageReferences">
-                                                Refer to the following similar question: <br>
+                                                <div>Refer to the following similar question:</div>
+                                                <br>
                                                 <ng-container *ngIf="similarQn">
-                                                    <b>Question: </b>{{similarQn.question}} <br>
-                                                    <b>Answer: </b>{{similarQn.answer}} <br>
-                                                    <br>
-                                                    Refer to the following page(s) on REG51:
-                                                    <ng-container *ngFor="let ref of similarQn.refPages; let len=index">
-                                                        <ng-container *ngIf="len !== similarQn.refPages.length-1">
-                                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}},
-                                                            </a>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="len === similarQn.refPages.length-1">
-                                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                    <b>Question: </b> <br>
+                                                    {{similarQn.question}} <br>
+                                                    <b>Answer: </b> <br>
+                                                    <div [innerHTML]="similarQn.answer"></div>
+                                                    <ng-container *ngIf="similarQn.refPages.length > 0">
+                                                        <br>
+                                                        Refer to the following page(s) on REG51:
+                                                        <ng-container *ngFor="let ref of similarQn.refPages; let len=index">
+                                                            <ng-container *ngIf="len !== similarQn.refPages.length-1">
+                                                                <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}},
+                                                                </a>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="len === similarQn.refPages.length-1">
+                                                                <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                            </ng-container>
                                                         </ng-container>
                                                     </ng-container>
                                                 </ng-container>
