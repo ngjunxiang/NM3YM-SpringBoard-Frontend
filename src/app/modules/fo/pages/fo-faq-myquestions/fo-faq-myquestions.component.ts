@@ -24,6 +24,7 @@ export class FOFaqMyQuestionsComponent implements OnInit {
     questionForm: FormGroup;
     faqs: any[];
     displayFAQs: any[];
+    similarQn: any;
 
     // Paginator Controls
     numFAQs: number;
@@ -133,6 +134,28 @@ export class FOFaqMyQuestionsComponent implements OnInit {
 
     showAnswerDialog(index) {
         this.currentIndex = index
+
+        this.similarQn = null;
+
+        if (this.faqs[index].qnIDRef) {
+            this.foService.retrieveSelectedAnsweredFAQ(this.faqs[index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.similarQn = res.results;
+                }
+            }, error => {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                });
+            });
+        }
+
         this.answerDialog = true;
     }
 

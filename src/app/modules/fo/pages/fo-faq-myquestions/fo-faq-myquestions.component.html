@@ -33,7 +33,8 @@
                     </ng-container>
 
                     <ng-container *ngIf="answerDialog">
-                        <p-dialog header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true" [maximizable]="true">
+                        <p-dialog header="Answer View" [(visible)]="answerDialog" [closable]="true" [modal]="true"
+                            [maximizable]="true">
                             <div style="font-size: 12px; font-weight: 600; padding-left: 7px">
                                 <i>Question:</i>
                             </div>
@@ -55,7 +56,7 @@
                             <div class="ui-g">
                                 <div class="ui-g-10 ansInDialog" style="color:black; margin-bottom:12px">
                                     <div [innerHTML]="faqs[currentIndex].answer"></div>
-                                    <ng-container *ngIf="faqs[currentIndex].refPages.length > 0">
+                                    <ng-container *ngIf="faqs[currentIndex].refPages && faqs[currentIndex].refPages.length > 0">
                                         <p-card styleClass="pageReferences">
                                             Refer to the following page(s) on REG51:
                                             <ng-container *ngFor="let ref of faqs[currentIndex].refPages; let len=index">
@@ -64,6 +65,32 @@
                                                 </ng-container>
                                                 <ng-container *ngIf="len === faqs[currentIndex].refPages.length-1">
                                                     <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                </ng-container>
+                                            </ng-container>
+                                        </p-card>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="faqs[currentIndex].qnIDRef">
+                                        <p-card styleClass="pageReferences">
+                                            <div>Refer to the following similar question:</div>
+                                            <br>
+                                            <ng-container *ngIf="similarQn">
+                                                <b>Question: </b> <br>
+                                                {{similarQn.question}} <br>
+                                                <b>Answer: </b> <br>
+                                                <div [innerHTML]="similarQn.answer"></div>
+                                                <ng-container *ngIf="similarQn.refPages.length > 0">
+                                                    <br>
+                                                    Refer to the following page(s) on REG51:
+                                                    <ng-container *ngFor="let ref of similarQn.refPages; let len=index">
+                                                        <ng-container *ngIf="len !== similarQn.refPages.length-1">
+                                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}},
+                                                            </a>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="len === similarQn.refPages.length-1">
+                                                            <a href="javascript:void(0)" (click)="openPDF(ref)">{{ref}}</a>
+                                                        </ng-container>
+                                                    </ng-container>
                                                 </ng-container>
                                             </ng-container>
                                         </p-card>

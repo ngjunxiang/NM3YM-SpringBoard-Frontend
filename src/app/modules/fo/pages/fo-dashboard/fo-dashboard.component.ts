@@ -125,6 +125,29 @@ export class FODashboardComponent implements OnInit {
 
             if (res.results) {
                 this.faqs = res.results.answered;
+
+                for (let i = 0; i < this.faqs.length; i++) {
+                    let faq = this.faqs[i];
+
+                    if (faq.qnIDRef) {
+                        this.foService.retrieveSelectedAnsweredFAQ(faq.qnIDRef).subscribe(res => {
+                            if (res.error) {
+                                this.messageService.add({
+                                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                                });
+                                return;
+                            }
+            
+                            if (res.results) {
+                                this.faqs[i]['similarQn'] = res.results;
+                            }
+                        }, error => {
+                            this.messageService.add({
+                                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                            });
+                        });
+                    }
+                }
             } 
 
             this.loading = false;

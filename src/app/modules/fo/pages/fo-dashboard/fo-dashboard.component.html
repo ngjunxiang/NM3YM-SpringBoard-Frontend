@@ -82,6 +82,11 @@
                         <div *ngIf="i < 5">
                             <p-accordionTab header = {{faq.question}}>
                                 <div style="font-weight: 500" [innerHTML]="faq.answer"></div>
+                                Refer to linked similar question:
+                                <div style="font-weight: 500">
+                                    Question: {{ faq.similarQn.question }} <br>
+                                    Answer: {{ faq.similarQn.answer }} <br>
+                                </div>
                             </p-accordionTab>
                         </div>
                     </div>
