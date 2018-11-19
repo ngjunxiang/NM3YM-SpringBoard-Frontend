@@ -32,14 +32,12 @@ export class FODashboardComponent implements OnInit {
     // UI Control
     loading = false;
 
-    // Dummy Variables for Dashboard
-    data1: any;
-    data: any;
-    years: Year[];
+    // Variables for Dashboard
     documents: Document[];
     clients: Client[];
     cols: any[];
     colsDoc: any[];
+    faqs: any[];
 
     // UI Component
     completedClients: number;
@@ -58,6 +56,7 @@ export class FODashboardComponent implements OnInit {
     ngOnInit() {
         this.loading = true
         //Calling from endpoints
+        this.getRecentQuestions();
         this.foService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
                 this.messageService.add({ 
@@ -100,25 +99,42 @@ export class FODashboardComponent implements OnInit {
             });
         })
 
-
-        this.documents = [
-            { name: "SOL", changes: "Modified", date: "12-04-2018" },
-            { name: "SOL", changes: "New", date: "12-04-2018" },
-            { name: "SOL", changes: "Deleted", date: "12-04-2018" },
-            { name: "SOL", changes: "Modified", date: "12-04-2018" }
-        ];
-
         this.colsDoc = [
             { field: 'name', header: 'Document' },
             { field: 'changes', header: 'Changes' },
             { field: 'date', header: 'Date' }
         ];
 
-
         this.cols = [
             { field: 'Client', header: 'Client' },
             { field: 'DocName', header: 'Checklist Name' }
         ];
+    }
+
+    getRecentQuestions() {
+        this.faqs = [];
+
+        this.foService.retrieveUserFAQ().subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                this.loading = false;
+                return;
+            }
+
+            if (res.results) {
+                this.faqs = res.results.answered;
+            } 
+
+            this.loading = false;
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+
+            this.loading = false;
+        });
     }
 
     redirectPending() {

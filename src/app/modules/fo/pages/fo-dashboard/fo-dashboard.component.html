@@ -73,20 +73,18 @@
         </div>
     </div>
 
-    <div class="row">
+    <div *ngIf="faqs.length > 0" class="row">
         <div class="col-md-12">
             <p-card title="YOUR MOST RECENT QUESTIONS" class="table">
                 <hr>
                 <p-accordion>
-                    <p-accordionTab header="Who are the Legal representative to sign off the UBO form?">
-                        Legal representative refers to Authorized signatories as per mandate
-                    </p-accordionTab>
-                    <p-accordionTab header="What are the process / documents required for onboarding a Business Introducer?">
-                        To refer to BI checklist - New application from : http://drs.asia.echonet/applis/drs/drs.nsf/document.xsp?key=PRO/REG/REL-MGT/000665
-                    </p-accordionTab>
-                    <p-accordionTab header="If account is opened recently and it is subjected to 6 month review. Do I have to submit filenet?">
-                        Not required. Please submit 6 month review form only. http://fps-co-asia.is.echonet/public/en/corporate-trust-pic-tpm
-                    </p-accordionTab>
+                    <div *ngFor="let faq of faqs; let i=index">
+                        <div *ngIf="i < 5">
+                            <p-accordionTab header = {{faq.question}}>
+                                <div style="font-weight: 500" [innerHTML]="faq.answer"></div>
+                            </p-accordionTab>
+                        </div>
+                    </div>
                 </p-accordion>
             </p-card>
         </div>
