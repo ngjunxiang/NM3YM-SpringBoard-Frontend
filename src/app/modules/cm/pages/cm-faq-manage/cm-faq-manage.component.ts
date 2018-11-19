@@ -714,9 +714,9 @@ export class CMFaqManageComponent implements OnInit {
         this.answeredDialog = true;
     }
 
-    showHistoryDialog() {
+    async showHistoryDialog() {
         this.historySimilarFaqs = [];
-        this.faqs[this.currentIndex].prevAnswer.forEach(prev => {
+        await this.faqs[this.currentIndex].prevAnswer.forEach(prev => {
             if (prev.qnIDRef) {
                 this.cmService.retrieveSelectedAnsweredFAQ(prev.qnIDRef).subscribe(res => {
                     if (res.error) {
@@ -730,8 +730,6 @@ export class CMFaqManageComponent implements OnInit {
                         console.log(res.results)
                         this.historySimilarFaqs.push(res.results);
                     }
-
-                    this.historyDialog = true;
                 }, error => {
                     this.messageService.add({
                         key: 'msgs', severity: 'error', summary: 'Error', detail: error
@@ -741,6 +739,7 @@ export class CMFaqManageComponent implements OnInit {
                 this.historySimilarFaqs.push({});
             }
         });
+        this.historyDialog = true;
     }
 
     showUnansweredDialog(index) {
