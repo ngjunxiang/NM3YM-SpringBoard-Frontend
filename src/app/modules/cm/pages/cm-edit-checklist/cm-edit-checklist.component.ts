@@ -489,7 +489,7 @@ export class CMEditChecklistComponent implements OnInit {
                         documentType: new FormControl(res.complianceDocuments['optional'][optionalDoc]['documentType']),
                         agmtCode: new FormControl(res.complianceDocuments['optional'][optionalDoc]['agmtCode']),
                         signature: new FormControl(res.complianceDocuments['optional'][optionalDoc]['signature']),
-                        canWaiver: new FormControl(res.legalDocuments['optional'][optionalDoc]['canWaiver']),
+                        canWaiver: new FormControl(res.complianceDocuments['optional'][optionalDoc]['canWaiver']),
                         remarks: new FormControl(res.complianceDocuments['optional'][optionalDoc]['remarks']),
                         docID: new FormControl(res.complianceDocuments['optional'][optionalDoc]['docID']),
                         changed: new FormControl(res.complianceDocuments['optional'][optionalDoc]['changed'])
