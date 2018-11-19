@@ -298,6 +298,7 @@ export class CMFaqManageComponent implements OnInit {
                         dateAsked: faq.dateAsked,
                         views: faq.views,
                         answer: faq.answer,
+                        refPages: faq.refPages,
                         dateAnswered: faq.dateAnswered,
                         CMusername: faq.CMusername,
                         prevAnswer: faq.prevAnswer,
