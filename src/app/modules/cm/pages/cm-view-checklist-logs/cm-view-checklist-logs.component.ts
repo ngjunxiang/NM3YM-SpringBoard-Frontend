@@ -19,6 +19,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
     loading = false;
     searched = false;
     totalVersions: number;
+    deletedChecklists: string[];
 
     // UI Components
     checklistNameVersionData: any[];
@@ -88,12 +89,15 @@ export class CMViewChecklistLogsComponent implements OnInit {
 
     reloadVersions(event) {
         let selectedClID = this.checklistLogForm.get('clID').value;
-        this.checklistNameVersionData.forEach(cl => {
-            if (cl.clID === selectedClID) {
-                this.checklistVersionData = cl.versions;
-            }
-        });
-        this.checklistLogForm.get('version').enable();
+
+        if (selectedClID) {
+            this.checklistNameVersionData.forEach(cl => {
+                if (cl.clID === selectedClID) {
+                    this.checklistVersionData = cl.versions;
+                }
+            });
+            this.checklistLogForm.get('version').enable();
+        }
     }
 
     retrieveChecklistNamesAndVersions() {
@@ -104,6 +108,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
                 });
             }
             if (res.results) {
+                this.deletedChecklists = [];
                 this.checklistNameVersionData = [];
                 res.results['current'].forEach(cl => {
                     let clData = {};
@@ -137,6 +142,7 @@ export class CMViewChecklistLogsComponent implements OnInit {
                         });
                     });
                     this.checklistNameVersionData.push(clData);
+                    this.deletedChecklists.push(cl.name);
                 });
 
                 this.checklistNameVersionData.sort((a, b) => (a > b ? 1 : -1));
@@ -148,6 +154,8 @@ export class CMViewChecklistLogsComponent implements OnInit {
                 this.checklistNameVersionData.forEach(cl => {
                     this.checklistNameData.push(cl.name);
                 });
+
+                this.reloadVersions(Event);
                 this.loading = false;
             }
         }, error => {
@@ -188,9 +196,10 @@ export class CMViewChecklistLogsComponent implements OnInit {
                         conditionOptions: this.checklistLogData['conditions'][conditionName]
                     });
                 });
+                
                 this.checklistLogData['conditions'] = conditions;
-                this.searched = true;
                 this.totalVersions = this.checklistVersionData.length;
+                this.searched = true;
             }
         }, error => {
             this.messageService.add({ 
@@ -218,6 +227,10 @@ export class CMViewChecklistLogsComponent implements OnInit {
                         this.messageService.add({
                             key: 'msgs', severity: 'success', summary: 'Success', detail: 'Checklist reverted'
                         });
+
+                        this.loading = true;
+                        this.retrieveChecklistNamesAndVersions();
+                        this.searched = false;
                     }
                 }, error => {
                     this.messageService.add({ 

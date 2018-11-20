@@ -22,7 +22,7 @@
     <div *ngIf="searched">
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
-                <div *ngIf="totalVersions > 1 && checklistLogData.version != totalVersions" style="float: right">
+                <div *ngIf="(!deletedChecklists.includes(checklistLogData.name) && totalVersions > 1 && checklistLogData.version != totalVersions) || (deletedChecklists.includes(checklistLogData.name) && checklistLogData.version == totalVersions)" style="float: right">
                     <button pButton label="Revert to this version" class="ui-button-warning" type="button" icon="fas fa-undo" (click)="revertChecklist()"></button>
                 </div>
                 <h4>{{ checklistLogData.name }}</h4>
