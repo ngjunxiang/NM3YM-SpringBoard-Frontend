@@ -39,17 +39,11 @@ export class CMDashboardComponent implements OnInit {
     mostRecentQns: any[];
     mostViewedQns: any[];
     tempDate: string;
-
-    //Fake Data 
-    data1: any;
-    data: any;
-    years: Year[];
+    recentSimilarQn: any;
+    mostViewedSimilarQn: any;
     checklists: checklist[];
     clients: Client[];
-    selectedCity: number;
-    cols: any[];
     colsDoc: any[];
-    frozenCol: any[];
 
     constructor(
         private cmService: CMService,
@@ -60,31 +54,16 @@ export class CMDashboardComponent implements OnInit {
     ngOnInit() {
         this.loading = true;
 
-        this.cmService.retrieveDashboardStats().subscribe(res => {
-            if (res.error) {
-                this.messageService.add({
-                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
-            this.faqAnsweredCount = res.results.answeredCount;
-            this.faqUnansweredCount = res.results.unansweredCount;
-            this.updatedChecklists = res.updatedChecklists;
-            this.mostRecentQns = res.mostRecentQuestions;
-            this.mostViewedQns = res.mostPopularQuestions;
-            
-            this.updatedChecklists.forEach(checklist => {
-                this.tempDate = checklist.dateUpdated.slice(0, 10)
-                checklist.dateUpdated = this.tempDate
-            })
-        })
+        this.colsDoc = [
+            { field: 'name', header: 'Checklist' },
+            { field: 'dateUpdated', header: 'Date Modified' },
+        ];
 
         this.cmService.retrieveUncleanedFAQ().subscribe(res => {
             if (res.error) {
                 this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
-                this.loading = false;
                 return;
             }
 
@@ -96,41 +75,36 @@ export class CMDashboardComponent implements OnInit {
             this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
             });
-            this.loading = false;
         });
 
-        this.colsDoc = [
-            { field: 'name', header: 'Checklist' },
-            { field: 'dateUpdated', header: 'Date Modified' },
-        ];
+        this.cmService.retrieveDashboardStats().subscribe(res => {
+            if (res.error) {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                });
+                this.loading = false;
+                return;
+            }
 
-
-        this.data1 = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: '2018',
-                    data: [65, 59, 80, 81, 56, 55, 40, 43, 30, 21, 15, 10],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: '2017',
-                    data: [28, 48, 40, 19, 86, 27, 90, 60, 40, 32, 21, 12],
-                    fill: false,
-                    borderColor: '#565656'
-                },
-            ]
-        }
-
-        this.years = [
-            { label: "2018", value: 2018 },
-            { label: "2017", value: 2017 },
-            { label: "2016", value: 2016 },
-        ];
-
-
-        this.loading = false;
+            if (res.results) {
+                this.faqAnsweredCount = res.results.answeredCount;
+                this.faqUnansweredCount = res.results.unansweredCount;
+                this.updatedChecklists = res.updatedChecklists;
+                this.mostRecentQns = res.mostRecentQuestions;
+                this.mostViewedQns = res.mostPopularQuestions;
+                
+                this.updatedChecklists.forEach(checklist => {
+                    this.tempDate = checklist.dateUpdated.slice(0, 10)
+                    checklist.dateUpdated = this.tempDate
+                });
+                this.loading = false;
+            }
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Server Error', detail: error
+            });
+            this.loading = false;
+        });
     }
 
     redirectAnswered() {
@@ -153,4 +127,54 @@ export class CMDashboardComponent implements OnInit {
         this.router.navigate(['cm/faq/clean']);
     }
 
+    loadMostViewedSimilarQn(event) {
+        if (this.mostViewedQns[event.index].qnIDRef) {
+            this.cmService.retrieveSelectedAnsweredFAQ(this.mostViewedQns[event.index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.mostViewedSimilarQn = res.results;
+                }
+            }, error => {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                });
+            });
+        }
+    }
+
+    setMostViewedSimilarQnToNull(event) {
+        this.mostViewedSimilarQn = null;
+    }
+
+    loadRecentSimilarQn(event) {
+        console.log(this.mostRecentQns[event.index])
+        if (this.mostRecentQns[event.index].qnIDRef) {
+            this.cmService.retrieveSelectedAnsweredFAQ(this.mostRecentQns[event.index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.recentSimilarQn = res.results;
+                }
+            }, error => {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                });
+            });
+        }
+    }
+
+    setRecentSimilarQnToNull(event) {
+        this.recentSimilarQn = null;
+    }
 }

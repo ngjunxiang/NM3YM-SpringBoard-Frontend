@@ -38,6 +38,7 @@ export class FODashboardComponent implements OnInit {
     cols: any[];
     colsDoc: any[];
     faqs: any[];
+    similarQn: any;
 
     // UI Component
     completedClients: number;
@@ -45,7 +46,7 @@ export class FODashboardComponent implements OnInit {
     totalChecklist: number;
     docChanges: any[];
     clientsAffected: any[];
-    tempDate : string; 
+    tempDate: string;
 
     constructor(
         private foService: FOService,
@@ -54,50 +55,10 @@ export class FODashboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loading = true
+        this.loading = true;
+
         //Calling from endpoints
-        this.getRecentQuestions();
-        this.foService.retrieveDashboardStats().subscribe(res => {
-            if (res.error) {
-                this.messageService.add({ 
-                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
-                });
-                return;
-            }
-
-            this.docChanges = [];
-
-            if (res.results) {
-                this.completedClients = res.results.completedCount;
-                this.pendingClients = res.results.pendingCount;
-                this.totalChecklist = this.completedClients + this.pendingClients; 
-                this.clientsAffected = res.clientsAffected;
-
-                res.docChanges.notifications.forEach(docChange => {
-                    this.tempDate = docChange.dateCreated.slice(0,10)
-                    docChange.dateCreated = this.tempDate
-
-                    var typeOfChange: string;
-                    if (docChange.type.changed == "1") {
-                        typeOfChange = "Modified"
-                    } else if (docChange.type.changed == "2") {
-                        typeOfChange = "Added"
-                    } else {
-                        typeOfChange = "Deleted"
-                    }
-                    this.docChanges.push({
-                        name: docChange.type.documentName, changes: typeOfChange, date: docChange.dateCreated
-                    });
-
-                });
-                this.clientsAffected = res.clientsAffected;
-            }
-            this.loading = false;
-        }, error => {
-            this.messageService.add({ 
-                key: 'msgs', severity: 'error', summary: 'Error', detail: error
-            });
-        })
+        this.getDashboardStats();
 
         this.colsDoc = [
             { field: 'name', header: 'Document' },
@@ -111,52 +72,48 @@ export class FODashboardComponent implements OnInit {
         ];
     }
 
-    getRecentQuestions() {
-        this.faqs = [];
-
-        this.foService.retrieveUserFAQ().subscribe(res => {
+    getDashboardStats() {
+        this.foService.retrieveDashboardStats().subscribe(res => {
             if (res.error) {
                 this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
-                this.loading = false;
                 return;
             }
 
+            this.docChanges = [];
+
             if (res.results) {
-                this.faqs = res.results.answered;
+                console.log(res)
+                this.completedClients = res.results.completedCount;
+                this.pendingClients = res.results.pendingCount;
+                this.totalChecklist = this.completedClients + this.pendingClients;
+                this.clientsAffected = res.clientsAffected;
+                this.faqs = res.recentlyAnswerQuestions;
 
-                for (let i = 0; i < this.faqs.length; i++) {
-                    let faq = this.faqs[i];
+                res.docChanges.notifications.forEach(docChange => {
+                    this.tempDate = docChange.dateCreated.slice(0, 10)
+                    docChange.dateCreated = this.tempDate
 
-                    if (faq.qnIDRef) {
-                        this.foService.retrieveSelectedAnsweredFAQ(faq.qnIDRef).subscribe(res => {
-                            if (res.error) {
-                                this.messageService.add({
-                                    key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
-                                });
-                                return;
-                            }
-            
-                            if (res.results) {
-                                this.faqs[i]['similarQn'] = res.results;
-                            }
-                        }, error => {
-                            this.messageService.add({
-                                key: 'msgs', severity: 'error', summary: 'Error', detail: error
-                            });
-                        });
+                    var typeOfChange: string;
+                    if (docChange.type.changed == "1") {
+                        typeOfChange = "Modified"
+                    } else if (docChange.type.changed == "2") {
+                        typeOfChange = "Added"
+                    } else {
+                        typeOfChange = "Deleted"
                     }
-                }
-            } 
+                    this.docChanges.push({
+                        name: docChange.type.documentName, changes: typeOfChange, date: docChange.dateCreated
+                    });
+                });
 
-            this.loading = false;
+                this.loading = false;
+            }
         }, error => {
             this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
-
-            this.loading = false;
         });
     }
 
@@ -182,5 +139,30 @@ export class FODashboardComponent implements OnInit {
                 name: docName
             }
         });
+    }
+
+    loadSimilarQn(event) {
+        if (this.faqs[event.index].qnIDRef) {
+            this.foService.retrieveSelectedAnsweredFAQ(this.faqs[event.index].qnIDRef).subscribe(res => {
+                if (res.error) {
+                    this.messageService.add({
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                    });
+                    return;
+                }
+
+                if (res.results) {
+                    this.similarQn = res.results;
+                }
+            }, error => {
+                this.messageService.add({
+                    key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                });
+            });
+        }
+    }
+
+    setSimilarQnToNull(event) {
+        this.similarQn = null;
     }
 }

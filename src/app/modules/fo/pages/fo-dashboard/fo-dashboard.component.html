@@ -61,8 +61,8 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
-                        <tr class="clickable" (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])" pTooltip="View client's checklist"
-                            tooltipPosition="right">
+                        <tr class="clickable" (click)="redirectAffectedClient(rowData['obID'], rowData['DocName'])"
+                            pTooltip="View client's checklist" tooltipPosition="right">
                             <td *ngFor="let col of columns">
                                 {{rowData[col.field]}}
                             </td>
@@ -77,16 +77,20 @@
         <div class="col-md-12">
             <p-card title="RECENTLY ANSWERED QUESTIONS" class="table">
                 <hr>
-                <p-accordion>
+                <p-accordion (onOpen)="loadSimilarQn($event)" (onClose)="setSimilarQnToNull($event)">
                     <div *ngFor="let faq of faqs; let i=index">
                         <div *ngIf="i < 5">
-                            <p-accordionTab header = {{faq.question}}>
+                            <p-accordionTab header="{{faq.question}}">
                                 <div style="font-weight: 500" [innerHTML]="faq.answer"></div>
-                                Refer to linked similar question:
-                                <div style="font-weight: 500">
-                                    Question: {{ faq.similarQn.question }} <br>
-                                    Answer: {{ faq.similarQn.answer }} <br>
-                                </div>
+                                <ng-container *ngIf="faq.qnIDRef">
+                                    Refer to linked similar question:
+                                    <div *ngIf="similarQn" style="font-weight: 500">
+                                        <b>Question: </b> <br>
+                                        {{similarQn.question}} <br>
+                                        <b>Answer: </b> <br>
+                                        <div [innerHTML]="similarQn.answer"></div>
+                                    </div>
+                                </ng-container>
                             </p-accordionTab>
                         </div>
                     </div>
