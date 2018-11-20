@@ -39,6 +39,7 @@ export class CMFaqManageComponent implements OnInit {
     currentSearch: string;
     categoryOptions: any[];
     sortByOptions: any[];
+    sortedAndFiltered: boolean;
     selectedCategory: string = '';
     selectedSortBy: string = '';
     filterFAQWithRef: false;
@@ -69,7 +70,6 @@ export class CMFaqManageComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.activeTab = params['activeTab'];
         });
-
 
         if (!this.activeTab) {
             this.activeTab = 0;
@@ -107,6 +107,7 @@ export class CMFaqManageComponent implements OnInit {
     loadPage() {
         this.loading = true;
         this.faqs = [];
+        this.sortedAndFiltered = false;
         this.selectedCategory = '';
         this.selectedSortBy = '';
         this.filterFAQWithRef = false;
@@ -277,6 +278,7 @@ export class CMFaqManageComponent implements OnInit {
 
     filterAndSortBy() {
         this.loading = true;
+        this.sortedAndFiltered = true;
         this.faqs = [];
 
         this.cmService.retrieveFAQByCategoryAndSort(this.selectedCategory, this.selectedSortBy, this.filterFAQWithRef).subscribe(res => {
@@ -581,14 +583,18 @@ export class CMFaqManageComponent implements OnInit {
             }
 
             if (res.results) {
-                this.loadPage();
                 this.messageService.add({
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Answer updated'
                 });
             }
 
+            if (this.sortedAndFiltered) {
+                this.filterAndSortBy();
+            } else {
+                this.loadPage();
+            }
+
             this.hideAnsEditArea();
-            this.loadPage();
 
             if (updatedFaq.qnIDRef) {
                 this.loadSimilarFaq(updatedFaq.qnIDRef);

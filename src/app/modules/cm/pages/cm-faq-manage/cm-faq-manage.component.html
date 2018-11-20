@@ -163,7 +163,7 @@
                                             <p-accordion>
                                                 <ng-container *ngFor="let similarFaq of similarFaqs; let i=index">
                                                     <p-accordionTab header="{{similarFaq.question}}">
-                                                        {{similarFaq.answer}}
+                                                        <div [innerHTML]="similarFaq.answer"></div>
                                                         <div style="padding-top: 1%">
                                                             <button *ngIf="selectedSimilarFaq === i" pButton style="width:15%; margin-right:1%"
                                                                 class="ui-button-primary" icon="pi pi-check" label="Selected"
@@ -343,7 +343,7 @@
                         <p-accordion>
                             <ng-container *ngFor="let similarFaq of similarFaqs; let i=index">
                                 <p-accordionTab header="{{similarFaq.question}}">
-                                    {{similarFaq.answer}}
+                                    <div [innerHTML]="similarFaq.answer"></div>
                                     <div style="padding-top: 1%">
                                         <button *ngIf="selectedSimilarFaq === i" pButton style="width:15%; margin-right:1%"
                                             class="ui-button-primary" icon="pi pi-check" label="Selected" type="button"

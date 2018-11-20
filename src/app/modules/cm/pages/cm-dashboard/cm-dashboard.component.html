@@ -52,7 +52,7 @@
 </div>
 
 
-<div class="row">
+<div *ngIf="mostRecentQns.length > 0" class="row">
     <div class="col-md-12">
         <p-card title="RECENTLY ASKED QUESTIONS" class="table">
             <hr>
@@ -69,7 +69,7 @@
     </div>
 </div>
 
-<div class="row">
+<div *ngIf="mostViewedQns.length > 0" class="row">
     <div class="col-md-12">
         <p-card title="MOST VIEWED QUESTIONS" class="table">
             <hr>
