@@ -40,6 +40,7 @@ interface DashboardResults {
     docChanges: any;
     clientsAffected: any[];
     pendingClients: any[];
+    recentlyAnswerQuestions: any[];
     error: string;
 }
 
