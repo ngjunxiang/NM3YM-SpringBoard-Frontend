@@ -84,7 +84,6 @@ export class FODashboardComponent implements OnInit {
             this.docChanges = [];
 
             if (res.results) {
-                console.log(res)
                 this.completedClients = res.results.completedCount;
                 this.pendingClients = res.results.pendingCount;
                 this.totalChecklist = this.completedClients + this.pendingClients;

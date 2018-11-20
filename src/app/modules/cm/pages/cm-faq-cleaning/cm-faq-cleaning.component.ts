@@ -371,31 +371,6 @@ export class CMFaqCleaningComponent implements OnInit {
     }
 
     submitCleanedFAQ() {
-        // Refresh token
-        this.authService.authenticate('CM').then(res => {
-            if (res.newToken && localStorage.getItem('USERTYPE') === 'CM') {
-                this.authService.setLocalStorage(localStorage.getItem('USERNAME'), res.newToken, localStorage.getItem('USERTYPE'));
-            }
-
-            if (res.error === 'Invalid Token' || res.error === 'Token has expired') {
-                this.router.navigate(['/login'], {
-                    queryParams: {
-                        err: 'auth001'
-                    }
-                });
-                return;
-            }
-
-            if (res.error === 'Invalid userType') {
-                this.router.navigate(['/' + localStorage.getItem('USERTYPE').toLowerCase() + '/dashboard'], {
-                    queryParams: {
-                        err: 'auth001'
-                    }
-                });
-                return;
-            }
-        });
-
         //Invalid FormControlName Controls
         let invalidCount = 0;
         let emptyEntityCount = 0;

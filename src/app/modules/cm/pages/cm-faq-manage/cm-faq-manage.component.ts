@@ -734,7 +734,6 @@ export class CMFaqManageComponent implements OnInit {
                     }
 
                     if (res.results) {
-                        console.log(res.results)
                         this.historySimilarFaqs.push(res.results);
                     }
                 }, error => {

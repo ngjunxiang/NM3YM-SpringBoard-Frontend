@@ -153,7 +153,6 @@ export class CMDashboardComponent implements OnInit {
     }
 
     loadRecentSimilarQn(event) {
-        console.log(this.mostRecentQns[event.index])
         if (this.mostRecentQns[event.index].qnIDRef) {
             this.cmService.retrieveSelectedAnsweredFAQ(this.mostRecentQns[event.index].qnIDRef).subscribe(res => {
                 if (res.error) {
