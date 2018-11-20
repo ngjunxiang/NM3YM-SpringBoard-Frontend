@@ -657,6 +657,8 @@ export class CMEditChecklistComponent implements OnInit {
     }
 
     showDialog(docType: string) {
+        this.dialogForm.get('agmtCode').enable();
+        this.dialogForm.get('documentName').enable();
         this.dialogForm.patchValue({
             hasConditions: false,
             documentName: '',
@@ -668,6 +670,7 @@ export class CMEditChecklistComponent implements OnInit {
             docID: '',
             changed: '2'
         });
+
         this.dialogForm.setControl('conditions', new FormArray([]));
 
         this.retrieveDocumentConditions();
@@ -1011,6 +1014,11 @@ export class CMEditChecklistComponent implements OnInit {
         this.editMode = true;
         this.blocked = true;
 
+        if (this.dialogForm.get('changed').value !== '2') {
+            this.dialogForm.get('documentName').disable();
+            this.dialogForm.get('agmtCode').disable();
+        }
+
         docType === 'mandatory' ? this.mEditDisplay = true : this.oEditDisplay = true;
     }
 
@@ -1080,7 +1088,7 @@ export class CMEditChecklistComponent implements OnInit {
 
         // Checklist Required Fields
         this.checklist['requiredFields'] = [];
-        console.log(this.currentChecklistForm.get('requiredFields')['controls'])
+
         for (let i = 0; i < this.currentChecklistForm.get('requiredFields')['length']; i++) {
             if (!(this.currentChecklistForm.get('requiredFields')['length'] - 1 === i
                 && this.currentChecklistForm.get('requiredFields').get(i + '').get('fieldName').value === '')) {
