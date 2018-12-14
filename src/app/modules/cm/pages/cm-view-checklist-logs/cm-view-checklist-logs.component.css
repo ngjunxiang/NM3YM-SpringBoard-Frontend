@@ -1,12 +1,20 @@
-.deleted-field { background-color: #FF756B !important}
-.edited-field { background-color: #FFE073 !important}
-.new-field { background-color: #AADD81 !important}
-
-.zoom {
-    zoom: 90%;
+.deleted-field {
+    background-color: #FF756B !important
 }
 
-:host >>> .ui-overlaypanel {
+.edited-field {
+    background-color: #FFE073 !important
+}
+
+.new-field {
+    background-color: #AADD81 !important
+}
+
+/* .zoom {
+    zoom: 90%;
+} */
+
+:host>>>.ui-overlaypanel {
     z-index: 100;
     left: 40%;
     right: 10%;
@@ -30,6 +38,7 @@
 /***********************************
   Style of invalid and dirty inputs 
  ***********************************/
- :host >>>  p-dropdown.ng-dirty.ng-invalid > .ui-dropdown > label.ui-dropdown-label {
-     background-color: #f8bdc3;
- }
+
+:host>>>p-dropdown.ng-dirty.ng-invalid>.ui-dropdown>label.ui-dropdown-label {
+    background-color: #f8bdc3;
+}

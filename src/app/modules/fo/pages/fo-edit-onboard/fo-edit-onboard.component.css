@@ -1,18 +1,26 @@
-.deleted-field { background-color: #FF756B !important}
-.edited-field { background-color: #FFE073 !important}
-.new-field { background-color: #AADD81 !important}
-
-.zoom {
-    zoom: 90%;
+.deleted-field {
+    background-color: #FF756B !important
 }
 
-:host >>> .ui-overlaypanel {
+.edited-field {
+    background-color: #FFE073 !important
+}
+
+.new-field {
+    background-color: #AADD81 !important
+}
+
+/* .zoom {
+    zoom: 90%;
+} */
+
+:host>>>.ui-overlaypanel {
     z-index: 100;
     left: 40%;
     right: 10%;
 }
 
-:host >>> .ui-table-scrollable-header {
+:host>>>.ui-table-scrollable-header {
     margin-right: 0 auto;
     width: 100% !important;
 }
@@ -32,7 +40,7 @@
     color: #000000 !important;
 }
 
-.th{
+.th {
     text-align: center;
 }
 
@@ -50,7 +58,7 @@
     width: 10%
 }
 
-.cCondName{
+.cCondName {
     width: 13%
 }
 
@@ -66,10 +74,9 @@
     width: 35%
 }
 
-.cSignature { 
+.cSignature {
     width: 10%
 }
-
 
 /* Legal Checklist Documents*/
 
@@ -81,7 +88,7 @@
     width: 10%
 }
 
-.lCondName{
+.lCondName {
     width: 10%
 }
 
@@ -97,10 +104,10 @@
     width: 25%
 }
 
-.lSignature { 
+.lSignature {
     width: 10%
 }
 
-.lWaiver { 
+.lWaiver {
     width: 10%
 }

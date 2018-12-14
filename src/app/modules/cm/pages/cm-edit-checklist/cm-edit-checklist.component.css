@@ -1,15 +1,17 @@
 /*
  * Specific styles of signin component
  */
+
 /*
  * General styles
  */
 
-.zoom {
+/* .zoom {
     zoom: 90%;
-}
+} */
 
-body, html {
+body,
+html {
     height: 100%;
     background-repeat: no-repeat;
     background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
@@ -38,13 +40,12 @@ body, html {
     transition: background-color 0.2s;
 }
 
-.cButton:hover
-{
-    background-color: #3c7cad  !important;
+.cButton:hover {
+    background-color: #3c7cad !important;
     color: white;
 }
 
-:host >>> .sticy .ui-widget-header.ui-datatable-scrollable-header {
+:host>>>.sticy .ui-widget-header.ui-datatable-scrollable-header {
     position: sticky;
     position: -webkit-sticky;
     position: -moz-sticky;
@@ -54,46 +55,47 @@ body, html {
     z-index: 100;
 }
 
-
 /*
  * CSS of p-chip for condition's options 
 */
-:host >>> .ui-chips > ul.ui-inputtext .ui-chips-token {
+
+:host>>>.ui-chips>ul.ui-inputtext .ui-chips-token {
     margin-bottom: 1.5px;
 }
 
-:host >>> .ui-chips > ul.ui-inputtext .ui-chips-input-token input{
+:host>>>.ui-chips>ul.ui-inputtext .ui-chips-input-token input {
     min-width: 350px;
 }
 
-:host >>> .ui-chips > ul.ui-inputtext .ui-chips-input-token input{
+:host>>>.ui-chips>ul.ui-inputtext .ui-chips-input-token input {
     min-width: 350px;
 }
 
 /*Condition p-chip's border turns red when empty*/
-:host >>>  .invalid .ui-chips > ul.ui-inputtext {
+
+:host>>>.invalid .ui-chips>ul.ui-inputtext {
     border-color: #bd3f3f;
 }
 
 /***********************************
   Style of invalid and dirty inputs 
  ***********************************/
-:host >>> .ui-inputtext.ng-dirty.ng-invalid,
-:host >>>  p-dropdown.ng-dirty.ng-invalid > .ui-dropdown > label.ui-dropdown-label,
-:host >>> p-calendar.ng-dirty.ng-invalid > .ui-calendar > .ui-inputtext,
-:host >>> p-chips.ng-dirty.ng-invalid > .ui-chips > .ui-inputtext,
-:host >>> p-autocomplete.ng-dirty.ng-invalid > .ui-autocomplete > .ui-inputtext {
+
+:host>>>.ui-inputtext.ng-dirty.ng-invalid,
+:host>>>p-dropdown.ng-dirty.ng-invalid>.ui-dropdown>label.ui-dropdown-label,
+:host>>>p-calendar.ng-dirty.ng-invalid>.ui-calendar>.ui-inputtext,
+:host>>>p-chips.ng-dirty.ng-invalid>.ui-chips>.ui-inputtext,
+:host>>>p-autocomplete.ng-dirty.ng-invalid>.ui-autocomplete>.ui-inputtext {
     background-color: #f8bdc3;
 }
-
-
 
 /*
  * Card component
  */
+
 .card {
     background-color: #F7F7F7;
-     /* shadows and rounded borders */
+    /* shadows and rounded borders */
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
@@ -114,6 +116,7 @@ body, html {
 /*
  * Form styles
  */
+
 .form-create #input {
     direction: ltr;
     height: 40px;
@@ -146,8 +149,8 @@ body, html {
 .form-create .form-control:focus {
     border-color: rgb(104, 145, 162);
     outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgb(104, 145, 162);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgb(104, 145, 162);
 }
 
 .btn.btn-signin {
@@ -175,25 +178,25 @@ body, html {
 }
 
 .error-inline-msg {
-    height: 14px;		
-    color: #AB081C;		
-    font-size: 10px;	
+    height: 14px;
+    color: #AB081C;
+    font-size: 10px;
     line-height: 14px;
     width: 300px;
     margin-bottom: 5px;
     margin-top: 3px;
-} 
+}
 
 .error-label {
     height: 14px;
     line-height: 28px;
     text-align: center;
-    color: #AB081C;	
-    font-size: 14px;	
+    color: #AB081C;
+    font-size: 14px;
     float: left;
     width: 100%;
     margin-top: -15px;
-    margin-bottom:15px;
+    margin-bottom: 15px;
 }
 
 /*
@@ -210,7 +213,7 @@ body, html {
     width: 10%
 }
 
-.cCondName{
+.cCondName {
     width: 13%
 }
 
@@ -226,10 +229,9 @@ body, html {
     width: 35%
 }
 
-.cSignature { 
+.cSignature {
     width: 10%
 }
-
 
 /* Legal Checklist Documents*/
 
@@ -241,7 +243,7 @@ body, html {
     width: 10%
 }
 
-.lCondName{
+.lCondName {
     width: 10%
 }
 
@@ -257,21 +259,18 @@ body, html {
     width: 25%
 }
 
-.lSignature { 
+.lSignature {
     width: 10%
 }
 
-.lWaiver { 
+.lWaiver {
     width: 10%
 }
-
-
 
 /*
  * Overwriting Ngx-Wig Editor Component
- */ 
+ */
 
-:host >>> .nw-editor{
+:host>>>.nw-editor {
     height: 200px;
 }
-

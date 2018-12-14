@@ -1,8 +1,10 @@
-.zoom{
+/* .zoom{
     zoom: 90%;
-}
+} */
 
-.field { padding-top:1% }
+.field {
+    padding-top: 1%
+}
 
 .bButton {
     margin: 0;
@@ -14,7 +16,7 @@
 }
 
 .bButton:hover {
-    background-color: #3c7cad  !important;
+    background-color: #3c7cad !important;
     color: white;
 }
 
@@ -22,11 +24,11 @@
   Style of invalid and dirty inputs 
  **********************************/
 
-:host >>> .ui-inputtext.ng-dirty.ng-invalid,
-:host >>>  p-dropdown.ng-dirty.ng-invalid > .ui-dropdown > label.ui-dropdown-label,
-:host >>> p-calendar.ng-dirty.ng-invalid > .ui-calendar > .ui-inputtext {
+:host>>>.ui-inputtext.ng-dirty.ng-invalid,
+:host>>>p-dropdown.ng-dirty.ng-invalid>.ui-dropdown>label.ui-dropdown-label,
+:host>>>p-calendar.ng-dirty.ng-invalid>.ui-calendar>.ui-inputtext {
     background-color: #f8bdc3;
-} 
+}
 
 /***************************
    All Table Column Widths 
@@ -42,7 +44,7 @@
     width: 10%
 }
 
-.cCondName{
+.cCondName {
     width: 13%
 }
 
@@ -58,10 +60,9 @@
     width: 35%
 }
 
-.cSignature { 
+.cSignature {
     width: 10%
 }
-
 
 /* Legal Checklist Documents*/
 
@@ -73,7 +74,7 @@
     width: 10%
 }
 
-.lCondName{
+.lCondName {
     width: 10%
 }
 
@@ -89,11 +90,10 @@
     width: 25%
 }
 
-.lSignature { 
+.lSignature {
     width: 10%
 }
 
-.lWaiver { 
+.lWaiver {
     width: 10%
 }
-
