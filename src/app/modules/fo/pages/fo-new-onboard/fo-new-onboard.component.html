@@ -1,243 +1,254 @@
-<!-- Select Checklist -->
-<div class="zoom" *ngIf="!loading">
-    <div *ngIf="step === 1">
-        <p-card [formGroup]="checklistForm" styleClass="ui-card-shadow">
-            <h4>Select Checklist</h4>
-            <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistId"
-                [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
-        </p-card>
-        <button pButton label="Next" class="ui-button-success" style="width: 15%; margin-top: 1%" type="button" icon="fas fa-arrow-right"
-            (click)="submitChecklistName()"></button>
-    </div>
-    <!-- Enter Required and Condition Fields -->
-    <div *ngIf="step === 2" [formGroup]="checklistForm">
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow" id="requiredFields">
-                <h4>Required Fields</h4>
-                <div formArrayName="requiredFields">
-                    <div class="field" *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index"
-                        [formGroupName]="i">
-                        <h5>{{ selectedChecklistData.requiredFields[i] }}</h5>
-                        <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" style="display: inline-block; width: 50%"
-                            placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}" formControlName="field"
-                            required pInputText>
-                        <p-dropdown *ngIf="i === 1" [options]="rmNames" placeholder="Select RM Name" formControlName="field"
-                            [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
-                        <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" dateFormat="dd/mm/yy"
-                            dataType="string" placeholder="Enter Date of Submission" formControlName="field"
-                            readonlyInput="true"></p-calendar>
-                    </div>
-                </div>
+<div class="container-fluid">
+
+
+    <!-- Select Checklist -->
+    <div class="" *ngIf="!loading">
+
+        <div *ngIf="step === 1">
+            <p-card [formGroup]="checklistForm" styleClass="prime-card-override">
+                <h4>Select Checklist</h4>
+                <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistId"
+                    [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
             </p-card>
-        </div>
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow" id="conditions">
-                <h4>Conditions</h4>
-                <div formArrayName="conditions">
-                    <div class="field" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index"
-                        [formGroupName]="i">
-                        <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
-                        <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option"
-                            formControlName="conditionOption" [style]="{'width':'30%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
-                    </div>
-                </div>
-            </p-card>
+            <button pButton label="Next" class="ui-button-success" style="width: 15%; margin-top: 1%" type="button"
+                icon="fas fa-arrow-right" (click)="submitChecklistName()"></button>
         </div>
 
-        <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left"
-            (click)="back()"></button>
-        <button pButton label="Next" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-arrow-right"
-            (click)="submitFieldsConditions()"></button>
-    </div>
+        <!-- Enter Required and Condition Fields -->
+        <div *ngIf="step === 2" [formGroup]="checklistForm">
 
-    <!-- Check Documents Required -->
-    <div *ngIf="step === 3" [formGroup]="checklistForm">
+            <div style="padding-bottom: 10px">
+                <p-card styleClass="" id="requiredFields">
+                    <!-- <h4>Required Fields</h4> -->
 
-        <!-- Compliance Documents -->
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow" formGroupName="complianceDocuments">
-                <h4>Compliance Documents</h4>
-                <h5>Mandatory</h5>
-                <div *ngIf="selectedChecklistData.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
-                    No documents in this section
-                </div>
-                <div *ngIf="selectedChecklistData.complianceDocuments.mandatory.length > 0" style="padding-bottom:1%"
-                    formArrayName="mandatory">
-                    <p-table [value]="selectedChecklistData.complianceDocuments.mandatory" [scrollable]="true"
-                        scrollHeight="350px" selectionMode="single">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                    <div class="row" formArrayName="requiredFields">
+                        <div class="field col-6" *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index"
+                            [formGroupName]="i">
+                            <label>{{ selectedChecklistData.requiredFields[i] }}</label>
+
+                            <!-- they hardcored the component type-->
+                            <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" 
+                            placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}" formControlName="field" required pInputText>
+
+                            <p-dropdown *ngIf="i === 1" [options]="rmNames" class="prime-dropdown-override" 
+                            placeholder="Select RM Name" formControlName="field" [style]=""></p-dropdown>
+
+                            <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" class="prime-dropdown-override" 
+                            dateFormat="dd/mm/yy" dataType="string" 
+                            placeholder="Enter Date of Submission" formControlName="field" readonlyInput="true"></p-calendar>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+            <div style="padding-bottom: 10px">
+                <p-card styleClass="ui-card-shadow" id="conditions">
+                    <h4>Conditions</h4>
+                    <div class="row" formArrayName="conditions">
+                        <div class="field col-6" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index"
+                            [formGroupName]="i">
+                            <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
+                            <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option"
+                                formControlName="conditionOption" [style]="{'width':'30%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+
+            <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left"
+                (click)="back()"></button>
+            <button pButton label="Next" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-arrow-right"
+                (click)="submitFieldsConditions()"></button>
+
+        </div>
+
+        <!-- Check Documents Required -->
+        <div *ngIf="step === 3" [formGroup]="checklistForm">
+
+            <!-- Compliance Documents -->
+            <div style="padding-bottom: 10px">
+                <p-card styleClass="ui-card-shadow" formGroupName="complianceDocuments">
+                    <h4>Compliance Documents</h4>
+                    <h5>Mandatory</h5>
+                    <div *ngIf="selectedChecklistData.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="selectedChecklistData.complianceDocuments.mandatory.length > 0" style="padding-bottom:1%"
+                        formArrayName="mandatory">
+                        <p-table [value]="selectedChecklistData.complianceDocuments.mandatory" [scrollable]="true"
+                            scrollHeight="350px" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
                                                                             col.field === 'documentType' ? 'cDocType' :
                                                                             col.field === 'conditionName' ? 'cCondName' : 
                                                                             col.field === 'conditionOptions' ? 'cCondOption' : 
                                                                             col.field === 'agmtCode' ? 'cAgmtCode' :
                                                                             col.field === 'remarks' ? 'cRemark' :
                                                                             col.field === 'signature' ? 'cSignature' : null">
-                                    {{ col.header }}
-                                </th>
-                                <th style="width: 10%">Checked?</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                            <ng-container *ngIf="doc.conditions.length === 0">
-                                <tr>
-                                    <td class="cDocName">
-                                        {{ doc.documentName }}
-                                    </td>
-                                    <td class="cDocType">
-                                        {{ doc.documentType }}
-                                    </td>
-                                    <td class="cCondName"> - </td>
-                                    <td class="cCondOption"> - </td>
-                                    <td class="cAgmtCode">
-                                        {{ doc.agmtCode }}
-                                    </td>
-                                    <td class="cRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%;">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
                                 </tr>
-                            </ng-container>
-                            <ng-container *ngIf="doc.conditions.length > 0">
-                                <ng-container *ngFor="let condition of selectedChecklistData.complianceDocuments.mandatory[i].conditions; let j=index">
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngIf="doc.conditions.length === 0">
                                     <tr>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cDocName" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">{{
-                                                doc.documentName }}</td>
-                                            <td class="cDocType" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">{{
-                                                doc.documentType }}</td>
-                                        </ng-container>
-                                        <td class="cCondName">{{ condition.conditionName }}</td>
-                                        <td class="cCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cAgmtCode" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">{{
-                                                doc.agmtCode }}</td>
-                                            <td class="cRemark" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length"
-                                                [innerHTML]='doc.remarks'></td>
-                                            <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length"
-                                                style="text-align:center; vertical-align:middle; width: 10%;">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
+                                        <td class="cDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="cDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="cCondName"> - </td>
+                                        <td class="cCondOption"> - </td>
+                                        <td class="cAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="cRemark" [innerHTML]='doc.remarks'></td>
+                                        <td class="cSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="cSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle; width: 10%;">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
                                     </tr>
                                 </ng-container>
-                            </ng-container>
-                        </ng-template>
-                    </p-table>
-                </div>
+                                <ng-container *ngIf="doc.conditions.length > 0">
+                                    <ng-container *ngFor="let condition of selectedChecklistData.complianceDocuments.mandatory[i].conditions; let j=index">
+                                        <tr>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cDocName" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">{{
+                                                    doc.documentName }}</td>
+                                                <td class="cDocType" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">{{
+                                                    doc.documentType }}</td>
+                                            </ng-container>
+                                            <td class="cCondName">{{ condition.conditionName }}</td>
+                                            <td class="cCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cAgmtCode" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">{{
+                                                    doc.agmtCode }}</td>
+                                                <td class="cRemark" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length"
+                                                    [innerHTML]='doc.remarks'></td>
+                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="selectedChecklistData.complianceDocuments.mandatory[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%;">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
 
-                <h5>Optional</h5>
-                <div *ngIf="selectedChecklistData.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
-                    No documents in this section
-                </div>
-                <div *ngIf="selectedChecklistData.complianceDocuments.optional.length > 0" style="padding-bottom:1%"
-                    formArrayName="optional">
-                    <p-table [value]="selectedChecklistData.complianceDocuments.optional" [scrollable]="true"
-                        scrollHeight="350px" selectionMode="single">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                    <h5>Optional</h5>
+                    <div *ngIf="selectedChecklistData.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="selectedChecklistData.complianceDocuments.optional.length > 0" style="padding-bottom:1%"
+                        formArrayName="optional">
+                        <p-table [value]="selectedChecklistData.complianceDocuments.optional" [scrollable]="true"
+                            scrollHeight="350px" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
                                                                             col.field === 'documentType' ? 'cDocType' :
                                                                             col.field === 'conditionName' ? 'cCondName' : 
                                                                             col.field === 'conditionOptions' ? 'cCondOption' : 
                                                                             col.field === 'agmtCode' ? 'cAgmtCode' :
                                                                             col.field === 'remarks' ? 'cRemark' :
                                                                             col.field === 'signature' ? 'cSignature' : null">
-                                    {{ col.header }}
-                                </th>
-                                <th style="width: 10%">Checked?</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                            <ng-container *ngIf="doc.conditions.length === 0">
-                                <tr>
-                                    <td class="cDocName">
-                                        {{ doc.documentName }}
-                                    </td>
-                                    <td class="cDocType">
-                                        {{ doc.documentType }}
-                                    </td>
-                                    <td class="cCondName"> - </td>
-                                    <td class="cCondOption"> - </td>
-                                    <td class="cAgmtCode">
-                                        {{ doc.agmtCode }}
-                                    </td>
-                                    <td class="cRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="cSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="cSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%;">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
                                 </tr>
-                            </ng-container>
-                            <ng-container *ngIf="doc.conditions.length > 0">
-                                <ng-container *ngFor="let condition of selectedChecklistData.complianceDocuments.optional[i].conditions; let j=index">
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngIf="doc.conditions.length === 0">
                                     <tr>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cDocName" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">{{
-                                                doc.documentName }}</td>
-                                            <td class="cDocType" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">{{
-                                                doc.documentType }}</td>
-                                        </ng-container>
-                                        <td class="cCondName">{{ condition.conditionName }}</td>
-                                        <td class="cCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="cAgmtCode" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">{{
-                                                doc.agmtCode }}</td>
-                                            <td class="cRemark" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length"
-                                                [innerHTML]='doc.remarks'></td>
-                                            <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length"
-                                                style="text-align:center; vertical-align:middle; width: 10%;">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
+                                        <td class="cDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="cDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="cCondName"> - </td>
+                                        <td class="cCondOption"> - </td>
+                                        <td class="cAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="cRemark" [innerHTML]='doc.remarks'></td>
+                                        <td class="cSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="cSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle; width: 10%;">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
                                     </tr>
                                 </ng-container>
-                            </ng-container>
-                        </ng-template>
-                    </p-table>
-                </div>
-            </p-card>
-        </div>
+                                <ng-container *ngIf="doc.conditions.length > 0">
+                                    <ng-container *ngFor="let condition of selectedChecklistData.complianceDocuments.optional[i].conditions; let j=index">
+                                        <tr>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cDocName" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">{{
+                                                    doc.documentName }}</td>
+                                                <td class="cDocType" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">{{
+                                                    doc.documentType }}</td>
+                                            </ng-container>
+                                            <td class="cCondName">{{ condition.conditionName }}</td>
+                                            <td class="cCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="cAgmtCode" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">{{
+                                                    doc.agmtCode }}</td>
+                                                <td class="cRemark" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length"
+                                                    [innerHTML]='doc.remarks'></td>
+                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="selectedChecklistData.complianceDocuments.optional[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%;">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-card>
+            </div>
 
-        <!-- Legal Documents -->
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow" formGroupName="legalDocuments">
-                <h4>Legal Documents</h4>
-                <h5>Mandatory</h5>
-                <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
-                    No documents in this section
-                </div>
-                <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length > 0" style="padding-bottom:1%"
-                    formArrayName="mandatory">
-                    <p-table [value]="selectedChecklistData.legalDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
-                        selectionMode="single">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
+            <!-- Legal Documents -->
+            <div style="padding-bottom: 10px">
+                <p-card styleClass="ui-card-shadow" formGroupName="legalDocuments">
+                    <h4>Legal Documents</h4>
+                    <h5>Mandatory</h5>
+                    <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length > 0" style="padding-bottom:1%"
+                        formArrayName="mandatory">
+                        <p-table [value]="selectedChecklistData.legalDocuments.mandatory" [scrollable]="true"
+                            scrollHeight="350px" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
                                                                             col.field === 'documentType' ? 'lDocType' :
                                                                             col.field === 'conditionName' ? 'lCondName' : 
                                                                             col.field === 'conditionOptions' ? 'lCondOption' : 
@@ -245,94 +256,94 @@
                                                                             col.field === 'remarks' ? 'lRemark' :
                                                                             col.field === 'signature' ? 'lSignature' : 
                                                                             col.field === 'canWaiver' ? 'lWaiver' : null">
-                                    {{ col.header }}
-                                </th>
-                                <th style="width: 10%">Checked?</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                            <ng-container *ngIf="doc.conditions.length === 0">
-                                <tr>
-                                    <td class="lDocName">
-                                        {{ doc.documentName }}
-                                    </td>
-                                    <td class="lDocType">
-                                        {{ doc.documentType }}
-                                    </td>
-                                    <td class="lCondName"> - </td>
-                                    <td class="lCondOption"> - </td>
-                                    <td class="lAgmtCode">
-                                        {{ doc.agmtCode }}
-                                    </td>
-                                    <td class="lRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%;">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
                                 </tr>
-                            </ng-container>
-                            <ng-container *ngIf="doc.conditions.length > 0">
-                                <ng-container *ngFor="let condition of selectedChecklistData.legalDocuments.mandatory[i].conditions; let j=index">
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngIf="doc.conditions.length === 0">
                                     <tr>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lDocName" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">{{
-                                                doc.documentName }}</td>
-                                            <td class="lDocType" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">{{
-                                                doc.documentType }}</td>
-                                        </ng-container>
-                                        <td class="lCondName">{{ condition.conditionName }}</td>
-                                        <td class="lCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lAgmtCode" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">{{
-                                                doc.agmtCode }}</td>
-                                            <td class="lRemark" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length"
-                                                [innerHTML]='doc.remarks'></td>
-                                            <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length"
-                                                style="text-align:center; vertical-align:middle; width: 10%;">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
+                                        <td class="lDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="lDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="lCondName"> - </td>
+                                        <td class="lCondOption"> - </td>
+                                        <td class="lAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="lRemark" [innerHTML]='doc.remarks'></td>
+                                        <td class="lSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="doc.canWaiver">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="!doc.canWaiver">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle; width: 10%;">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
                                     </tr>
                                 </ng-container>
-                            </ng-container>
-                        </ng-template>
-                    </p-table>
-                </div>
+                                <ng-container *ngIf="doc.conditions.length > 0">
+                                    <ng-container *ngFor="let condition of selectedChecklistData.legalDocuments.mandatory[i].conditions; let j=index">
+                                        <tr>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lDocName" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">{{
+                                                    doc.documentName }}</td>
+                                                <td class="lDocType" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">{{
+                                                    doc.documentType }}</td>
+                                            </ng-container>
+                                            <td class="lCondName">{{ condition.conditionName }}</td>
+                                            <td class="lCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lAgmtCode" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">{{
+                                                    doc.agmtCode }}</td>
+                                                <td class="lRemark" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length"
+                                                    [innerHTML]='doc.remarks'></td>
+                                                <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="selectedChecklistData.legalDocuments.mandatory[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%;">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
 
-                <h5>Optional</h5>
-                <div *ngIf="selectedChecklistData.legalDocuments.optional.length === 0" style="padding-bottom:1%">
-                    No documents in this section
-                </div>
-                <div *ngIf="selectedChecklistData.legalDocuments.optional.length > 0" style="padding-bottom:1%"
-                    formArrayName="optional">
-                    <p-table [value]="selectedChecklistData.legalDocuments.optional" [scrollable]="true" scrollHeight="350px"
-                        selectionMode="single">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
+                    <h5>Optional</h5>
+                    <div *ngIf="selectedChecklistData.legalDocuments.optional.length === 0" style="padding-bottom:1%">
+                        No documents in this section
+                    </div>
+                    <div *ngIf="selectedChecklistData.legalDocuments.optional.length > 0" style="padding-bottom:1%"
+                        formArrayName="optional">
+                        <p-table [value]="selectedChecklistData.legalDocuments.optional" [scrollable]="true"
+                            scrollHeight="350px" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
                                                                             col.field === 'documentType' ? 'lDocType' :
                                                                             col.field === 'conditionName' ? 'lCondName' : 
                                                                             col.field === 'conditionOptions' ? 'lCondOption' : 
@@ -340,87 +351,90 @@
                                                                             col.field === 'remarks' ? 'lRemark' :
                                                                             col.field === 'signature' ? 'lSignature' :
                                                                             col.field === 'canWaiver' ? 'lWaiver' : null">
-                                    {{ col.header }}
-                                </th>
-                                <th style="width: 10%">Checked?</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                            <ng-container *ngIf="doc.conditions.length === 0">
-                                <tr>
-                                    <td class="lDocName">
-                                        {{ doc.documentName }}
-                                    </td>
-                                    <td class="lDocType">
-                                        {{ doc.documentType }}
-                                    </td>
-                                    <td class="lCondName"> - </td>
-                                    <td class="lCondOption"> - </td>
-                                    <td class="lAgmtCode">
-                                        {{ doc.agmtCode }}
-                                    </td>
-                                    <td class="lRemark" [innerHTML]='doc.remarks'></td>
-                                    <td class="lSignature" *ngIf="doc.signature">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lSignature" *ngIf="!doc.signature">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td class="lWaiver" *ngIf="doc.canWaiver">
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                    <td class="lWaiver" *ngIf="!doc.canWaiver">
-                                        <i class="fa fa-times"></i>
-                                    </td>
-                                    <td style="text-align:center; vertical-align:middle; width: 10%;">
-                                        <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                    </td>
+                                        {{ col.header }}
+                                    </th>
+                                    <th style="width: 10%">Checked?</th>
                                 </tr>
-                            </ng-container>
-                            <ng-container *ngIf="doc.conditions.length > 0">
-                                <ng-container *ngFor="let condition of selectedChecklistData.legalDocuments.optional[i].conditions; let j=index">
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+                                <ng-container *ngIf="doc.conditions.length === 0">
                                     <tr>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lDocName" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">{{
-                                                doc.documentName }}</td>
-                                            <td class="lDocType" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">{{
-                                                doc.documentType }}</td>
-                                        </ng-container>
-                                        <td class="lCondName">{{ condition.conditionName }}</td>
-                                        <td class="lCondOption">{{ condition.conditionOption }}</td>
-                                        <ng-container *ngIf="j === 0">
-                                            <td class="lAgmtCode" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">{{
-                                                doc.agmtCode }}</td>
-                                            <td class="lRemark" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length"
-                                                [innerHTML]='doc.remarks'></td>
-                                            <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
-                                                <i class="fa fa-check"></i>
-                                            </td>
-                                            <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
-                                                <i class="fa fa-times"></i>
-                                            </td>
-                                            <td [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length"
-                                                style="text-align:center; vertical-align:middle; width: 10%;">
-                                                <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                            </td>
-                                        </ng-container>
+                                        <td class="lDocName">
+                                            {{ doc.documentName }}
+                                        </td>
+                                        <td class="lDocType">
+                                            {{ doc.documentType }}
+                                        </td>
+                                        <td class="lCondName"> - </td>
+                                        <td class="lCondOption"> - </td>
+                                        <td class="lAgmtCode">
+                                            {{ doc.agmtCode }}
+                                        </td>
+                                        <td class="lRemark" [innerHTML]='doc.remarks'></td>
+                                        <td class="lSignature" *ngIf="doc.signature">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lSignature" *ngIf="!doc.signature">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="doc.canWaiver">
+                                            <i class="fa fa-check"></i>
+                                        </td>
+                                        <td class="lWaiver" *ngIf="!doc.canWaiver">
+                                            <i class="fa fa-times"></i>
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle; width: 10%;">
+                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                        </td>
                                     </tr>
                                 </ng-container>
-                            </ng-container>
-                        </ng-template>
-                    </p-table>
-                </div>
-            </p-card>
+                                <ng-container *ngIf="doc.conditions.length > 0">
+                                    <ng-container *ngFor="let condition of selectedChecklistData.legalDocuments.optional[i].conditions; let j=index">
+                                        <tr>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lDocName" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">{{
+                                                    doc.documentName }}</td>
+                                                <td class="lDocType" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">{{
+                                                    doc.documentType }}</td>
+                                            </ng-container>
+                                            <td class="lCondName">{{ condition.conditionName }}</td>
+                                            <td class="lCondOption">{{ condition.conditionOption }}</td>
+                                            <ng-container *ngIf="j === 0">
+                                                <td class="lAgmtCode" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">{{
+                                                    doc.agmtCode }}</td>
+                                                <td class="lRemark" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length"
+                                                    [innerHTML]='doc.remarks'></td>
+                                                <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-check"></i>
+                                                </td>
+                                                <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length">
+                                                    <i class="fa fa-times"></i>
+                                                </td>
+                                                <td [attr.rowspan]="selectedChecklistData.legalDocuments.optional[i].conditions.length"
+                                                    style="text-align:center; vertical-align:middle; width: 10%;">
+                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-card>
+            </div>
+            <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left"
+                (click)="back()"></button>
+            <button pButton label="Create" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-plus"
+                (click)="createOnboardProcess()" [disabled]="processing"></button>
         </div>
-        <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left"
-            (click)="back()"></button>
-        <button pButton label="Create" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-plus"
-            (click)="createOnboardProcess()" [disabled]="processing"></button>
     </div>
+
+
 </div>

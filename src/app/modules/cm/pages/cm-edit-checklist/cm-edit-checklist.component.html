@@ -53,53 +53,48 @@
         <div style="padding-bottom: 10px" id="conditions">
             <p-card styleClass="ui-card-shadow">
 
-                <h4 style="display: inline-block;">
-                    Checklist Conditions
-                </h4>
-                <p-dialog header="Information on Checklist Conditions" [(visible)]="cInfoDisplay" [closable]="true"
-                    [maximizable]="true">
-                    <font size="3">
-                        <p>
-                            <strong>Checklist conditions are tied to onboarding documents which are required under
-                                certain conditions.</strong>
-                            <br>
-                            <i>E.G. Financial Intermediary Agreement is only required if Booking Center is Hong Kong.</i>
-                        </p>
+                <h4 style="display: inline-block;">Checklist Conditions</h4>
+
+                <p-dialog header="Information on Checklist Conditions" [(visible)]="cInfoDisplay" [closable]="true" [maximizable]="true">
+
+                    <p>
+                        <strong>Checklist conditions are tied to onboarding documents which are required under
+                            certain conditions.</strong>
                         <br>
-                        <p>
-                            <strong>In the below image, it shows the creation of a Conditional Document which requires
-                                its condition
-                                parameters to be filled.</strong>
-                        </p>
-                        <img src="assets/images/CM_Cond_Info_Part_1.jpg" alt="Example of Condition" class="dark-logo"
-                            style="border:1px solid grey; width: 500px; height: 250px" />
-                        <br>
-                        <br>
-                        <p>
-                            <strong>
-                                To create the condition paramenters, you are required to fill in 'Condition' and
-                                'Condition Options' as shown in the below
-                                image.
-                                <br> In the example below, there are 2 options, 'Singapore' and 'Hong Kong'.
-                                <br> Each option needs be typed into the 'Condition Options' input field.
-                                <br> Press Enter after writing each option.
-                            </strong>
-                        </p>
-                        <img src="assets/images/CM_Cond_Info_Part_2.jpg" alt="Example of Condition" class="dark-logo"
-                            style="border:1px solid grey; width: 500px; height: 150px" />
-                        <br>
-                        <br>
-                        <p>
-                            <strong>
-                                The conditon parameters you have created will be reflected on the creation of
-                                Conditional Document.
-                            </strong>
-                        </p>
-                        <img src="assets/images/CM_Cond_Info_Part_3.jpg" alt="Example of Condition" class="dark-logo"
-                            style="border:1px solid grey; width: 500px; height: 250px" />
-                        <br>
-                        <br>
-                    </font>
+                        <i>E.G. Financial Intermediary Agreement is only required if Booking Center is Hong Kong.</i>
+                    </p>
+                    <br>
+                    <p>
+                        <strong>In the below image, it shows the creation of a Conditional Document which requires
+                            its condition
+                            parameters to be filled.</strong>
+                    </p>
+                    <img src="assets/images/CM_Cond_Info_Part_1.jpg" alt="Example of Condition" class="dark-logo" style="border:1px solid grey; width: 500px; height: 250px" />
+                    <br>
+                    <br>
+                    <p>
+                        <strong>
+                            To create the condition paramenters, you are required to fill in 'Condition' and
+                            'Condition Options' as shown in the below
+                            image.
+                            <br> In the example below, there are 2 options, 'Singapore' and 'Hong Kong'.
+                            <br> Each option needs be typed into the 'Condition Options' input field.
+                            <br> Press Enter after writing each option.
+                        </strong>
+                    </p>
+                    <img src="assets/images/CM_Cond_Info_Part_2.jpg" alt="Example of Condition" class="dark-logo" style="border:1px solid grey; width: 500px; height: 150px" />
+                    <br>
+                    <br>
+                    <p>
+                        <strong>
+                            The conditon parameters you have created will be reflected on the creation of
+                            Conditional Document.
+                        </strong>
+                    </p>
+                    <img src="assets/images/CM_Cond_Info_Part_3.jpg" alt="Example of Condition" class="dark-logo" style="border:1px solid grey; width: 500px; height: 250px" />
+                    <br>
+                    <br>
+
                 </p-dialog>
                 <div style="float: right">
                     <button type="button" (click)="showCInfoDialog()" pButton icon="pi pi-info-circle" class="ui-button-rounded ui-button-info"
@@ -110,6 +105,7 @@
                     <div *ngFor="let condition of currentChecklistForm.get('conditions').controls; let i=index">
                         <h5>Condition {{ i + 1 }}</h5>
                         <div [formGroupName]="i" class="ui-g">
+
                             <div style="margin-left: 0px; width: 100%;">
                                 <input type="text" class="form-control" style="display: inline-block; width: 50%"
                                     placeholder="Condition (e.g. Booking Center)" formControlName="conditionName"
@@ -134,6 +130,7 @@
                                 <hr *ngIf="i !== currentChecklistForm.get('conditions').controls.length - 1">
                             </div>
                             <hr>
+                            
                         </div>
                     </div>
                 </div>
@@ -477,8 +474,8 @@
                         </p-table>
                     </div>
 
-                    <button pButton label="Optional" class="cButton" style="display: inline-block; width: 20%"
-                        type="button" icon="fa fa-plus" (click)="showDialog('optional')"></button>
+                    <button pButton label="Optional" class="cButton" style="display: inline-block; width: 20%" type="button"
+                        icon="fa fa-plus" (click)="showDialog('optional')"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Optional Document" [(visible)]="oDisplay" [closable]="false"
                         [maximizable]="true" [width]="800">
@@ -997,8 +994,8 @@
                         </p-table>
                     </div>
 
-                    <button pButton label="Optional" class="cButton" style="display: inline-block; width: 20%"
-                        type="button" icon="fa fa-plus" (click)="showDialog('optional')"></button>
+                    <button pButton label="Optional" class="cButton" style="display: inline-block; width: 20%" type="button"
+                        icon="fa fa-plus" (click)="showDialog('optional')"></button>
 
                     <p-dialog [formGroup]="dialogForm" header="Add Optional Document" [(visible)]="oDisplay" [closable]="false"
                         [maximizable]="true" [width]="800">

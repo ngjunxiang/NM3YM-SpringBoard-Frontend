@@ -20,6 +20,7 @@
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h4 style="display: inline-block;">Compliance Documents</h4>
+
                 <p-overlayPanel #legendTable appendTo="'body'">
                     <p-table [columns]="tableCols" [value]="docChanges">
                         <ng-template pTemplate="header" let-columns>
@@ -40,6 +41,8 @@
                         </ng-template>
                     </p-table>
                 </p-overlayPanel>
+
+
                 <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info"
                     (mouseover)="legendTable.show($event)" (mouseout)="legendTable.hide()"></button>
                 <div formGroupName="complianceDocuments">
@@ -49,11 +52,52 @@
                     </div>
                     <div *ngIf="obDetails.complianceDocuments.mandatory.length > 0" style="padding-bottom:1%"
                         formArrayName="mandatory">
-                        <p-table [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
-                            [selectionMode]="single">
-                            <ng-template pTemplate="header">
+                        <!-- <p-table [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
+                            [selectionMode]="single"> -->
+<!-- 
+                        <p-table [columns]="selectedColumns" [value]="obDetails.complianceDocuments.mandatory">
+                            <ng-template pTemplate="caption">
+                                <div style="text-align:left">
+                                    <p-multiSelect [options]="complianceCols" [(ngModel)]="selectedColumns"
+                                        [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                        [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
+                                    <th *ngFor="let col of columns">
+                                        {{col.header}}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td *ngFor="let col of columns">
+                                        {{rowData[col.field]}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table> -->
+
+
+
+
+
+
+                        <p-table [columns]="selectedColumns" [value]="obDetails.complianceDocuments.mandatory" [selectionMode]="single">
+
+
+                            <ng-template pTemplate="caption">
+                                <div style="text-align:left">
+                                    <p-multiSelect [options]="complianceCols" [(ngModel)]="selectedColumns"
+                                        [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                        [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
                                                                                         col.field === 'documentType' ? 'cDocType' :
                                                                                         col.field === 'conditionName' ? 'cCondName' : 
                                                                                         col.field === 'conditionOptions' ? 'cCondOption' : 
@@ -65,7 +109,12 @@
                                     <th style="width: 10%">Checked?</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
+
+
+
+                            <!-- we must change the data here to make it able to hide and show -->
+
+                            <ng-template pTemplate="body" let-doc let-i="rowIndex" let-rowData let-columns="columns">
                                 <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0">
                                     <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
                                                     doc.changed === '2' ? 'new-field' :
@@ -99,6 +148,10 @@
                                         </td>
                                     </tr>
                                 </ng-container>
+
+
+                                
+
                                 <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length > 0">
                                     <ng-container *ngFor="let condition of obDetails.complianceDocuments.mandatory[i].conditions; let j=index">
                                         <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
@@ -132,6 +185,7 @@
                                                 <td *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
                                                     <i class="fa fa-times"></i>
                                                 </td> -->
+                                                
                                                 <td [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"
                                                     style="text-align:center; vertical-align:middle; width: 10%">
                                                     <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
@@ -139,8 +193,15 @@
                                             </ng-container>
                                         </tr>
                                     </ng-container>
-                                </ng-container>
+                                </ng-container> 
+
+
                             </ng-template>
+
+
+
+
+
                         </p-table>
                     </div>
 
@@ -278,8 +339,7 @@
                     <div *ngIf="obDetails.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.legalDocuments.mandatory.length > 0" style="padding-bottom:1%"
-                        formArrayName="mandatory">
+                    <div *ngIf="obDetails.legalDocuments.mandatory.length > 0" style="padding-bottom:1%" formArrayName="mandatory">
                         <p-table [value]="obDetails.legalDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
                             [selectionMode]="single">
                             <ng-template pTemplate="header">
@@ -380,8 +440,7 @@
                     <div *ngIf="obDetails.legalDocuments.optional.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.legalDocuments.optional.length > 0" style="padding-bottom:1%"
-                        formArrayName="optional">
+                    <div *ngIf="obDetails.legalDocuments.optional.length > 0" style="padding-bottom:1%" formArrayName="optional">
                         <p-table [value]="obDetails.legalDocuments.optional" [scrollable]="true" scrollHeight="350px"
                             [selectionMode]="single">
                             <ng-template pTemplate="header">

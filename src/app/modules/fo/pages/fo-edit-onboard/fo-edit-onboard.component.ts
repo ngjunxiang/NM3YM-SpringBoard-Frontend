@@ -30,6 +30,8 @@ export class FOEditOnboardComponent implements OnInit {
     docChanges: any[];
     tableCols: any[];
 
+    selectedColumns: any[];
+
 
     constructor(
         private fb: FormBuilder,
@@ -52,6 +54,7 @@ export class FOEditOnboardComponent implements OnInit {
             { title: this.obName }
         ];
 
+        
         this.createForm();
 
         this.retrieveOnboardDetails(this.route.snapshot.paramMap.get('id'));
@@ -67,28 +70,7 @@ export class FOEditOnboardComponent implements OnInit {
             { typeOfChange: "Document Added", cellColour: "Green" },
             { typeOfChange: "Document Removed", cellColour: "Red" }
         ];
-    }
 
-    @HostListener('window:beforeunload')
-    canDeactivate(): Promise<boolean> | boolean {
-        if (this.isSubmitted) return true;
-        if (!this.documentsForm.dirty) {
-            return true;
-        }
-        return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
-    }
-
-    createForm() {
-        this.documentsForm = this.fb.group({
-            complianceDocuments: this.fb.group({
-                mandatory: new FormArray([]),
-                optional: new FormArray([])
-            }),
-            legalDocuments: this.fb.group({
-                mandatory: new FormArray([]),
-                optional: new FormArray([])
-            })
-        });
 
         this.legalCols = [
             { field: 'documentName', header: 'Document Name' },
@@ -110,6 +92,40 @@ export class FOEditOnboardComponent implements OnInit {
             { field: 'remarks', header: 'Remarks' },
             { field: 'signature', header: 'Signature Required' }
         ];
+
+        this.selectedColumns  = this.complianceCols;
+ 
+    }
+
+    @HostListener('window:beforeunload')
+    canDeactivate(): Promise<boolean> | boolean {
+        if (this.isSubmitted) return true;
+        if (!this.documentsForm.dirty) {
+            return true;
+        }
+        return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
+    }
+
+    createForm() {
+
+        // this.documentsForm = new FormGroup({
+        //     i: new FormControl()
+        //  });
+
+        this.documentsForm = this.fb.group({
+            complianceDocuments: this.fb.group({
+                mandatory: new FormArray([]),
+                optional: new FormArray([])
+            }),
+            legalDocuments: this.fb.group({
+                mandatory: new FormArray([]),
+                optional: new FormArray([])
+            })
+        });
+
+        
+
+        
     }
 
     initForm() {

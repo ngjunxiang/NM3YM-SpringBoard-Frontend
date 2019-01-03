@@ -3,27 +3,27 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 export const routes: Routes = [
-    { 
-        path: '', 
-        redirectTo: 'login', 
-        pathMatch: 'full' 
+    {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
     },
-    { 
-        path: 'ma', 
-        redirectTo: 'fo', 
-        pathMatch: 'full' 
+    {
+        path: 'ma',
+        redirectTo: 'fo',
+        pathMatch: 'full'
     },
-    { 
-        path: 'rm', 
-        redirectTo: 'fo', 
-        pathMatch: 'full' 
+    {
+        path: 'rm',
+        redirectTo: 'fo',
+        pathMatch: 'full'
     },
-    { 
-        path: 'login', 
-        loadChildren: './modules/login/login.module#LoginModule' 
+    {
+        path: 'login',
+        loadChildren: './modules/login/login.module#LoginModule'
     },
-    { 
-        path: 'admin', 
+    {
+        path: 'admin',
         loadChildren: './modules/admin/admin.module#AdminModule'
     },
     {
@@ -36,14 +36,17 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        loadChildren: './modules/login/login.module#LoginModule' 
+        loadChildren: './modules/login/login.module#LoginModule'
     }
 ];
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forRoot(routes, { useHash: true })
+        RouterModule.forRoot(routes, {
+            useHash: true,
+            enableTracing: false // <-- debugging purposes only
+        }) 
     ],
     exports: [
         RouterModule
@@ -51,3 +54,5 @@ export const routes: Routes = [
     declarations: []
 })
 export class AppRoutingModule { }
+
+

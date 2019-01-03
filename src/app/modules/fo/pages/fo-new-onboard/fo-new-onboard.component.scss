@@ -3,7 +3,7 @@
 } */
 
 .field {
-    padding-top: 1%
+    /* padding-top: 1% */
 }
 
 .bButton {
@@ -12,12 +12,18 @@
     background-color: #499ad8 !important;
     border: 1px solid #499ad8 !important;
     font-size: 14px;
-    transition: background-color 0.2s;
+    /* transition: background-color 0.2s; */
 }
 
 .bButton:hover {
     background-color: #3c7cad !important;
     color: white;
+}
+
+label {
+    font-size: 0.875em;
+    color: #333333;
+    display: inline-block;
 }
 
 /***********************************
@@ -28,6 +34,18 @@
 :host>>>p-dropdown.ng-dirty.ng-invalid>.ui-dropdown>label.ui-dropdown-label,
 :host>>>p-calendar.ng-dirty.ng-invalid>.ui-calendar>.ui-inputtext {
     background-color: #f8bdc3;
+}
+
+:host::ng-deep {
+    &.prime-card-override {
+        box-shadow: none;
+        border-radius: 0;
+    }
+    &.prime-dropdown-override {
+        display: inline-block;
+        width: 100%;
+        height: 36px;
+    }
 }
 
 /***************************

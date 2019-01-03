@@ -6,6 +6,15 @@
 	],
 	"settings": {
 		"typescript.tsdk": "node_modules/typescript/lib",
-		"git.ignoreLimitWarning": true
+		"git.ignoreLimitWarning": true,
+		"files.exclude": {
+			"**/.git": true,
+			"**/.DS_Store": true,
+			"**/.vscode": true,
+			"**/*.spec.ts": true,
+			"**/*.js.map": true,
+			"**/node_modules": true,
+			"node_modules": true
+		}
 	}
 }
