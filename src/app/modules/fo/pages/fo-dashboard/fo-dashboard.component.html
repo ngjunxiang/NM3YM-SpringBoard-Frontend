@@ -1,34 +1,32 @@
 <div *ngIf="!loading">
     <div class="row">
-        <div class="col-lg-4 col-sm-6">
-            <p-card title="PENDING CLIENTS" class="style1 clickable" (click)="redirectPending()" pTooltip="View all pending clients"
-                tooltipPosition="right">
+        <div class="col-4">
+            <p-card header="Pending Clients" class="clickable" (click)="redirectPending()" pTooltip="View all pending clients" tooltipPosition="right">
                 <hr>
-                <p class="cardP">{{pendingClients}}</p>
+                {{pendingClients}}
             </p-card>
         </div>
 
-        <div class="col-lg-4 col-sm-6">
-            <p-card title="COMPLETED CLIENTS" class="style1 clickable" (click)="redirectCompleted()" pTooltip="View all completed clients"
-                tooltipPosition="right">
+        <div class="col-4">
+            <p-card header="Completed Clients" class="clickable" (click)="redirectCompleted()" pTooltip="View all completed clients" tooltipPosition="right">
                 <hr>
-                <p class="cardP">{{completedClients}}</p>
+                {{completedClients}}
             </p-card>
         </div>
 
-        <div class="col-lg-4 col-sm-6">
-            <p-card title="TOTAL ONBOARDS" class="style1">
+        <div class="col-4">
+            <p-card header="Total Onboard">
                 <hr>
-                <p class="cardP">{{totalChecklist}}</p>
+                {{totalChecklist}}
             </p-card>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <p-card title="RECENT CHANGES IN DOCUMENTS" class="table">
+        <div class="col-6">
+            <p-card header="Recent Changes in Documents" class="table">
                 <hr>
-                <p>List of changes in documents</p>
+                
                 <p-table [columns]="colsDoc" [value]="docChanges" [scrollable]="true" scrollHeight="100%">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
@@ -48,10 +46,10 @@
             </p-card>
         </div>
 
-        <div class="col-md-6">
-            <p-card title="CLIENTS AFFECTED" class="table">
+        <div class="col-6">
+            <p-card header="Clients Affected" class="table">
                 <hr>
-                <p>There are {{clientsAffected?.length}} affected clients</p>
+                
                 <p-table [columns]="cols" [value]="clientsAffected" [scrollable]="true" scrollHeight="100%">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
@@ -74,8 +72,8 @@
     </div>
 
     <div *ngIf="faqs.length > 0" class="row">
-        <div class="col-md-12">
-            <p-card title="RECENTLY ANSWERED QUESTIONS" class="table">
+        <div class="col-12">
+           <p-card header="Recently Answered Questions" class="table">
                 <hr>
                 <p-accordion (onOpen)="loadSimilarQn($event)" (onClose)="setSimilarQnToNull($event)">
                     <div *ngFor="let faq of faqs; let i=index">

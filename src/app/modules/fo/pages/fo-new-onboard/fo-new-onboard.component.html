@@ -1,64 +1,51 @@
 <div class="container-fluid">
 
-
     <!-- Select Checklist -->
-    <div class="" *ngIf="!loading">
+    <div *ngIf="!loading">
 
         <div *ngIf="step === 1">
             <p-card [formGroup]="checklistForm" styleClass="prime-card-override">
-                <h4>Select Checklist</h4>
                 <p-dropdown [options]="checklistNameDropdownData" placeholder="Select a checklist" formControlName="selectedChecklistId"
                     [style]="{'width':'50%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
             </p-card>
-            <button pButton label="Next" class="ui-button-success" style="width: 15%; margin-top: 1%" type="button"
-                icon="fas fa-arrow-right" (click)="submitChecklistName()"></button>
+            <button pButton label="Next" class="ui-button-success" type="button" icon="fas fa-arrow-right" (click)="submitChecklistName()"></button>
         </div>
 
         <!-- Enter Required and Condition Fields -->
         <div *ngIf="step === 2" [formGroup]="checklistForm">
 
-            <div style="padding-bottom: 10px">
-                <p-card styleClass="" id="requiredFields">
-                    <!-- <h4>Required Fields</h4> -->
+            <p-card id="requiredFields" styleClass="prime-card-override">
+                <div class="row" formArrayName="requiredFields">
+                    <div class="field col-6" [formGroupName]="i" *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index">
 
-                    <div class="row" formArrayName="requiredFields">
-                        <div class="field col-6" *ngFor="let field of checklistForm.get('requiredFields').controls; let i=index"
-                            [formGroupName]="i">
-                            <label>{{ selectedChecklistData.requiredFields[i] }}</label>
+                        <label>{{ selectedChecklistData.requiredFields[i] }}</label>
 
-                            <!-- they hardcored the component type-->
-                            <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" 
-                            placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}" formControlName="field" required pInputText>
+                        <input *ngIf="i !== 1 && i !== 3" type="text" id="input" class="form-control" placeholder="Enter {{ selectedChecklistData.requiredFields[i] }}"
+                            formControlName="field" required pInputText>
 
-                            <p-dropdown *ngIf="i === 1" [options]="rmNames" class="prime-dropdown-override" 
-                            placeholder="Select RM Name" formControlName="field" [style]=""></p-dropdown>
+                        <p-dropdown *ngIf="i === 1" [options]="rmNames" class="prime-dropdown-override" placeholder="Select RM Name"
+                            formControlName="field"></p-dropdown>
 
-                            <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" class="prime-dropdown-override" 
-                            dateFormat="dd/mm/yy" dataType="string" 
-                            placeholder="Enter Date of Submission" formControlName="field" readonlyInput="true"></p-calendar>
-                        </div>
+                        <p-calendar *ngIf="i === 3" [showIcon]="true" [maxDate]="maxDateValue" class="prime-dropdown-override"
+                            dateFormat="dd/mm/yy" dataType="string" placeholder="Enter Date of Submission"
+                            formControlName="field" readonlyInput="true"></p-calendar>
                     </div>
-                </p-card>
-            </div>
-            <div style="padding-bottom: 10px">
-                <p-card styleClass="ui-card-shadow" id="conditions">
-                    <h4>Conditions</h4>
-                    <div class="row" formArrayName="conditions">
-                        <div class="field col-6" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index"
-                            [formGroupName]="i">
-                            <h5>{{ selectedChecklistData.conditions[i].conditionName }}</h5>
-                            <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" placeholder="Select option"
-                                formControlName="conditionOption" [style]="{'width':'30%', 'margin-top': '0.5%', 'margin-left': '1px'}"></p-dropdown>
-                        </div>
+                </div>
+            </p-card>
+
+            <p-card id="conditions" styleClass="prime-card-override">
+                <h4>Conditions</h4>
+                <div class="row" formArrayName="conditions">
+                    <div class="field col-6" [formGroupName]="i" *ngFor="let condition of checklistForm.get('conditions').controls; let i=index">
+                        <label>{{ selectedChecklistData.conditions[i].conditionName }}</label>
+                        <p-dropdown [options]="selectedChecklistData.conditions[i].conditionOptions" class="prime-dropdown-override"
+                            placeholder="Select option" formControlName="conditionOption"></p-dropdown>
                     </div>
-                </p-card>
-            </div>
+                </div>
+            </p-card>
 
-            <button pButton label="Back" class="bButton" style="width: 15%; margin-right: 1%" type="button" icon="fas fa-arrow-left"
-                (click)="back()"></button>
-            <button pButton label="Next" class="ui-button-success" style="width: 15%" type="button" icon="fas fa-arrow-right"
-                (click)="submitFieldsConditions()"></button>
-
+            <button pButton label="Back" class="bButton" type="button" icon="fas fa-arrow-left" (click)="back()"></button>
+            <button pButton label="Next" class="ui-button-success" type="button" icon="fas fa-arrow-right" (click)="submitFieldsConditions()"></button>
         </div>
 
         <!-- Check Documents Required -->
@@ -66,7 +53,7 @@
 
             <!-- Compliance Documents -->
             <div style="padding-bottom: 10px">
-                <p-card styleClass="ui-card-shadow" formGroupName="complianceDocuments">
+                <p-card styleClass="prime-card-override" formGroupName="complianceDocuments">
                     <h4>Compliance Documents</h4>
                     <h5>Mandatory</h5>
                     <div *ngIf="selectedChecklistData.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
@@ -79,12 +66,12 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
-                                                                            col.field === 'documentType' ? 'cDocType' :
-                                                                            col.field === 'conditionName' ? 'cCondName' : 
-                                                                            col.field === 'conditionOptions' ? 'cCondOption' : 
-                                                                            col.field === 'agmtCode' ? 'cAgmtCode' :
-                                                                            col.field === 'remarks' ? 'cRemark' :
-                                                                            col.field === 'signature' ? 'cSignature' : null">
+col.field === 'documentType' ? 'cDocType' :
+col.field === 'conditionName' ? 'cCondName' : 
+col.field === 'conditionOptions' ? 'cCondOption' : 
+col.field === 'agmtCode' ? 'cAgmtCode' :
+col.field === 'remarks' ? 'cRemark' :
+col.field === 'signature' ? 'cSignature' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
@@ -161,12 +148,12 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th *ngFor="let col of complianceCols" [ngClass]="col.field === 'documentName' ? 'cDocName' : 
-                                                                            col.field === 'documentType' ? 'cDocType' :
-                                                                            col.field === 'conditionName' ? 'cCondName' : 
-                                                                            col.field === 'conditionOptions' ? 'cCondOption' : 
-                                                                            col.field === 'agmtCode' ? 'cAgmtCode' :
-                                                                            col.field === 'remarks' ? 'cRemark' :
-                                                                            col.field === 'signature' ? 'cSignature' : null">
+col.field === 'documentType' ? 'cDocType' :
+col.field === 'conditionName' ? 'cCondName' : 
+col.field === 'conditionOptions' ? 'cCondOption' : 
+col.field === 'agmtCode' ? 'cAgmtCode' :
+col.field === 'remarks' ? 'cRemark' :
+col.field === 'signature' ? 'cSignature' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
@@ -236,7 +223,7 @@
 
             <!-- Legal Documents -->
             <div style="padding-bottom: 10px">
-                <p-card styleClass="ui-card-shadow" formGroupName="legalDocuments">
+                <p-card styleClass="prime-card-override" formGroupName="legalDocuments">
                     <h4>Legal Documents</h4>
                     <h5>Mandatory</h5>
                     <div *ngIf="selectedChecklistData.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
@@ -249,13 +236,13 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
-                                                                            col.field === 'documentType' ? 'lDocType' :
-                                                                            col.field === 'conditionName' ? 'lCondName' : 
-                                                                            col.field === 'conditionOptions' ? 'lCondOption' : 
-                                                                            col.field === 'agmtCode' ? 'lAgmtCode' :
-                                                                            col.field === 'remarks' ? 'lRemark' :
-                                                                            col.field === 'signature' ? 'lSignature' : 
-                                                                            col.field === 'canWaiver' ? 'lWaiver' : null">
+col.field === 'documentType' ? 'lDocType' :
+col.field === 'conditionName' ? 'lCondName' : 
+col.field === 'conditionOptions' ? 'lCondOption' : 
+col.field === 'agmtCode' ? 'lAgmtCode' :
+col.field === 'remarks' ? 'lRemark' :
+col.field === 'signature' ? 'lSignature' : 
+col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>
@@ -344,13 +331,13 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th *ngFor="let col of legalCols" [ngClass]="col.field === 'documentName' ? 'lDocName' : 
-                                                                            col.field === 'documentType' ? 'lDocType' :
-                                                                            col.field === 'conditionName' ? 'lCondName' : 
-                                                                            col.field === 'conditionOptions' ? 'lCondOption' : 
-                                                                            col.field === 'agmtCode' ? 'lAgmtCode' :
-                                                                            col.field === 'remarks' ? 'lRemark' :
-                                                                            col.field === 'signature' ? 'lSignature' :
-                                                                            col.field === 'canWaiver' ? 'lWaiver' : null">
+col.field === 'documentType' ? 'lDocType' :
+col.field === 'conditionName' ? 'lCondName' : 
+col.field === 'conditionOptions' ? 'lCondOption' : 
+col.field === 'agmtCode' ? 'lAgmtCode' :
+col.field === 'remarks' ? 'lRemark' :
+col.field === 'signature' ? 'lSignature' :
+col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{ col.header }}
                                     </th>
                                     <th style="width: 10%">Checked?</th>

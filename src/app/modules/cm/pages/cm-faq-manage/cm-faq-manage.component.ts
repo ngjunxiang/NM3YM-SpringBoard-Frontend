@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Message, MenuItem, ConfirmationService, MessageService } from 'primeng/components/common/api';
+import { Message, ConfirmationService, MessageService } from 'primeng/components/common/api';
+import { MenuItem } from 'primeng/api';
+
 
 import { CMService } from '../../../../core/services/cm.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';

@@ -24,7 +24,7 @@ interface Year {
 @Component({
     selector: 'fo-dashboard',
     templateUrl: './fo-dashboard.component.html',
-    styleUrls: ['./fo-dashboard.component.css']
+    styleUrls: ['./fo-dashboard.component.scss']
 })
 
 export class FODashboardComponent implements OnInit {

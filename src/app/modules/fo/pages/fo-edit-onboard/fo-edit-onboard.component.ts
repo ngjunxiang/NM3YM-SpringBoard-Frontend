@@ -107,11 +107,7 @@ export class FOEditOnboardComponent implements OnInit {
     }
 
     createForm() {
-
-        // this.documentsForm = new FormGroup({
-        //     i: new FormControl()
-        //  });
-
+        
         this.documentsForm = this.fb.group({
             complianceDocuments: this.fb.group({
                 mandatory: new FormArray([]),
@@ -122,10 +118,6 @@ export class FOEditOnboardComponent implements OnInit {
                 optional: new FormArray([])
             })
         });
-
-        
-
-        
     }
 
     initForm() {
