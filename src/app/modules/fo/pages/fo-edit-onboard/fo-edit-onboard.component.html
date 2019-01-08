@@ -8,6 +8,8 @@
                 </div>
             </p-card>
         </div>
+
+
         <div style="padding-bottom: 10px">
             <p-card styleClass="ui-card-shadow">
                 <h4>Conditions</h4>
@@ -42,11 +44,6 @@
                     </p-table>
                 </p-overlayPanel>
 
-
-
-
-
-
                 <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info"
                     (mouseover)="legendTable.show($event)" (mouseout)="legendTable.hide()"></button>
 
@@ -62,7 +59,7 @@
                         <!-- <p-table [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
                             [selectionMode]="single"> -->
 
-                        <p-table [columns]="selectedColumns" [value]="obDetails.complianceDocuments.mandatory">
+                        <p-table [columns]="selectedColumns" [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="450px" [selectionMode]="single">
                             <ng-template pTemplate="caption">
                                 <div style="text-align:left">
                                     <p-multiSelect [options]="complianceCols" [(ngModel)]="selectedColumns"
@@ -79,93 +76,64 @@
                                             col.field === 'conditionOptions' ? 'cCondOption' : 
                                             col.field === 'agmtCode' ? 'cAgmtCode' :
                                             col.field === 'remarks' ? 'cRemark' :
+                                            col.field === 'comments' ? 'cComments' :
+                                            col.field === 'uploadFile' ? 'cUploadFile' :
                                             col.field === 'signature' ? 'cSignature' : null">
                                         {{col.header}}
                                     </th>
-                                    <th style="width: 10%">Checked?</th>
+                                    <th class="cChk">Chk</th>
                                 </tr>
                             </ng-template>
 
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
-
-                                <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0">
-                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : doc.changed === '2' ? 'new-field' : doc.changed === '1' ? 'edited-field' : null">
-                                        <td class="cDocName">
-                                            {{ doc.documentName }}
-                                        </td>
-                                        <td class="cDocType">
-                                            {{ doc.documentType }}
-                                        </td>
+                                <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0" >
+                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : doc.changed === '2' ? 'new-field' : doc.changed === '1' ? 'edited-field' : null">
+                                        <td class="cDocName">{{'a'+ i}} / {{ doc.documentName }}</td>
+                                        <td class="cDocType">{{ doc.documentType }}</td>
                                         <td class="cCondName"> - </td>
                                         <td class="cCondOption"> - </td>
-                                        <td class="cAgmtCode">
-                                            {{ doc.agmtCode }}
-                                        </td>
+                                        <td class="cAgmtCode">{{ doc.agmtCode }}</td>
                                         <td class="cRemark" [innerHTML]="doc.remarks"></td>
-                                        <td class="cSignature" *ngIf="doc.signature">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td class="cSignature" *ngIf="!doc.signature">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td style="text-align:center; vertical-align:middle; width: 10%">
-                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                        </td>
+                                        <td class="cComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                        <td class="cUploadFile">{{ doc.uploadfile }}</td>
+                                        <td class="cSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
+                                        <td class="cSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
+                                        <td class="cChk"><p-checkbox formControlName="chkbox" binary="true"></p-checkbox></td>
                                     </tr>
                                 </ng-container>
+
                                 <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length > 0">
                                     <ng-container *ngFor="let condition of obDetails.complianceDocuments.mandatory[i].conditions; let j=index">
-                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : doc.changed === '2' ? 'new-field' : doc.changed === '1' ? 'edited-field' : null">
+                                        <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : doc.changed === '2' ? 'new-field' : doc.changed === '1' ? 'edited-field' : null">
                                             <ng-container *ngIf="j === 0">
-                                                <td class="cDocName" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
-                                                    {{ doc.documentName }}
-                                                </td>
-                                                <td class="cDocType" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
-                                                    {{ doc.documentType }}
-                                                </td>
+                                                <td class="cDocName" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">{{ doc.documentName }}</td>
+                                                <td class="cDocType" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">{{ doc.documentType }}</td>
                                             </ng-container>
                                             <td class="cCondName">{{ condition.conditionName }}</td>
                                             <td class="cCondOption">{{ condition.conditionOption }}</td>
                                             <ng-container *ngIf="j === 0">
-                                                <td class="cAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
-                                                    {{ doc.agmtCode }}
-                                                </td>
-                                                <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"
-                                                    [innerHTML]="doc.remarks"></td>
-                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"
-                                                    style="text-align:center; vertical-align:middle; width: 10%">
-                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
-                                                </td>
+                                                <td class="cAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">{{ doc.agmtCode }}</td>
+                                                <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"[innerHTML]="doc.remarks"></td>
+                                                <td class="cComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                                <td class="cUploadFile">{{ doc.uploadfile }}</td>
+                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"><i class="fa fa-check"></i></td>
+                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"><i class="fa fa-times"></i></td>
+                                                <td [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length" style="text-align:center; vertical-align:middle; width: 10%"><p-checkbox formControlName="chkbox" binary="true"></p-checkbox></td>
                                             </ng-container>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
                             </ng-template>
-
-<!-- <tr>
-<td *ngFor="let col of columns">
-{{rowData[col.field]}}
-</td>
-</tr> -->
-
                         </p-table>
-
-
-
                     </div>
+
+                    <br><br>
 
                     <h5>Optional</h5>
                     <div *ngIf="obDetails.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
                         No documents in this section
                     </div>
-                    <div *ngIf="obDetails.complianceDocuments.optional.length > 0" style="padding-bottom:1%"
-                        formArrayName="optional">
+                    <div *ngIf="obDetails.complianceDocuments.optional.length > 0" style="padding-bottom:1%" formArrayName="optional">
                         <p-table [value]="obDetails.complianceDocuments.optional" [scrollable]="true" scrollHeight="350px"
                             [selectionMode]="single">
                             <ng-template pTemplate="header">
@@ -176,15 +144,17 @@
                                                                                         col.field === 'conditionOptions' ? 'cCondOption' : 
                                                                                         col.field === 'agmtCode' ? 'cAgmtCode' :
                                                                                         col.field === 'remarks' ? 'cRemark' :
+                                                                                        col.field === 'comments' ? 'cComments' :
+                                                                                        col.field === 'uploadFile' ? 'cUploadFile' :
                                                                                         col.field === 'signature' ? 'cSignature' : null">
                                         {{ col.header }}
                                     </th>
-                                    <th style="width: 10%">Checked?</th>
+                                    <th style="width: 10%">Chk</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
                                 <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length === 0">
-                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
                                                     doc.changed === '2' ? 'new-field' :
                                                     doc.changed === '1' ? 'edited-field' : null">
                                         <td class="cDocName">
@@ -199,20 +169,18 @@
                                             {{ doc.agmtCode }}
                                         </td>
                                         <td class="cRemark" [innerHTML]="doc.remarks"></td>
+                                        
+                                        <td class="cComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                        <td class="cUploadFile">{{ doc.uploadfile }}</td>
+
                                         <td class="cSignature" *ngIf="doc.signature">
                                             <i class="fa fa-check"></i>
                                         </td>
                                         <td class="cSignature" *ngIf="!doc.signature">
                                             <i class="fa fa-times"></i>
                                         </td>
-                                        <!-- <td *ngIf="doc.canWaiver">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td *ngIf="!doc.canWaiver">
-                                            <i class="fa fa-times"></i>
-                                        </td> -->
                                         <td style="text-align:center; vertical-align:middle; width: 10%">
-                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                            <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                         </td>
                                     </tr>
                                 </ng-container>
@@ -237,21 +205,19 @@
                                                 </td>
                                                 <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length"
                                                     [innerHTML]="doc.remarks"></td>
+
+                                                <td class="cComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                                <td class="cUploadFile">{{ doc.uploadfile }}</td>
+
                                                 <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
                                                     <i class="fa fa-check"></i>
                                                 </td>
                                                 <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
                                                     <i class="fa fa-times"></i>
                                                 </td>
-                                                <!-- <td *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td> -->
                                                 <td [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length"
                                                     style="text-align:center; vertical-align:middle; width: 10%">
-                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                                 </td>
                                             </ng-container>
                                         </tr>
@@ -309,12 +275,12 @@
                                                                                             col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{ col.header }}
                                     </th>
-                                    <th style="width: 10%">Checked?</th>
+                                    <th style="width: 10%">Chk</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
                                 <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length === 0">
-                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
                                                     doc.changed === '2' ? 'new-field' :
                                                     doc.changed === '1' ? 'edited-field' : null">
                                         <td class="lDocName">
@@ -329,6 +295,10 @@
                                             {{ doc.agmtCode }}
                                         </td>
                                         <td class="lRemark" [innerHTML]="doc.remarks"></td>
+
+                                        <td class="lComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                        <td class="lUploadFile">{{ doc.uploadfile }}</td>
+
                                         <td class="lSignature" *ngIf="doc.signature">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -342,13 +312,13 @@
                                             <i class="fa fa-times"></i>
                                         </td>
                                         <td style="text-align:center; vertical-align:middle; width: 10%">
-                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                            <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                         </td>
                                     </tr>
                                 </ng-container>
                                 <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length > 0">
                                     <ng-container *ngFor="let condition of obDetails.legalDocuments.mandatory[i].conditions; let j=index">
-                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                        <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
                                                         doc.changed === '2' ? 'new-field' :
                                                         doc.changed === '1' ? 'edited-field' : null">
                                             <ng-container *ngIf="j === 0">
@@ -367,6 +337,11 @@
                                                 </td>
                                                 <td class="lRemark" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length"
                                                     [innerHTML]="doc.remarks"></td>
+
+                                                <td class="lComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                                <td class="lUploadFile">{{ doc.uploadfile }}</td>
+
+                                                
                                                 <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
                                                     <i class="fa fa-check"></i>
                                                 </td>
@@ -381,7 +356,7 @@
                                                 </td>
                                                 <td [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length"
                                                     style="text-align:center; vertical-align:middle; width: 10%">
-                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                                 </td>
                                             </ng-container>
                                         </tr>
@@ -410,12 +385,12 @@
                                                                                             col.field === 'canWaiver' ? 'lWaiver' : null">
                                         {{ col.header }}
                                     </th>
-                                    <th style="width: 10%">Checked?</th>
+                                    <th style="width: 10%">Chk</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-doc let-i="rowIndex">
                                 <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length === 0">
-                                    <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
                                                     doc.changed === '2' ? 'new-field' :
                                                     doc.changed === '1' ? 'edited-field' : null">
                                         <td class="lDocName">
@@ -430,6 +405,10 @@
                                             {{ doc.agmtCode }}
                                         </td>
                                         <td class="lRemark" [innerHTML]="doc.remarks"></td>
+
+                                        <td class="lComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                        <td class="lUploadFile">{{ doc.uploadfile }}</td>
+
                                         <td class="lSignature" *ngIf="doc.signature">
                                             <i class="fa fa-check"></i>
                                         </td>
@@ -443,13 +422,13 @@
                                             <i class="fa fa-times"></i>
                                         </td>
                                         <td style="text-align:center; vertical-align:middle; width: 10%">
-                                            <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                            <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                         </td>
                                     </tr>
                                 </ng-container>
                                 <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length > 0">
                                     <ng-container *ngFor="let condition of obDetails.legalDocuments.optional[i].conditions; let j=index">
-                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
+                                        <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
                                                         doc.changed === '2' ? 'new-field' :
                                                         doc.changed === '1' ? 'edited-field' : null">
                                             <ng-container *ngIf="j === 0">
@@ -468,6 +447,12 @@
                                                 </td>
                                                 <td class="lRemark" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length"
                                                     [innerHTML]="doc.remarks"></td>
+
+
+
+                                                <td class="lComments"><textarea formControlName="comments" pInputTextarea autoResize="autoResize">{{ doc.comments }}</textarea></td>
+                                                <td class="lUploadFile">{{ doc.uploadfile }}</td>
+
                                                 <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
                                                     <i class="fa fa-check"></i>
                                                 </td>
@@ -482,7 +467,7 @@
                                                 </td>
                                                 <td [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length"
                                                     style="text-align:center; vertical-align:middle; width: 10%">
-                                                    <p-checkbox [formControlName]="i" binary="true"></p-checkbox>
+                                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                                 </td>
                                             </ng-container>
                                         </tr>

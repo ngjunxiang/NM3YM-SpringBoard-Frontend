@@ -2,8 +2,8 @@
 
 <div style="padding-bottom: 8px;">Current Onboarding</div>
 <form class="search-container" [formGroup]="questionForm">
-    <input type="text" id="search-bar" class="form-control" placeholder="Enter Client Name" (keyup.enter)="searchClient()" formControlName="question" required
-        pInputText>
+    <input type="text" id="search-bar" class="form-control" placeholder="Enter Client Name" (keyup.enter)="searchClient()"
+        formControlName="question" required pInputText>
     <div class="search-icon" (click)="searchClient()">
         <i class="fa fa-search"></i>
     </div>
@@ -22,13 +22,14 @@
     </div>
 
     <div class="ui-g-2 clickable" style="padding-top: 12px; padding-left: 0px; height: 50.67px" (click)="clearAll()">
-        <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px" >
+        <img src="assets/images/icon/delete-button.png" style="width:15px; height:15px; margin-right:5px">
         <u>clear all</u>
     </div>
 
     <div class="ui-g-4">
         <a routerLink="../create">
-            <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button" icon="fa fa-plus"></button>
+            <button pButton class="ui-button-success" style="float: right;" label="New Onboarding Process" type="button"
+                icon="fa fa-plus"></button>
         </a>
     </div>
 </div>
@@ -41,15 +42,21 @@
         <div *ngFor="let obProcess of obProcesses; let i=index">
             <p-card styleClass="ui-card-shadow">
                 <div style="float:right">
-                    <button pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil"
-                        (click)="editOnboardProcess(i)"></button>
-                    <button pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteOnboardProcess(i)"></button>
+                    <!-- obProcess {{ obProcess }} <br>
+                    obProcess.isLocked {{ obProcess.isLocked }} -->
+                    
+                    <ng-container *ngIf="obProcess.isLocked !== true">
+                        <button pButton style="width:40%; margin-right:4%" class="ui-button-warning" label="Edit" type="button" icon="fa fa-pencil" (click)="editOnboardProcess(i)"></button>
+                        <button pButton style="width:50%" class="ui-button-danger" label="Delete" type="button" icon="fa fa-times" (click)="deleteOnboardProcess(i)"></button>
+                    </ng-container>
+                    <ng-container *ngIf="obProcess.progress === 100">
+                            <button pButton class="ui-button-success btn-lock" label="Lock" type="button" icon="fa fa-lock" (click)="lockOnboardProcess(i)"></button>
+                    </ng-container>
                 </div>
 
                 <div class="ui-g">
                     <div style="display: inline-block" class="ui-g-4">
-                        <p>
-                            <b>Type: </b>{{ obProcess.type }}</p>
+                        <p><b>Type: </b>{{ obProcess.type }}</p>
                     </div>
 
                     <div style="width: 30%" class="ui-g-4">

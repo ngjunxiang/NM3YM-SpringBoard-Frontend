@@ -9,7 +9,7 @@ import { FOService } from '../../../../core/services/fo.service';
 @Component({
     selector: 'fo-edit-onboard',
     templateUrl: './fo-edit-onboard.component.html',
-    styleUrls: ['./fo-edit-onboard.component.css']
+    styleUrls: ['./fo-edit-onboard.component.scss']
 })
 export class FOEditOnboardComponent implements OnInit {
 
@@ -73,24 +73,28 @@ export class FOEditOnboardComponent implements OnInit {
 
 
         this.legalCols = [
-            { field: 'documentName', header: 'Document Name' },
-            { field: 'documentType', header: 'Document Type' },
-            { field: 'conditionName', header: 'Condition Name' },
-            { field: 'conditionOptions', header: 'Condition Options' },
-            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'documentName', header: 'Doc Name' },
+            { field: 'documentType', header: 'Doc Type' },
+            { field: 'conditionName', header: 'Condition' },
+            { field: 'conditionOptions', header: 'Opt' },
+            { field: 'agmtCode', header: 'Code' },
             { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' },
-            { field: 'canWaiver', header: 'Can be Waivered' }
+            { field: 'comments', header: 'Comments' },
+            { field: 'uploadFiles', header: 'File' },
+            { field: 'signature', header: 'Sign Req' },
+            { field: 'canWaiver', header: 'Waiver Allow' }
         ];
 
         this.complianceCols = [
-            { field: 'documentName', header: 'Document Name' },
-            { field: 'documentType', header: 'Document Type' },
-            { field: 'conditionName', header: 'Condition Name' },
-            { field: 'conditionOptions', header: 'Condition Options' },
-            { field: 'agmtCode', header: 'Agmt Code' },
+            { field: 'documentName', header: 'Doc Name' },
+            { field: 'documentType', header: 'Doc Type' },
+            { field: 'conditionName', header: 'Condition' },
+            { field: 'conditionOptions', header: 'Opt' },
+            { field: 'agmtCode', header: 'Code' },
             { field: 'remarks', header: 'Remarks' },
-            { field: 'signature', header: 'Signature Required' }
+            { field: 'comments', header: 'Comments' },
+            { field: 'uploadFiles', header: 'File' },
+            { field: 'signature', header: 'Sign Req' }
         ];
 
         this.selectedColumns  = this.complianceCols;
@@ -120,41 +124,55 @@ export class FOEditOnboardComponent implements OnInit {
         });
     }
 
+
     initForm() {
         let formArray;
+  
         this.obDetails.complianceDocuments.mandatory.forEach(mandatoryDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('mandatory');
             if (mandatoryDoc.changed === '3') {
-                formArray.push(new FormControl({ value: false, disabled: true }));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
             } else {
-                formArray.push(new FormControl(mandatoryDoc.checked));
+                formArray.push(new FormGroup({ 'comments': new FormControl(mandatoryDoc.comments), 'chkbox': new FormControl(mandatoryDoc.checked)}));
             }
         });
 
         this.obDetails.complianceDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('optional');
             if (optionalDoc.changed === '3') {
-                formArray.push(new FormControl({ value: false, disabled: true }));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                // formArray.push(new FormControl({ value: "" }));
+                // formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
-                formArray.push(new FormControl(optionalDoc.checked));
+                formArray.push(new FormGroup({ 'comments': new FormControl(optionalDoc.comments), 'chkbox': new FormControl(optionalDoc.checked)}));
+                // formArray.push(new FormControl(optionalDoc.comments));
+                // formArray.push(new FormControl(optionalDoc.checked));
             }
         });
 
         this.obDetails.legalDocuments.mandatory.forEach(mandatoryDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('mandatory');
             if (mandatoryDoc.changed === '3') {
-                formArray.push(new FormControl({ value: false, disabled: true }));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                // formArray.push(new FormControl({ value: "" }));
+                // formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
-                formArray.push(new FormControl(mandatoryDoc.checked));
+                formArray.push(new FormGroup({ 'comments': new FormControl(mandatoryDoc.comments), 'chkbox': new FormControl(mandatoryDoc.checked)}));
+                // formArray.push(new FormControl(mandatoryDoc.comments));
+                // formArray.push(new FormControl(mandatoryDoc.checked));
             }
         });
 
         this.obDetails.legalDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('optional');
             if (optionalDoc.changed === '3') {
-                formArray.push(new FormControl({ value: false, disabled: true }));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                // formArray.push(new FormControl({ value: "" }));
+                // formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
-                formArray.push(new FormControl(optionalDoc.checked));
+                formArray.push(new FormGroup({ 'comments': new FormControl(optionalDoc.comments), 'chkbox': new FormControl(optionalDoc.checked)}));
+                // formArray.push(new FormControl(optionalDoc.comments));
+                // formArray.push(new FormControl(optionalDoc.checked));
             }
         });
     }
@@ -228,7 +246,9 @@ export class FOEditOnboardComponent implements OnInit {
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
-                checked: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').value,
+                comments: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').get('comments').value,
+                uploadFiles: ['a', 'b', 'c'],
+                checked: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').get('chkbox').value,
                 changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
             });
@@ -246,7 +266,9 @@ export class FOEditOnboardComponent implements OnInit {
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
-                checked: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').value,
+                comments: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').get('comments').value,
+                uploadFiles: ['a', 'b', 'c'],
+                checked: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').get('chkbox').value,
                 changed: optionalDoc.changed,
                 docID: optionalDoc.docID
             });
@@ -266,7 +288,9 @@ export class FOEditOnboardComponent implements OnInit {
                 agmtCode: mandatoryDoc.agmtCode,
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
-                checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').value,
+                comments: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').get('comments').value,
+                uploadFiles: ['a', 'b', 'c'],
+                checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').get('chkbox').value,
                 changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
             });
@@ -284,7 +308,9 @@ export class FOEditOnboardComponent implements OnInit {
                 agmtCode: optionalDoc.agmtCode,
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
-                checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').value,
+                comments: this.documentsForm.get('legalDocuments').get('optional').get(i + '').get('comments').value,
+                uploadFiles: ['a', 'b', 'c'],
+                checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').get('chkbox').value,
                 changed: optionalDoc.changed,
                 docID: optionalDoc.docID
             });

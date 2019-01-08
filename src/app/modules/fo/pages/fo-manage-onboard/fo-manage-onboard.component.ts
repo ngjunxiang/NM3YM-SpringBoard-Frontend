@@ -102,6 +102,7 @@ export class FOManageOnboardComponent implements OnInit {
                     let obID = obList.obID;
                     let conditions = [];
                     let progress = obList.progress;
+                    let isLocked = obList.isLocked;
                     Object.keys(obList.requiredFields).forEach(key => {
                         let fieldName;
                         for (fieldName in obList.requiredFields[key]);
@@ -123,6 +124,7 @@ export class FOManageOnboardComponent implements OnInit {
                         'type': type,
                         'requiredFields': requiredFields,
                         'conditions': conditions,
+                        'isLocked': isLocked,
                         'progress': progress
                     });
                 });
@@ -212,6 +214,7 @@ export class FOManageOnboardComponent implements OnInit {
                     let obID = obList.obID;
                     let conditions = [];
                     let progress = obList.progress;
+                    // let isLocked = obList.isLocked;
                     Object.keys(obList.requiredFields).forEach(key => {
                         let fieldName;
                         for (fieldName in obList.requiredFields[key]);
@@ -233,6 +236,7 @@ export class FOManageOnboardComponent implements OnInit {
                         'type': type,
                         'requiredFields': requiredFields,
                         'conditions': conditions,
+                        // 'isLocked': isLocked,
                         'progress': progress
                     });
                 });
@@ -275,9 +279,42 @@ export class FOManageOnboardComponent implements OnInit {
                     }
 
                     if (res.results) {
-                        this.retrieveAllOnboardProcesses();
+                        // this.retrieveAllOnboardProcesses();
                         this.messageService.add({ 
                             key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process deleted'
+                        });
+                    }
+                }, error => {
+                    this.messageService.add({ 
+                        key: 'msgs', severity: 'error', summary: 'Error', detail: error
+                    });
+                });
+            },
+            reject: () => {
+                return;
+            }
+        });
+    }
+
+    lockOnboardProcess(index:number) {
+        this.confirmationService.confirm({
+            message: 'Do you want to lock this onboard process?',
+            header: 'Lock Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                let selectedOnboardID = this.obProcesses[index].obID;
+                this.foService.lockOnboardProcess(selectedOnboardID).subscribe(res => {
+                    if (res.error) {
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
+                        });
+                        return;
+                    }
+
+                    if (res.results) {
+                        this.retrieveAllOnboardProcesses();
+                        this.messageService.add({ 
+                            key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process locked'
                         });
                     }
                 }, error => {

@@ -14,15 +14,16 @@
     zoom: 90%;
 } */
 
-:host>>>.ui-overlaypanel {
-    z-index: 100;
-    left: 40%;
-    right: 10%;
-}
-
-:host>>>.ui-table-scrollable-header {
-    margin-right: 0 auto;
-    width: 100% !important;
+:host::ng-deep {
+    .ui-overlaypanel {
+        z-index: 100;
+        left: 40%;
+        right: 10%;
+    }
+    .ui-table-scrollable-header {
+        margin-right: 0 auto;
+        width: 100% !important;
+    }
 }
 
 .addedDoc {
@@ -51,31 +52,46 @@
 /* Compliance Checklist Documents*/
 
 .cDocName {
-    width: 12%
+    width: 10%;
+    overflow-wrap: break-word;
 }
 
 .cDocType {
-    width: 10%
+    width: 10%;
+    overflow-wrap: break-word;
 }
 
 .cCondName {
-    width: 13%
+    width: 10%;
 }
 
 .cCondOption {
-    width: 10%
+    width: 5%;
 }
 
 .cAgmtCode {
-    width: 7%
+    width: 5%;
 }
 
 .cRemark {
-    width: 35%
+    width: 15%;
+}
+
+.cComments {
+    width: 15%;
+}
+
+.cUploadFile {
+    width: 10%;
 }
 
 .cSignature {
-    width: 10%
+    width: 10%;
+}
+
+.cChk {
+    width: 10%; // text-align:center;
+    // vertical-align: middle;
 }
 
 /* Legal Checklist Documents*/

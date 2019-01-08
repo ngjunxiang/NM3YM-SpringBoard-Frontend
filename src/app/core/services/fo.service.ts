@@ -82,6 +82,7 @@ export class FOService {
     private retrieveFilteredOnboardProcessesURL = environment.host + '/app/fo/filterby-onboard';
     private retrieveOnboardProcessDetailsURL = environment.host + '/app/fo/retrieve-selected-onboard';
     private deleteUpdateOnboardProcessURL = environment.host + '/app/fo/manage-onboard';
+    private lockUpdateOnboardProcessURL = environment.host + '/app/fo/lock-onboard';
     private retrieveAllRMNamesURL = environment.host + '/app/fo/retrieve-rm-names';
 
     // FAQ Endpoints
@@ -519,6 +520,8 @@ export class FOService {
             })
         };
 
+        console.log('onboardProcessData', onboardProcessData);
+
         const onboardData = {
             'obID': onboardProcessData.obID,
             'checklist': JSON.stringify(onboardProcessData)
@@ -550,6 +553,24 @@ export class FOService {
         return this.http.delete<Response>(this.deleteUpdateOnboardProcessURL, httpOptions)
             .pipe(
                 retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    lockOnboardProcess(obID) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        const obIDData = {
+            'obID': obID
+        };
+
+        const postData = Object.assign(this.authService.authItems, obIDData);
+
+        return this.http.put<Response>(this.lockUpdateOnboardProcessURL, postData, httpOptions)
+            .pipe(
                 catchError(this.handleError)
             );
     }
