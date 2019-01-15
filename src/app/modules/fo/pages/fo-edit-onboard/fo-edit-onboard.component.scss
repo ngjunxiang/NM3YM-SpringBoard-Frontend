@@ -10,10 +10,6 @@
     background-color: #AADD81 !important
 }
 
-/* .zoom {
-    zoom: 90%;
-} */
-
 :host::ng-deep {
     .ui-overlaypanel {
         z-index: 100;
@@ -23,6 +19,21 @@
     .ui-table-scrollable-header {
         margin-right: 0 auto;
         width: 100% !important;
+    }
+    .ui-table .ui-table-caption {
+        background-color: transparent;
+        border: none;
+    }
+    .ui-fileupload .ui-fileupload-buttonbar {
+        padding: 0;
+    }
+    .dataTable {
+        // font-size: 0.625em;
+        // font-size: 0.625em;
+        font-size: 0.75em;
+        * {
+            word-break: break-all;
+        }
     }
 }
 
@@ -41,8 +52,36 @@
     color: #000000 !important;
 }
 
-.th {
-    text-align: center;
+.uploadFileLink {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.uploadFileLink {
+    padding: 0;
+    list-style-type: none;
+    span:nth-child(1) {
+        margin-right: 5px;
+    }
+    span:nth-child(2) {
+        margin-left: 0px;
+    }
+}
+
+.textareaWrapper {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.docComments {
+    width: 100%;
+    height: 100%;
+}
+
+ul {
+    margin-top: 10px;
+    padding: 0;
 }
 
 /*
@@ -53,16 +92,14 @@
 
 .cDocName {
     width: 10%;
-    overflow-wrap: break-word;
 }
 
 .cDocType {
-    width: 10%;
-    overflow-wrap: break-word;
+    width: 5%;
 }
 
 .cCondName {
-    width: 10%;
+    width: 5%;
 }
 
 .cCondOption {
@@ -74,56 +111,74 @@
 }
 
 .cRemark {
-    width: 15%;
+    width: 20%;
 }
 
 .cComments {
-    width: 15%;
+    min-width: 150px;
+    height: 1px;
 }
 
-.cUploadFile {
-    width: 10%;
+.cUploadFile { 
+    min-width: 120px;
 }
 
 .cSignature {
-    width: 10%;
+    width: 52px;
+    text-align: center;
 }
 
 .cChk {
-    width: 10%; // text-align:center;
-    // vertical-align: middle;
+    width: 52px;
+    text-align: center;
 }
 
 /* Legal Checklist Documents*/
 
 .lDocName {
-    width: 10%
+    width: 10%;
+    word-break: break-all;
 }
 
 .lDocType {
-    width: 10%
+    width: 10%;
+    word-break: break-all;
 }
 
 .lCondName {
-    width: 10%
+    width: 10%;
 }
 
 .lCondOption {
-    width: 10%
+    width: 5%;
+    word-break: break-all;
 }
 
 .lAgmtCode {
-    width: 7%
+    width: 5%;
 }
 
 .lRemark {
-    width: 25%
+    width: 15%;
+    word-break: break-all;
+}
+
+.lComments {
+    width: 15%;
+}
+
+.lUploadFile {
+    width: 10%;
 }
 
 .lSignature {
-    width: 10%
+    width: 5%;
 }
 
 .lWaiver {
     width: 10%
+}
+
+.lChk {
+    width: 5%;
 }

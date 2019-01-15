@@ -2,9 +2,13 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { MessageService } from 'primeng/components/common/api';
+import { environment } from '../../../../../environments/environment';
 
+import { MessageService } from 'primeng/components/common/api';
 import { FOService } from '../../../../core/services/fo.service';
+
+import { SpringboardService } from '../../../../core/services/springboard.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'fo-edit-onboard',
@@ -12,6 +16,42 @@ import { FOService } from '../../../../core/services/fo.service';
     styleUrls: ['./fo-edit-onboard.component.scss']
 })
 export class FOEditOnboardComponent implements OnInit {
+
+    public complianceTableHeaders = {
+        cDocName: false,
+        cDocType: false,
+        cCondName: false,
+        cCondOption: false,
+        cAgmtCode: false,
+        cRemark: false,
+        cComments: false,
+        cUploadFile: false,
+        cSignature: false
+    };
+
+    public legalTableHeaders = {
+        lDocName: false,
+        lDocType: false,
+        lCondName: false,
+        lCondOption: false,
+        lAgmtCode: false,
+        lRemark: false,
+        lComments: false,
+        lUploadFile: false,
+        lSignature: false,
+        lWaiver: false
+    };
+    public colorLegend = {
+        addedDoc: false,
+        removedDoc: false,
+        modifiedDoc: false,
+    }
+
+    public docChange = {
+        'deleted-field': false,
+        'new-field': false,
+        'edited-field': false,
+    }
 
     // UI Control
     loading = false;
@@ -32,14 +72,15 @@ export class FOEditOnboardComponent implements OnInit {
 
     selectedColumns: any[];
 
+    private subscription: Subscription;
 
     constructor(
         private fb: FormBuilder,
         private foService: FOService,
         private messageService: MessageService,
         private route: ActivatedRoute,
-        private router: Router
-    ) { }
+        private router: Router,
+        private springboardService: SpringboardService) { }
 
     ngOnInit() {
         this.loading = true;
@@ -54,7 +95,8 @@ export class FOEditOnboardComponent implements OnInit {
             { title: this.obName }
         ];
 
-        
+        this.subscription = this.springboardService.getUploadingDoc().subscribe(this.onFileUploaded());
+
         this.createForm();
 
         this.retrieveOnboardDetails(this.route.snapshot.paramMap.get('id'));
@@ -71,34 +113,33 @@ export class FOEditOnboardComponent implements OnInit {
             { typeOfChange: "Document Removed", cellColour: "Red" }
         ];
 
+        this.complianceCols = [
+            { field: 'documentName', header: 'Doc Name' },
+            { field: 'documentType', header: 'Type' },
+            { field: 'conditionName', header: 'Con' },
+            { field: 'conditionOptions', header: 'Opt' },
+            { field: 'agmtCode', header: 'Code' },
+            { field: 'remarks', header: 'Remarks' },
+            { field: 'comments', header: 'Comments' },
+            { field: 'uploadFiles', header: 'File' },
+            { field: 'signature', header: 'Sign' }
+        ];
 
         this.legalCols = [
             { field: 'documentName', header: 'Doc Name' },
-            { field: 'documentType', header: 'Doc Type' },
-            { field: 'conditionName', header: 'Condition' },
+            { field: 'documentType', header: 'Type' },
+            { field: 'conditionName', header: 'Con' },
             { field: 'conditionOptions', header: 'Opt' },
             { field: 'agmtCode', header: 'Code' },
             { field: 'remarks', header: 'Remarks' },
             { field: 'comments', header: 'Comments' },
             { field: 'uploadFiles', header: 'File' },
-            { field: 'signature', header: 'Sign Req' },
-            { field: 'canWaiver', header: 'Waiver Allow' }
+            { field: 'signature', header: 'Sign' },
+            { field: 'canWaiver', header: 'Waiver' }
         ];
+        
+        this.selectedColumns = this.complianceCols;
 
-        this.complianceCols = [
-            { field: 'documentName', header: 'Doc Name' },
-            { field: 'documentType', header: 'Doc Type' },
-            { field: 'conditionName', header: 'Condition' },
-            { field: 'conditionOptions', header: 'Opt' },
-            { field: 'agmtCode', header: 'Code' },
-            { field: 'remarks', header: 'Remarks' },
-            { field: 'comments', header: 'Comments' },
-            { field: 'uploadFiles', header: 'File' },
-            { field: 'signature', header: 'Sign Req' }
-        ];
-
-        this.selectedColumns  = this.complianceCols;
- 
     }
 
     @HostListener('window:beforeunload')
@@ -110,8 +151,57 @@ export class FOEditOnboardComponent implements OnInit {
         return confirm('Are you sure you want to continue? Any unsaved changes will be lost.');
     }
 
+    complianceTableHeadersClass(field) {
+        this.complianceTableHeaders = {
+            cDocName: field === 'documentName' ? true : false,
+            cDocType: field === 'documentType' ? true : false,
+            cCondName: field === 'conditionName' ? true : false,
+            cCondOption: field === 'conditionOptions' ? true : false,
+            cAgmtCode: field === 'agmtCode' ? true : false,
+            cRemark: field === 'remarks' ? true : false,
+            cComments: field === 'comments' ? true : false,
+            cUploadFile: field === 'uploadFile' ? true : false,
+            cSignature: field === 'signature' ? true : false
+        };
+
+        return this.complianceTableHeaders;
+    }
+    legalTableHeadersClass(field) {
+        this.legalTableHeaders = {
+            lDocName: field === 'documentName' ? true : false,
+            lDocType: field === 'documentType' ? true : false,
+            lCondName: field === 'conditionName' ? true : false,
+            lCondOption: field === 'conditionOptions' ? true : false,
+            lAgmtCode: field === 'agmtCode' ? true : false,
+            lRemark: field === 'remarks' ? true : false,
+            lComments: field === 'comments' ? true : false,
+            lUploadFile: field === 'uploadFile' ? true : false,
+            lSignature: field === 'signature' ? true : false,
+            lWaiver: field === 'canWaiver' ? true : false
+        };
+
+        return this.legalTableHeaders;
+    }
+
+    getColorLegend(field) {
+        this.colorLegend = {
+            addedDoc: field === 'Green' ? true : false,
+            removedDoc: field === 'Red' ? true : false,
+            modifiedDoc: field === 'Yellow' ? true : false
+        };
+        return this.colorLegend;
+    }
+
+    getDocChange(field) {
+        this.docChange = {
+            'deleted-field': field === '3' ? true : false,
+            'new-field': field === '2' ? true : false,
+            'edited-field': field === '1' ? true : false,
+        };
+        return this.docChange;
+    }
+
     createForm() {
-        
         this.documentsForm = this.fb.group({
             complianceDocuments: this.fb.group({
                 mandatory: new FormArray([]),
@@ -127,24 +217,24 @@ export class FOEditOnboardComponent implements OnInit {
 
     initForm() {
         let formArray;
-  
+
         this.obDetails.complianceDocuments.mandatory.forEach(mandatoryDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('mandatory');
             if (mandatoryDoc.changed === '3') {
-                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true }) }));
             } else {
-                formArray.push(new FormGroup({ 'comments': new FormControl(mandatoryDoc.comments), 'chkbox': new FormControl(mandatoryDoc.checked)}));
+                formArray.push(new FormGroup({ 'comments': new FormControl(mandatoryDoc.comments), 'chkbox': new FormControl(mandatoryDoc.checked) }));
             }
         });
 
         this.obDetails.complianceDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('complianceDocuments').get('optional');
             if (optionalDoc.changed === '3') {
-                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true }) }));
                 // formArray.push(new FormControl({ value: "" }));
                 // formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
-                formArray.push(new FormGroup({ 'comments': new FormControl(optionalDoc.comments), 'chkbox': new FormControl(optionalDoc.checked)}));
+                formArray.push(new FormGroup({ 'comments': new FormControl(optionalDoc.comments), 'chkbox': new FormControl(optionalDoc.checked) }));
                 // formArray.push(new FormControl(optionalDoc.comments));
                 // formArray.push(new FormControl(optionalDoc.checked));
             }
@@ -153,11 +243,11 @@ export class FOEditOnboardComponent implements OnInit {
         this.obDetails.legalDocuments.mandatory.forEach(mandatoryDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('mandatory');
             if (mandatoryDoc.changed === '3') {
-                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true }) }));
                 // formArray.push(new FormControl({ value: "" }));
                 // formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
-                formArray.push(new FormGroup({ 'comments': new FormControl(mandatoryDoc.comments), 'chkbox': new FormControl(mandatoryDoc.checked)}));
+                formArray.push(new FormGroup({ 'comments': new FormControl(mandatoryDoc.comments), 'chkbox': new FormControl(mandatoryDoc.checked) }));
                 // formArray.push(new FormControl(mandatoryDoc.comments));
                 // formArray.push(new FormControl(mandatoryDoc.checked));
             }
@@ -166,11 +256,11 @@ export class FOEditOnboardComponent implements OnInit {
         this.obDetails.legalDocuments.optional.forEach(optionalDoc => {
             formArray = <FormArray>this.documentsForm.get('legalDocuments').get('optional');
             if (optionalDoc.changed === '3') {
-                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true })}));
+                formArray.push(new FormGroup({ 'comments': new FormControl({ value: "" }), 'chkbox': new FormControl({ value: false, disabled: true }) }));
                 // formArray.push(new FormControl({ value: "" }));
                 // formArray.push(new FormControl({ value: false, disabled: true }));
             } else {
-                formArray.push(new FormGroup({ 'comments': new FormControl(optionalDoc.comments), 'chkbox': new FormControl(optionalDoc.checked)}));
+                formArray.push(new FormGroup({ 'comments': new FormControl(optionalDoc.comments), 'chkbox': new FormControl(optionalDoc.checked) }));
                 // formArray.push(new FormControl(optionalDoc.comments));
                 // formArray.push(new FormControl(optionalDoc.checked));
             }
@@ -181,7 +271,7 @@ export class FOEditOnboardComponent implements OnInit {
         this.loading = true;
         this.foService.retrieveOnboardProcessDetails(obID).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 return;
@@ -213,7 +303,7 @@ export class FOEditOnboardComponent implements OnInit {
 
             this.loading = false;
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
         });
@@ -247,7 +337,7 @@ export class FOEditOnboardComponent implements OnInit {
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
                 comments: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').get('comments').value,
-                uploadFiles: ['a', 'b', 'c'],
+                uploadFiles: mandatoryDoc.uploadFiles,
                 checked: this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').get('chkbox').value,
                 changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
@@ -318,7 +408,7 @@ export class FOEditOnboardComponent implements OnInit {
 
         this.foService.updateOnboardProcess(processData).subscribe(res => {
             if (res.error) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'error', summary: 'Error', detail: res.error
                 });
                 this.processing = false;
@@ -326,7 +416,7 @@ export class FOEditOnboardComponent implements OnInit {
             }
 
             if (res.results) {
-                this.messageService.add({ 
+                this.messageService.add({
                     key: 'msgs', severity: 'success', summary: 'Success', detail: 'Onboard process updated. You will be redirected shortly'
                 });
             }
@@ -337,10 +427,39 @@ export class FOEditOnboardComponent implements OnInit {
                 this.router.navigate(['/fo/onboard/manage']);
             }, 3000);
         }, error => {
-            this.messageService.add({ 
+            this.messageService.add({
                 key: 'msgs', severity: 'error', summary: 'Error', detail: error
             });
             this.processing = false;
         });
+    }
+
+    fileDeleteHandler(uploadIndex, index) {
+        let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[index];
+        mandatoryDoc.uploadFiles.splice(uploadIndex, 1);
+        console.log('fileDeleteHandler', uploadIndex, index);
+    }
+    fileViewHandler(uploadIndex, index) {
+        // OPEN FILE
+        let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[index];
+        window.open(environment.host + '/app/document/' + mandatoryDoc.uploadFiles[uploadIndex]);
+    }
+
+    onFileUploaded() {
+        return (function () {
+            return function (message) {
+                // console.log('this.springboardService.pdfDataInput', this.springboardService.pdfDataInput);
+                // console.log('onFileUploaded this.springboardService.pdfDataInput.returnFileName', this.springboardService.pdfDataInput.returnFileName);
+                // console.log('onFileUploaded this.springboardService', this.springboardService.pdfDataInput.formArray);
+                let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[this.springboardService.pdfDataInput.formArray];
+                mandatoryDoc.uploadFiles.push(this.springboardService.pdfDataInput.returnFileName);
+            }
+
+        })().bind(this);
+    }
+
+    ngOnDestroy() {
+        this.springboardService.clearData();
+        this.subscription.unsubscribe();
     }
 }

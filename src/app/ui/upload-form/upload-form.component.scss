@@ -1,0 +1,12 @@
+:host::ng-deep {
+    .ui-fileupload-content {
+        display: none;
+    }
+    .ui-button {
+        font-size: 0.875em;
+    }
+    .ui-fileupload .ui-fileupload-buttonbar {
+        background-color: transparent;
+        border: 0px solid transparent;
+    }
+}

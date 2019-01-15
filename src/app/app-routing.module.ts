@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
+// PRELOGIN
+// import { FOComponent } from './modules/fo/pages/fo.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -46,7 +49,7 @@ export const routes: Routes = [
         RouterModule.forRoot(routes, {
             useHash: true,
             enableTracing: false // <-- debugging purposes only
-        }) 
+        })
     ],
     exports: [
         RouterModule
@@ -54,5 +57,3 @@ export const routes: Routes = [
     declarations: []
 })
 export class AppRoutingModule { }
-
-

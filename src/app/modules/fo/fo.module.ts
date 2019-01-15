@@ -44,6 +44,8 @@ import { FOFaqMyQuestionsComponent } from './pages/fo-faq-myquestions/fo-faq-myq
 import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
 import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.guard';
 
+import { UiModule } from '../../ui/ui.module';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -82,7 +84,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TableModule,
         TabViewModule,
         ToastModule,
-        TooltipModule
+        TooltipModule,
+        UiModule
     ],
     declarations: [
         FOComponent,

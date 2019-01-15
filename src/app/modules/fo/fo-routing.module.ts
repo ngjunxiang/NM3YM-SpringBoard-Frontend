@@ -16,7 +16,7 @@ import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.gua
 const routes: Routes = [
     { 
         path: '', 
-        redirectTo: 'dashboard', 
+        redirectTo: 'dashboard/', 
         pathMatch: 'full' 
     },
     {

@@ -752,7 +752,7 @@ export class CMService {
 
         return this.http.post<Response>(this.retrieveReg51NotificationsURL, postData, httpOptions)
             .pipe(
-                retry(3),
+                // retry(3),
                 catchError(this.handleError)
             );
     }

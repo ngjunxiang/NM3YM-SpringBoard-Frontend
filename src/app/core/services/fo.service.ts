@@ -199,7 +199,6 @@ export class FOService {
 
         return this.http.post<Checklist>(this.retrieveChecklistURL, postData, httpOptions)
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
@@ -293,7 +292,6 @@ export class FOService {
 
         return this.http.post<ObList>(this.retrieveOnboardProcessDetailsURL, postData, httpOptions)
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
@@ -571,6 +569,26 @@ export class FOService {
 
         return this.http.put<Response>(this.lockUpdateOnboardProcessURL, postData, httpOptions)
             .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    uploadFile(onboardProcessData) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+
+        const onboardData = {
+            'checklist': JSON.stringify(onboardProcessData)
+        };
+
+        const postData = Object.assign(this.authService.authItems, onboardData);
+
+        return this.http.post<Response>(this.createOnboardProcessURL, postData, httpOptions)
+            .pipe(
+                retry(3),
                 catchError(this.handleError)
             );
     }

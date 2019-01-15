@@ -1,0 +1,7 @@
+
+  <div class="form-create">
+
+    <p-fileUpload name="uploadedFile" [disabled]="loading" url="{{ uploadUrl }}" 
+      (onUpload)="onUpload($event)" (onError)="onError($event)" (onSelect)="onSelect($event)" (onBeforeUpload)="onBeforeUpload($event)" auto="auto">
+    </p-fileUpload>
+  </div>
