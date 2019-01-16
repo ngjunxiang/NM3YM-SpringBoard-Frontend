@@ -10,11 +10,30 @@
     background-color: #AADD81 !important
 }
 
+.legendContainer {
+    text-align: right;
+    margin-bottom: 10px;
+
+    .overlayContainer {
+        position: relative;
+        text-align: left;
+        right: 300px;
+        top: -160px;
+        width: 350px;
+        background-color: red;
+    }
+}
+
 :host::ng-deep {
     .ui-overlaypanel {
-        z-index: 100;
-        left: 40%;
-        right: 10%;
+        // z-index: 100;
+        // left: 40%;
+        // right: 10%;
+        width: 350px;
+    }
+    .ui-overlaypanel:after, .ui-overlaypanel:before {
+        left: auto;
+        right: 1.25em;
     }
     .ui-table-scrollable-header {
         margin-right: 0 auto;
@@ -34,6 +53,9 @@
         * {
             word-break: break-all;
         }
+    }
+    .fillHeight {
+        height: 100%;
     }
 }
 
@@ -99,7 +121,7 @@ ul {
 }
 
 .cCondName {
-    width: 5%;
+    min-width: 100px;
 }
 
 .cCondOption {
@@ -115,12 +137,12 @@ ul {
 }
 
 .cComments {
-    min-width: 150px;
+    min-width: 120px;
     height: 1px;
 }
 
 .cUploadFile { 
-    min-width: 120px;
+    min-width: 100px;
 }
 
 .cSignature {
@@ -137,21 +159,18 @@ ul {
 
 .lDocName {
     width: 10%;
-    word-break: break-all;
 }
 
 .lDocType {
-    width: 10%;
-    word-break: break-all;
+    width: 5%;
 }
 
 .lCondName {
-    width: 10%;
+    min-width: 100px;
 }
 
 .lCondOption {
     width: 5%;
-    word-break: break-all;
 }
 
 .lAgmtCode {
@@ -159,26 +178,29 @@ ul {
 }
 
 .lRemark {
-    width: 15%;
-    word-break: break-all;
+    width: 20%;
 }
 
 .lComments {
-    width: 15%;
+    min-width: 120px;
+    height: 1px;
 }
 
 .lUploadFile {
-    width: 10%;
+    min-width: 100px;
 }
 
 .lSignature {
-    width: 5%;
+    width: 50px;
+    text-align: center;
 }
 
 .lWaiver {
-    width: 10%
+    width: 50px;
+    text-align: center;
 }
 
 .lChk {
-    width: 5%;
+    width: 52px;
+    text-align: center;
 }

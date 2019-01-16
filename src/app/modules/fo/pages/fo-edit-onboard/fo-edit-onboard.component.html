@@ -1,461 +1,491 @@
-<div class="zoom" *ngIf="!loading">
-    <div [formGroup]="documentsForm">
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow">
+<div class="mainContainer" *ngIf="!loading">
+
+    <!-- START OF LEGEND -->
+    <div class="legendContainer">
+        <div class="overlayContainer">
+            <p-overlayPanel #legendTable>
+                <p-table [columns]="tableCols" [value]="docChanges">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns">{{col.header}}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr>
+                            <td *ngFor="let col of columns" [ngClass]="getColorLegend(rowData[col.field])">{{rowData[col.field]}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-overlayPanel>
+        </div>
+        <div class="colourLegend" (mouseover)="legendTable.show($event)" (mouseout)="legendTable.hide()">Colour Legend</div>
+    </div>
+    <!-- END OF LEGEND -->
+
+    <!-- START OF TWO TILES INFORMATION -->
+    <div class="p-grid p-col-align-stretch">
+        <div class="p-col">
+            <p-card styleClass="fillHeight">
                 <h4>Required Fields</h4>
-                <div *ngFor="let requiredField of obDetails.requiredFields; let i=index">
-                    <b>{{ requiredField.fieldName }}:</b> {{ requiredField.fieldValue }}
+                <div *ngFor="let requiredField of obDetails.requiredFields">
+                    <b>{{ requiredField.fieldName }}: </b>{{ requiredField.fieldValue }}
                 </div>
             </p-card>
         </div>
-
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow">
+        <div class="p-col">
+            <p-card styleClass="fillHeight">
                 <h4>Conditions</h4>
-                <div *ngFor="let condition of obDetails.conditions; let i=index">
-                    <b>{{ condition.conditionName }}:</b> {{ condition.conditionOption }}
+                <div *ngFor="let condition of obDetails.conditions">
+                    <b>{{ condition.conditionName }}: </b>{{ condition.conditionOption }}
                 </div>
             </p-card>
         </div>
+    </div>
+    <!-- END OF TWO TILES INFORMATION  -->
 
 
+    <!-- START OF DOCUMENTFORM -->
+    <div [formGroup]="documentsForm">
 
 
+        <!-- START OF COMPLIANCE DOCS -->
+        <div formGroupName="complianceDocuments">
+            <h4>Compliance Documents: Mandatory</h4>
+            <!-- START OF COMPLIANCE MANDATORY -->
+            <p-card>
+                <div *ngIf="obDetails.complianceDocuments.mandatory.length === 0">No documents in this section</div>
 
+                <div *ngIf="obDetails.complianceDocuments.mandatory.length > 0" formArrayName="mandatory">
 
+                    <p-table [columns]="selectedComplianceManCols" [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true"
+                        scrollHeight="450px" [selectionMode]="single" styleClass="dataTable">
 
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow">
-                <h4 style="display: inline-block;">Compliance Documents</h4>
+                        <ng-template pTemplate="caption">
+                            <div style="text-align:left">
+                                <p-multiSelect [options]="complianceCols" [(ngModel)]="selectedComplianceManCols"
+                                    [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                    [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
+                            </div>
+                        </ng-template>
 
-                <!-- LEGEND -->
-                <p-overlayPanel #legendTable appendTo="'body'">
-                    <p-table [columns]="tableCols" [value]="docChanges">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th *ngFor="let col of columns">{{col.header}}</th>
+                                <th *ngFor="let col of columns" [ngClass]="complianceTableHeadersClass(col.field)">{{col.header}}</th>
+                                <th class="cChk">Chk</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr>
-                                <td *ngFor="let col of columns" [ngClass]="getColorLegend(rowData[col.field])">{{rowData[col.field]}}</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info" (mouseover)="legendTable.show($event)" (mouseout)="legendTable.hide()"></button>
-                <!-- LEGEND -->
 
-
-                <div formGroupName="complianceDocuments">
-                    <h5>Mandatory</h5>
-                    <div *ngIf="obDetails.complianceDocuments.mandatory.length === 0" style="padding-bottom:1%">
-                        No documents in this section
-                    </div>
-
-                    <div *ngIf="obDetails.complianceDocuments.mandatory.length > 0" formArrayName="mandatory">
-
-                        <p-table [columns]="selectedColumns" [value]="obDetails.complianceDocuments.mandatory" [scrollable]="true" scrollHeight="450px" [selectionMode]="single" styleClass="dataTable">
-                            
-                            <ng-template pTemplate="caption">
-                                <div style="text-align:left">
-                                    <p-multiSelect [options]="complianceCols" [(ngModel)]="selectedColumns"
-                                        [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
-                                        [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
-                                </div>
-                            </ng-template>
-
-                            <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th *ngFor="let col of columns" [ngClass]="complianceTableHeadersClass(col.field)">{{col.header}}</th>
-                                    <th class="cChk">Chk</th>
-                                </tr>
-                            </ng-template>
-
-                            <ng-template pTemplate="body" let-doc let-rowData let-i="rowIndex" let-columns="columns">
-
-                                <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0">
-                                    <tr valign="top" formGroupName="{{i}}" [ngClass]="getDocChange(doc.changed)">
-                                        <ng-container *ngFor="let col of columns">
-                                            <ng-container *ngIf="col.field === 'documentName'">
-                                                <td class="cDocName">{{ doc.documentName }}</td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'documentType'">
-                                                <td class="cDocType">{{ doc.documentType }}</td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'conditionName'">
-                                                <td class="cCondName"></td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'conditionOptions'">
-                                                <td class="cCondOption"></td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'agmtCode'">
-                                                <td class="cAgmtCode">{{ doc.agmtCode }}</td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'remarks'">
-                                                <td class="cRemark" [innerHTML]="doc.remarks"></td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'comments'">
-                                                <td class="cComments">
-                                                    <div class="textareaWrapper">
-                                                        <textarea class="docComments" formControlName="comments">{{ doc.comments }}</textarea>
-                                                    </div>
-                                                </td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'uploadFiles'">
-                                                <td class="cUploadFile">
-                                                    <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
-                                                    <ul>
-                                                        <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
-                                                            <li class="uploadFileLink">
-                                                                <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
-                                                                <span (click)="fileViewHandler(uploadIndex, i)">{{ uploadFile }}</span>
-                                                            </li>
-                                                        </ng-container>
-                                                    </ul>
-                                                </td>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field === 'signature'">
-                                                <td class="cSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
-                                                <td class="cSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
-                                            </ng-container>
-                                        </ng-container>
-                                        <td class="cChk"><p-checkbox formControlName="chkbox" binary="true"></p-checkbox></td>
-                                    </tr>
-                                </ng-container>
-                                
-                                <!-- <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length > 0">
-                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.mandatory[i].conditions; let j=index">
-                                        <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : doc.changed === '2' ? 'new-field' : doc.changed === '1' ? 'edited-field' : null">
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="cDocName" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">{{ doc.documentName }}</td>
-                                                <td class="cDocType" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">{{ doc.documentType }}</td>
-                                            </ng-container>
-                                            <td class="cCondName">{{ condition.conditionName }}</td>
-                                            <td class="cCondOption">{{ condition.conditionOption }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="cAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length">{{ doc.agmtCode }}</td>
-                                                <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"[innerHTML]="doc.remarks"></td>
-                                                <td class="cComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                                <td class="cUploadFile"><div *ngFor="let uploadFile of doc.uploadFiles">d {{ uploadFile }}</div></td>
-                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"><i class="fa fa-check"></i></td>
-                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"><i class="fa fa-times"></i></td>
-                                                <td [attr.rowspan]="obDetails.complianceDocuments.mandatory[i].conditions.length"><p-checkbox formControlName="chkbox" binary="true"></p-checkbox></td>
-                                            </ng-container>
-                                        </tr>
-                                    </ng-container>
-                                </ng-container> -->
-
-                            </ng-template>
-
-                        </p-table>
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-                    <br><br>
-
-                    <h5>Optional</h5>
-                    <div *ngIf="obDetails.complianceDocuments.optional.length === 0" style="padding-bottom:1%">
-                        No documents in this section
-                    </div>
-                    <div *ngIf="obDetails.complianceDocuments.optional.length > 0" style="padding-bottom:1%" formArrayName="optional">
-                        <p-table [value]="obDetails.complianceDocuments.optional" [scrollable]="true" scrollHeight="350px"
-                            [selectionMode]="single">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th *ngFor="let col of complianceCols" [ngClass]="complianceTableHeadersClass(col.field)">{{ col.header }}</th>
-                                    <th class="cChk">Chk</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length === 0">
-                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : doc.changed === '2' ? 'new-field' :doc.changed === '1' ? 'edited-field' : null">
+                        <ng-template pTemplate="body" let-doc let-rowData let-i="rowIndex" let-columns="columns">
+                            <tr valign="top" formGroupName="{{i}}" [ngClass]="getDocChange(doc.changed)">
+                                <ng-container *ngFor="let col of columns">
+                                    <ng-container *ngIf="col.field === 'documentName'">
                                         <td class="cDocName">{{ doc.documentName }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'documentType'">
                                         <td class="cDocType">{{ doc.documentType }}</td>
-                                        <td class="cCondName"> - </td>
-                                        <td class="cCondOption"> - </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionName'">
+                                        <td class="cCondName">
+                                            <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.mandatory[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionName }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionOptions'">
+                                        <td class="cCondOption">
+                                            <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.complianceDocuments.mandatory[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.mandatory[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionOption }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'agmtCode'">
                                         <td class="cAgmtCode">{{ doc.agmtCode }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'remarks'">
                                         <td class="cRemark" [innerHTML]="doc.remarks"></td>
-                                        
-                                        <td class="cComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                        <td class="cUploadFile">{{ doc.uploadfile }}</td>
-
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'comments'">
+                                        <td class="cComments">
+                                            <div class="textareaWrapper">
+                                                <textarea class="docComments" formControlName="comments">{{ doc.comments }}</textarea>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'uploadFiles'">
+                                        <td class="cUploadFile">
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <ul>
+                                                <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
+                                                    <li class="uploadFileLink">
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
+                                                            uploadFile }}</span>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'signature'">
                                         <td class="cSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
                                         <td class="cSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
-                                        <td style="text-align:center; vertical-align:middle; width: 10%"><p-checkbox formControlName="chkbox" binary="true"></p-checkbox></td>
-                                    </tr>
-                                </ng-container>
-                                <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length > 0">
-                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.optional[i].conditions; let j=index">
-                                        <tr [ngClass]="doc.changed === '3' ? 'deleted-field' : 
-                                                        doc.changed === '2' ? 'new-field' :
-                                                        doc.changed === '1' ? 'edited-field' : null">
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="cDocName" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    {{ doc.documentName }}
-                                                </td>
-                                                <td class="cDocType" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    {{ doc.documentType }}
-                                                </td>
-                                            </ng-container>
-                                            <td class="cCondName">{{ condition.conditionName }}</td>
-                                            <td class="cCondOption">{{ condition.conditionOption }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="cAgmtCode" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    {{ doc.agmtCode }}
-                                                </td>
-                                                <td class="cRemark" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length"
-                                                    [innerHTML]="doc.remarks"></td>
-
-                                                <td class="cComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                                <td class="cUploadFile">{{ doc.uploadfile }}</td>
-
-                                                <td class="cSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td class="cSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="obDetails.complianceDocuments.optional[i].conditions.length"
-                                                    style="text-align:center; vertical-align:middle; width: 10%">
-                                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
-                                                </td>
-                                            </ng-container>
-                                        </tr>
                                     </ng-container>
                                 </ng-container>
-                            </ng-template>
-                        </p-table>
-                    </div>
-                </div>
-            </p-card>
-        </div>
-
-        <div style="padding-bottom: 10px">
-            <p-card styleClass="ui-card-shadow">
-                <h4 style="display: inline-block;">Legal Documents</h4>
-                <p-overlayPanel #legendTable2 appendTo="'body'">
-                    <p-table [columns]="tableCols" [value]="docChanges">
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th *ngFor="let col of columns">
-                                    {{col.header}}
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr>
-                                <td *ngFor="let col of columns" [ngClass]="rowData[col.field] === 'Green' ? 'addedDoc' : 
-                                                                    rowData[col.field] === 'Red' ? 'removedDoc' : 
-                                                                    rowData[col.field] === 'Yellow' ? 'modifiedDoc' : 'null'">
-                                    {{rowData[col.field]}}
+                                <td class="cChk">
+                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
                                 </td>
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-overlayPanel>
-                <button type="text" style="float: right;" pButton label="Colour Legend" class="ui-button-raised ui-button-info"
-                    (mouseover)="legendTable2.show($event)" (mouseout)="legendTable2.hide()"></button>
-                <div formGroupName="legalDocuments">
-                    <h5>Mandatory</h5>
-                    <div *ngIf="obDetails.legalDocuments.mandatory.length === 0" style="padding-bottom:1%">
-                        No documents in this section
-                    </div>
-                    <div *ngIf="obDetails.legalDocuments.mandatory.length > 0" style="padding-bottom:1%" formArrayName="mandatory">
-                        <p-table [value]="obDetails.legalDocuments.mandatory" [scrollable]="true" scrollHeight="350px"
-                            [selectionMode]="single">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th *ngFor="let col of legalCols" [ngClass]="legalTableHeadersClass(col.field)">{{ col.header }}</th>
-                                    <th class="lChk">Chk</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length === 0">
-                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
-                                                    doc.changed === '2' ? 'new-field' :
-                                                    doc.changed === '1' ? 'edited-field' : null">
-                                        <td class="lDocName">
-                                            {{ doc.documentName }}
-                                        </td>
-                                        <td class="lDocType">{{ doc.documentType }}</td>
-                                        <td class="lCondName"> - </td>
-                                        <td class="lCondOption"> - </td>
-                                        <td class="lAgmtCode">{{ doc.agmtCode }}</td>
-                                        <td class="lRemark" [innerHTML]="doc.remarks"></td>
-
-                                        <td class="lComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                        <td class="lUploadFile">{{ doc.uploadfile }}</td>
-
-                                        <td class="lSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
-                                        <td class="lSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
-                                        <td class="lWaiver" *ngIf="doc.canWaiver"><i class="fa fa-check"></i></td>
-                                        <td class="lWaiver" *ngIf="!doc.canWaiver"><i class="fa fa-times"></i></td>
-                                        <td><p-checkbox formControlName="chkbox" binary="true"></p-checkbox></td>
-                                    </tr>
-                                </ng-container>
-                                <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length > 0">
-                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.mandatory[i].conditions; let j=index">
-                                        <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
-                                                        doc.changed === '2' ? 'new-field' :
-                                                        doc.changed === '1' ? 'edited-field' : null">
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="lDocName" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    {{ doc.documentName }}
-                                                </td>
-                                                <td class="lDocType" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    {{ doc.documentType }}
-                                                </td>
-                                            </ng-container>
-                                            <td class="lCondName">{{ condition.conditionName }}</td>
-                                            <td class="lCondOption">{{ condition.conditionOption }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="lAgmtCode" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    {{ doc.agmtCode }}
-                                                </td>
-                                                <td class="lRemark" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length"
-                                                    [innerHTML]="doc.remarks"></td>
-
-                                                <td class="lComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                                <td class="lUploadFile">{{ doc.uploadfile }}</td>
-
-                                                
-                                                <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="obDetails.legalDocuments.mandatory[i].conditions.length">
-                                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
-                                                </td>
-                                            </ng-container>
-                                        </tr>
-                                    </ng-container>
-                                </ng-container>
-                            </ng-template>
-                        </p-table>
-                    </div>
-
-                    <h5>Optional</h5>
-                    <div *ngIf="obDetails.legalDocuments.optional.length === 0" style="padding-bottom:1%">
-                        No documents in this section
-                    </div>
-                    <div *ngIf="obDetails.legalDocuments.optional.length > 0" style="padding-bottom:1%" formArrayName="optional">
-                        <p-table [value]="obDetails.legalDocuments.optional" [scrollable]="true" scrollHeight="350px"
-                            [selectionMode]="single">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th *ngFor="let col of legalCols" [ngClass]="legalTableHeadersClass(col.field)">{{ col.header }}</th>
-                                    <th class="lChk">Chk</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-i="rowIndex">
-                                <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length === 0">
-                                    <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
-                                                    doc.changed === '2' ? 'new-field' :
-                                                    doc.changed === '1' ? 'edited-field' : null">
-                                        <td class="lDocName">
-                                            {{ doc.documentName }}
-                                        </td>
-                                        <td class="lDocType">
-                                            {{ doc.documentType }}
-                                        </td>
-                                        <td class="lCondName"> - </td>
-                                        <td class="lCondOption"> - </td>
-                                        <td class="lAgmtCode">
-                                            {{ doc.agmtCode }}
-                                        </td>
-                                        <td class="lRemark" [innerHTML]="doc.remarks"></td>
-
-                                        <td class="lComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                        <td class="lUploadFile">{{ doc.uploadfile }}</td>
-
-                                        <td class="lSignature" *ngIf="doc.signature">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td class="lSignature" *ngIf="!doc.signature">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td class="lWaiver" *ngIf="doc.canWaiver">
-                                            <i class="fa fa-check"></i>
-                                        </td>
-                                        <td class="lWaiver" *ngIf="!doc.canWaiver">
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                        <td>
-                                            <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
-                                        </td>
-                                    </tr>
-                                </ng-container>
-                                <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length > 0">
-                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.optional[i].conditions; let j=index">
-                                        <tr formGroupName="{{i}}" [ngClass]="doc.changed === '3' ? 'deleted-field' : 
-                                                        doc.changed === '2' ? 'new-field' :
-                                                        doc.changed === '1' ? 'edited-field' : null">
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="lDocName" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    {{ doc.documentName }}
-                                                </td>
-                                                <td class="lDocType" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    {{ doc.documentType }}
-                                                </td>
-                                            </ng-container>
-                                            <td class="lCondName">{{ condition.conditionName }}</td>
-                                            <td class="lCondOption">{{ condition.conditionOption }}</td>
-                                            <ng-container *ngIf="j === 0">
-                                                <td class="lAgmtCode" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    {{ doc.agmtCode }}
-                                                </td>
-                                                <td class="lRemark" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length" [innerHTML]="doc.remarks"></td>
-
-                                                <td class="lComments"><textarea formControlName="comments">{{ doc.comments }}</textarea></td>
-                                                <td class="lUploadFile">
-                                                    
-                                                </td>
-
-                                                <td class="lSignature" *ngIf="doc.signature" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td class="lSignature" *ngIf="!doc.signature" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td class="lWaiver" *ngIf="doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-check"></i>
-                                                </td>
-                                                <td class="lWaiver" *ngIf="!doc.canWaiver" [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    <i class="fa fa-times"></i>
-                                                </td>
-                                                <td [attr.rowspan]="obDetails.legalDocuments.optional[i].conditions.length">
-                                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
-                                                </td>
-                                            </ng-container>
-                                        </tr>
-                                    </ng-container>
-                                </ng-container>
-                            </ng-template>
-                        </p-table>
-                    </div>
                 </div>
             </p-card>
-        </div>
+            <!-- END OF COMPLIANCE MANDATORY -->
+            
+            <h4>Compliance Documents: Optional</h4>
 
-        <button pButton label="Save Changes" class="ui-button-success" style="width: 100%" type="button" icon="far fa-save"
+            <!-- START OF COMPLIANCE OPTIONAL -->
+            <p-card>
+                <div *ngIf="obDetails.complianceDocuments.optional.length === 0">No documents in this section</div>
+
+                <div *ngIf="obDetails.complianceDocuments.optional.length > 0" formArrayName="optional">
+
+                    <p-table [columns]="selectedComplianceOptCols" [value]="obDetails.complianceDocuments.optional" [scrollable]="true"
+                        scrollHeight="450px" [selectionMode]="single" styleClass="dataTable">
+
+                        <ng-template pTemplate="caption">
+                            <div style="text-align:left">
+                                <p-multiSelect [options]="complianceCols" [(ngModel)]="selectedComplianceOptCols"
+                                    [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                    [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" [ngClass]="complianceTableHeadersClass(col.field)">{{col.header}}</th>
+                                <th class="cChk">Chk</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-doc let-rowData let-i="rowIndex" let-columns="columns">
+                            <tr valign="top" formGroupName="{{i}}" [ngClass]="getDocChange(doc.changed)">
+                                <ng-container *ngFor="let col of columns">
+                                    <ng-container *ngIf="col.field === 'documentName'">
+                                        <td class="cDocName">{{ doc.documentName }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'documentType'">
+                                        <td class="cDocType">{{ doc.documentType }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionName'">
+                                        <td class="cCondName">
+                                            <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.optional[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionName }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionOptions'">
+                                        <td class="cCondOption">
+                                            <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.complianceDocuments.optional[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.complianceDocuments.optional[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionOption }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'agmtCode'">
+                                        <td class="cAgmtCode">{{ doc.agmtCode }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'remarks'">
+                                        <td class="cRemark" [innerHTML]="doc.remarks"></td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'comments'">
+                                        <td class="cComments">
+                                            <div class="textareaWrapper">
+                                                <textarea class="docComments" formControlName="comments">{{ doc.comments }}</textarea>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'uploadFiles'">
+                                        <td class="cUploadFile">
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <ul>
+                                                <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
+                                                    <li class="uploadFileLink">
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
+                                                            uploadFile }}</span>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'signature'">
+                                        <td class="cSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
+                                        <td class="cSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
+                                    </ng-container>
+                                </ng-container>
+                                <td class="cChk">
+                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-card>
+            <!-- END OF COMPLIANCE OPTIONAL -->
+        </div>
+        <!-- END OF COMPLIANCE DOCS -->
+
+        <!-- START OF LEGAL DOCS -->
+        <div formGroupName="legalDocuments">
+            <h4>Legal Documents: Mandatory</h4>
+            <!-- START OF LEGAL MANDATORY -->
+            <p-card>
+                <div *ngIf="obDetails.legalDocuments.mandatory.length === 0">No documents in this section</div>
+
+                <div *ngIf="obDetails.legalDocuments.mandatory.length > 0" formArrayName="mandatory">
+
+                    <p-table [columns]="selectedLegalManCols" [value]="obDetails.legalDocuments.mandatory" [scrollable]="true"
+                        scrollHeight="450px" [selectionMode]="single" styleClass="dataTable">
+
+                        <ng-template pTemplate="caption">
+                            <div style="text-align:left">
+                                <p-multiSelect [options]="legalCols" [(ngModel)]="selectedLegalManCols"
+                                    [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                    [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" [ngClass]="legalTableHeadersClass(col.field)">{{col.header}}</th>
+                                <th class="cChk">Chk</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-doc let-rowData let-i="rowIndex" let-columns="columns">
+                            <tr valign="top" formGroupName="{{i}}" [ngClass]="getDocChange(doc.changed)">
+                                <ng-container *ngFor="let col of columns">
+                                    <ng-container *ngIf="col.field === 'documentName'">
+                                        <td class="lDocName">{{ doc.documentName }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'documentType'">
+                                        <td class="lDocType">{{ doc.documentType }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionName'">
+                                        <td class="lCondName">
+                                            <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.mandatory[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionName }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionOptions'">
+                                        <td class="lCondOption">
+                                            <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.legalDocuments.mandatory[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.mandatory[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionOption }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'agmtCode'">
+                                        <td class="lAgmtCode">{{ doc.agmtCode }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'remarks'">
+                                        <td class="lRemark" [innerHTML]="doc.remarks"></td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'comments'">
+                                        <td class="lComments">
+                                            <div class="textareaWrapper">
+                                                <textarea class="docComments" formControlName="comments">{{ doc.comments }}</textarea>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'uploadFiles'">
+                                        <td class="lUploadFile">
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <ul>
+                                                <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
+                                                    <li class="uploadFileLink">
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
+                                                            uploadFile }}</span>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'signature'">
+                                        <td class="lSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
+                                        <td class="lSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'canWaiver'">
+                                        <td class="lWaiver" *ngIf="doc.canWaiver"><i class="fa fa-check"></i></td>
+                                        <td class="lWaiver" *ngIf="!doc.canWaiver"><i class="fa fa-times"></i></td>
+                                    </ng-container>
+                                </ng-container>
+                                <td class="cChk">
+                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-card>
+            <!-- END OF LEGAL MANDATORY -->
+
+            <h4>Legal Documents: Optional</h4>
+            <!-- START OF LEGAL OPTIONAL -->
+            <p-card>
+                <div *ngIf="obDetails.legalDocuments.optional.length === 0">No documents in this section</div>
+
+                <div *ngIf="obDetails.legalDocuments.optional.length > 0" formArrayName="optional">
+
+                    <p-table [columns]="selectedLegalOptCols" [value]="obDetails.legalDocuments.optional" [scrollable]="true"
+                        scrollHeight="450px" [selectionMode]="single" styleClass="dataTable">
+
+                        <ng-template pTemplate="caption">
+                            <div style="text-align:left">
+                                <p-multiSelect [options]="legalCols" [(ngModel)]="selectedLegalOptCols"
+                                    [ngModelOptions]="{standalone: true}" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                    [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"></p-multiSelect>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" [ngClass]="legalTableHeadersClass(col.field)">{{col.header}}</th>
+                                <th class="cChk">Chk</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-doc let-rowData let-i="rowIndex" let-columns="columns">
+                            <tr valign="top" formGroupName="{{i}}" [ngClass]="getDocChange(doc.changed)">
+                                <ng-container *ngFor="let col of columns">
+                                    <ng-container *ngIf="col.field === 'documentName'">
+                                        <td class="lDocName">{{ doc.documentName }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'documentType'">
+                                        <td class="lDocType">{{ doc.documentType }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionName'">
+                                        <td class="lCondName">
+                                            <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.optional[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionName }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'conditionOptions'">
+                                        <td class="lCondOption">
+                                            <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length === 0"> - </ng-container>
+                                            <ng-container *ngIf="obDetails.legalDocuments.optional[i].conditions.length > 0">
+                                                <div class="subCellContainer">
+                                                    <ng-container *ngFor="let condition of obDetails.legalDocuments.optional[i].conditions">
+                                                        <div class="subCell">
+                                                            {{ condition.conditionOption }}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'agmtCode'">
+                                        <td class="lAgmtCode">{{ doc.agmtCode }}</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'remarks'">
+                                        <td class="lRemark" [innerHTML]="doc.remarks"></td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'comments'">
+                                        <td class="lComments">
+                                            <div class="textareaWrapper">
+                                                <textarea class="docComments" formControlName="comments">{{ doc.comments }}</textarea>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'uploadFiles'">
+                                        <td class="lUploadFile">
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <ul>
+                                                <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
+                                                    <li class="uploadFileLink">
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
+                                                            uploadFile }}</span>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'signature'">
+                                        <td class="lSignature" *ngIf="doc.signature"><i class="fa fa-check"></i></td>
+                                        <td class="lSignature" *ngIf="!doc.signature"><i class="fa fa-times"></i></td>
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field === 'canWaiver'">
+                                        <td class="lWaiver" *ngIf="doc.canWaiver"><i class="fa fa-check"></i></td>
+                                        <td class="lWaiver" *ngIf="!doc.canWaiver"><i class="fa fa-times"></i></td>
+                                    </ng-container>
+                                </ng-container>
+                                <td class="cChk">
+                                    <p-checkbox formControlName="chkbox" binary="true"></p-checkbox>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-card>
+            <!-- END OF LEGAL OPTIONAL -->
+        </div>
+        <!-- END OF LEGAL DOCS -->
+
+        <div class="p-grid p-align-center p-justify-center">
+            <button pButton label="Save Changes" class="ui-button-success" type="button" icon="far fa-save" 
             (click)="updateOnboardProcess()" [disabled]="processing"></button>
+        </div>
+        
     </div>
+    <!-- END OF DOCUMENTFORM -->
 </div>

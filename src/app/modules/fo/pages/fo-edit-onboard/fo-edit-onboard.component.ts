@@ -70,7 +70,10 @@ export class FOEditOnboardComponent implements OnInit {
     docChanges: any[];
     tableCols: any[];
 
-    selectedColumns: any[];
+    selectedComplianceManCols: any[];
+    selectedComplianceOptCols: any[];
+    selectedLegalManCols: any[];
+    selectedLegalOptCols: any[];
 
     private subscription: Subscription;
 
@@ -114,10 +117,10 @@ export class FOEditOnboardComponent implements OnInit {
         ];
 
         this.complianceCols = [
-            { field: 'documentName', header: 'Doc Name' },
+            { field: 'documentName', header: 'Name' },
             { field: 'documentType', header: 'Type' },
-            { field: 'conditionName', header: 'Con' },
-            { field: 'conditionOptions', header: 'Opt' },
+            { field: 'conditionName', header: 'Condition' },
+            { field: 'conditionOptions', header: 'Option' },
             { field: 'agmtCode', header: 'Code' },
             { field: 'remarks', header: 'Remarks' },
             { field: 'comments', header: 'Comments' },
@@ -126,10 +129,10 @@ export class FOEditOnboardComponent implements OnInit {
         ];
 
         this.legalCols = [
-            { field: 'documentName', header: 'Doc Name' },
+            { field: 'documentName', header: 'Name' },
             { field: 'documentType', header: 'Type' },
-            { field: 'conditionName', header: 'Con' },
-            { field: 'conditionOptions', header: 'Opt' },
+            { field: 'conditionName', header: 'Condition' },
+            { field: 'conditionOptions', header: 'Option' },
             { field: 'agmtCode', header: 'Code' },
             { field: 'remarks', header: 'Remarks' },
             { field: 'comments', header: 'Comments' },
@@ -138,7 +141,11 @@ export class FOEditOnboardComponent implements OnInit {
             { field: 'canWaiver', header: 'Waiver' }
         ];
         
-        this.selectedColumns = this.complianceCols;
+        this.selectedComplianceManCols = this.complianceCols;
+        this.selectedComplianceOptCols = this.complianceCols;
+
+        this.selectedLegalManCols = this.legalCols;
+        this.selectedLegalOptCols = this.legalCols;
 
     }
 
