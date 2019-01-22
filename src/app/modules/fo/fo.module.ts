@@ -45,7 +45,7 @@ import { FOViewPDFComponent } from './pages/fo-view-pdf/fo-view-pdf.component';
 import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.guard';
 
 import { UiModule } from '../../ui/ui.module';
-
+import { changeToNA } from '../fo/pages/fo-edit-onboard/fo-edit-onboard.component'
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -53,13 +53,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 @NgModule({
     imports: [
-        FORoutingModule,
         AccordionModule,
         ButtonModule,
         CardModule,
         CalendarModule,
         ChartModule,
         CheckboxModule,
+        FORoutingModule,
         CommonModule,
         ConfirmDialogModule,
         DataScrollerModule,
@@ -95,7 +95,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FOManageOnboardComponent,
         FOFaqViewAllComponent,
         FOFaqMyQuestionsComponent,
-        FOViewPDFComponent
+        FOViewPDFComponent,
+        changeToNA
     ],
     providers: [
         {

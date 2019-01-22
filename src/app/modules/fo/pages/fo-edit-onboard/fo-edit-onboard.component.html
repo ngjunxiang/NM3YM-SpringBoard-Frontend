@@ -27,7 +27,7 @@
         <div class="p-col">
             <p-card styleClass="fillHeight">
                 <h4>Required Fields</h4>
-                <div *ngFor="let requiredField of obDetails.requiredFields">
+                <div class="topFieldsContainer" *ngFor="let requiredField of obDetails.requiredFields">
                     <b>{{ requiredField.fieldName }}: </b>{{ requiredField.fieldValue }}
                 </div>
             </p-card>
@@ -35,7 +35,7 @@
         <div class="p-col">
             <p-card styleClass="fillHeight">
                 <h4>Conditions</h4>
-                <div *ngFor="let condition of obDetails.conditions">
+                <div class="topFieldsContainer" *ngFor="let condition of obDetails.conditions">
                     <b>{{ condition.conditionName }}: </b>{{ condition.conditionOption }}
                 </div>
             </p-card>
@@ -45,12 +45,11 @@
 
 
     <!-- START OF DOCUMENTFORM -->
-    <div [formGroup]="documentsForm">
-
+    <div class="complianceDocumentsGroup" [formGroup]="documentsForm">
 
         <!-- START OF COMPLIANCE DOCS -->
         <div formGroupName="complianceDocuments">
-            <h4>Compliance Documents: Mandatory</h4>
+            <h3>Compliance Documents: Mandatory</h3>
             <!-- START OF COMPLIANCE MANDATORY -->
             <p-card>
                 <div *ngIf="obDetails.complianceDocuments.mandatory.length === 0">No documents in this section</div>
@@ -71,7 +70,7 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th *ngFor="let col of columns" [ngClass]="complianceTableHeadersClass(col.field)">{{col.header}}</th>
-                                <th class="cChk">Chk</th>
+                                <th class="cChk"><div (click)="allCheckboxLoop('cdm')">Check</div></th>
                             </tr>
                         </ng-template>
 
@@ -82,7 +81,7 @@
                                         <td class="cDocName">{{ doc.documentName }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'documentType'">
-                                        <td class="cDocType">{{ doc.documentType }}</td>
+                                        <td class="cDocType">{{ doc.documentType | changeToNA }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'conditionName'">
                                         <td class="cCondName">
@@ -131,9 +130,8 @@
                                             <ul>
                                                 <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
                                                     <li class="uploadFileLink">
-                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
-                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
-                                                            uploadFile }}</span>
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i, 'cdm')" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i, 'cdm')">{{ uploadFile }}</span>
                                                     </li>
                                                 </ng-container>
                                             </ul>
@@ -154,7 +152,7 @@
             </p-card>
             <!-- END OF COMPLIANCE MANDATORY -->
             
-            <h4>Compliance Documents: Optional</h4>
+            <h3>Compliance Documents: Optional</h3>
 
             <!-- START OF COMPLIANCE OPTIONAL -->
             <p-card>
@@ -176,7 +174,7 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th *ngFor="let col of columns" [ngClass]="complianceTableHeadersClass(col.field)">{{col.header}}</th>
-                                <th class="cChk">Chk</th>
+                                <th class="cChk"><div (click)="allCheckboxLoop('cdo')">Check</div></th>
                             </tr>
                         </ng-template>
 
@@ -187,7 +185,7 @@
                                         <td class="cDocName">{{ doc.documentName }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'documentType'">
-                                        <td class="cDocType">{{ doc.documentType }}</td>
+                                        <td class="cDocType">{{ doc.documentType | changeToNA }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'conditionName'">
                                         <td class="cCondName">
@@ -232,12 +230,12 @@
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'uploadFiles'">
                                         <td class="cUploadFile">
-                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdo'}"></app-upload-form>
                                             <ul>
                                                 <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
                                                     <li class="uploadFileLink">
-                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
-                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i, 'cdo')" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i, 'cdo')">{{
                                                             uploadFile }}</span>
                                                     </li>
                                                 </ng-container>
@@ -262,8 +260,8 @@
         <!-- END OF COMPLIANCE DOCS -->
 
         <!-- START OF LEGAL DOCS -->
-        <div formGroupName="legalDocuments">
-            <h4>Legal Documents: Mandatory</h4>
+        <div class="legelDocumentsGroup" formGroupName="legalDocuments">
+            <h3>Legal Documents: Mandatory</h3>
             <!-- START OF LEGAL MANDATORY -->
             <p-card>
                 <div *ngIf="obDetails.legalDocuments.mandatory.length === 0">No documents in this section</div>
@@ -284,7 +282,7 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th *ngFor="let col of columns" [ngClass]="legalTableHeadersClass(col.field)">{{col.header}}</th>
-                                <th class="cChk">Chk</th>
+                                <th class="cChk"><div (click)="allCheckboxLoop('ldm')">Check</div></th>
                             </tr>
                         </ng-template>
 
@@ -295,7 +293,7 @@
                                         <td class="lDocName">{{ doc.documentName }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'documentType'">
-                                        <td class="lDocType">{{ doc.documentType }}</td>
+                                        <td class="lDocType">{{ doc.documentType | changeToNA }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'conditionName'">
                                         <td class="lCondName">
@@ -340,12 +338,12 @@
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'uploadFiles'">
                                         <td class="lUploadFile">
-                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'ldm'}"></app-upload-form>
                                             <ul>
                                                 <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
                                                     <li class="uploadFileLink">
-                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
-                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i, 'ldm')" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i, 'ldm')">{{
                                                             uploadFile }}</span>
                                                     </li>
                                                 </ng-container>
@@ -371,7 +369,7 @@
             </p-card>
             <!-- END OF LEGAL MANDATORY -->
 
-            <h4>Legal Documents: Optional</h4>
+            <h3>Legal Documents: Optional</h3>
             <!-- START OF LEGAL OPTIONAL -->
             <p-card>
                 <div *ngIf="obDetails.legalDocuments.optional.length === 0">No documents in this section</div>
@@ -392,7 +390,7 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th *ngFor="let col of columns" [ngClass]="legalTableHeadersClass(col.field)">{{col.header}}</th>
-                                <th class="cChk">Chk</th>
+                                <th class="cChk"><div (click)="allCheckboxLoop('ldo')">Check</div></th>
                             </tr>
                         </ng-template>
 
@@ -403,7 +401,7 @@
                                         <td class="lDocName">{{ doc.documentName }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'documentType'">
-                                        <td class="lDocType">{{ doc.documentType }}</td>
+                                        <td class="lDocType">{{ doc.documentType | changeToNA }}</td>
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'conditionName'">
                                         <td class="lCondName">
@@ -448,13 +446,12 @@
                                     </ng-container>
                                     <ng-container *ngIf="col.field === 'uploadFiles'">
                                         <td class="lUploadFile">
-                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'cdm'}"></app-upload-form>
+                                            <app-upload-form [loopData]="{'docID' : doc.docID, 'formArray' : i, 'docCat' : 'ldo'}"></app-upload-form>
                                             <ul>
                                                 <ng-container *ngFor="let uploadFile of doc.uploadFiles; let uploadIndex=index">
                                                     <li class="uploadFileLink">
-                                                        <span (click)="fileDeleteHandler(uploadIndex, i)" class="fa fa-times"></span>
-                                                        <span (click)="fileViewHandler(uploadIndex, i)">{{
-                                                            uploadFile }}</span>
+                                                        <span (click)="fileDeleteHandler(uploadIndex, i, 'ldo')" class="fa fa-times"></span>
+                                                        <span (click)="fileViewHandler(uploadIndex, i, 'ldo')">{{ uploadFile }}</span>
                                                     </li>
                                                 </ng-container>
                                             </ul>
@@ -482,7 +479,7 @@
         <!-- END OF LEGAL DOCS -->
 
         <div class="p-grid p-align-center p-justify-center">
-            <button pButton label="Save Changes" class="ui-button-success" type="button" icon="far fa-save" 
+            <button pButton label="Save Changes" class="ui-button-success saveChangeBtn" type="button" icon="far fa-save" 
             (click)="updateOnboardProcess()" [disabled]="processing"></button>
         </div>
         

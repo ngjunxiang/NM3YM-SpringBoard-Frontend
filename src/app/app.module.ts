@@ -23,7 +23,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 
-// import { FOModule } from './modules/fo/fo.module';
 import { UiModule } from './ui/ui.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -51,8 +50,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReactiveFormsModule,
         UserIdleModule.forRoot({ idle: 1500, timeout: 300, ping: 30 }),
         SharedModule,
-        UiModule,
-        // FOModule
+        UiModule
     ],
     declarations: [
         AppComponent

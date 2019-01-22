@@ -99,6 +99,9 @@ export class FOService {
     // PDF URL
     private retrievePdfURL = environment.host + '/app/faq/retrieve-file';
 
+    // GENERATED PDF
+    private retrieveGeneratedPdfURL = environment.host + '/app/fo/generatedocument';
+
     // Reg51 Notification Endpoint
     private retrieveReg51NotificationsURL = environment.host + '/app/fo/retrieve-req51-notifications';
 
@@ -116,6 +119,21 @@ export class FOService {
         return this.http.post(this.retrievePdfURL, postData, { headers: headers, responseType: 'blob' as 'json' })
             .pipe(
                 retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+
+   
+    retrieveGeneratedPdf(obID) {
+        let headers = new HttpHeaders();
+        headers = headers.set('Accept', 'application/pdf, */*');
+        const obIDData = {
+            'obID': obID
+        };
+        const postData = Object.assign(this.authService.authItems, obIDData);
+        return this.http.post(this.retrieveGeneratedPdfURL, postData, { headers: headers, responseType: 'blob' as 'json' })
+            .pipe(
                 catchError(this.handleError)
             );
     }

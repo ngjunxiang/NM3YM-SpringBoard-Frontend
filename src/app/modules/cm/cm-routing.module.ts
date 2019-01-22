@@ -19,8 +19,6 @@ import { CMUploadAgmtComponent } from './pages/cm-upload-agmt/cm-upload-agmt.com
 import { CMUploadReg51Component } from './pages/cm-upload-reg51/cm-upload-reg51.component';
 import { CanDeactivateGuard } from '../../core/can-deactivate/can-deactivate.guard';
 
-
-
 const routes: Routes = [
     {
         path: '',

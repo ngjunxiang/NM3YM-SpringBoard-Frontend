@@ -18,9 +18,14 @@ export const routes: Routes = [
     },
     {
         path: 'rm',
-        redirectTo: 'fo',
+        redirectTo: 'fo/dashboard',
         pathMatch: 'full'
     },
+    // {
+    //     path: 'fo',
+    //     redirectTo: 'fo/dashboard',
+    //     pathMatch: 'full'
+    // },
     {
         path: 'login',
         loadChildren: './modules/login/login.module#LoginModule'

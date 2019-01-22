@@ -1,19 +1,24 @@
-.deleted-field {
-    background-color: #FF756B !important
+h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-.edited-field {
-    background-color: #FFE073 !important
+h4 {
+    margin-bottom: 20px;
 }
 
-.new-field {
-    background-color: #AADD81 !important
+ul {
+    margin-top: 10px;
+    padding: 0;
+}
+
+.topFieldsContainer {
+    line-height: 2em;
 }
 
 .legendContainer {
     text-align: right;
     margin-bottom: 10px;
-
     .overlayContainer {
         position: relative;
         text-align: left;
@@ -24,54 +29,16 @@
     }
 }
 
-:host::ng-deep {
-    .ui-overlaypanel {
-        // z-index: 100;
-        // left: 40%;
-        // right: 10%;
-        width: 350px;
-    }
-    .ui-overlaypanel:after, .ui-overlaypanel:before {
-        left: auto;
-        right: 1.25em;
-    }
-    .ui-table-scrollable-header {
-        margin-right: 0 auto;
-        width: 100% !important;
-    }
-    .ui-table .ui-table-caption {
-        background-color: transparent;
-        border: none;
-    }
-    .ui-fileupload .ui-fileupload-buttonbar {
-        padding: 0;
-    }
-    .dataTable {
-        // font-size: 0.625em;
-        // font-size: 0.625em;
-        font-size: 0.75em;
-        * {
-            word-break: break-all;
-        }
-    }
-    .fillHeight {
-        height: 100%;
-    }
+.complianceDocumentsGroup {
+    margin-top: 60px;
 }
 
-.addedDoc {
-    background-color: #AADD81 !important;
-    color: #000000 !important;
+.legelDocumentsGroup {
+    margin-top: 60px;
 }
 
-.removedDoc {
-    background-color: #FF756B !important;
-    color: #000000 !important;
-}
-
-.modifiedDoc {
-    background-color: #FFE073 !important;
-    color: #000000 !important;
+.saveChangeBtn {
+    margin-top: 40px;
 }
 
 .uploadFileLink {
@@ -101,9 +68,33 @@
     height: 100%;
 }
 
-ul {
-    margin-top: 10px;
-    padding: 0;
+
+
+.deleted-field {
+    background-color: #FF756B !important
+}
+
+.edited-field {
+    background-color: #FFE073 !important
+}
+
+.new-field {
+    background-color: #AADD81 !important
+}
+
+.addedDoc {
+    background-color: #AADD81 !important;
+    color: #000000 !important;
+}
+
+.removedDoc {
+    background-color: #FF756B !important;
+    color: #000000 !important;
+}
+
+.modifiedDoc {
+    background-color: #FFE073 !important;
+    color: #000000 !important;
 }
 
 /*
@@ -112,95 +103,106 @@ ul {
 
 /* Compliance Checklist Documents*/
 
-.cDocName {
-    width: 10%;
-}
-
-.cDocType {
-    width: 5%;
-}
-
-.cCondName {
-    min-width: 100px;
-}
-
-.cCondOption {
-    width: 5%;
-}
-
-.cAgmtCode {
-    width: 5%;
-}
-
-.cRemark {
-    width: 20%;
-}
-
-.cComments {
-    min-width: 120px;
-    height: 1px;
-}
-
-.cUploadFile { 
-    min-width: 100px;
-}
-
-.cSignature {
-    width: 52px;
-    text-align: center;
-}
-
-.cChk {
-    width: 52px;
-    text-align: center;
-}
-
-/* Legal Checklist Documents*/
-
+.cDocName,
 .lDocName {
     width: 10%;
 }
 
+.cDocType,
 .lDocType {
     width: 5%;
 }
 
+.cCondName,
 .lCondName {
     min-width: 100px;
 }
 
+.cCondOption,
 .lCondOption {
-    width: 5%;
+    width: 56px;
 }
 
+.cAgmtCode,
 .lAgmtCode {
     width: 5%;
 }
 
+.cRemark,
 .lRemark {
     width: 20%;
 }
 
+.cComments,
 .lComments {
     min-width: 120px;
     height: 1px;
 }
 
+.cUploadFile,
 .lUploadFile {
     min-width: 100px;
 }
 
+.cSignature,
 .lSignature {
     width: 50px;
     text-align: center;
 }
+
+.cChk,
+.lChk {
+    cursor: pointer;
+    width: 52px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+/* Legal Checklist Documents*/
 
 .lWaiver {
     width: 50px;
     text-align: center;
 }
 
-.lChk {
-    width: 52px;
-    text-align: center;
+:host::ng-deep {
+    label {
+        margin-bottom: 0;
+    }
+    .ui-overlaypanel {
+        // z-index: 100;
+        // left: 40%;
+        // right: 10%;
+        width: 350px;
+    }
+    .ui-overlaypanel:after,
+    .ui-overlaypanel:before {
+        left: auto;
+        right: 1.25em;
+    }
+    .ui-table-scrollable-header {
+        margin-right: 0 auto;
+        width: 100% !important;
+    }
+    .ui-table {
+        .ui-table-caption {
+            background-color: transparent;
+            border: none;
+            padding: 0 0 10px 0;
+        }
+    }
+    .ui-fileupload .ui-fileupload-buttonbar {
+        padding: 0;
+    }
+    .dataTable {
+        // font-size: 0.625em;
+        // font-size: 0.625em;
+        font-size: 0.75em;
+        * {
+            word-break: break-all;
+        }
+    }
+    .fillHeight {
+        height: 100%;
+    }
 }

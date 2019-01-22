@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Pipe, PipeTransform } from '@angular/core';
 
 import { environment } from '../../../../../environments/environment';
 
@@ -9,6 +10,16 @@ import { FOService } from '../../../../core/services/fo.service';
 
 import { SpringboardService } from '../../../../core/services/springboard.service';
 import { Subscription } from 'rxjs';
+
+@Pipe({ name: 'changeToNA' })
+export class changeToNA implements PipeTransform {
+    transform(value: string): string {
+        if (value === 'Not Applicable') {
+            return 'N/A';
+        }
+        return value;
+      }
+}
 
 @Component({
     selector: 'fo-edit-onboard',
@@ -77,6 +88,13 @@ export class FOEditOnboardComponent implements OnInit {
 
     private subscription: Subscription;
 
+    private checkboxBool = {
+        cdm: true,
+        cdo: true,
+        ldm: true,
+        ldo: true
+    }
+
     constructor(
         private fb: FormBuilder,
         private foService: FOService,
@@ -140,7 +158,7 @@ export class FOEditOnboardComponent implements OnInit {
             { field: 'signature', header: 'Sign' },
             { field: 'canWaiver', header: 'Waiver' }
         ];
-        
+
         this.selectedComplianceManCols = this.complianceCols;
         this.selectedComplianceOptCols = this.complianceCols;
 
@@ -364,7 +382,7 @@ export class FOEditOnboardComponent implements OnInit {
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
                 comments: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').get('comments').value,
-                uploadFiles: ['a', 'b', 'c'],
+                uploadFiles: optionalDoc.uploadFiles,
                 checked: this.documentsForm.get('complianceDocuments').get('optional').get(i + '').get('chkbox').value,
                 changed: optionalDoc.changed,
                 docID: optionalDoc.docID
@@ -386,7 +404,7 @@ export class FOEditOnboardComponent implements OnInit {
                 signature: mandatoryDoc.signature,
                 remarks: mandatoryDoc.remarks,
                 comments: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').get('comments').value,
-                uploadFiles: ['a', 'b', 'c'],
+                uploadFiles: mandatoryDoc.uploadFiles,
                 checked: this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').get('chkbox').value,
                 changed: mandatoryDoc.changed,
                 docID: mandatoryDoc.docID
@@ -406,7 +424,7 @@ export class FOEditOnboardComponent implements OnInit {
                 signature: optionalDoc.signature,
                 remarks: optionalDoc.remarks,
                 comments: this.documentsForm.get('legalDocuments').get('optional').get(i + '').get('comments').value,
-                uploadFiles: ['a', 'b', 'c'],
+                uploadFiles: optionalDoc.uploadFiles,
                 checked: this.documentsForm.get('legalDocuments').get('optional').get(i + '').get('chkbox').value,
                 changed: optionalDoc.changed,
                 docID: optionalDoc.docID
@@ -441,28 +459,89 @@ export class FOEditOnboardComponent implements OnInit {
         });
     }
 
-    fileDeleteHandler(uploadIndex, index) {
-        let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[index];
-        mandatoryDoc.uploadFiles.splice(uploadIndex, 1);
-        console.log('fileDeleteHandler', uploadIndex, index);
+    fileDeleteHandler(uploadIndex, index, whichObj) {
+        switch (whichObj) {
+            case 'cdm':
+                let complianceDocMandatory = this.obDetails.complianceDocuments.mandatory[index];
+                complianceDocMandatory.uploadFiles.splice(uploadIndex, 1);
+                break;
+            case 'cdo':
+                let complianceDocOptional = this.obDetails.complianceDocuments.optional[index];
+                complianceDocOptional.uploadFiles.splice(uploadIndex, 1);
+                break;
+
+            case 'ldm':
+                let legalDocMandatory = this.obDetails.legalDocuments.mandatory[index];
+                legalDocMandatory.uploadFiles.splice(uploadIndex, 1);
+                break;
+            case 'ldo':
+                let legalDocOptional = this.obDetails.legalDocuments.optional[index];
+                legalDocOptional.uploadFiles.splice(uploadIndex, 1);
+                break;
+        }
+
+        //console.log('fileDeleteHandler', uploadIndex, index);
     }
-    fileViewHandler(uploadIndex, index) {
+    fileViewHandler(uploadIndex, index, whichObj) {
+        console.log('fileViewHandler', uploadIndex, index, whichObj);
         // OPEN FILE
-        let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[index];
-        window.open(environment.host + '/app/document/' + mandatoryDoc.uploadFiles[uploadIndex]);
+        switch (whichObj) {
+            case 'cdm':
+                let complianceDocMandatory = this.obDetails.complianceDocuments.mandatory[index];
+                window.open(environment.host + '/app/document/' + complianceDocMandatory.uploadFiles[uploadIndex]);
+                break;
+            case 'cdo':
+                let complianceDocOptional = this.obDetails.complianceDocuments.optional[index];
+                window.open(environment.host + '/app/document/' + complianceDocOptional.uploadFiles[uploadIndex]);
+                break;
+
+            case 'ldm':
+                let legalDocMandatory = this.obDetails.legalDocuments.mandatory[index];
+                window.open(environment.host + '/app/document/' + legalDocMandatory.uploadFiles[uploadIndex]);
+                break;
+            case 'ldo':
+                let legalDocOptional = this.obDetails.legalDocuments.optional[index];
+                window.open(environment.host + '/app/document/' + legalDocOptional.uploadFiles[uploadIndex]);
+                break;
+        }
     }
 
     onFileUploaded() {
         return (function () {
             return function (message) {
-                // console.log('this.springboardService.pdfDataInput', this.springboardService.pdfDataInput);
-                // console.log('onFileUploaded this.springboardService.pdfDataInput.returnFileName', this.springboardService.pdfDataInput.returnFileName);
-                // console.log('onFileUploaded this.springboardService', this.springboardService.pdfDataInput.formArray);
                 let mandatoryDoc = this.obDetails.complianceDocuments.mandatory[this.springboardService.pdfDataInput.formArray];
                 mandatoryDoc.uploadFiles.push(this.springboardService.pdfDataInput.returnFileName);
             }
-
         })().bind(this);
+    }
+
+    allCheckboxLoop(whichObj) {
+        switch (whichObj) {
+            case 'cdm':
+                for (let i = 0; i < this.obDetails.complianceDocuments.mandatory.length; i++) {
+                    this.documentsForm.get('complianceDocuments').get('mandatory').get(i + '').get('chkbox').setValue(this.checkboxBool.cdm);
+                }
+                this.checkboxBool.cdm = !this.checkboxBool.cdm;
+                break;
+            case 'cdo':
+                for (let i = 0; i < this.obDetails.complianceDocuments.optional.length; i++) {
+                    this.documentsForm.get('complianceDocuments').get('optional').get(i + '').get('chkbox').setValue(this.checkboxBool.cdo);
+                }
+                this.checkboxBool.cdo = !this.checkboxBool.cdo;
+                break;
+            case 'ldm':
+                for (let i = 0; i < this.obDetails.legalDocuments.mandatory.length; i++) {
+                    this.documentsForm.get('legalDocuments').get('mandatory').get(i + '').get('chkbox').setValue(this.checkboxBool.ldm);
+                }
+                this.checkboxBool.ldm = !this.checkboxBool.ldm;
+                break;
+            case 'ldo':
+                for (let i = 0; i < this.obDetails.legalDocuments.optional.length; i++) {
+                    this.documentsForm.get('legalDocuments').get('optional').get(i + '').get('chkbox').setValue(this.checkboxBool.ldo);
+                }
+                this.checkboxBool.ldo = !this.checkboxBool.ldo;
+                break;
+        }
     }
 
     ngOnDestroy() {
@@ -470,3 +549,4 @@ export class FOEditOnboardComponent implements OnInit {
         this.subscription.unsubscribe();
     }
 }
+

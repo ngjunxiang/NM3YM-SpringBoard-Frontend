@@ -379,6 +379,23 @@ export class FOManageOnboardComponent implements OnInit {
         this.loading = false;
     }
 
+    exportAsPDF(index:number) {
+        let selectedOnboardID = this.obProcesses[index].obID;
+
+        this.foService.retrieveGeneratedPdf(selectedOnboardID).subscribe((res: any) => {
+            let blob = new Blob([res], { type: 'application/pdf' });
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url);
+            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+                alert('Please disable your pop-up blocker and try again.');
+            }
+        }, error => {
+            this.messageService.add({
+                key: 'msgs', severity: 'error', summary: 'Error', detail: error
+            });
+        });
+    }
+
     clearAll(){
         this.retrieveAllOnboardProcesses();
     }
